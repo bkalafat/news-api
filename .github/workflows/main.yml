@@ -17,7 +17,7 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           APP_NAME: ${{ 'newsApi' }}
         run: |
-          cd ./newsApi
+          cd ./NEWS-API
           docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
           heroku container:push web -a newsApi
           heroku container:release web -a newsApi
