@@ -28,15 +28,16 @@ namespace newsApi
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000",
+                        builder.WithOrigins(
+                                "http://localhost:3000",
                                 "https://bkalafat.github.io/",
-                                   "https://haberibul.com",
+                                "https://haberibul.com",
                                 "http://haberibul.com",
                                 "https://www.haberibul.com",
                                 "http://www.haberibul.com",
                                 "http://m.haberibul.com",
                                 "https://m.haberibul.com",
-                            "http://localhost:3000",
+                                "http://localhost:8000",
                                 "https://news-26417.web.app",
                                 "https://haberibul.web.app",
                                 "https://haberibul.firebaseapp.com")
