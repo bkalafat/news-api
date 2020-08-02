@@ -30,6 +30,8 @@ namespace newsApi
                     {
                         builder.WithOrigins(
                                 "http://localhost:3000",
+                                "https://localhost:3000",
+                                "http://localhost:3000/gundem",
                                 "https://bkalafat.github.io/",
                                 "https://haberibul.com",
                                 "http://haberibul.com",
