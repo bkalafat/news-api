@@ -10,6 +10,8 @@ namespace newsApi.Models
         public string Category { get; set; }
         public string Type { get; set; }
         public string Caption { get; set; }
+        public string Keywords { get; set; }
+        public string SocialTags { get; set; }
         public string Summary { get; set; }
         public string ImgPath { get; set; }
         public string ImgAlt { get; set; }
