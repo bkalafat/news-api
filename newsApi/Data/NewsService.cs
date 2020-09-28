@@ -18,7 +18,7 @@ namespace newsApi.Data
         }
 
         public List<News> Get() =>
-            _newsList.Find(news => true).ToList();
+            _newsList.Find(news => news.CreateDate > new DateTime().AddMonths(-2)).ToList();
 
         public News Get(Guid id) =>
             _newsList.Find(news => news.Id == id).FirstOrDefault();
