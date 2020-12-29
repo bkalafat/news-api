@@ -26,11 +26,11 @@ namespace newsApi.Controllers
 
 
         // GET: api/News/5
-        [HttpGet("{dashCaption}", Name = "Get")]
-        public News Get(string dashCaption)
+        [HttpGet("{id}", Name = "Get")]
+        public News Get(Guid id)
         {
 
-            var news = _newsService.Get(dashCaption);
+            var news = _newsService.Get(id);
 
             return news;
         }
@@ -44,9 +44,9 @@ namespace newsApi.Controllers
 
         // PUT: api/News/5
         [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody] News news)
+        public void Put([FromBody] News news, Guid? id = null)
         {
-            _newsService.Update(id, news);
+            _newsService.Update(id ?? new Guid() , news);
         }
 
         // DELETE: api/ApiWithActions/5

@@ -18,7 +18,7 @@ namespace newsApi
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -30,10 +30,18 @@ namespace newsApi
                     {
                         builder.WithOrigins(
                                 "http://localhost:3000",
+                                "https://localhost:3000",
                                 "https://bkalafat.github.io/",
                                 "https://haberibul.com",
                                 "http://haberibul.com",
                                 "https://www.haberibul.com",
+                                "https://news-livid.vercel.app",
+                                "https://news-git-master.bkalafat.vercel.app",
+                                "https://news-git-master.bkalafat.vercel.app",
+                                "https://news-4znxe32rk.vercel.app",
+                                "https://news.bkalafat.vercel.app",
+                                "https://news-git-develop.bkalafat.vercel.app",
+                                "https://news-n8bzqvwmp.vercel.app",
                                 "http://www.haberibul.com",
                                 "http://m.haberibul.com",
                                 "https://m.haberibul.com",
@@ -53,7 +61,8 @@ namespace newsApi
                 sp.GetRequiredService<IOptions<NewsDatabaseSettings>>().Value);
 
             services.AddControllers();
-            services.AddScoped<INewsService, NewsService>();//TODO prod'da mongo lokalde bakcaz.
+            services.AddMemoryCache();
+            services.AddScoped<INewsService, NewsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
