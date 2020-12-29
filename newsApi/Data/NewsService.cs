@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Caching.Memory;
 using MongoDB.Driver;
+using newsApi.Common;
 using newsApi.Models;
 
 namespace newsApi.Data
@@ -8,20 +10,41 @@ namespace newsApi.Data
     public class NewsService : INewsService
     {
         private readonly IMongoCollection<News> _newsList;
+        private readonly IMemoryCache _cache;
 
-        public NewsService(INewsDatabaseSettings settings)
+        public NewsService(INewsDatabaseSettings settings, IMemoryCache memoryCache)
         {
+            _cache = memoryCache;
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
             _newsList = database.GetCollection<News>(settings.NewsCollectionName);
         }
 
-        public List<News> Get() =>
-            _newsList.Find(news => news.CreateDate > new DateTime().AddMonths(-2)).ToList();
+        public List<News> Get()
+        {
+            if (_cache.TryGetValue(CacheKeys.NewsList, out List<News> newsList)) return newsList;
+            
+            newsList = _newsList.Find(news => news.CreateDate > DateTime.Now.AddMonths(-2)).ToList();
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(2));
 
-        public News Get(Guid id) =>
-            _newsList.Find(news => news.Id == id).FirstOrDefault();
+            _cache.Set(CacheKeys.NewsList, newsList, cacheEntryOptions);
+
+            return newsList;
+        }
+
+        public News Get(Guid id)
+        {
+            if (_cache.TryGetValue(id, out News news)) return news;
+            
+            news = _newsList.Find(n => n.Id == id).FirstOrDefault();
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(2));
+            _cache.Set(id, news, cacheEntryOptions);
+
+            return news;
+        }
 
         public News Get(string url)
         {
