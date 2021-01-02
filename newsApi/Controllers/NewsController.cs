@@ -6,7 +6,7 @@ using newsApi.Models;
 
 namespace newsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class NewsController : ControllerBase
     {
@@ -54,6 +54,14 @@ namespace newsApi.Controllers
         public void Delete(Guid id)
         {
             _newsService.Remove(id);
+        }
+
+        [HttpGet("{slug}")]
+        [ActionName("GetBySlug")]
+        public News GetBySlug(string slug)
+        {
+            var news = _newsService.Get(slug);
+            return news;
         }
     }
 }

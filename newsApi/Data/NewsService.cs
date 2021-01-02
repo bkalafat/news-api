@@ -46,9 +46,9 @@ namespace newsApi.Data
             return news;
         }
 
-        public News Get(string url)
+        public News Get(string slug)
         {
-            return _newsList.Find(news => news.Url.Contains(url)).FirstOrDefault();
+            return _newsList.Find(news => news.Url.Contains(slug)).FirstOrDefault();
         }
 
         public News Create(News news)

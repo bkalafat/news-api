@@ -23,6 +23,7 @@ namespace newsApi.Models
         public DateTime UpdateDate { get; set; }
         public int Priority { get; set; }
         public bool IsActive { get; set; }
+        public string Slug { get; set; }
         public string Url { get; set; }
         public int ViewCount { get; set; }
         public bool IsSecondPageNews { get; set; }
