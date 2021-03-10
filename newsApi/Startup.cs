@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using newsApi.Data;
 using newsApi.Models;
+using Microsoft.OpenApi.Models;
+using System;
 
 namespace newsApi
 {
@@ -61,13 +63,42 @@ namespace newsApi
                 sp.GetRequiredService<IOptions<NewsDatabaseSettings>>().Value);
 
             services.AddControllers();
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen();
             services.AddMemoryCache();
             services.AddScoped<INewsService, NewsService>();
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Haberibul API",
+                    Version = "v1",
+                    Description = ".net Core Web API's for Haberibul",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Haberibul Software Technologies",
+                        Email = "kalafatburak@gmail.com",
+                        Url = new Uri("https://github.com/bkalafat"),
+                    }
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Haberibul API V1");
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
