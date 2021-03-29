@@ -51,7 +51,7 @@ namespace newsApi
                                 "https://news-26417.web.app",
                                 "https://haberibul.web.app",
                                 "https://tskulis.vercel.app",
-                                "https://tskulis.com/",
+                                "https://tskulis.com",
                                 "https://www.tskulis.com",
                                 "http://m.tskulis.com",
                                 "https://tskulis-bkalafat.vercel.app",
