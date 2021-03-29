@@ -33,7 +33,7 @@ namespace newsApi
                         builder.WithOrigins(
                                 "http://localhost:3000",
                                 "https://localhost:3000",
-                                "https://bkalafat.github.io/",
+                                "https://bkalafat.github.io",
                                 "https://haberibul.com",
                                 "http://haberibul.com",
                                 "https://www.haberibul.com",
@@ -50,8 +50,12 @@ namespace newsApi
                                 "http://localhost:8000",
                                 "https://news-26417.web.app",
                                 "https://haberibul.web.app",
-                                "https://tskulis.vercel.app/",
+                                "https://tskulis.vercel.app",
                                 "https://tskulis.com/",
+                                "https://www.tskulis.com",
+                                "http://m.tskulis.com",
+                                "https://tskulis-bkalafat.vercel.app",
+                                "https://tskulis-git-master-bkalafat.vercel.app",
                                 "https://haberibul.firebaseapp.com")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
