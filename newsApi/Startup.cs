@@ -50,6 +50,8 @@ namespace newsApi
                                 "http://localhost:8000",
                                 "https://news-26417.web.app",
                                 "https://haberibul.web.app",
+                                "https://tskulis.vercel.app/",
+                                "https://tskulis.com/",
                                 "https://haberibul.firebaseapp.com")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
@@ -72,12 +74,12 @@ namespace newsApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Haberibul API",
+                    Title = "News API",
                     Version = "v1",
-                    Description = ".net Core Web API's for Haberibul",
+                    Description = ".net Core Web API's for News",
                     Contact = new OpenApiContact
                     {
-                        Name = "Haberibul Software Technologies",
+                        Name = "News Software Technologies",
                         Email = "kalafatburak@gmail.com",
                         Url = new Uri("https://github.com/bkalafat"),
                     }
@@ -96,7 +98,7 @@ namespace newsApi
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Haberibul API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "News API V1");
             });
 
             if (env.IsDevelopment())
