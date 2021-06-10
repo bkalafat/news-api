@@ -63,5 +63,12 @@ namespace newsApi.Controllers
             var news = _newsService.Get(slug);
             return news;
         }
+
+        [HttpGet]
+        [ActionName("GetLastNews")]
+        public List<News> GetLastNews()
+        {
+            return _newsService.GetLastNews();
+        }
     }
 }

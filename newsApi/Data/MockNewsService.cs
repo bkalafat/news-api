@@ -137,6 +137,11 @@ namespace newsApi.Data
             throw new NotImplementedException();
         }
 
+        public List<News> GetLastNews()
+        {
+            throw new NotImplementedException();
+        }
+
         public News Create(News news)
         {
             throw new NotImplementedException();

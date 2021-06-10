@@ -24,8 +24,8 @@ namespace newsApi.Data
         public List<News> Get()
         {
             if (_cache.TryGetValue(CacheKeys.NewsList, out List<News> newsList)) return newsList;
-            
-            newsList = _newsList.Find(news => news.CreateDate > DateTime.Now.AddMonths(-2)).ToList();
+
+            newsList = _newsList.Find(news => true).SortByDescending(news => news.CreateDate).Limit(100).ToList();
             var cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(2));
 
@@ -37,7 +37,7 @@ namespace newsApi.Data
         public News Get(Guid id)
         {
             if (_cache.TryGetValue(id, out News news)) return news;
-            
+
             news = _newsList.Find(n => n.Id == id).FirstOrDefault();
             var cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(2));
@@ -48,7 +48,20 @@ namespace newsApi.Data
 
         public News Get(string slug)
         {
-            return _newsList.Find(news => news.Url.Contains(slug)).FirstOrDefault();
+            return _cache.TryGetValue(CacheKeys.NewsList, out List<News> newsList) ? newsList.Find(news => news.Url.Contains(slug)) : _newsList.Find(news => news.Url.Contains(slug)).FirstOrDefault();
+        }
+
+        public List<News> GetLastNews()
+        {
+            if (_cache.TryGetValue(CacheKeys.LastNews, out List<News> newsList)) return newsList;
+
+            newsList = _newsList.Find(news => true).SortByDescending(news => news.CreateDate).Limit(7).ToList();
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromHours(3));
+
+            _cache.Set(CacheKeys.LastNews, newsList, cacheEntryOptions);
+
+            return newsList;
         }
 
         public News Create(News news)

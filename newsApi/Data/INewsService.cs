@@ -12,6 +12,8 @@ namespace newsApi.Data
 
         public News Get(string slug);
 
+        public List<News> GetLastNews();
+
         public News Create(News news);
 
         public void Update(Guid id, News newsIn);
