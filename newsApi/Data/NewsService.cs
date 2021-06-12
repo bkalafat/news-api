@@ -27,7 +27,7 @@ namespace newsApi.Data
 
             newsList = _newsList.Find(news => true).SortByDescending(news => news.CreateDate).Limit(100).ToList();
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(2));
+                .SetSlidingExpiration(TimeSpan.FromMinutes(1));
 
             _cache.Set(CacheKeys.NewsList, newsList, cacheEntryOptions);
 
@@ -40,7 +40,7 @@ namespace newsApi.Data
 
             news = _newsList.Find(n => n.Id == id).FirstOrDefault();
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(2));
+                .SetSlidingExpiration(TimeSpan.FromMinutes(20));
             _cache.Set(id, news, cacheEntryOptions);
 
             return news;
