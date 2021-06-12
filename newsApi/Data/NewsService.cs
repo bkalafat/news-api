@@ -48,7 +48,14 @@ namespace newsApi.Data
 
         public News Get(string slug)
         {
-            return _cache.TryGetValue(CacheKeys.NewsList, out List<News> newsList) ? newsList.Find(news => news.Url.Contains(slug)) : _newsList.Find(news => news.Url.Contains(slug)).FirstOrDefault();
+            if (_cache.TryGetValue(slug, out News news)) return news;
+
+            news = _newsList.Find(n => n.Url.Contains(slug)).FirstOrDefault();
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(20));
+            _cache.Set(slug, news, cacheEntryOptions);
+
+            return news;
         }
 
         public List<News> GetLastNews()
