@@ -27,7 +27,7 @@ namespace newsApi.Data
 
             newsList = _newsList.Find(news => true).SortByDescending(news => news.CreateDate).Limit(100).ToList();
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(1));
+                .SetSlidingExpiration(TimeSpan.FromHours(4));
 
             _cache.Set(CacheKeys.NewsList, newsList, cacheEntryOptions);
 
@@ -40,7 +40,7 @@ namespace newsApi.Data
 
             news = _newsList.Find(n => n.Id == id).FirstOrDefault();
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(20));
+                .SetSlidingExpiration(TimeSpan.FromHours(4));
             _cache.Set(id, news, cacheEntryOptions);
 
             return news;
@@ -52,7 +52,7 @@ namespace newsApi.Data
 
             news = _newsList.Find(n => n.Url.Contains(slug)).FirstOrDefault();
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(20));
+                .SetSlidingExpiration(TimeSpan.FromHours(4));
             _cache.Set(slug, news, cacheEntryOptions);
 
             return news;
@@ -62,9 +62,9 @@ namespace newsApi.Data
         {
             if (_cache.TryGetValue(CacheKeys.LastNews, out List<News> newsList)) return newsList;
 
-            newsList = _newsList.Find(news => true).SortByDescending(news => news.CreateDate).Limit(7).ToList();
+            newsList = _newsList.Find(news => news.IsActive).SortByDescending(news => news.CreateDate).Limit(7).ToList();
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromHours(3));
+                .SetSlidingExpiration(TimeSpan.FromHours(4));
 
             _cache.Set(CacheKeys.LastNews, newsList, cacheEntryOptions);
 
@@ -73,17 +73,33 @@ namespace newsApi.Data
 
         public News Create(News news)
         {
+            _cache.Remove(CacheKeys.NewsList);
+            _cache.Remove(CacheKeys.LastNews);
             _newsList.InsertOne(news);
             return news;
         }
 
-        public void Update(Guid id, News newsIn) =>
+        public void Update(Guid id, News newsIn)
+        {
+            _cache.Remove(CacheKeys.NewsList);
+            _cache.Remove(CacheKeys.LastNews);
+            _cache.Remove(newsIn.Slug);
+            _cache.Remove(id);
             _newsList.ReplaceOne(news => news.Id == id, newsIn);
+        }
 
-        public void Remove(News newsIn) =>
+        public void Remove(News newsIn)
+        {
+            _cache.Remove(CacheKeys.NewsList);
+            _cache.Remove(CacheKeys.LastNews);
             _newsList.DeleteOne(news => news.Id == newsIn.Id);
+        }
 
-        public void Remove(Guid id) =>
+        public void Remove(Guid id)
+        {
+            _cache.Remove(CacheKeys.NewsList);
+            _cache.Remove(CacheKeys.LastNews);
             _newsList.DeleteOne(news => news.Id == id);
+        }
     }
 }
