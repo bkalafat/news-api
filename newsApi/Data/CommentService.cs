@@ -34,12 +34,10 @@ namespace newsApi.Data
 
         public IEnumerable<Comment> Get(Guid newsId)
         {
-            if (_cache.TryGetValue(newsId, out IEnumerable<Comment> commentList)) return commentList;
+            if (_cache.TryGetValue(CacheKeys.Comment + newsId, out IEnumerable<Comment> commentList)) return commentList;
 
             commentList = _commentList.Find(n => n.Id == newsId).ToList();
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromHours(4));
-            _cache.Set(newsId, commentList, cacheEntryOptions);
+            _cache.Set(CacheKeys.Comment + newsId, commentList);
 
             return commentList;
         }
@@ -50,22 +48,20 @@ namespace newsApi.Data
             {
                 news = _newsList.Find(n => n.Url.Contains(slug)).FirstOrDefault();
             }
-            if (news != null && _cache.TryGetValue(news.Id, out IEnumerable<Comment> commentList))
+            if (news != null && _cache.TryGetValue(CacheKeys.Comment + news.Id, out IEnumerable<Comment> commentList))
             {
                 return commentList;
             }
 
             commentList = _commentList.Find(n => news != null && n.NewsId == news.Id.ToString()).ToList();
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromHours(4));
-            if (news != null) _cache.Set(news.Id, commentList, cacheEntryOptions);
+            if (news != null) _cache.Set(CacheKeys.Comment + news.Id, commentList);
 
             return commentList;
         }
 
         public Comment Create(Comment comment)
         {
-            _cache.Remove(comment.NewsId);
+            _cache.Remove(CacheKeys.Comment + comment.NewsId);
             _cache.Remove(CacheKeys.CommentList);
             _commentList.InsertOne(comment);
             return comment;
@@ -73,19 +69,19 @@ namespace newsApi.Data
 
         public void Update(Guid id, Comment comment)
         {
-            _cache.Remove(comment.NewsId);
+            _cache.Remove(CacheKeys.Comment + comment.NewsId);
             _commentList.ReplaceOne(c => c.Id == id, comment);
         }
 
         public void Remove(Comment comment)
         {
-            _cache.Remove(comment.NewsId);
+            _cache.Remove(CacheKeys.Comment + comment.NewsId);
             _commentList.DeleteOne(c => c.Id == comment.Id);
         }
 
         public void Remove(string newsId)
         {
-            _cache.Remove(newsId);
+            _cache.Remove(CacheKeys.Comment + newsId);
             _commentList.DeleteMany(comment => comment.NewsId == newsId);
         }
     }

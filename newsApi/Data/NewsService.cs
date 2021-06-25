@@ -27,10 +27,7 @@ namespace newsApi.Data
             if (_cache.TryGetValue(CacheKeys.NewsList, out List<News> newsList)) return newsList;
 
             newsList = _newsList.Find(news => true).SortByDescending(news => news.CreateDate).Limit(100).ToList();
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromHours(4));
-
-            _cache.Set(CacheKeys.NewsList, newsList, cacheEntryOptions);
+            _cache.Set(CacheKeys.NewsList, newsList);
 
             return newsList;
         }
@@ -40,9 +37,7 @@ namespace newsApi.Data
             if (_cache.TryGetValue(id, out News news)) return news;
 
             news = _newsList.Find(n => n.Id == id).FirstOrDefault();
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromHours(4));
-            _cache.Set(id, news, cacheEntryOptions);
+            _cache.Set(id, news);
 
             return news;
         }
@@ -52,9 +47,7 @@ namespace newsApi.Data
             if (_cache.TryGetValue(slug, out News news)) return news;
 
             news = _newsList.Find(n => n.Url.Contains(slug)).FirstOrDefault();
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromHours(4));
-            _cache.Set(slug, news, cacheEntryOptions);
+            _cache.Set(slug, news);
 
             return news;
         }
@@ -64,10 +57,7 @@ namespace newsApi.Data
             if (_cache.TryGetValue(CacheKeys.LastNews, out List<News> newsList)) return newsList;
 
             newsList = _newsList.Find(news => news.IsActive).SortByDescending(news => news.CreateDate).Limit(7).ToList();
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromHours(4));
-
-            _cache.Set(CacheKeys.LastNews, newsList, cacheEntryOptions);
+            _cache.Set(CacheKeys.LastNews, newsList);
 
             return newsList;
         }
