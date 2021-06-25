@@ -7,6 +7,7 @@ using newsApi.Models;
 
 namespace newsApi.Data
 {
+    //TODO: bkalafat Instead cache remove _cache try get value update it and set to _cache again.
     public class NewsService : INewsService
     {
         private readonly IMongoCollection<News> _newsList;

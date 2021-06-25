@@ -5,15 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using newsApi.Data;
-using newsApi.Models;
 using Microsoft.OpenApi.Models;
 using System;
+using newsApi.Common;
 
 namespace newsApi
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        private const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         public Startup(IConfiguration configuration)
         {
@@ -73,6 +73,7 @@ namespace newsApi
             services.AddSwaggerGen();
             services.AddMemoryCache();
             services.AddScoped<INewsService, NewsService>();
+            services.AddScoped<ICommentService, CommentService>();
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
@@ -80,10 +81,10 @@ namespace newsApi
                 {
                     Title = "News API",
                     Version = "v1",
-                    Description = ".net Core Web API's for News",
+                    Description = ".net 5 Web API for News",
                     Contact = new OpenApiContact
                     {
-                        Name = "News Software Technologies",
+                        Name = "Bkalafat Software Technologies",
                         Email = "kalafatburak@gmail.com",
                         Url = new Uri("https://github.com/bkalafat"),
                     }
@@ -102,7 +103,7 @@ namespace newsApi
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "News API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "News API V2");
             });
 
             if (env.IsDevelopment())
