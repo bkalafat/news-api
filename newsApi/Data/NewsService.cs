@@ -46,7 +46,7 @@ namespace newsApi.Data
         {
             if (_cache.TryGetValue(slug, out News news)) return news;
 
-            news = _newsList.Find(n => n.Url.Contains(slug)).FirstOrDefault();
+            news = _newsList.Find(n => n.Slug.Equals(slug)).FirstOrDefault();
             _cache.Set(slug, news);
 
             return news;
