@@ -81,7 +81,7 @@ namespace newsApi
                 {
                     Title = "News API",
                     Version = "v1",
-                    Description = ".net 5 Web API for News",
+                    Description = ".net 6 Web API for News",
                     Contact = new OpenApiContact
                     {
                         Name = "Bkalafat Software Technologies",
@@ -103,7 +103,7 @@ namespace newsApi
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "News API V2");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "News API V3");
             });
 
             if (env.IsDevelopment())
