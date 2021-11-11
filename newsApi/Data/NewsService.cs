@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using MongoDB.Driver;
 using newsApi.Common;
 using newsApi.Models;
+using System;
+using System.Collections.Generic;
 
 namespace newsApi.Data
 {

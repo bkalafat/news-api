@@ -1,6 +1,6 @@
+using newsApi.Models;
 using System;
 using System.Collections.Generic;
-using newsApi.Models;
 
 namespace newsApi.Data
 {

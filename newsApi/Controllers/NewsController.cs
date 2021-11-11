@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using newsApi.Data;
 using newsApi.Models;
+using System;
+using System.Collections.Generic;
 
 namespace newsApi.Controllers
 {
@@ -46,7 +46,7 @@ namespace newsApi.Controllers
         [HttpPut("{id}")]
         public void Put([FromBody] News news, Guid? id = null)
         {
-            _newsService.Update(id ?? new Guid() , news);
+            _newsService.Update(id ?? new Guid(), news);
         }
 
         // DELETE: api/ApiWithActions/5
