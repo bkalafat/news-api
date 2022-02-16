@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MongoDB.Driver;
 using newsApi.Common;
 using newsApi.Models;
@@ -6,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
+using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 
 namespace newsApi.Data
@@ -25,21 +27,18 @@ namespace newsApi.Data
 
         public async void CreateUserAsync(string expoNotificationToken)
         {
-            try
-            {
-                await _userList.InsertOneAsync(new User { ExpoNotificationRequest = expoNotificationToken });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            await _userList.InsertOneAsync(new User { ExpoNotificationRequest = expoNotificationToken });
+        }
+
+        public async Task<List<User>> GetUserList()
+        {
+            return await _userList.Find(_ => true).ToListAsync();
         }
 
         public async void SendNotification(ExpoNotificationRequest expoNotificationRequest)
         {
             //TODO get token list and send notifications to all devices from mongoDB.
-            // ExpoNotificationRequest.to = All tokens as array
+            //ExpoNotificationRequest.to = All tokens as array
             var httpClient = _clientFactory.CreateClient();
 
             string jsonString = JsonSerializer.Serialize(expoNotificationRequest);

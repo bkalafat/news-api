@@ -1,6 +1,7 @@
 ﻿using newsApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace newsApi.Data
 {
@@ -156,12 +157,12 @@ namespace newsApi.Data
                 SendNotificationAsync(news);
             return news;
         }
-        private void SendNotificationAsync(News news)
+        private async void SendNotificationAsync(News news)
         {
-            //TODO: Map news to expo notification request.
-            ExpoNotificationRequest expoNotificationRequest = new ExpoNotificationRequest
+            var userList = await _userService.GetUserList();
+            var expoNotificationRequest = new ExpoNotificationRequest
             {
-                to = "ExponentPushToken[oazVUwCatGyt0wr8IUSOlb]", // make it array
+                to = userList.Select(u => u.ExpoNotificationRequest).ToArray(),
                 data = new Models.Data { extradata = news.Slug },
                 title = "TS Kulis",
                 body = news.Caption
