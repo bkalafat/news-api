@@ -6,6 +6,13 @@ namespace newsApi.Data
 {
     public class MockNewsService : INewsService
     {
+        private readonly IUserService _userService;
+
+        public MockNewsService(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         public List<News> Get()
         {
             return new List<News>
@@ -144,7 +151,22 @@ namespace newsApi.Data
 
         public News Create(News news)
         {
-            throw new NotImplementedException();
+
+            if (news.ShowNotifications)
+                SendNotificationAsync(news);
+            return news;
+        }
+        private void SendNotificationAsync(News news)
+        {
+            //TODO: Map news to expo notification request.
+            ExpoNotificationRequest expoNotificationRequest = new ExpoNotificationRequest
+            {
+                to = "ExponentPushToken[oazVUwCatGyt0wr8IUSOlb]", // make it array
+                data = new Models.Data { extradata = news.Slug },
+                title = "TS Kulis",
+                body = news.Caption
+            };
+            _userService.SendNotification(expoNotificationRequest);
         }
 
         public void Update(Guid id, News newsIn)
@@ -152,6 +174,10 @@ namespace newsApi.Data
             throw new NotImplementedException();
         }
 
+        public void ShowNotifications()
+        {
+            throw new NotImplementedException();
+        }
         public void Remove(News newsIn)
         {
             throw new NotImplementedException();
