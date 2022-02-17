@@ -9,7 +9,7 @@ public interface IUserService
 {
     public void SendNotification(ExpoNotificationRequest expoNotificationRequest);
 
-    public void CreateUserAsync(string expoNotificationToken);
+    public void CreateUserAsync(User user);
 
     public Task<List<User>> GetUserList();
 }

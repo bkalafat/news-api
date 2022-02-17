@@ -21,9 +21,12 @@ namespace newsApi.Controllers
 
         // POST: api/CreateUserAsync
         [HttpPost]
-        public Task<IActionResult> CreateUser(string expoNotificationToken)
+        public Task<IActionResult> CreateUser([FromBody] User user)
         {
-            _userService.CreateUserAsync(expoNotificationToken);
+            if (user != null && !string.IsNullOrEmpty(user.ExpoNotificationRequest))
+            {
+                _userService.CreateUserAsync(user);
+            }
             return Task.FromResult<IActionResult>(Ok());
         }
     }
