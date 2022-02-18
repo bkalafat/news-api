@@ -44,8 +44,8 @@ namespace newsApi
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
             services.AddMemoryCache();
-            //services.AddScoped<INewsService, NewsService>();
-            services.AddScoped<INewsService, MockNewsService>();
+            services.AddScoped<INewsService, NewsService>();
+            //services.AddScoped<INewsService, MockNewsService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IUserService, UserService>();
             // Register the Swagger generator, defining 1 or more Swagger documents

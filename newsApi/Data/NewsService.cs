@@ -73,7 +73,7 @@ namespace newsApi.Data
             _cache.Remove(CacheKeys.NewsList);
             _cache.Remove(CacheKeys.LastNews);
             _newsList.InsertOne(news);
-            if(news.ShowNotifications)
+            if(news.ShowNotification)
                 SendNotificationAsync(news);
             return news;
         }

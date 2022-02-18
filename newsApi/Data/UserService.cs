@@ -31,8 +31,6 @@ namespace newsApi.Data
 
         public async void CreateUserAsync(User user)
         {
-            //TODO: Cache'te ExpoNotificationRequest varsa return
-            //Cache'te yoksa _cache.Remove(CacheKeys.UserList);
             var cacheUserList = await GetUserList();
             if (cacheUserList.Any(cacheUser => cacheUser.ExpoNotificationRequest == user.ExpoNotificationRequest))
                 return;

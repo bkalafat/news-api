@@ -25,7 +25,7 @@ namespace newsApi.Data
                     Type = "news",
                     Caption = "Korona vaka sayısı",
                     Summary = "Türkiyede vaka sayısı azalıyor.",
-                    ImgPath = "https://i4.hurimg.com/i/hurriyet/75/750x422/5eaec3097af5072a587581f7.jpg",
+                    ImgPath = "https://firebasestorage.googleapis.com/v0/b/news-26417.appspot.com/o/tskulis-1109230.jpg.webp?alt=media&token=d40e71b5-5180-4e9d-89b3-0297d8f11d87",
                     ImgAlt = "test haber img",
                     Content =
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi at nisi ex. Nullam et elit elementum, consequat risus ut, aliquet metus. Phasellus pharetra, urna non mollis auctor, dui erat fermentum lorem, sed egestas sem nisl ut augue. Duis vitae turpis non dui luctus congue. Donec iaculis, diam in consequat dapibus, tortor mauris rhoncus ex, sit amet rutrum augue arcu a lacus. Vestibulum porta, orci vitae ultrices blandit, dolor metus tristique lorem,eget placerat nisl nulla in turpis. Maecenas vel aliquam leo. Vivamus eleifend sapien vel mauris mollis imperdiet.",
@@ -44,7 +44,7 @@ namespace newsApi.Data
                     Type = "news",
                     Caption = "Libya'da Hafter milislerine ikmal yapan yakıt tankeri ile iki askeri araç vuruldu",
                     Summary = "Libya karışık aga",
-                    ImgPath = "https://cdnuploads.aa.com.tr/uploads/Contents/2020/05/03/thumbs_b_c_e1a109ca046e8f74f310eaa8e012e09d.jpg",
+                    ImgPath = "https://firebasestorage.googleapis.com/v0/b/news-26417.appspot.com/o/tskulis-1109230.jpg.webp?alt=media&token=d40e71b5-5180-4e9d-89b3-0297d8f11d87",
                     ImgAlt = "test haber img",
                     Content =
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi at nisi ex. Nullam et elit elementum, consequat risus ut, aliquet metus. Phasellus pharetra, urna non mollis auctor, dui erat fermentum lorem, sed egestas sem nisl ut augue. Duis vitae turpis non dui luctus congue. Donec iaculis, diam in consequat dapibus, tortor mauris rhoncus ex, sit amet rutrum augue arcu a lacus. Vestibulum porta, orci vitae ultrices blandit, dolor metus tristique lorem,eget placerat nisl nulla in turpis. Maecenas vel aliquam leo. Vivamus eleifend sapien vel mauris mollis imperdiet.",
@@ -63,7 +63,7 @@ namespace newsApi.Data
                     Type = "subNews",
                     Caption = "Trabzonspor'da Nwakaeme teklifi.",
                     Summary = "Her ligde olduğu gibi trabzonspor'un da liderliği tescillendi.",
-                    ImgPath = "https://i12.haber7.net//haber/haber7/photos/2019/39/karamandan_nwakaemeye_ozel_gorev_1569743374_9174.jpg",
+                    ImgPath = "https://firebasestorage.googleapis.com/v0/b/news-26417.appspot.com/o/tskulis-1109230.jpg.webp?alt=media&token=d40e71b5-5180-4e9d-89b3-0297d8f11d87",
                     ImgAlt = "test haber img",
                     Content =
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi at nisi ex. Nullam et elit elementum, consequat risus ut, aliquet metus. Phasellus pharetra, urna non mollis auctor, dui erat fermentum lorem, sed egestas sem nisl ut augue. Duis vitae turpis non dui luctus congue. Donec iaculis, diam in consequat dapibus, tortor mauris rhoncus ex, sit amet rutrum augue arcu a lacus. Vestibulum porta, orci vitae ultrices blandit, dolor metus tristique lorem,eget placerat nisl nulla in turpis. Maecenas vel aliquam leo. Vivamus eleifend sapien vel mauris mollis imperdiet.",
@@ -82,7 +82,7 @@ namespace newsApi.Data
                     Type = "subNews",
                     Caption = "Sokağa Çıkma Yasağı",
                     Summary = "Çankırı'da 335 kişiye ceza kesildi",
-                    ImgPath = "https://icdn.ensonhaber.com/resimler/diger//kok/2020/05/08/koronavirus_3102.jpg",
+                    ImgPath = "https://firebasestorage.googleapis.com/v0/b/news-26417.appspot.com/o/tskulis-1109230.jpg.webp?alt=media&token=d40e71b5-5180-4e9d-89b3-0297d8f11d87",
                     ImgAlt = "test haber img",
                     Content =
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi at nisi ex. Nullam et elit elementum, consequat risus ut, aliquet metus. Phasellus pharetra, urna non mollis auctor, dui erat fermentum lorem, sed egestas sem nisl ut augue. Duis vitae turpis non dui luctus congue. Donec iaculis, diam in consequat dapibus, tortor mauris rhoncus ex, sit amet rutrum augue arcu a lacus. Vestibulum porta, orci vitae ultrices blandit, dolor metus tristique lorem,eget placerat nisl nulla in turpis. Maecenas vel aliquam leo. Vivamus eleifend sapien vel mauris mollis imperdiet.",
@@ -102,7 +102,7 @@ namespace newsApi.Data
                     Type = "subNews",
                     Caption = "Kyk'dan Çıktılar",
                     Summary = "Kyk karantinası sona erdi mutlular",
-                    ImgPath = "https://icdn.ensonhaber.com/resimler/diger/kok/2020/05/08/koronavirus_6087.jpg",
+                    ImgPath = "https://firebasestorage.googleapis.com/v0/b/news-26417.appspot.com/o/tskulis-1109230.jpg.webp?alt=media&token=d40e71b5-5180-4e9d-89b3-0297d8f11d87",
                     ImgAlt = "test haber img",
                     Content =
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi at nisi ex. Nullam et elit elementum, consequat risus ut, aliquet metus. Phasellus pharetra, urna non mollis auctor, dui erat fermentum lorem, sed egestas sem nisl ut augue. Duis vitae turpis non dui luctus congue. Donec iaculis, diam in consequat dapibus, tortor mauris rhoncus ex, sit amet rutrum augue arcu a lacus. Vestibulum porta, orci vitae ultrices blandit, dolor metus tristique lorem,eget placerat nisl nulla in turpis. Maecenas vel aliquam leo. Vivamus eleifend sapien vel mauris mollis imperdiet.",
@@ -126,7 +126,7 @@ namespace newsApi.Data
                 Type = "news",
                 Caption = "Korona vaka sayısı",
                 Summary = "Türkiyede vaka sayısı azalıyor.",
-                ImgPath = "https://via.placeholder.com/600x300?text=KORONA",
+                ImgPath = "https://firebasestorage.googleapis.com/v0/b/news-26417.appspot.com/o/tskulis-1109230.jpg.webp?alt=media&token=d40e71b5-5180-4e9d-89b3-0297d8f11d87",
                 ImgAlt = "test haber img",
                 Content =
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi at nisi ex. Nullam et elit elementum, consequat risus ut, aliquet metus. Phasellus pharetra, urna non mollis auctor, dui erat fermentum lorem, sed egestas sem nisl ut augue. Duis vitae turpis non dui luctus congue. Donec iaculis, diam in consequat dapibus, tortor mauris rhoncus ex, sit amet rutrum augue arcu a lacus. Vestibulum porta, orci vitae ultrices blandit, dolor metus tristique lorem,eget placerat nisl nulla in turpis. Maecenas vel aliquam leo. Vivamus eleifend sapien vel mauris mollis imperdiet.",
@@ -153,7 +153,7 @@ namespace newsApi.Data
         public News Create(News news)
         {
 
-            if (news.ShowNotifications)
+            if (news.ShowNotification)
                 SendNotificationAsync(news);
             return news;
         }

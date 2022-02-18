@@ -23,7 +23,7 @@ namespace newsApi.Models
         public DateTime UpdateDate { get; set; }
         public int Priority { get; set; }
         public bool IsActive { get; set; }
-        public bool ShowNotifications { get; set; }
+        public bool ShowNotification { get; set; }
         public string Slug { get; set; }
         public string Url { get; set; }
         public int ViewCount { get; set; }
