@@ -84,7 +84,7 @@ namespace newsApi.Data
             var expoNotificationRequest = new ExpoNotificationRequest
             {
                 to = userList.Select(u => u.ExpoNotificationRequest).ToArray(),
-                data = new Models.Data{extradata = news.Slug},
+                data = news,
                 title = "TS Kulis",
                 body = news.Caption
             };
