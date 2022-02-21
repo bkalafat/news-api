@@ -30,7 +30,7 @@ namespace newsApi
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder => builder.AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader().SetIsOriginAllowed(origin => true));
+                        .AllowAnyHeader().SetIsOriginAllowed(_ => true));
             });
 
             services.AddHttpClient();
