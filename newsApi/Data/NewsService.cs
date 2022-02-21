@@ -4,6 +4,7 @@ using newsApi.Common;
 using newsApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace newsApi.Data
 {
@@ -12,13 +13,14 @@ namespace newsApi.Data
     {
         private readonly IMongoCollection<News> _newsList;
         private readonly IMemoryCache _cache;
+        private readonly IUserService _userService;
 
-        public NewsService(INewsDatabaseSettings settings, IMemoryCache memoryCache)
+        public NewsService(INewsDatabaseSettings settings, IMemoryCache memoryCache, IUserService userService)
         {
             _cache = memoryCache;
+            _userService = userService;
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
-
             _newsList = database.GetCollection<News>(settings.NewsCollectionName);
         }
 
@@ -67,7 +69,22 @@ namespace newsApi.Data
             _cache.Remove(CacheKeys.NewsList);
             _cache.Remove(CacheKeys.LastNews);
             _newsList.InsertOne(news);
+            if(news.ShowNotification)
+                SendNotificationAsync(news);
             return news;
+        }
+        
+        private async void SendNotificationAsync(News news)
+        {
+            var userList = await _userService.GetUserList();
+            var expoNotificationRequest = new ExpoNotificationRequest
+            {
+                to = userList.Select(u => u.ExpoNotificationRequest).ToArray(),
+                data = news,
+                title = "TS Kulis",
+                body = news.Caption
+            };
+            _userService.SendNotification(expoNotificationRequest);
         }
 
         public void Update(Guid id, News newsIn)
