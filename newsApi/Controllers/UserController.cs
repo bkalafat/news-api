@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using newsApi.Data;
 using newsApi.Models;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace newsApi.Controllers
 {
