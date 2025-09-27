@@ -20,7 +20,6 @@ tests/
 
 ## Recent Changes
 - 002-modernize-net-core: Added .NET 8 LTS with C# 12 + ASP.NET Core 8.0, MongoDB.Driver 2.28+, FluentValidation 11.3+, JWT Bearer Authentication
-- 002-modernize-net-core: Added .NET 8 LTS with C# 12 + ASP.NET Core 8.0, MongoDB.Driver 2.28+, FluentValidation 11.3+, JWT Bearer Authentication
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
