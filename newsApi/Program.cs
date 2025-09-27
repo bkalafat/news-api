@@ -1,20 +1,54 @@
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NewsApi.Presentation.Extensions;
+using NewsApi.Presentation.Middleware;
 
-namespace newsApi
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Add custom application services
+builder.Services.AddApplicationServices(builder.Configuration);
+
+// Add JWT authentication
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
+// Add CORS policy
+builder.Services.AddCorsPolicy();
+
+// Add health checks
+builder.Services.AddCustomHealthChecks();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline
+if (app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+// Security middleware (before routing)
+app.UseMiddleware<SecurityHeadersMiddleware>();
+
+// CORS (before authentication)
+app.UseCors("AllowSpecificOrigins");
+
+// Authentication & Authorization
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Custom validation middleware
+app.UseMiddleware<ValidationMiddleware>();
+
+// Routing
+app.MapControllers();
+
+// Health checks
+app.MapHealthChecks("/health");
+
+app.Run();
