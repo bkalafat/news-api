@@ -15,7 +15,7 @@
 
 ## Phase 3.3: Application Layer Implementation
 - [ ] T007 [P] Create INewsService interface in newsApi/Application/Services/INewsService.cs
-- [ ] T008 [P] Create DTOs (CreateNewsDto, UpdateNewsDto) in newsApi/Application/DTOs/
+- [ ] T008 [P] Create CreateNewsDto and UpdateNewsDto classes in newsApi/Application/DTOs/ with proper validation attributes
 - [ ] T009 [P] Create FluentValidation validators in newsApi/Application/Validators/NewsValidator.cs
 - [ ] T010 Implement NewsService with repository pattern in newsApi/Application/Services/NewsService.cs
 
