@@ -7,6 +7,8 @@
     <UserSecretsId>63b90c45-207e-4876-9627-7c6c4d9989ee</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileTag>newsapi/</DockerfileTag>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
