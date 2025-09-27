@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		heroku.yml = heroku.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsApi.Tests", "NewsApi.Tests\NewsApi.Tests.csproj", "{FB5AD937-6EA8-4F42-B10C-075B5DACE02B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4BE7270B-4ED2-4C24-8840-D39B1C83904B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BE7270B-4ED2-4C24-8840-D39B1C83904B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BE7270B-4ED2-4C24-8840-D39B1C83904B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB5AD937-6EA8-4F42-B10C-075B5DACE02B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB5AD937-6EA8-4F42-B10C-075B5DACE02B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB5AD937-6EA8-4F42-B10C-075B5DACE02B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB5AD937-6EA8-4F42-B10C-075B5DACE02B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
