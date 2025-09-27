@@ -27,20 +27,23 @@ As a development team, we need to modernize the existing .NET Core 3.1 News API 
 
 ### Functional Requirements
 - **FR-001**: System MUST upgrade from .NET Core 3.1 to .NET 8 LTS while maintaining backward compatibility of all API endpoints
-- **FR-002**: System MUST implement Clean Architecture with distinct Domain, Application, Infrastructure, and Presentation layers
+- **FR-002**: System MUST implement Clean Architecture with distinct Domain, Application, Infrastructure, and Presentation layers organized as folders within the existing newsApi project
 - **FR-003**: System MUST enforce dependency rules where Domain layer has no external dependencies and all dependencies point inward
 - **FR-004**: System MUST implement repository pattern with clear interfaces for all data access operations
 - **FR-005**: System MUST use dependency injection for all service registrations and configurations
-- **FR-006**: System MUST validate all input data on the server-side using modern validation frameworks
+- **FR-006**: System MUST validate all input data on the server-side using FluentValidation framework with comprehensive validation rules
 - **FR-007**: System MUST protect against OWASP Top 10 vulnerabilities including SQL Injection and XSS
+- **FR-007a**: System MUST implement JWT Bearer token authentication with OAuth2/OpenID Connect standards for secure API access
 - **FR-008**: System MUST store sensitive configuration data using .NET Secret Manager for development environments
 - **FR-009**: System MUST support Azure Key Vault integration for production secret management
 - **FR-010**: System MUST use only actively maintained NuGet packages with no known security vulnerabilities
 - **FR-011**: System MUST follow official Microsoft C# coding conventions throughout the codebase
 - **FR-012**: System MUST use C# 12 language features and modern programming paradigms
 - **FR-013**: System MUST maintain all existing CRUD operations for News entities
-- **FR-014**: System MUST preserve existing MongoDB integration with updated driver versions
+- **FR-014**: System MUST implement modern MongoDB integration with updated driver versions and clean database schema design
+- **FR-014a**: System MUST provide data migration scripts to transfer existing data to new schema format
 - **FR-015**: System MUST maintain existing caching functionality for performance optimization
+- **FR-016**: System MUST implement minimal structured logging with console output and basic error tracking for development and production environments
 
 ### Non-Functional Requirements
 - **NFR-001**: All API responses MUST maintain sub-200ms response times for cached content
@@ -54,6 +57,15 @@ As a development team, we need to modernize the existing .NET Core 3.1 News API 
 - **NewsService**: Service layer abstraction for news operations
 - **DatabaseSettings**: Configuration entity for MongoDB connection management
 - **CacheKeys**: Static configuration for memory caching strategies
+
+## Clarifications
+
+### Session 2025-09-27
+- Q: Authentication and Authorization Strategy → A: JWT Bearer tokens - Full OAuth2/OpenID Connect with user authentication
+- Q: Clean Architecture Project Structure → A: Single project with folders - Keep existing newsApi project, organize into Domain/Application/Infrastructure/Presentation folders
+- Q: Migration Strategy for Existing Data → A: Clean slate - Assume fresh start with new database schema and data migration scripts
+- Q: Validation Framework Choice → A: FluentValidation - Rich, fluent API with complex validation rules and custom validators
+- Q: Logging and Monitoring Strategy → A: Minimal logging - Keep simple console logging with basic error tracking
 
 ---
 
