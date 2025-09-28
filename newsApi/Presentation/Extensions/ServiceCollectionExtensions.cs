@@ -85,7 +85,7 @@ public static class ServiceCollectionExtensions
             options.AddPolicy("AllowSpecificOrigins", builder =>
             {
                 builder
-                    .WithOrigins("http://localhost:3000", "https://haberibul.azurewebsites.net")
+                    .WithOrigins("http://localhost:3000", "http://localhost:3001", "https://haberibul.azurewebsites.net")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();
