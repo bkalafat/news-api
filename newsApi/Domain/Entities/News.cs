@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 
@@ -6,7 +7,8 @@ namespace NewsApi.Domain.Entities;
 public class News
 {
     [BsonId]
-    public Guid Id { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
     
     public string Category { get; set; } = string.Empty;
     

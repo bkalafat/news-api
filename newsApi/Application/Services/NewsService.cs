@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Caching.Memory;
+using MongoDB.Bson;
 using NewsApi.Application.Services;
 using NewsApi.Common;
 using NewsApi.Domain.Entities;
@@ -32,7 +33,7 @@ public class NewsService : INewsService
         return news;
     }
 
-    public async Task<News?> GetNewsByIdAsync(Guid id)
+    public async Task<News?> GetNewsByIdAsync(string id)
     {
         if (_cache.TryGetValue(id, out News? cachedNews) && cachedNews != null)
         {
@@ -54,7 +55,7 @@ public class NewsService : INewsService
 
     public async Task<News> CreateNewsAsync(News news)
     {
-        news.Id = Guid.NewGuid();
+        news.Id = ObjectId.GenerateNewId().ToString();
         news.CreateDate = DateTime.UtcNow;
         news.UpdateDate = DateTime.UtcNow;
 
@@ -66,7 +67,7 @@ public class NewsService : INewsService
         return createdNews;
     }
 
-    public async Task UpdateNewsAsync(Guid id, News news)
+    public async Task UpdateNewsAsync(string id, News news)
     {
         news.UpdateDate = DateTime.UtcNow;
         await _newsRepository.UpdateAsync(id, news);
@@ -76,7 +77,7 @@ public class NewsService : INewsService
         _cache.Remove(id);
     }
 
-    public async Task DeleteNewsAsync(Guid id)
+    public async Task DeleteNewsAsync(string id)
     {
         await _newsRepository.DeleteAsync(id);
         

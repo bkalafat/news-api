@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using MongoDB.Driver;
 using NewsApi.Domain.Entities;
 using NewsApi.Domain.Interfaces;
@@ -25,7 +26,7 @@ public class NewsRepository : INewsRepository
             .ToListAsync();
     }
 
-    public async Task<News?> GetByIdAsync(Guid id)
+    public async Task<News?> GetByIdAsync(string id)
     {
         return await _newsCollection
             .Find(news => news.Id == id && news.IsActive)
@@ -45,7 +46,7 @@ public class NewsRepository : INewsRepository
         return news;
     }
 
-    public async Task UpdateAsync(Guid id, News news)
+    public async Task UpdateAsync(string id, News news)
     {
         await _newsCollection.ReplaceOneAsync(
             filter: n => n.Id == id,
@@ -53,7 +54,7 @@ public class NewsRepository : INewsRepository
         );
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(string id)
     {
         await _newsCollection.DeleteOneAsync(news => news.Id == id);
     }

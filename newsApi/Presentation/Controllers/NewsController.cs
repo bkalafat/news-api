@@ -32,24 +32,30 @@ public class NewsController : ControllerBase
     {
         try
         {
+            Console.WriteLine("GetAllNews called");
             var news = await _newsService.GetAllNewsAsync();
+            Console.WriteLine($"Retrieved {news.Count} news items");
             
             // Apply filtering if parameters provided
             if (!string.IsNullOrEmpty(category))
             {
                 news = news.FindAll(n => n.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
+                Console.WriteLine($"After category filter: {news.Count} items");
             }
             
             if (!string.IsNullOrEmpty(type))
             {
                 news = news.FindAll(n => n.Type.Equals(type, StringComparison.OrdinalIgnoreCase));
+                Console.WriteLine($"After type filter: {news.Count} items");
             }
 
             return Ok(news);
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "An error occurred while retrieving news", error = ex.Message });
+            // Log more detailed error information
+            Console.WriteLine($"Error in GetAllNews: {ex}");
+            return StatusCode(500, new { message = "An error occurred while retrieving news", error = ex.Message, stackTrace = ex.StackTrace });
         }
     }
 
@@ -60,7 +66,7 @@ public class NewsController : ControllerBase
     /// <returns>News article</returns>
     [HttpGet("{id}")]
     [AllowAnonymous] // Public endpoint
-    public async Task<ActionResult<News>> GetNewsById(Guid id)
+    public async Task<ActionResult<News>> GetNewsById(string id)
     {
         try
         {
@@ -159,7 +165,7 @@ public class NewsController : ControllerBase
     /// <returns>No content</returns>
     [HttpPut("{id}")]
     [Authorize] // Protected endpoint
-    public async Task<ActionResult> UpdateNews(Guid id, [FromBody] UpdateNewsDto updateNewsDto)
+    public async Task<ActionResult> UpdateNews(string id, [FromBody] UpdateNewsDto updateNewsDto)
     {
         try
         {
@@ -203,7 +209,7 @@ public class NewsController : ControllerBase
     /// <returns>No content</returns>
     [HttpDelete("{id}")]
     [Authorize] // Protected endpoint
-    public async Task<ActionResult> DeleteNews(Guid id)
+    public async Task<ActionResult> DeleteNews(string id)
     {
         try
         {

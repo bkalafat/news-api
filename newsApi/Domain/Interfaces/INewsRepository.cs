@@ -8,9 +8,9 @@ namespace NewsApi.Domain.Interfaces;
 public interface INewsRepository
 {
     Task<List<News>> GetAllAsync();
-    Task<News?> GetByIdAsync(Guid id);
+    Task<News?> GetByIdAsync(string id);
     Task<News?> GetByUrlAsync(string url);
     Task<News> CreateAsync(News news);
-    Task UpdateAsync(Guid id, News news);
-    Task DeleteAsync(Guid id);
+    Task UpdateAsync(string id, News news);
+    Task DeleteAsync(string id);
 }
