@@ -74,7 +74,7 @@ public class NewsServiceTests
         var newsId = Guid.NewGuid();
         var cachedNews = new News { Id = newsId, Caption = "Cached News" };
 
-        _cache.Set(newsId, cachedNews);
+        _cache.Set(newsId.ToString(), cachedNews);
 
         // Act
         var result = await _newsService.GetNewsByIdAsync(newsId.ToString());
