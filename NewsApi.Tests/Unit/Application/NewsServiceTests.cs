@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using NewsApi.Application.Services;
 using NewsApi.Common;

@@ -47,4 +47,7 @@ public class News
     public int ViewCount { get; set; }
     
     public bool IsSecondPageNews { get; set; }
+    
+    // Optional field used by integration tests to scope documents to a test run.
+    public string? TestRunId { get; set; }
 }

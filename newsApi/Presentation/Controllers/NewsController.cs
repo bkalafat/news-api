@@ -81,6 +81,7 @@ public class NewsController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Error in GetNewsById: {ex}");
             return StatusCode(500, new { message = "An error occurred while retrieving the news article", error = ex.Message });
         }
     }
@@ -153,6 +154,7 @@ public class NewsController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Error in CreateNews: {ex}");
             return StatusCode(500, new { message = "An error occurred while creating the news article", error = ex.Message });
         }
     }
@@ -198,6 +200,7 @@ public class NewsController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Error in UpdateNews: {ex}");
             return StatusCode(500, new { message = "An error occurred while updating the news article", error = ex.Message });
         }
     }
@@ -224,6 +227,7 @@ public class NewsController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Error in DeleteNews: {ex}");
             return StatusCode(500, new { message = "An error occurred while deleting the news article", error = ex.Message });
         }
     }

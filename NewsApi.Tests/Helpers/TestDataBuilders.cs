@@ -24,8 +24,8 @@ public class NewsBuilder
       ImgPath = "/images/default-test.jpg",
       ImgAlt = "Default test image",
       Content = "Default test content for news article",
-      Subjects = new[] { "Testing" },
-      Authors = new[] { "Test Author" },
+      Subjects = ["Testing"],
+      Authors = ["Test Author"],
       ExpressDate = DateTime.UtcNow,
       CreateDate = DateTime.UtcNow,
       UpdateDate = DateTime.UtcNow,
@@ -243,8 +243,8 @@ public class CreateNewsDtoBuilder
             ImgPath = "/images/default-test.jpg",
             ImgAlt = "Default test image",
             Content = "Default test content for news article",
-            Subjects = new[] { "Testing" },
-            Authors = new[] { "Test Author" },
+            Subjects = ["Testing"],
+            Authors = ["Test Author"],
             ExpressDate = DateTime.UtcNow,
             Priority = 1,
             Url = "default-test-news"
@@ -273,13 +273,13 @@ public class CreateNewsDtoBuilder
 
     public CreateNewsDtoBuilder WithKeywords(string? keywords)
     {
-        _dto.Keywords = keywords;
+        _dto.Keywords = keywords ?? string.Empty;
         return this;
     }
 
     public CreateNewsDtoBuilder WithSocialTags(string? socialTags)
     {
-        _dto.SocialTags = socialTags;
+        _dto.SocialTags = socialTags ?? string.Empty;
         return this;
     }
 
@@ -291,13 +291,13 @@ public class CreateNewsDtoBuilder
 
     public CreateNewsDtoBuilder WithImagePath(string? imgPath)
     {
-        _dto.ImgPath = imgPath;
+        _dto.ImgPath = imgPath ?? string.Empty;
         return this;
     }
 
     public CreateNewsDtoBuilder WithImageAlt(string? imgAlt)
     {
-        _dto.ImgAlt = imgAlt;
+        _dto.ImgAlt = imgAlt ?? string.Empty;
         return this;
     }
 
@@ -309,13 +309,13 @@ public class CreateNewsDtoBuilder
 
     public CreateNewsDtoBuilder WithSubjects(params string[]? subjects)
     {
-        _dto.Subjects = subjects;
+        _dto.Subjects = subjects ?? [];
         return this;
     }
 
     public CreateNewsDtoBuilder WithAuthors(params string[]? authors)
     {
-        _dto.Authors = authors;
+        _dto.Authors = authors ?? [];
         return this;
     }
 
@@ -333,7 +333,7 @@ public class CreateNewsDtoBuilder
 
     public CreateNewsDtoBuilder WithUrl(string? url)
     {
-        _dto.Url = url;
+        _dto.Url = url ?? string.Empty;
         return this;
     }
 
@@ -396,8 +396,8 @@ public class UpdateNewsDtoBuilder
             ImgPath = "/images/updated-test.jpg",
             ImgAlt = "Updated test image",
             Content = "Updated test content for news article",
-            Subjects = new[] { "Updated Testing" },
-            Authors = new[] { "Updated Test Author" },
+            Subjects = ["Updated Testing"],
+            Authors = ["Updated Test Author"],
             ExpressDate = DateTime.UtcNow,
             Priority = 2,
             Url = "updated-test-news"

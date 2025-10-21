@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Caching.Memory;
 using MongoDB.Bson;
-using NewsApi.Application.Services;
 using NewsApi.Common;
 using NewsApi.Domain.Entities;
 using NewsApi.Domain.Interfaces;
@@ -30,6 +29,7 @@ public class NewsService : INewsService
 
         var news = await _newsRepository.GetAllAsync();
         _cache.Set(CacheKeys.NewsList, news, TimeSpan.FromMinutes(30));
+
         return news;
     }
 

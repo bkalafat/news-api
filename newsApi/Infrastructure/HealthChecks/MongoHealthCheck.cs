@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using MongoDB.Driver;
 using NewsApi.Infrastructure.Data;
 using System;
 using System.Threading;

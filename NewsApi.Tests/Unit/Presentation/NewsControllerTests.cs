@@ -1,7 +1,6 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using NewsApi.Application.DTOs;
 using NewsApi.Application.Services;
 using NewsApi.Domain.Entities;
 using NewsApi.Presentation.Controllers;

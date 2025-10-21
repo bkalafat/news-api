@@ -1,4 +1,3 @@
-using FluentAssertions;
 using FluentValidation.TestHelper;
 using NewsApi.Application.DTOs;
 using NewsApi.Application.Validators;
