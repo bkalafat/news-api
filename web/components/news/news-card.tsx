@@ -15,6 +15,10 @@ interface NewsCardProps {
 }
 
 export function NewsCard({ news }: NewsCardProps) {
+  // Extract slug from URL
+  const slug = news.url?.split('/').pop() || '';
+  const localNewsUrl = `/news/${slug}`;
+  
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
       {/* Image */}
@@ -40,16 +44,14 @@ export function NewsCard({ news }: NewsCardProps) {
           )}
           <ShareButtons 
             title={news.title} 
-            url={news.url}
+            url={`${typeof window !== 'undefined' ? window.location.origin : ''}${localNewsUrl}`}
           />
         </div>
 
         {/* Title */}
         <CardTitle className="line-clamp-2 leading-tight">
           <Link
-            href={news.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={localNewsUrl}
             className="hover:text-primary transition-colors"
           >
             {news.title}
@@ -84,9 +86,7 @@ export function NewsCard({ news }: NewsCardProps) {
 
         {/* Read More Link */}
         <Link
-          href={news.url}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={localNewsUrl}
           className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-primary hover:underline"
         >
           Haberi Oku
