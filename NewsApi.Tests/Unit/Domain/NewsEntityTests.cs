@@ -12,7 +12,7 @@ public class NewsEntityTests
         var news = new News();
 
         // Assert
-        news.Id.Should().BeEmpty();
+        news.Id.Should().NotBeEmpty(); // Changed: News entity generates a default ObjectId
         news.Category.Should().BeEmpty();
         news.Type.Should().BeEmpty();
         news.Caption.Should().BeEmpty();
@@ -38,7 +38,7 @@ public class NewsEntityTests
     public void News_WhenPropertiesSet_ShouldRetainValues()
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = Guid.NewGuid().ToString();
         var category = "Technology";
         var type = "Article";
         var caption = "Test Caption";
@@ -200,7 +200,7 @@ public class NewsEntityTests
     {
         // Arrange
         var seoUrl = "breaking-news-about-technology-trends-2024";
-        
+
         // Act
         var news = new News { Url = seoUrl };
 

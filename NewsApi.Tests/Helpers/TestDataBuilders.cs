@@ -14,26 +14,26 @@ public class NewsBuilder
     {
         _news = new News
         {
-            Id = Guid.NewGuid(),
-            Category = "Technology",
-            Type = "Article",
-            Caption = "Default Test Caption",
-            Keywords = "test, default",
-            SocialTags = "#test #default",
-            Summary = "Default test summary",
-            ImgPath = "/images/default-test.jpg",
-            ImgAlt = "Default test image",
-            Content = "Default test content for news article",
-            Subjects = new[] { "Testing" },
-            Authors = new[] { "Test Author" },
-            ExpressDate = DateTime.UtcNow,
-            CreateDate = DateTime.UtcNow,
-            UpdateDate = DateTime.UtcNow,
-            Priority = 1,
-            IsActive = true,
-            Url = "default-test-news",
-            ViewCount = 0,
-            IsSecondPageNews = false
+            Id = Guid.NewGuid().ToString(),
+      Category = "Technology",
+      Type = "Article",
+      Caption = "Default Test Caption",
+      Keywords = "test, default",
+      SocialTags = "#test #default",
+      Summary = "Default test summary",
+      ImgPath = "/images/default-test.jpg",
+      ImgAlt = "Default test image",
+      Content = "Default test content for news article",
+      Subjects = new[] { "Testing" },
+      Authors = new[] { "Test Author" },
+      ExpressDate = DateTime.UtcNow,
+      CreateDate = DateTime.UtcNow,
+      UpdateDate = DateTime.UtcNow,
+      Priority = 1,
+      IsActive = true,
+      Url = "default-test-news",
+      ViewCount = 0,
+      IsSecondPageNews = false
         };
     }
 
@@ -41,7 +41,7 @@ public class NewsBuilder
 
     public NewsBuilder WithId(Guid id)
     {
-        _news.Id = id;
+        _news.Id = id.ToString();
         return this;
     }
 
@@ -214,7 +214,7 @@ public class NewsBuilder
         for (int i = 0; i < count; i++)
         {
             var news = Build();
-            news.Id = Guid.NewGuid(); // Ensure unique IDs
+            news.Id = Guid.NewGuid().ToString(); // Ensure unique IDs
             news.Caption = $"{news.Caption} {i + 1}";
             news.Url = $"{news.Url}-{i + 1}";
             newsList.Add(news);
