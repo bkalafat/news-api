@@ -102,7 +102,7 @@ public class NewsServiceTests
         _mockRepository.Verify(x => x.GetByIdAsync(newsId), Times.Once);
         
         // Verify it was cached
-        _cache.TryGetValue(newsId, out var cachedValue).Should().BeTrue();
+        _cache.TryGetValue(newsId.ToString(), out var cachedValue).Should().BeTrue();
         cachedValue.Should().BeEquivalentTo(newsFromRepo);
     }
 
@@ -123,7 +123,7 @@ public class NewsServiceTests
         _mockRepository.Verify(x => x.GetByIdAsync(newsId), Times.Once);
         
         // Verify nothing was cached
-        _cache.TryGetValue(newsId, out _).Should().BeFalse();
+        _cache.TryGetValue(newsId.ToString(), out _).Should().BeFalse();
     }
 
     [Fact]
@@ -186,7 +186,7 @@ public class NewsServiceTests
 
         // Setup cache with some data to verify it gets invalidated
         _cache.Set(CacheKeys.NewsList, new List<News>());
-        _cache.Set(newsId, new News());
+        _cache.Set(newsId.ToString(), new News());
 
         // Act
         await _newsService.UpdateNewsAsync(newsId, news);
@@ -200,7 +200,7 @@ public class NewsServiceTests
 
         // Verify cache was invalidated
         _cache.TryGetValue(CacheKeys.NewsList, out _).Should().BeFalse();
-        _cache.TryGetValue(newsId, out _).Should().BeFalse();
+        _cache.TryGetValue(newsId.ToString(), out _).Should().BeFalse();
     }
 
     [Fact]
@@ -211,7 +211,7 @@ public class NewsServiceTests
 
         // Setup cache with some data to verify it gets invalidated
         _cache.Set(CacheKeys.NewsList, new List<News>());
-        _cache.Set(newsId, new News());
+        _cache.Set(newsId.ToString(), new News());
 
         // Act
         await _newsService.DeleteNewsAsync(newsId);
@@ -221,7 +221,7 @@ public class NewsServiceTests
 
         // Verify cache was invalidated
         _cache.TryGetValue(CacheKeys.NewsList, out _).Should().BeFalse();
-        _cache.TryGetValue(newsId, out _).Should().BeFalse();
+        _cache.TryGetValue(newsId.ToString(), out _).Should().BeFalse();
     }
 
     [Fact]
