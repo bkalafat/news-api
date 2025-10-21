@@ -77,7 +77,7 @@ public class NewsServiceTests
         _cache.Set(newsId, cachedNews);
 
         // Act
-        var result = await _newsService.GetNewsByIdAsync(newsId);
+        var result = await _newsService.GetNewsByIdAsync(newsId.ToString());
 
         // Assert
         result.Should().BeEquivalentTo(cachedNews);
