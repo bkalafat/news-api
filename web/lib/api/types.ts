@@ -5,15 +5,40 @@
 
 export interface News {
   id: string;
-  title: string;
-  description: string;
-  url: string;
+  category: string;
+  type: string;
+  caption: string;
+  slug: string;
+  keywords: string;
+  socialTags: string;
+  summary: string;
+  imgPath: string;
+  imgAlt: string;
   imageUrl?: string;
-  publishedAt: Date;
-  source: string;
+  thumbnailUrl?: string;
+  imageMetadata?: {
+    width: number;
+    height: number;
+    altText: string;
+  };
+  content: string;
+  subjects: string[];
+  authors: string[];
+  expressDate: string;
+  createDate: string;
+  updateDate: string;
+  priority: number;
+  isActive: boolean;
+  url: string;
+  viewCount: number;
+  isSecondPageNews: boolean;
+  
+  // Legacy compatibility
+  title?: string;
+  description?: string;
+  publishedAt?: Date;
+  source?: string;
   author?: string;
-  category?: string;
-  content?: string;
 }
 
 export interface CreateNewsDto {

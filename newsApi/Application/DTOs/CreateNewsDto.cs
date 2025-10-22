@@ -33,6 +33,18 @@ public class CreateNewsDto
     [StringLength(200)]
     public string ImgAlt { get; set; } = string.Empty;
     
+    /// <summary>
+    /// Full-size image URL (can be external URL or MinIO URL)
+    /// </summary>
+    [StringLength(1000)]
+    public string ImageUrl { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Thumbnail image URL (can be external URL or MinIO URL)
+    /// </summary>
+    [StringLength(1000)]
+    public string ThumbnailUrl { get; set; } = string.Empty;
+    
     [Required]
     public string Content { get; set; } = string.Empty;
     

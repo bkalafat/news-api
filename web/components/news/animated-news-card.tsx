@@ -17,6 +17,9 @@ interface AnimatedNewsCardProps {
 }
 
 export function AnimatedNewsCard({ news, index = 0 }: AnimatedNewsCardProps) {
+  const imageUrl = news.imageUrl || news.thumbnailUrl || news.imgPath || "/placeholder-news.jpg";
+  const newsUrl = `/news/${news.slug || news.id}`;
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -30,11 +33,11 @@ export function AnimatedNewsCard({ news, index = 0 }: AnimatedNewsCardProps) {
     >
       <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group h-full">
         {/* Image */}
-        {news.imageUrl && (
+        {imageUrl && (
           <div className="relative h-48 w-full overflow-hidden bg-muted">
             <Image
-              src={news.imageUrl}
-              alt={news.title}
+              src={imageUrl}
+              alt={news.imgAlt || news.caption}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -56,20 +59,18 @@ export function AnimatedNewsCard({ news, index = 0 }: AnimatedNewsCardProps) {
               </Badge>
             )}
             <ShareButtons 
-              title={news.title} 
-              url={news.url}
+              title={news.caption || news.title || 'Haber'} 
+              url={newsUrl}
             />
           </motion.div>
 
           {/* Title */}
           <CardTitle className="line-clamp-2 leading-tight">
             <Link
-              href={news.url}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={newsUrl}
               className="hover:text-primary transition-colors"
             >
-              {news.title}
+              {news.caption || news.title}
             </Link>
           </CardTitle>
 
@@ -77,17 +78,17 @@ export function AnimatedNewsCard({ news, index = 0 }: AnimatedNewsCardProps) {
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
-              {news.publishedAt && !isNaN(news.publishedAt.getTime()) ? (
-                <time dateTime={news.publishedAt.toISOString()}>
-                  {format(news.publishedAt, 'dd MMMM yyyy', { locale: tr })}
+              {(news.expressDate || news.publishedAt) && (
+                <time dateTime={news.expressDate || news.publishedAt?.toISOString()}>
+                  {news.expressDate ? format(new Date(news.expressDate), 'dd MMMM yyyy', { locale: tr }) : 
+                   news.publishedAt ? format(news.publishedAt, 'dd MMMM yyyy', { locale: tr }) : 
+                   'Tarih belirtilmemiş'}
                 </time>
-              ) : (
-                <span>Tarih belirtilmemiş</span>
               )}
             </div>
-            {news.source && (
+            {(news.authors && news.authors.length > 0) && (
               <Badge variant="outline" className="text-xs">
-                {news.source}
+                {news.authors[0]}
               </Badge>
             )}
           </div>
@@ -96,14 +97,12 @@ export function AnimatedNewsCard({ news, index = 0 }: AnimatedNewsCardProps) {
         <CardContent>
           {/* Description */}
           <CardDescription className="line-clamp-3">
-            {news.description}
+            {news.summary || news.description || news.content}
           </CardDescription>
 
           {/* Read More Link */}
           <Link
-            href={news.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={newsUrl}
             className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-primary hover:underline group/link"
           >
             Haberi Oku

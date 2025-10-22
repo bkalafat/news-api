@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useAllNews } from '@/lib/api/hooks';
-import { NewsCard } from '@/components/news/news-card';
+import { AnimatedNewsCard } from "@/components/news/animated-news-card";
 import { NewsCardSkeleton } from '@/components/news/news-card-skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
@@ -22,10 +22,11 @@ export function SearchResults() {
     
     const lowerQuery = query.toLowerCase();
     return news.filter(item => 
-      item.title.toLowerCase().includes(lowerQuery) ||
-      item.description?.toLowerCase().includes(lowerQuery) ||
+      (item.caption || item.title || '').toLowerCase().includes(lowerQuery) ||
+      (item.summary || item.description || '').toLowerCase().includes(lowerQuery) ||
       item.category?.toLowerCase().includes(lowerQuery) ||
       item.content?.toLowerCase().includes(lowerQuery) ||
+      item.authors?.some(author => author.toLowerCase().includes(lowerQuery)) ||
       item.author?.toLowerCase().includes(lowerQuery)
     );
   }, [news, query]);
@@ -74,8 +75,8 @@ export function SearchResults() {
         </Alert>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredNews.map((item) => (
-            <NewsCard key={item.id} news={item} />
+          {filteredNews.map((item, index) => (
+            <AnimatedNewsCard key={item.id} news={item} index={index} />
           ))}
         </div>
       )}

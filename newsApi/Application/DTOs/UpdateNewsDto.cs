@@ -29,6 +29,18 @@ public class UpdateNewsDto
     [StringLength(200)]
     public string? ImgAlt { get; set; }
     
+    /// <summary>
+    /// Full-size image URL (can be external URL or MinIO URL)
+    /// </summary>
+    [StringLength(1000)]
+    public string? ImageUrl { get; set; }
+    
+    /// <summary>
+    /// Thumbnail image URL (can be external URL or MinIO URL)
+    /// </summary>
+    [StringLength(1000)]
+    public string? ThumbnailUrl { get; set; }
+    
     public string? Content { get; set; }
     
     public string[]? Subjects { get; set; }

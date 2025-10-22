@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using NewsApi.Application.DTOs;
 using NewsApi.Application.Services;
 using NewsApi.Domain.Entities;
+using NewsApi.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace NewsApi.Presentation.Controllers;
@@ -14,10 +16,12 @@ namespace NewsApi.Presentation.Controllers;
 public class NewsController : ControllerBase
 {
     private readonly INewsService _newsService;
+    private readonly IImageStorageService _imageStorageService;
 
-    public NewsController(INewsService newsService)
+    public NewsController(INewsService newsService, IImageStorageService imageStorageService)
     {
         _newsService = newsService;
+        _imageStorageService = imageStorageService;
     }
 
     /// <summary>
@@ -194,6 +198,8 @@ public class NewsController : ControllerBase
             if (updateNewsDto.IsActive.HasValue) existingNews.IsActive = updateNewsDto.IsActive.Value;
             if (updateNewsDto.Url != null) existingNews.Url = updateNewsDto.Url;
             if (updateNewsDto.IsSecondPageNews.HasValue) existingNews.IsSecondPageNews = updateNewsDto.IsSecondPageNews.Value;
+            if (updateNewsDto.ImageUrl != null) existingNews.ImageUrl = updateNewsDto.ImageUrl;
+            if (updateNewsDto.ThumbnailUrl != null) existingNews.ThumbnailUrl = updateNewsDto.ThumbnailUrl;
 
             await _newsService.UpdateNewsAsync(id, existingNews);
             return NoContent();
@@ -230,5 +236,120 @@ public class NewsController : ControllerBase
             Console.WriteLine($"Error in DeleteNews: {ex}");
             return StatusCode(500, new { message = "An error occurred while deleting the news article", error = ex.Message });
         }
+    }
+
+    /// <summary>
+    /// Upload an image for a news article (requires authentication)
+    /// </summary>
+    /// <param name="id">News article ID</param>
+    /// <param name="imageUpload">Image upload DTO</param>
+    /// <returns>Updated news article with image URLs</returns>
+    [HttpPost("{id}/image")]
+    [Authorize]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType(typeof(News), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<News>> UploadImage(string id, [FromForm] ImageUploadDto imageUpload)
+    {
+        try
+        {
+            // Check if news article exists
+            var existingNews = await _newsService.GetNewsByIdAsync(id);
+            if (existingNews == null)
+            {
+                return NotFound(new { message = "News article not found" });
+            }
+
+            // Delete old image if exists
+            if (existingNews.ImageMetadata != null)
+            {
+                await _imageStorageService.DeleteImageWithThumbnailAsync(existingNews.ImageMetadata);
+            }
+
+            // Upload new image
+            var imageMetadata = await _imageStorageService.UploadImageAsync(
+                id, 
+                imageUpload.Image, 
+                imageUpload.GenerateThumbnail,
+                imageUpload.AltText
+            );
+
+            // Update news article with image URLs
+            existingNews.ImageUrl = GetImageUrl(imageMetadata.MinioObjectKey);
+            existingNews.ThumbnailUrl = GetThumbnailUrl(id, Path.GetExtension(imageMetadata.FileName));
+            existingNews.ImageMetadata = imageMetadata;
+            existingNews.ImgAlt = imageUpload.AltText ?? imageMetadata.AltText;
+
+            await _newsService.UpdateNewsAsync(id, existingNews);
+
+            return Ok(existingNews);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in UploadImage: {ex}");
+            return StatusCode(500, new { message = "An error occurred while uploading the image", error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Delete the image from a news article (requires authentication)
+    /// </summary>
+    /// <param name="id">News article ID</param>
+    /// <returns>No content</returns>
+    [HttpDelete("{id}/image")]
+    [Authorize]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult> DeleteImage(string id)
+    {
+        try
+        {
+            var existingNews = await _newsService.GetNewsByIdAsync(id);
+            if (existingNews == null)
+            {
+                return NotFound(new { message = "News article not found" });
+            }
+
+            if (existingNews.ImageMetadata == null)
+            {
+                return NotFound(new { message = "News article has no image" });
+            }
+
+            // Delete image from MinIO
+            await _imageStorageService.DeleteImageWithThumbnailAsync(existingNews.ImageMetadata);
+
+            // Update news article
+            existingNews.ImageUrl = string.Empty;
+            existingNews.ThumbnailUrl = string.Empty;
+            existingNews.ImageMetadata = null;
+
+            await _newsService.UpdateNewsAsync(id, existingNews);
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in DeleteImage: {ex}");
+            return StatusCode(500, new { message = "An error occurred while deleting the image", error = ex.Message });
+        }
+    }
+
+    private string GetImageUrl(string objectKey)
+    {
+        // In production, this should be a CDN URL
+        return $"http://localhost:9000/news-images/{objectKey}";
+    }
+
+    private string GetThumbnailUrl(string newsId, string extension)
+    {
+        // In production, this should be a CDN URL
+        return $"http://localhost:9000/news-images/{newsId}-thumb{extension}";
     }
 }

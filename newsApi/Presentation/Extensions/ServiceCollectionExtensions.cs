@@ -13,6 +13,7 @@ using NewsApi.Infrastructure.Data.Configurations;
 using NewsApi.Infrastructure.Data.Repositories;
 using NewsApi.Infrastructure.Security;
 using NewsApi.Infrastructure.HealthChecks;
+using NewsApi.Infrastructure.Services;
 using System;
 using System.Text;
 
@@ -40,6 +41,12 @@ public static class ServiceCollectionExtensions
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();
         services.AddValidatorsFromAssemblyContaining<CreateNewsDtoValidator>();
+
+        // MinIO Image Storage
+        var minioSettings = new MinioSettings();
+        configuration.GetSection("MinioSettings").Bind(minioSettings);
+        services.AddSingleton(minioSettings);
+        services.AddSingleton<IImageStorageService, MinioImageStorageService>();
 
         return services;
     }

@@ -1,6 +1,7 @@
 using MongoDB.Driver;
 using NewsApi.Domain.Entities;
 using NewsApi.Infrastructure.Data;
+using NewsApi.Common;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -31,6 +32,7 @@ public static class SeedNewsData
                 Category = "technology",
                 Type = "news",
                 Caption = "Yapay Zeka Çağında Yeni Gelişmeler",
+                Slug = SlugHelper.GenerateSlug("Yapay Zeka Çağında Yeni Gelişmeler"),
                 Keywords = "yapay zeka, AI, GPT-5, OpenAI, teknoloji",
                 SocialTags = "#YapayZeka #AI #GPT5 #Teknoloji",
                 Summary = "OpenAI'nin yeni GPT-5 modeli, yapay zeka dünyasında devrim yaratmaya hazırlanıyor. Model, daha gelişmiş anlama ve üretim yetenekleriyle dikkat çekiyor.",
@@ -545,6 +547,15 @@ public static class SeedNewsData
                 IsSecondPageNews = false
             }
         };
+
+        // Generate slugs for all news articles before inserting
+        foreach (var news in newsList)
+        {
+            if (string.IsNullOrEmpty(news.Slug))
+            {
+                news.Slug = SlugHelper.GenerateSlug(news.Caption);
+            }
+        }
 
         await newsCollection.InsertManyAsync(newsList);
         Console.WriteLine($"Successfully seeded {newsList.Count} news articles to the database!");

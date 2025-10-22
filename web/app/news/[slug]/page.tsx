@@ -1,194 +1,176 @@
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowLeft, Calendar, User, Eye, Share2 } from 'lucide-react';
-import { ShareButtons } from '@/components/social/share-buttons';
+import { notFound } from "next/navigation";
+import { NewsDetailHero } from "@/components/news/news-detail-hero";
+import { NewsDetailContent } from "@/components/news/news-detail-content";
+import { RelatedNews } from "@/components/news/related-news";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Metadata } from "next";
 
-async function getNewsArticle(slug: string) {
+interface News {
+  id: string;
+  category: string;
+  type: string;
+  caption: string;
+  slug: string;
+  keywords: string;
+  socialTags: string;
+  summary: string;
+  imgPath: string;
+  imgAlt: string;
+  imageUrl?: string;
+  thumbnailUrl?: string;
+  imageMetadata?: {
+    width: number;
+    height: number;
+    altText: string;
+  };
+  content: string;
+  subjects: string[];
+  authors: string[];
+  expressDate: string;
+  createDate: string;
+  updateDate: string;
+  priority: number;
+  isActive: boolean;
+  url: string;
+  viewCount: number;
+  isSecondPageNews: boolean;
+}
+
+async function getNewsBySlug(slug: string): Promise<News | null> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news`, {
-      cache: 'no-store'
+    // First, try to get all news and find by slug
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/news`, {
+      next: { revalidate: 60 },
     });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const allNews: News[] = await response.json();
+    const news = allNews.find(n => n.slug === slug);
     
-    if (!res.ok) return null;
-    
-    const articles = await res.json();
-    
-    // Find article by matching URL slug
-    const article = articles.find((item: any) => {
-      const urlSlug = item.url?.split('/').pop() || '';
-      return urlSlug === slug;
-    });
-    
-    return article || null;
+    return news || null;
   } catch (error) {
-    console.error('Error fetching news article:', error);
+    console.error("Error fetching news by slug:", error);
     return null;
   }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const article = await getNewsArticle(params.slug);
-  
-  if (!article) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const news = await getNewsBySlug(slug);
+
+  if (!news) {
     return {
-      title: 'Haber Bulunamadı'
+      title: "Haber Bulunamadı",
     };
   }
-  
+
+  const imageUrl = news.imageUrl || news.imgPath || "/placeholder-news.jpg";
+
   return {
-    title: `${article.caption} | Haberler`,
-    description: article.summary,
+    title: `${news.caption} | Teknoloji Haberleri`,
+    description: news.summary,
+    keywords: news.keywords.split(",").map((k) => k.trim()),
     openGraph: {
-      title: article.caption,
-      description: article.summary,
-      images: article.imgPath ? [article.imgPath] : [],
+      title: news.caption,
+      description: news.summary,
+      type: "article",
+      publishedTime: news.expressDate,
+      modifiedTime: news.updateDate,
+      authors: news.authors,
+      tags: news.subjects,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: news.imgAlt || news.caption,
+        },
+      ],
     },
     twitter: {
-      card: 'summary_large_image',
-      title: article.caption,
-      description: article.summary,
-      images: article.imgPath ? [article.imgPath] : [],
+      card: "summary_large_image",
+      title: news.caption,
+      description: news.summary,
+      images: [imageUrl],
     },
   };
 }
 
-export default async function NewsDetailPage({ params }: { params: { slug: string } }) {
-  const article = await getNewsArticle(params.slug);
-  
-  if (!article) {
+export default async function NewsDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const news = await getNewsBySlug(slug);
+
+  if (!news) {
     notFound();
   }
 
-  const formattedDate = new Date(article.expressDate).toLocaleDateString('tr-TR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
+  const categoryNames: Record<string, string> = {
+    technology: "Teknoloji",
+    world: "Dünya",
+    business: "İş Dünyası",
+    science: "Bilim",
+    health: "Sağlık",
+    entertainment: "Eğlence",
+    sports: "Spor",
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Back Button */}
-        <Link 
-          href="/" 
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span>Ana Sayfaya Dön</span>
-        </Link>
+      {/* Breadcrumb Navigation */}
+      <div className="container mx-auto px-4 py-4">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Ana Sayfa</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/category/${news.category}`}>
+                {categoryNames[news.category] || news.category}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{news.caption}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
 
-        {/* Category Badge */}
-        <div className="mb-4">
-          <Link
-            href={`/category/${article.category}`}
-            className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium hover:bg-primary/20 transition-colors"
-          >
-            {article.category === 'technology' && 'Teknoloji'}
-            {article.category === 'world' && 'Dünya'}
-            {article.category === 'business' && 'Ekonomi'}
-            {article.category === 'science' && 'Bilim'}
-            {article.category === 'health' && 'Sağlık'}
-            {article.category === 'entertainment' && 'Eğlence'}
-            {article.category === 'sports' && 'Spor'}
-          </Link>
+      {/* Hero Section */}
+      <NewsDetailHero news={news} />
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Article Content - 2/3 width on large screens */}
+          <div className="lg:col-span-2">
+            <NewsDetailContent news={news} />
+          </div>
+
+          {/* Sidebar - 1/3 width on large screens */}
+          <aside className="lg:col-span-1">
+            <RelatedNews category={news.category} currentNewsId={news.id} />
+          </aside>
         </div>
-
-        {/* Title */}
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-          {article.caption}
-        </h1>
-
-        {/* Summary */}
-        <p className="text-xl text-muted-foreground mb-6 leading-relaxed">
-          {article.summary}
-        </p>
-
-        {/* Meta Information */}
-        <div className="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Calendar className="h-4 w-4" />
-            <span>{formattedDate}</span>
-          </div>
-          
-          {article.authors && article.authors.length > 0 && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <User className="h-4 w-4" />
-              <span>{article.authors.join(', ')}</span>
-            </div>
-          )}
-          
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Eye className="h-4 w-4" />
-            <span>{article.viewCount.toLocaleString('tr-TR')} görüntülenme</span>
-          </div>
-        </div>
-
-        {/* Featured Image */}
-        {article.imgPath && (
-          <div className="relative w-full h-[400px] md:h-[500px] mb-8 rounded-lg overflow-hidden">
-            <Image
-              src={article.imgPath}
-              alt={article.imgAlt || article.caption}
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
-        )}
-
-        {/* Article Content */}
-        <div className="prose prose-lg dark:prose-invert max-w-none mb-8">
-          <div className="text-lg leading-relaxed whitespace-pre-line">
-            {article.content}
-          </div>
-        </div>
-
-        {/* Keywords/Tags */}
-        {article.keywords && (
-          <div className="mb-8">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Etiketler</h3>
-            <div className="flex flex-wrap gap-2">
-              {article.keywords.split(',').map((keyword: string, index: number) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-muted rounded-full text-sm"
-                >
-                  {keyword.trim()}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Social Share */}
-        <div className="border-t pt-6">
-          <div className="flex items-center gap-3 mb-3">
-            <Share2 className="h-5 w-5 text-muted-foreground" />
-            <h3 className="text-lg font-semibold">Haberi Paylaş</h3>
-          </div>
-          <ShareButtons 
-            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/news/${params.slug}`}
-            title={article.caption}
-          />
-        </div>
-
-        {/* Subjects */}
-        {article.subjects && article.subjects.length > 0 && (
-          <div className="mt-8 p-4 bg-muted/50 rounded-lg">
-            <h3 className="text-sm font-semibold mb-2">Konular</h3>
-            <div className="flex flex-wrap gap-2">
-              {article.subjects.map((subject: string, index: number) => (
-                <span
-                  key={index}
-                  className="text-sm text-muted-foreground"
-                >
-                  {subject}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

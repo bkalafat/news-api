@@ -16,6 +16,11 @@ public class News
     
     public string Caption { get; set; } = string.Empty;
     
+    /// <summary>
+    /// SEO-friendly URL slug generated from Caption
+    /// </summary>
+    public string Slug { get; set; } = string.Empty;
+    
     public string Keywords { get; set; } = string.Empty;
     
     public string SocialTags { get; set; } = string.Empty;
@@ -25,6 +30,21 @@ public class News
     public string ImgPath { get; set; } = string.Empty;
     
     public string ImgAlt { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Full-size image URL from MinIO storage
+    /// </summary>
+    public string ImageUrl { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Thumbnail image URL from MinIO storage (optimized for lists/previews)
+    /// </summary>
+    public string ThumbnailUrl { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Metadata about the uploaded image
+    /// </summary>
+    public ImageMetadata? ImageMetadata { get; set; }
     
     public string Content { get; set; } = string.Empty;
     
