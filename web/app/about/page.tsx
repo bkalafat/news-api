@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import { Newspaper, Code, Zap, Shield } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
 
 export const metadata: Metadata = {
   title: 'Hakkımızda - Teknoloji Haberleri',
@@ -44,7 +46,10 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-5xl">
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1">
+        <div className="container mx-auto px-4 py-12 max-w-5xl">
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">Hakkımızda</h1>
@@ -153,6 +158,9 @@ export default function AboutPage() {
           &copy; {new Date().getFullYear()} Teknoloji Haberleri. Tüm hakları saklıdır.
         </p>
       </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }

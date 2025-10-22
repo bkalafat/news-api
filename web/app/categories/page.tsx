@@ -13,6 +13,8 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
 
 export const metadata: Metadata = {
   title: 'Kategoriler - Teknoloji Haberleri',
@@ -66,7 +68,10 @@ const categories = [
 
 export default function CategoriesPage() {
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl">
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1">
+        <div className="container mx-auto px-4 py-12 max-w-6xl">
       {/* Header */}
       <div className="text-center mb-12">
         <div className="flex items-center justify-center gap-2 mb-4">
@@ -143,6 +148,9 @@ export default function CategoriesPage() {
           </CardContent>
         </Card>
       </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }

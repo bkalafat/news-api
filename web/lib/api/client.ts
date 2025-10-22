@@ -79,7 +79,7 @@ class NewsApiClient {
    * Get news by category
    */
   async getNewsByCategory(category: string): Promise<News[]> {
-    const response = await this.client.get<News[]>(`/category/${category}`);
+    const response = await this.client.get<News[]>(`/?category=${category}`);
     return response.data.map(this.parseNewsDate);
   }
 
