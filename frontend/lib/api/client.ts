@@ -38,7 +38,9 @@ class NewsApiClient {
    */
   async getAllNews(): Promise<News[]> {
     const response = await this.client.get<News[]>('/');
-    return response.data.map(this.parseNewsDate);
+    // Backend returns array directly
+    const data = Array.isArray(response.data) ? response.data : [];
+    return data.map(this.parseNewsDate);
   }
 
   /**
@@ -80,7 +82,9 @@ class NewsApiClient {
    */
   async getNewsByCategory(category: string): Promise<News[]> {
     const response = await this.client.get<News[]>(`/?category=${category}`);
-    return response.data.map(this.parseNewsDate);
+    // Backend returns array directly
+    const data = Array.isArray(response.data) ? response.data : [];
+    return data.map(this.parseNewsDate);
   }
 
   /**
@@ -91,7 +95,8 @@ class NewsApiClient {
     let publishedAt: Date;
     
     try {
-      const dateValue = news.publishedAt;
+      // Backend returns expressDate, fallback to publishedAt for backward compatibility
+      const dateValue = news.expressDate || news.publishedAt;
       if (!dateValue) {
         // If no date provided, use current date
         publishedAt = new Date();
