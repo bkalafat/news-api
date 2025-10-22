@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using NewsApi.Infrastructure.Data;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using NewsApi.Infrastructure.Data;
 
 namespace NewsApi.Presentation.Controllers;
 
@@ -34,7 +34,7 @@ public class SeedController : ControllerBase
             _logger.LogInformation("Starting database seeding...");
             await SeedNewsData.SeedAsync(_context);
             _logger.LogInformation("Database seeding completed successfully!");
-            
+
             return Ok(new { message = "Database seeded successfully with news articles!" });
         }
         catch (Exception ex)

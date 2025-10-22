@@ -13,12 +13,12 @@ public class ImageUploadDto
     /// </summary>
     [Required]
     public IFormFile Image { get; set; } = null!;
-    
+
     /// <summary>
     /// Whether to generate a thumbnail (default: true)
     /// </summary>
     public bool GenerateThumbnail { get; set; } = true;
-    
+
     /// <summary>
     /// Alternative text for the image (accessibility)
     /// </summary>

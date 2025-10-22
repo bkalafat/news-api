@@ -1,8 +1,8 @@
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace NewsApi.Infrastructure.Security;
 
@@ -29,7 +29,11 @@ public class JwtTokenService
             new Claim(ClaimTypes.NameIdentifier, userId),
             new Claim(ClaimTypes.Name, username),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+            new Claim(
+                JwtRegisteredClaimNames.Iat,
+                DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
+                ClaimValueTypes.Integer64
+            ),
         };
 
         var token = new JwtSecurityToken(
@@ -59,7 +63,7 @@ public class JwtTokenService
                 ValidIssuer = _issuer,
                 ValidAudience = _audience,
                 IssuerSigningKey = key,
-                ClockSkew = TimeSpan.Zero
+                ClockSkew = TimeSpan.Zero,
             };
 
             var principal = tokenHandler.ValidateToken(token, validationParameters, out _);

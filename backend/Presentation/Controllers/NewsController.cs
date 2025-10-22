@@ -1,13 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsApi.Application.DTOs;
 using NewsApi.Application.Services;
 using NewsApi.Domain.Entities;
 using NewsApi.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace NewsApi.Presentation.Controllers;
 
@@ -32,21 +32,24 @@ public class NewsController : ControllerBase
     /// <returns>List of news articles</returns>
     [HttpGet]
     [AllowAnonymous] // Public endpoint
-    public async Task<ActionResult<List<News>>> GetAllNews([FromQuery] string? category = null, [FromQuery] string? type = null)
+    public async Task<ActionResult<List<News>>> GetAllNews(
+        [FromQuery] string? category = null,
+        [FromQuery] string? type = null
+    )
     {
         try
         {
             Console.WriteLine("GetAllNews called");
             var news = await _newsService.GetAllNewsAsync();
             Console.WriteLine($"Retrieved {news.Count} news items");
-            
+
             // Apply filtering if parameters provided
             if (!string.IsNullOrEmpty(category))
             {
                 news = news.FindAll(n => n.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
                 Console.WriteLine($"After category filter: {news.Count} items");
             }
-            
+
             if (!string.IsNullOrEmpty(type))
             {
                 news = news.FindAll(n => n.Type.Equals(type, StringComparison.OrdinalIgnoreCase));
@@ -59,7 +62,15 @@ public class NewsController : ControllerBase
         {
             // Log more detailed error information
             Console.WriteLine($"Error in GetAllNews: {ex}");
-            return StatusCode(500, new { message = "An error occurred while retrieving news", error = ex.Message, stackTrace = ex.StackTrace });
+            return StatusCode(
+                500,
+                new
+                {
+                    message = "An error occurred while retrieving news",
+                    error = ex.Message,
+                    stackTrace = ex.StackTrace,
+                }
+            );
         }
     }
 
@@ -75,7 +86,7 @@ public class NewsController : ControllerBase
         try
         {
             var news = await _newsService.GetNewsByIdAsync(id);
-            
+
             if (news == null)
             {
                 return NotFound(new { message = "News article not found" });
@@ -86,7 +97,10 @@ public class NewsController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Error in GetNewsById: {ex}");
-            return StatusCode(500, new { message = "An error occurred while retrieving the news article", error = ex.Message });
+            return StatusCode(
+                500,
+                new { message = "An error occurred while retrieving the news article", error = ex.Message }
+            );
         }
     }
 
@@ -107,7 +121,7 @@ public class NewsController : ControllerBase
             }
 
             var news = await _newsService.GetNewsByUrlAsync(url);
-            
+
             if (news == null)
             {
                 return NotFound(new { message = "News article not found" });
@@ -117,7 +131,10 @@ public class NewsController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "An error occurred while retrieving the news article", error = ex.Message });
+            return StatusCode(
+                500,
+                new { message = "An error occurred while retrieving the news article", error = ex.Message }
+            );
         }
     }
 
@@ -150,7 +167,7 @@ public class NewsController : ControllerBase
                 Priority = createNewsDto.Priority,
                 IsActive = createNewsDto.IsActive,
                 Url = createNewsDto.Url,
-                IsSecondPageNews = createNewsDto.IsSecondPageNews
+                IsSecondPageNews = createNewsDto.IsSecondPageNews,
             };
 
             var createdNews = await _newsService.CreateNewsAsync(news);
@@ -159,7 +176,10 @@ public class NewsController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Error in CreateNews: {ex}");
-            return StatusCode(500, new { message = "An error occurred while creating the news article", error = ex.Message });
+            return StatusCode(
+                500,
+                new { message = "An error occurred while creating the news article", error = ex.Message }
+            );
         }
     }
 
@@ -182,24 +202,42 @@ public class NewsController : ControllerBase
             }
 
             // Update only provided fields
-            if (updateNewsDto.Category != null) existingNews.Category = updateNewsDto.Category;
-            if (updateNewsDto.Type != null) existingNews.Type = updateNewsDto.Type;
-            if (updateNewsDto.Caption != null) existingNews.Caption = updateNewsDto.Caption;
-            if (updateNewsDto.Keywords != null) existingNews.Keywords = updateNewsDto.Keywords;
-            if (updateNewsDto.SocialTags != null) existingNews.SocialTags = updateNewsDto.SocialTags;
-            if (updateNewsDto.Summary != null) existingNews.Summary = updateNewsDto.Summary;
-            if (updateNewsDto.ImgPath != null) existingNews.ImgPath = updateNewsDto.ImgPath;
-            if (updateNewsDto.ImgAlt != null) existingNews.ImgAlt = updateNewsDto.ImgAlt;
-            if (updateNewsDto.Content != null) existingNews.Content = updateNewsDto.Content;
-            if (updateNewsDto.Subjects != null) existingNews.Subjects = updateNewsDto.Subjects;
-            if (updateNewsDto.Authors != null) existingNews.Authors = updateNewsDto.Authors;
-            if (updateNewsDto.ExpressDate.HasValue) existingNews.ExpressDate = updateNewsDto.ExpressDate.Value;
-            if (updateNewsDto.Priority.HasValue) existingNews.Priority = updateNewsDto.Priority.Value;
-            if (updateNewsDto.IsActive.HasValue) existingNews.IsActive = updateNewsDto.IsActive.Value;
-            if (updateNewsDto.Url != null) existingNews.Url = updateNewsDto.Url;
-            if (updateNewsDto.IsSecondPageNews.HasValue) existingNews.IsSecondPageNews = updateNewsDto.IsSecondPageNews.Value;
-            if (updateNewsDto.ImageUrl != null) existingNews.ImageUrl = updateNewsDto.ImageUrl;
-            if (updateNewsDto.ThumbnailUrl != null) existingNews.ThumbnailUrl = updateNewsDto.ThumbnailUrl;
+            if (updateNewsDto.Category != null)
+                existingNews.Category = updateNewsDto.Category;
+            if (updateNewsDto.Type != null)
+                existingNews.Type = updateNewsDto.Type;
+            if (updateNewsDto.Caption != null)
+                existingNews.Caption = updateNewsDto.Caption;
+            if (updateNewsDto.Keywords != null)
+                existingNews.Keywords = updateNewsDto.Keywords;
+            if (updateNewsDto.SocialTags != null)
+                existingNews.SocialTags = updateNewsDto.SocialTags;
+            if (updateNewsDto.Summary != null)
+                existingNews.Summary = updateNewsDto.Summary;
+            if (updateNewsDto.ImgPath != null)
+                existingNews.ImgPath = updateNewsDto.ImgPath;
+            if (updateNewsDto.ImgAlt != null)
+                existingNews.ImgAlt = updateNewsDto.ImgAlt;
+            if (updateNewsDto.Content != null)
+                existingNews.Content = updateNewsDto.Content;
+            if (updateNewsDto.Subjects != null)
+                existingNews.Subjects = updateNewsDto.Subjects;
+            if (updateNewsDto.Authors != null)
+                existingNews.Authors = updateNewsDto.Authors;
+            if (updateNewsDto.ExpressDate.HasValue)
+                existingNews.ExpressDate = updateNewsDto.ExpressDate.Value;
+            if (updateNewsDto.Priority.HasValue)
+                existingNews.Priority = updateNewsDto.Priority.Value;
+            if (updateNewsDto.IsActive.HasValue)
+                existingNews.IsActive = updateNewsDto.IsActive.Value;
+            if (updateNewsDto.Url != null)
+                existingNews.Url = updateNewsDto.Url;
+            if (updateNewsDto.IsSecondPageNews.HasValue)
+                existingNews.IsSecondPageNews = updateNewsDto.IsSecondPageNews.Value;
+            if (updateNewsDto.ImageUrl != null)
+                existingNews.ImageUrl = updateNewsDto.ImageUrl;
+            if (updateNewsDto.ThumbnailUrl != null)
+                existingNews.ThumbnailUrl = updateNewsDto.ThumbnailUrl;
 
             await _newsService.UpdateNewsAsync(id, existingNews);
             return NoContent();
@@ -207,7 +245,10 @@ public class NewsController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Error in UpdateNews: {ex}");
-            return StatusCode(500, new { message = "An error occurred while updating the news article", error = ex.Message });
+            return StatusCode(
+                500,
+                new { message = "An error occurred while updating the news article", error = ex.Message }
+            );
         }
     }
 
@@ -234,7 +275,10 @@ public class NewsController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Error in DeleteNews: {ex}");
-            return StatusCode(500, new { message = "An error occurred while deleting the news article", error = ex.Message });
+            return StatusCode(
+                500,
+                new { message = "An error occurred while deleting the news article", error = ex.Message }
+            );
         }
     }
 
@@ -270,8 +314,8 @@ public class NewsController : ControllerBase
 
             // Upload new image
             var imageMetadata = await _imageStorageService.UploadImageAsync(
-                id, 
-                imageUpload.Image, 
+                id,
+                imageUpload.Image,
                 imageUpload.GenerateThumbnail,
                 imageUpload.AltText
             );

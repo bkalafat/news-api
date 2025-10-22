@@ -1,8 +1,8 @@
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using NewsApi.Infrastructure.Data;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using NewsApi.Infrastructure.Data;
 
 namespace NewsApi.Infrastructure.HealthChecks;
 
@@ -15,7 +15,10 @@ public class MongoHealthCheck : IHealthCheck
         _context = context;
     }
 
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    public async Task<HealthCheckResult> CheckHealthAsync(
+        HealthCheckContext context,
+        CancellationToken cancellationToken = default
+    )
     {
         try
         {
@@ -26,7 +29,9 @@ public class MongoHealthCheck : IHealthCheck
             // Optionally check collection accessibility
             var collectionCount = await _context.News.EstimatedDocumentCountAsync(cancellationToken: cancellationToken);
 
-            return HealthCheckResult.Healthy($"MongoDB is healthy. Collection has approximately {collectionCount} documents.");
+            return HealthCheckResult.Healthy(
+                $"MongoDB is healthy. Collection has approximately {collectionCount} documents."
+            );
         }
         catch (Exception ex)
         {

@@ -1,6 +1,6 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NewsApi.Domain.Entities;
-using System.Threading.Tasks;
 
 namespace NewsApi.Domain.Interfaces;
 
@@ -17,20 +17,25 @@ public interface IImageStorageService
     /// <param name="generateThumbnail">Whether to generate a thumbnail</param>
     /// <param name="altText">Alternative text for accessibility</param>
     /// <returns>Image metadata including URLs</returns>
-    Task<ImageMetadata> UploadImageAsync(string newsId, IFormFile image, bool generateThumbnail = true, string? altText = null);
-    
+    Task<ImageMetadata> UploadImageAsync(
+        string newsId,
+        IFormFile image,
+        bool generateThumbnail = true,
+        string? altText = null
+    );
+
     /// <summary>
     /// Delete an image from MinIO storage
     /// </summary>
     /// <param name="objectKey">The MinIO object key</param>
     Task DeleteImageAsync(string objectKey);
-    
+
     /// <summary>
     /// Delete both the image and thumbnail
     /// </summary>
     /// <param name="imageMetadata">The image metadata containing object keys</param>
     Task DeleteImageWithThumbnailAsync(ImageMetadata imageMetadata);
-    
+
     /// <summary>
     /// Generate a pre-signed URL for temporary access to an image
     /// </summary>
@@ -38,7 +43,7 @@ public interface IImageStorageService
     /// <param name="expirySeconds">URL expiry time in seconds (default: 3600)</param>
     /// <returns>Pre-signed URL</returns>
     Task<string> GetPresignedUrlAsync(string objectKey, int expirySeconds = 3600);
-    
+
     /// <summary>
     /// Check if an image exists in storage
     /// </summary>

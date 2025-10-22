@@ -18,8 +18,7 @@ public static class SlugHelper
         text = text.ToLowerInvariant();
 
         // Replace Turkish characters
-        text = text
-            .Replace("ı", "i")
+        text = text.Replace("ı", "i")
             .Replace("ğ", "g")
             .Replace("ü", "u")
             .Replace("ş", "s")

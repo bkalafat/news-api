@@ -1,5 +1,5 @@
-using Microsoft.Extensions.Caching.Memory;
 using System;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace NewsApi.Infrastructure.Caching;
 

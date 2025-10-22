@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Minio;
@@ -5,11 +8,8 @@ using Minio.DataModel.Args;
 using NewsApi.Domain.Entities;
 using NewsApi.Domain.Interfaces;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using SixLabors.ImageSharp.Processing;
 
 namespace NewsApi.Infrastructure.Services;
 
@@ -26,7 +26,7 @@ public class MinioImageStorageService : IImageStorageService
     {
         _settings = settings;
         _logger = logger;
-        
+
         // Initialize MinIO client
         _minioClient = new MinioClient()
             .WithEndpoint(_settings.Endpoint)
@@ -36,7 +36,12 @@ public class MinioImageStorageService : IImageStorageService
     }
 
     /// <inheritdoc />
-    public async Task<ImageMetadata> UploadImageAsync(string newsId, IFormFile image, bool generateThumbnail = true, string? altText = null)
+    public async Task<ImageMetadata> UploadImageAsync(
+        string newsId,
+        IFormFile image,
+        bool generateThumbnail = true,
+        string? altText = null
+    )
     {
         // Validate image
         ValidateImage(image);
@@ -52,7 +57,7 @@ public class MinioImageStorageService : IImageStorageService
         // Upload original image
         using var imageStream = image.OpenReadStream();
         var imageBytes = await ReadStreamToBytes(imageStream);
-        
+
         // Get image dimensions
         using var img = Image.Load(imageBytes);
         var width = img.Width;
@@ -60,27 +65,35 @@ public class MinioImageStorageService : IImageStorageService
 
         // Upload to MinIO
         await using var uploadStream = new MemoryStream(imageBytes);
-        await _minioClient.PutObjectAsync(new PutObjectArgs()
-            .WithBucket(_settings.BucketName)
-            .WithObject(objectKey)
-            .WithStreamData(uploadStream)
-            .WithObjectSize(imageBytes.Length)
-            .WithContentType(image.ContentType));
+        await _minioClient.PutObjectAsync(
+            new PutObjectArgs()
+                .WithBucket(_settings.BucketName)
+                .WithObject(objectKey)
+                .WithStreamData(uploadStream)
+                .WithObjectSize(imageBytes.Length)
+                .WithContentType(image.ContentType)
+        );
 
         _logger.LogInformation("Uploaded image {ObjectKey} to MinIO", objectKey);
 
         // Generate and upload thumbnail if requested
         if (generateThumbnail)
         {
-            var thumbnailBytes = await GenerateThumbnailAsync(imageBytes, _settings.ThumbnailWidth, _settings.ThumbnailHeight);
+            var thumbnailBytes = await GenerateThumbnailAsync(
+                imageBytes,
+                _settings.ThumbnailWidth,
+                _settings.ThumbnailHeight
+            );
             await using var thumbnailStream = new MemoryStream(thumbnailBytes);
-            
-            await _minioClient.PutObjectAsync(new PutObjectArgs()
-                .WithBucket(_settings.BucketName)
-                .WithObject(thumbnailKey)
-                .WithStreamData(thumbnailStream)
-                .WithObjectSize(thumbnailBytes.Length)
-                .WithContentType(image.ContentType));
+
+            await _minioClient.PutObjectAsync(
+                new PutObjectArgs()
+                    .WithBucket(_settings.BucketName)
+                    .WithObject(thumbnailKey)
+                    .WithStreamData(thumbnailStream)
+                    .WithObjectSize(thumbnailBytes.Length)
+                    .WithContentType(image.ContentType)
+            );
 
             _logger.LogInformation("Uploaded thumbnail {ThumbnailKey} to MinIO", thumbnailKey);
         }
@@ -95,7 +108,7 @@ public class MinioImageStorageService : IImageStorageService
             Height = height,
             UploadedAt = DateTime.UtcNow,
             MinioObjectKey = objectKey,
-            AltText = altText ?? ""
+            AltText = altText ?? "",
         };
 
         return metadata;
@@ -106,9 +119,9 @@ public class MinioImageStorageService : IImageStorageService
     {
         try
         {
-            await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
-                .WithBucket(_settings.BucketName)
-                .WithObject(objectKey));
+            await _minioClient.RemoveObjectAsync(
+                new RemoveObjectArgs().WithBucket(_settings.BucketName).WithObject(objectKey)
+            );
 
             _logger.LogInformation("Deleted image {ObjectKey} from MinIO", objectKey);
         }
@@ -129,7 +142,7 @@ public class MinioImageStorageService : IImageStorageService
         var extension = Path.GetExtension(imageMetadata.FileName).ToLowerInvariant();
         var newsId = Path.GetFileNameWithoutExtension(imageMetadata.MinioObjectKey);
         var thumbnailKey = $"{newsId}-thumb{extension}";
-        
+
         await DeleteImageAsync(thumbnailKey);
     }
 
@@ -150,9 +163,9 @@ public class MinioImageStorageService : IImageStorageService
     {
         try
         {
-            await _minioClient.StatObjectAsync(new StatObjectArgs()
-                .WithBucket(_settings.BucketName)
-                .WithObject(objectKey));
+            await _minioClient.StatObjectAsync(
+                new StatObjectArgs().WithBucket(_settings.BucketName).WithObject(objectKey)
+            );
             return true;
         }
         catch
@@ -182,21 +195,27 @@ public class MinioImageStorageService : IImageStorageService
 
         if (image.Length > _settings.MaxFileSizeBytes)
         {
-            throw new ArgumentException($"Image size exceeds maximum allowed size of {_settings.MaxFileSizeBytes / (1024 * 1024)}MB");
+            throw new ArgumentException(
+                $"Image size exceeds maximum allowed size of {_settings.MaxFileSizeBytes / (1024 * 1024)}MB"
+            );
         }
 
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
         var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
-        
+
         if (!Array.Exists(allowedExtensions, ext => ext == extension))
         {
-            throw new ArgumentException($"Image format not supported. Allowed formats: {string.Join(", ", allowedExtensions)}");
+            throw new ArgumentException(
+                $"Image format not supported. Allowed formats: {string.Join(", ", allowedExtensions)}"
+            );
         }
 
         var allowedContentTypes = new[] { "image/jpeg", "image/png", "image/webp", "image/gif" };
         if (!Array.Exists(allowedContentTypes, ct => ct == image.ContentType))
         {
-            throw new ArgumentException($"Invalid content type. Allowed types: {string.Join(", ", allowedContentTypes)}");
+            throw new ArgumentException(
+                $"Invalid content type. Allowed types: {string.Join(", ", allowedContentTypes)}"
+            );
         }
     }
 
@@ -205,13 +224,13 @@ public class MinioImageStorageService : IImageStorageService
     /// </summary>
     private async Task EnsureBucketExistsAsync()
     {
-        var bucketExists = await _minioClient.BucketExistsAsync(new BucketExistsArgs()
-            .WithBucket(_settings.BucketName));
+        var bucketExists = await _minioClient.BucketExistsAsync(
+            new BucketExistsArgs().WithBucket(_settings.BucketName)
+        );
 
         if (!bucketExists)
         {
-            await _minioClient.MakeBucketAsync(new MakeBucketArgs()
-                .WithBucket(_settings.BucketName));
+            await _minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(_settings.BucketName));
 
             _logger.LogInformation("Created MinIO bucket: {BucketName}", _settings.BucketName);
         }
@@ -223,18 +242,14 @@ public class MinioImageStorageService : IImageStorageService
     private async Task<byte[]> GenerateThumbnailAsync(byte[] imageBytes, int width, int height)
     {
         using var image = Image.Load(imageBytes);
-        
+
         // Resize image maintaining aspect ratio
-        image.Mutate(x => x.Resize(new ResizeOptions
-        {
-            Size = new Size(width, height),
-            Mode = ResizeMode.Max
-        }));
+        image.Mutate(x => x.Resize(new ResizeOptions { Size = new Size(width, height), Mode = ResizeMode.Max }));
 
         // Save to memory stream
         using var outputStream = new MemoryStream();
         await image.SaveAsync(outputStream, new JpegEncoder { Quality = 80 });
-        
+
         return outputStream.ToArray();
     }
 

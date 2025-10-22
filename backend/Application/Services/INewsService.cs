@@ -1,6 +1,6 @@
-using NewsApi.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NewsApi.Domain.Entities;
 
 namespace NewsApi.Application.Services;
 

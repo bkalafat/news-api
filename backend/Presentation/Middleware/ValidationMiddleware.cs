@@ -1,10 +1,10 @@
-using FluentValidation;
-using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using FluentValidation;
+using Microsoft.AspNetCore.Http;
 
 namespace NewsApi.Presentation.Middleware;
 
@@ -35,23 +35,16 @@ public class ValidationMiddleware
         response.ContentType = "application/json";
         response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-        var errors = exception.Errors
-            .GroupBy(x => x.PropertyName)
-            .ToDictionary(
-                g => g.Key,
-                g => g.Select(x => x.ErrorMessage).ToArray()
-            );
+        var errors = exception
+            .Errors.GroupBy(x => x.PropertyName)
+            .ToDictionary(g => g.Key, g => g.Select(x => x.ErrorMessage).ToArray());
 
-        var validationResponse = new ValidationErrorResponse
-        {
-            Message = "Validation failed",
-            Errors = errors
-        };
+        var validationResponse = new ValidationErrorResponse { Message = "Validation failed", Errors = errors };
 
-        var jsonResponse = JsonSerializer.Serialize(validationResponse, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var jsonResponse = JsonSerializer.Serialize(
+            validationResponse,
+            new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
+        );
 
         await response.WriteAsync(jsonResponse);
     }

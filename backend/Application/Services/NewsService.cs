@@ -1,11 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using MongoDB.Bson;
 using NewsApi.Common;
 using NewsApi.Domain.Entities;
 using NewsApi.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace NewsApi.Application.Services;
 
@@ -60,10 +60,10 @@ public class NewsService : INewsService
         news.UpdateDate = DateTime.UtcNow;
 
         var createdNews = await _newsRepository.CreateAsync(news);
-        
+
         // Invalidate cache
         _cache.Remove(CacheKeys.NewsList);
-        
+
         return createdNews;
     }
 
@@ -71,7 +71,7 @@ public class NewsService : INewsService
     {
         news.UpdateDate = DateTime.UtcNow;
         await _newsRepository.UpdateAsync(id, news);
-        
+
         // Invalidate cache
         _cache.Remove(CacheKeys.NewsList);
         _cache.Remove(id);
@@ -80,7 +80,7 @@ public class NewsService : INewsService
     public async Task DeleteNewsAsync(string id)
     {
         await _newsRepository.DeleteAsync(id);
-        
+
         // Invalidate cache
         _cache.Remove(CacheKeys.NewsList);
         _cache.Remove(id);

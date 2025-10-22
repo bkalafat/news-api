@@ -1,10 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using NewsApi.Domain.Entities;
 using NewsApi.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace NewsApi.Infrastructure.Data.Repositories;
 
@@ -37,24 +37,24 @@ public class NewsRepository : INewsRepository
                 return null;
             }
 
-            return await _newsCollection
-                .Find(news => news.Id == id && news.IsActive)
-                .FirstOrDefaultAsync();
+            return await _newsCollection.Find(news => news.Id == id && news.IsActive).FirstOrDefaultAsync();
         }
         catch (Exception ex)
         {
             // Defensive: log to console during tests to aid debugging and return null so callers
             // can return NotFound instead of causing a 500.
-            try { Console.WriteLine($"NewsRepository.GetByIdAsync error for id={id}: {ex}"); } catch { }
+            try
+            {
+                Console.WriteLine($"NewsRepository.GetByIdAsync error for id={id}: {ex}");
+            }
+            catch { }
             return null;
         }
     }
 
     public async Task<News?> GetByUrlAsync(string url)
     {
-        return await _newsCollection
-            .Find(news => news.Url == url && news.IsActive)
-            .FirstOrDefaultAsync();
+        return await _newsCollection.Find(news => news.Url == url && news.IsActive).FirstOrDefaultAsync();
     }
 
     public async Task<News> CreateAsync(News news)
@@ -65,10 +65,7 @@ public class NewsRepository : INewsRepository
 
     public async Task UpdateAsync(string id, News news)
     {
-        await _newsCollection.ReplaceOneAsync(
-            filter: n => n.Id == id,
-            replacement: news
-        );
+        await _newsCollection.ReplaceOneAsync(filter: n => n.Id == id, replacement: news);
     }
 
     public async Task DeleteAsync(string id)

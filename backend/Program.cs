@@ -1,10 +1,10 @@
+using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NewsApi.Presentation.Extensions;
 using NewsApi.Presentation.Middleware;
-using System;
-using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,18 +13,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Title = "News API",
-        Version = "v1",
-        Description = "A comprehensive news management API with RSS integration, JWT authentication, and real-time data fetching from BBC News feeds.",
-        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+    options.SwaggerDoc(
+        "v1",
+        new Microsoft.OpenApi.Models.OpenApiInfo
         {
-            Name = "News API Support",
-            Email = "support@newsapi.com"
+            Title = "News API",
+            Version = "v1",
+            Description =
+                "A comprehensive news management API with RSS integration, JWT authentication, and real-time data fetching from BBC News feeds.",
+            Contact = new Microsoft.OpenApi.Models.OpenApiContact
+            {
+                Name = "News API Support",
+                Email = "support@newsapi.com",
+            },
         }
-    });
-    
+    );
+
     // Enable XML comments for better Swagger documentation
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
