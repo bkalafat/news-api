@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NewsApi.Application.Services;
 using NewsApi.Domain.Entities;
+using NewsApi.Domain.Interfaces;
 using NewsApi.Presentation.Controllers;
 using NewsApi.Tests.Helpers;
 
@@ -11,12 +12,14 @@ namespace NewsApi.Tests.Unit.Presentation;
 public class NewsControllerTests
 {
     private readonly Mock<INewsService> _mockNewsService;
+    private readonly Mock<IImageStorageService> _mockImageStorageService;
     private readonly NewsController _controller;
 
     public NewsControllerTests()
     {
-    _mockNewsService = new Mock<INewsService>();
-        _controller = new NewsController(_mockNewsService.Object);
+        _mockNewsService = new Mock<INewsService>();
+        _mockImageStorageService = new Mock<IImageStorageService>();
+        _controller = new NewsController(_mockNewsService.Object, _mockImageStorageService.Object);
     }
 
     #region GetAllNews Tests

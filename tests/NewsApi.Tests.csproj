@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\newsApi\newsApi.csproj" />
+    <ProjectReference Include="..\backend\newsApi.csproj" />
   </ItemGroup>
 
 </Project>
