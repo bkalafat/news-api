@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace NewsApi.Migration;
+namespace NewsApi.Infrastructure.Data;
 
 public static class SeedNewsData
 {

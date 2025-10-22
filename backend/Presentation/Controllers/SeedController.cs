@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NewsApi.Infrastructure.Data;
-using NewsApi.Migration;
 using System;
 using System.Threading.Tasks;
 
