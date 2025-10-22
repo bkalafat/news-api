@@ -46,7 +46,7 @@ dotnet_diagnostic.SA1611.severity = suggestion  # Parameter documentation
 dotnet_diagnostic.SA1615.severity = suggestion  # Return value documentation
 
 # Meziantou.Analyzer configuration (recommended for APIs)
-dotnet_diagnostic.MA0004.severity = suggestion  # Use Task.ConfigureAwait (optional for now)
+dotnet_diagnostic.MA0004.severity = warning  # Use Task.ConfigureAwait (optional for now)
 dotnet_diagnostic.MA0026.severity = warning  # Fix TODO comments
 dotnet_diagnostic.MA0048.severity = none  # File name must match type name
 dotnet_diagnostic.MA0051.severity = suggestion  # Method is too long (informational)
