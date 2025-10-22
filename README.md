@@ -12,7 +12,7 @@ A modern, full-stack Turkish technology news platform. Features a production-rea
 ### Backend API (newsApi/)
 Modern news management API built with .NET 10, following Clean Architecture principles. Features real-time RSS integration with BBC News feeds, JWT authentication, comprehensive caching, and MongoDB persistence.
 
-### Frontend Web (web/)
+### Frontend Web (frontend/)
 Modern, SEO-optimized Turkish tech news website built with Next.js 15, TypeScript, TailwindCSS, and Shadcn/ui. Features responsive design, React Query data management, and Turkish localization.
 
 ## ✨ Features
@@ -39,13 +39,36 @@ Modern, SEO-optimized Turkish tech news website built with Next.js 15, TypeScrip
 
 ### Installation
 
+### Quick Start with Scripts
+
+We provide convenient scripts for development:
+
+```bash
+# Start both backend and frontend (Windows)
+scripts\dev.bat
+
+# Start Docker containers (MongoDB + MinIO)
+scripts\docker-start.bat
+
+# Build both projects
+scripts\build.bat
+```
+
+### Manual Setup
+
 1. **Clone the repository**
    ```bash
    git clone https://github.com/bkalafat/news-api.git
    cd news-api
    ```
 
-2. **Configure User Secrets** (Development)
+2. **Start Docker services** (MongoDB + MinIO)
+   ```bash
+   cd docker
+   docker-compose up -d
+   ```
+
+3. **Configure User Secrets** (Development)
    ```bash
    cd newsApi
    dotnet user-secrets init
@@ -54,7 +77,7 @@ Modern, SEO-optimized Turkish tech news website built with Next.js 15, TypeScrip
    dotnet user-secrets set "JwtSettings:SecretKey" "your-secret-key-min-32-chars"
    ```
 
-3. **Restore Dependencies**
+4. **Restore Dependencies**
    ```bash
    dotnet restore
    ```
@@ -68,11 +91,11 @@ Modern, SEO-optimized Turkish tech news website built with Next.js 15, TypeScrip
    
    Navigate to: [http://localhost:5000/swagger](http://localhost:5000/swagger)
 
-### Frontend Setup (web/)
+### Frontend Setup (frontend/)
 
-1. **Navigate to web folder**
+1. **Navigate to frontend folder**
    ```bash
-   cd web
+   cd frontend
    ```
 
 2. **Install dependencies**
@@ -95,7 +118,7 @@ Modern, SEO-optimized Turkish tech news website built with Next.js 15, TypeScrip
    
    Navigate to: [http://localhost:3000](http://localhost:3000)
 
-**Frontend Documentation**: See [web/README.md](web/README.md) for complete frontend setup and development guide.
+**Frontend Documentation**: See [frontend/README.md](frontend/README.md) for complete frontend setup and development guide.
 
 ## 📚 API Documentation
 
@@ -119,32 +142,38 @@ Modern, SEO-optimized Turkish tech news website built with Next.js 15, TypeScrip
 
 **Swagger Testing Guide**: See [SWAGGER_TESTING_GUIDE.md](SWAGGER_TESTING_GUIDE.md) for interactive testing instructions.
 
-## 🏗️ Project Architecture
+## 🏗️ Project Structure
 
-This project follows **Clean Architecture** principles with clear layer separation:
+This project follows modern **monorepo architecture** with clean separation:
 
 ```
-newsApi/
-├── Domain/                    # Core business logic & entities
-│   ├── Entities/             # Domain models (News)
-│   └── Interfaces/           # Repository contracts
-├── Application/              # Business rules & use cases
-│   ├── DTOs/                # Data Transfer Objects
-│   ├── Services/            # Business logic (NewsService)
-│   └── Validators/          # FluentValidation rules
-├── Infrastructure/           # External concerns
-│   ├── Data/                # MongoDB implementation
-│   ├── Caching/             # Memory cache service
-│   ├── Security/            # JWT authentication
-│   └── HealthChecks/        # Health monitoring
-└── Presentation/             # API layer
-    ├── Controllers/         # API endpoints
-    ├── Middleware/          # Security & validation
-    └── Extensions/          # Service registration
-
-NewsApi.Tests/                # Test suite
-├── Unit/                    # Unit tests
-├── Integration/             # Integration tests
+news-api/                     # Root monorepo
+├── newsApi/                  # Backend (.NET 10 API)
+│   ├── Domain/              # Core business logic & entities
+│   ├── Application/         # Business rules & use cases
+│   ├── Infrastructure/      # External dependencies
+│   └── Presentation/        # API controllers & middleware
+├── NewsApi.Tests/           # Backend test suite
+│   ├── Unit/               # Unit tests
+│   ├── Integration/        # Integration tests
+│   └── Performance/        # Performance tests
+├── frontend/                # Frontend (Next.js 15)
+│   ├── app/                # Next.js pages
+│   ├── components/         # React components
+│   ├── lib/                # API client & utilities
+│   └── public/             # Static assets
+├── docker/                  # Docker configurations
+│   ├── docker-compose.yml  # Service orchestration
+│   └── Dockerfile.backend  # Backend container
+├── scripts/                 # Development scripts
+│   ├── dev.bat             # Start dev servers
+│   ├── build.bat           # Build all projects
+│   └── docker-start.bat    # Start Docker services
+├── .github/                 # GitHub configurations
+│   ├── instructions/       # Copilot guidelines
+│   └── prompts/            # Development prompts
+└── README.md               # This file
+```
 └── Performance/             # Performance benchmarks
 ```
 
@@ -218,9 +247,18 @@ dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
 ## 🐳 Docker Deployment
 
+### Start Services with Docker
+
+```bash
+# Start MongoDB and MinIO
+cd docker
+docker-compose up -d
+```
+
 ### Build Docker Image
 ```bash
-docker build -t news-api:latest .
+cd docker
+docker build -f Dockerfile.backend -t news-api:latest ..
 ```
 
 ### Run Container
