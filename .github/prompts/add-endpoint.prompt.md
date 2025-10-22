@@ -24,7 +24,7 @@ When implementing a new endpoint, ensure all these steps are completed:
 
 ### 1. Define the DTO
 
-**Location**: `newsApi/Application/DTOs/`
+**Location**: `backend/Application/DTOs/`
 
 ```csharp
 /// <summary>
@@ -43,7 +43,7 @@ public class YourDto
 
 ### 2. Create Validator
 
-**Location**: `newsApi/Application/Validators/`
+**Location**: `backend/Application/Validators/`
 
 ```csharp
 using FluentValidation;
@@ -63,7 +63,7 @@ public class YourDtoValidator : AbstractValidator<YourDto>
 
 ### 3. Add Service Interface Method
 
-**Location**: `newsApi/Application/Services/INewsService.cs`
+**Location**: `backend/Application/Services/INewsService.cs`
 
 ```csharp
 /// <summary>
@@ -76,7 +76,7 @@ Task<Result> YourMethodAsync(YourDto dto);
 
 ### 4. Implement Service Method
 
-**Location**: `newsApi/Application/Services/NewsService.cs`
+**Location**: `backend/Application/Services/NewsService.cs`
 
 ```csharp
 public async Task<Result> YourMethodAsync(YourDto dto)
@@ -103,7 +103,7 @@ public async Task<Result> YourMethodAsync(YourDto dto)
 
 ### 5. Add Controller Action
 
-**Location**: `newsApi/Presentation/Controllers/NewsController.cs`
+**Location**: `backend/Presentation/Controllers/NewsController.cs`
 
 ```csharp
 /// <summary>
@@ -128,7 +128,7 @@ public async Task<ActionResult<ResultType>> YourAction([FromBody] YourDto dto)
 
 ### 6. Write Unit Tests
 
-**Location**: `NewsApi.Tests/Unit/Application/Services/NewsServiceTests.cs`
+**Location**: `tests/Unit/Application/Services/NewsServiceTests.cs`
 
 ```csharp
 [Fact]
@@ -161,7 +161,7 @@ public async Task YourMethodAsync_InvalidInput_ThrowsException()
 
 ### 7. Write Integration Tests
 
-**Location**: `NewsApi.Tests/Integration/Controllers/NewsControllerIntegrationTests.cs`
+**Location**: `tests/Integration/Controllers/NewsControllerIntegrationTests.cs`
 
 ```csharp
 [Fact]
@@ -338,3 +338,4 @@ public async Task<ActionResult<IEnumerable<News>>> Search([FromBody] SearchNewsD
 - See `NEWS_API_DOCUMENTATION.md` for API conventions
 - See `csharp.instructions.md` for coding standards
 - See `testing.instructions.md` for testing guidelines
+

@@ -51,7 +51,7 @@ public async Task GetByIdAsync_ValidId_ReturnsNews()
 ## 📝 Test Categories
 
 ### Unit Tests
-**Location**: `NewsApi.Tests/Unit/`
+**Location**: `tests/Unit/`
 
 **Purpose**: Test individual components in isolation
 - Services
@@ -106,7 +106,7 @@ public class NewsServiceTests
 ```
 
 ### Integration Tests
-**Location**: `NewsApi.Tests/Integration/`
+**Location**: `tests/Integration/`
 
 **Purpose**: Test components working together
 - Controllers with full HTTP pipeline
@@ -164,7 +164,7 @@ public class NewsControllerIntegrationTests : IClassFixture<WebApplicationFactor
 ```
 
 ### Performance Tests
-**Location**: `NewsApi.Tests/Performance/`
+**Location**: `tests/Performance/`
 
 **Purpose**: Benchmark critical operations
 
@@ -352,7 +352,7 @@ var fakeRepo = new InMemoryNewsRepository(); // Actual logic, no database
 
 ### File Structure
 ```
-NewsApi.Tests/
+tests/
 ├── Unit/
 │   ├── Application/
 │   │   ├── Services/
@@ -458,3 +458,4 @@ public void FutureTest() { }
 - [xUnit Documentation](https://xunit.net/)
 - [Moq Quickstart](https://github.com/moq/moq4/wiki/Quickstart)
 - [Testing ASP.NET Core Applications](https://learn.microsoft.com/en-us/aspnet/core/test/)
+

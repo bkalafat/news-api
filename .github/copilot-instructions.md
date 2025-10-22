@@ -56,7 +56,7 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 
 ```
 news-api/
-├── newsApi/                          # Main API project
+├── backend/                          # Main API project
 │   ├── Domain/                       # Core business entities (no external dependencies)
 │   │   ├── Entities/                # News entity models
 │   │   └── Interfaces/              # Repository contracts (INewsRepository)
@@ -75,22 +75,21 @@ news-api/
 │   │   ├── Middleware/              # Security & validation middleware
 │   │   └── Extensions/              # Service collection extensions
 │   ├── Common/                      # Shared constants (CacheKeys)
-│   ├── Migration/                   # Data migration scripts and docs
 │   ├── Properties/                  # Launch settings and publish profiles
 │   └── Program.cs                   # Application entry point
-├── NewsApi.Tests/                   # Test suite
+├── tests/                           # Test suite
 │   ├── Unit/                        # Unit tests for services, validators, DTOs
 │   ├── Integration/                 # Controller & repository integration tests
 │   ├── Performance/                 # Performance benchmarks
 │   └── Helpers/                     # Test utilities (TestDataBuilders, TestMemoryCache)
-├── specs/                           # Architecture and feature specifications
-│   └── 002-modernize-net-core/     # .NET 8→10 modernization specs
+├── frontend/                        # Next.js 15 frontend
+├── docker/                          # Docker configurations
+├── scripts/                         # Development scripts
+│   └── database/                    # Data migration scripts
 ├── .github/                         # GitHub configuration
 │   ├── instructions/                # Copilot instruction files
 │   ├── prompts/                     # Reusable prompt files
-│   └── chatmodes/                   # Custom chat mode configurations
-├── Dockerfile                       # Multi-stage Docker build
-├── heroku.yml                       # Heroku deployment config
+│   └── cursor-rules.md              # Cursor IDE rules
 └── README.md                        # Project documentation
 
 ```
@@ -100,7 +99,7 @@ news-api/
 - `Application/` - Use cases and business rules
 - `Infrastructure/` - Data access, caching, external services
 - `Presentation/` - Controllers, middleware, API contracts
-- `NewsApi.Tests/` - Comprehensive test coverage
+- `tests/` - Comprehensive test coverage
 
 ## 🎯 Project & Code Guidelines
 
@@ -197,7 +196,7 @@ Located in project root or can be run via VS Code tasks:
 - **Build & Run**
   ```bash
   dotnet build
-  dotnet run --project newsApi/newsApi.csproj
+  dotnet run --project backend/newsApi.csproj
   ```
 
 - **Testing**
@@ -208,7 +207,7 @@ Located in project root or can be run via VS Code tasks:
   ```
 
 - **Database Management**
-  - See `Migration/data-migration.md` for migration scripts
+  - See `scripts/database/data-migration.md` for migration scripts
   - MongoDB must be running locally or provide connection string
 
 - **Docker**
@@ -240,8 +239,8 @@ Located in project root or can be run via VS Code tasks:
 3. Implement service method in `Application/Services/NewsService.cs`
 4. Add controller action in `Presentation/Controllers/NewsController.cs`
 5. Add XML documentation comments
-6. Write unit tests in `NewsApi.Tests/Unit/`
-7. Write integration tests in `NewsApi.Tests/Integration/`
+6. Write unit tests in `tests/Unit/`
+7. Write integration tests in `tests/Integration/`
 
 ### Adding a New Entity
 1. Create entity in `Domain/Entities/`
@@ -256,7 +255,7 @@ Located in project root or can be run via VS Code tasks:
 2. Inherit from `AbstractValidator<TDto>`
 3. Define rules in constructor using FluentValidation syntax
 4. Register in DI container (auto-registered with AddValidatorsFromAssemblyContaining)
-5. Write validator tests in `NewsApi.Tests/Unit/Validators/`
+5. Write validator tests in `tests/Unit/Validators/`
 
 ### Debugging Tips
 - Set breakpoints in controllers and services
@@ -291,8 +290,8 @@ Located in project root or can be run via VS Code tasks:
 - `NEWS_API_DOCUMENTATION.md` - Complete API reference
 - `SWAGGER_TESTING_GUIDE.md` - Interactive testing guide
 - `specs/002-modernize-net-core/spec.md` - Architecture specifications
-- `Migration/data-migration.md` - Data migration guide
-- `NewsApi.Tests/TEST_COVERAGE_REPORT.md` - Test coverage details
+- `scripts/database/data-migration.md` - Data migration guide
+- `tests/TEST_COVERAGE_REPORT.md` - Test coverage details
 
 ### Architecture Resources
 - [Clean Architecture by Jason Taylor](https://github.com/jasontaylordev/CleanArchitecture)

@@ -8,7 +8,7 @@ echo.
 
 REM Build Backend
 echo Building Backend...
-cd /d %~dp0..\newsApi
+cd /d %~dp0..\backend
 dotnet build --configuration Release
 if errorlevel 1 (
     echo [ERROR] Backend build failed!

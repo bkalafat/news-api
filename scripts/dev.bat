@@ -18,7 +18,7 @@ echo.
 
 REM Start Backend API
 echo Starting Backend API...
-start "Backend API" cmd /k "cd /d %~dp0..\newsApi && dotnet run"
+start "Backend API" cmd /k "cd /d %~dp0..\backend && dotnet run"
 timeout /t 3 /nobreak >nul
 
 REM Start Frontend

@@ -9,7 +9,7 @@ A modern, full-stack Turkish technology news platform. Features a production-rea
 
 ## 🌟 Platform Components
 
-### Backend API (newsApi/)
+### Backend API (backend/)
 Modern news management API built with .NET 10, following Clean Architecture principles. Features real-time RSS integration with BBC News feeds, JWT authentication, comprehensive caching, and MongoDB persistence.
 
 ### Frontend Web (frontend/)
@@ -68,9 +68,9 @@ scripts\build.bat
    docker-compose up -d
    ```
 
-3. **Configure User Secrets** (Development)
+2. **Configure User Secrets** (Development)
    ```bash
-   cd newsApi
+   cd backend
    dotnet user-secrets init
    dotnet user-secrets set "DatabaseSettings:ConnectionString" "mongodb://localhost:27017"
    dotnet user-secrets set "DatabaseSettings:DatabaseName" "NewsDb"
@@ -84,7 +84,7 @@ scripts\build.bat
 
 4. **Run the Application**
    ```bash
-   dotnet run --project newsApi/newsApi.csproj
+   dotnet run --project backend/newsApi.csproj
    ```
 
 5. **Access Swagger UI**
@@ -148,12 +148,12 @@ This project follows modern **monorepo architecture** with clean separation:
 
 ```
 news-api/                     # Root monorepo
-├── newsApi/                  # Backend (.NET 10 API)
+├── backend/                  # Backend (.NET 10 API)
 │   ├── Domain/              # Core business logic & entities
 │   ├── Application/         # Business rules & use cases
 │   ├── Infrastructure/      # External dependencies
 │   └── Presentation/        # API controllers & middleware
-├── NewsApi.Tests/           # Backend test suite
+├── tests/                   # Backend test suite
 │   ├── Unit/               # Unit tests
 │   ├── Integration/        # Integration tests
 │   └── Performance/        # Performance tests

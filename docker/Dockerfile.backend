@@ -15,16 +15,16 @@ WORKDIR /src
 
 # Copy solution and project files
 COPY *.sln .
-COPY newsApi/*.csproj newsApi/
+COPY backend/*.csproj backend/
 
 # Restore dependencies
-RUN dotnet restore newsApi/newsApi.csproj
+RUN dotnet restore backend/newsApi.csproj
 
 # Copy source code  
 COPY . .
 
 # Build the application
-WORKDIR /src/newsApi
+WORKDIR /src/backend
 RUN dotnet build newsApi.csproj -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

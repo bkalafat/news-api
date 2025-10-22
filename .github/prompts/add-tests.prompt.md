@@ -468,6 +468,7 @@ dotnet test /p:CollectCoverage=true
 
 - See `testing.instructions.md` for detailed testing guidelines
 - See `csharp.instructions.md` for code patterns
-- Review existing tests in `NewsApi.Tests/` for examples
+- Review existing tests in `tests/` for examples
 - [xUnit Documentation](https://xunit.net/)
 - [Moq Documentation](https://github.com/moq/moq4)
+

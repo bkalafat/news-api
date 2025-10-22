@@ -231,7 +231,7 @@ Reference these files to ensure:
 - `specs/002-modernize-net-core/plan.md` - Implementation plan
 
 ### Test Documentation
-- `NewsApi.Tests/TEST_COVERAGE_REPORT.md` - Test coverage details
+- `tests/TEST_COVERAGE_REPORT.md` - Test coverage details
 
 ## 🔄 Keeping Documentation Updated
 
@@ -280,3 +280,4 @@ These files are living documents that evolve with the project:
 **Maintained By**: News API Team
 
 **Questions?** Reference these docs or ask in GitHub Discussions.
+
