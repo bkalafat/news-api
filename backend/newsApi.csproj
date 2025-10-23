@@ -19,10 +19,7 @@
     </PackageReference>
     <PackageReference Include="MongoDB.Driver" Version="3.2.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
-    <PackageReference
-      Include="Microsoft.AspNetCore.Authentication.JwtBearer"
-      Version="10.0.0-rc.2.25502.107"
-    />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0-rc.2.25502.107" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.14.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -37,6 +34,6 @@
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
     <PackageReference Include="Minio" Version="6.0.3" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
   </ItemGroup>
 </Project>

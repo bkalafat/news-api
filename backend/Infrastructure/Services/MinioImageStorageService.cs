@@ -53,68 +53,71 @@ public class MinioImageStorageService : IImageStorageService
         var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
         var objectKey = $"{newsId}{extension}";
         var thumbnailKey = $"{newsId}-thumb{extension}";
-
+        var imageStream = image.OpenReadStream();
+        await
         // Upload original image
-        using var imageStream = image.OpenReadStream();
-        var imageBytes = await ReadStreamToBytes(imageStream).ConfigureAwait(false);
-
-        // Get image dimensions
-        using var img = Image.Load(imageBytes);
-        var width = img.Width;
-        var height = img.Height;
-
-        // Upload to MinIO
-        using var uploadStream = new MemoryStream(imageBytes);
-        await _minioClient
-            .PutObjectAsync(
-                new PutObjectArgs()
-                    .WithBucket(_settings.BucketName)
-                    .WithObject(objectKey)
-                    .WithStreamData(uploadStream)
-                    .WithObjectSize(imageBytes.Length)
-                    .WithContentType(image.ContentType)
-            )
-            .ConfigureAwait(false);
-
-        _logger.LogInformation("Uploaded image {ObjectKey} to MinIO", objectKey);
-
-        // Generate and upload thumbnail if requested
-        if (generateThumbnail)
+        using (imageStream.ConfigureAwait(false))
         {
-            var thumbnailBytes = await GenerateThumbnailAsync(
-                    imageBytes,
-                    _settings.ThumbnailWidth,
-                    _settings.ThumbnailHeight
-                )
-                .ConfigureAwait(false);
-            using var thumbnailStream = new MemoryStream(thumbnailBytes);
+            var imageBytes = await ReadStreamToBytes(imageStream).ConfigureAwait(false);
 
+            // Get image dimensions
+            using var img = Image.Load(imageBytes);
+            var width = img.Width;
+            var height = img.Height;
+
+            // Upload to MinIO
+            using var uploadStream = new MemoryStream(imageBytes);
             await _minioClient
                 .PutObjectAsync(
                     new PutObjectArgs()
                         .WithBucket(_settings.BucketName)
-                        .WithObject(thumbnailKey)
-                        .WithStreamData(thumbnailStream)
-                        .WithObjectSize(thumbnailBytes.Length)
+                        .WithObject(objectKey)
+                        .WithStreamData(uploadStream)
+                        .WithObjectSize(imageBytes.Length)
                         .WithContentType(image.ContentType)
                 )
                 .ConfigureAwait(false);
 
-            _logger.LogInformation("Uploaded thumbnail {ThumbnailKey} to MinIO", thumbnailKey);
-        }
+            _logger.LogInformation("Uploaded image {ObjectKey} to MinIO", objectKey);
 
-        // Build image metadata
-        return new ImageMetadata
-        {
-            FileName = image.FileName,
-            ContentType = image.ContentType,
-            FileSize = image.Length,
-            Width = width,
-            Height = height,
-            UploadedAt = DateTime.UtcNow,
-            MinioObjectKey = objectKey,
-            AltText = altText ?? "",
-        };
+            // Generate and upload thumbnail if requested
+            if (generateThumbnail)
+            {
+                var thumbnailBytes = await GenerateThumbnailAsync(
+                        imageBytes,
+                        _settings.ThumbnailWidth,
+                        _settings.ThumbnailHeight
+                    )
+                    .ConfigureAwait(false);
+                using var thumbnailStream = new MemoryStream(thumbnailBytes);
+
+                await _minioClient
+                    .PutObjectAsync(
+                        new PutObjectArgs()
+                            .WithBucket(_settings.BucketName)
+                            .WithObject(thumbnailKey)
+                            .WithStreamData(thumbnailStream)
+                            .WithObjectSize(thumbnailBytes.Length)
+                            .WithContentType(image.ContentType)
+                    )
+                    .ConfigureAwait(false);
+
+                _logger.LogInformation("Uploaded thumbnail {ThumbnailKey} to MinIO", thumbnailKey);
+            }
+
+            // Build image metadata
+            return new ImageMetadata
+            {
+                FileName = image.FileName,
+                ContentType = image.ContentType,
+                FileSize = image.Length,
+                Width = width,
+                Height = height,
+                UploadedAt = DateTime.UtcNow,
+                MinioObjectKey = objectKey,
+                AltText = altText ?? "",
+            };
+        }
     }
 
     /// <inheritdoc />

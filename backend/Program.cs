@@ -87,7 +87,4 @@ app.MapControllers();
 // Health checks
 app.MapHealthChecks("/health");
 
-app.Run();
-
-// Make Program class accessible to tests
-public partial class Program { }
+await app.RunAsync().ConfigureAwait(false);
