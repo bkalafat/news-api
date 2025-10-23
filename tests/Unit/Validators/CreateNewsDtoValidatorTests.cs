@@ -21,12 +21,11 @@ public class CreateNewsDtoValidatorTests
         // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithCategory(string.Empty).Build();
 
-    // Act
+        // Act
         var result = _validator.TestValidate(dto);
 
-   // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Category)
-            .WithErrorMessage("Category is required");
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Category).WithErrorMessage("Category is required");
     }
 
     [Fact]
@@ -39,17 +38,18 @@ public class CreateNewsDtoValidatorTests
         var result = _validator.TestValidate(dto);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Category)
-     .WithErrorMessage("Category must not exceed 100 characters");
+        result
+            .ShouldHaveValidationErrorFor(x => x.Category)
+            .WithErrorMessage("Category must not exceed 100 characters");
     }
 
     [Fact]
     public void Category_WhenValid_ShouldNotHaveValidationError()
     {
         // Arrange
-   var dto = CreateNewsDtoBuilder.Create().WithCategory("Technology").Build();
+        var dto = CreateNewsDtoBuilder.Create().WithCategory("Technology").Build();
 
-  // Act
+        // Act
         var result = _validator.TestValidate(dto);
 
         // Assert
@@ -61,31 +61,29 @@ public class CreateNewsDtoValidatorTests
     #region Type Tests
 
     [Fact]
-  public void Type_WhenEmpty_ShouldHaveValidationError()
+    public void Type_WhenEmpty_ShouldHaveValidationError()
     {
         // Arrange
-   var dto = CreateNewsDtoBuilder.Create().WithType(string.Empty).Build();
+        var dto = CreateNewsDtoBuilder.Create().WithType(string.Empty).Build();
 
         // Act
         var result = _validator.TestValidate(dto);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Type)
-            .WithErrorMessage("Type is required");
+        result.ShouldHaveValidationErrorFor(x => x.Type).WithErrorMessage("Type is required");
     }
 
     [Fact]
     public void Type_WhenExceedsMaxLength_ShouldHaveValidationError()
- {
-     // Arrange
+    {
+        // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithType(new string('a', 51)).Build();
 
-    // Act
+        // Act
         var result = _validator.TestValidate(dto);
 
-  // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Type)
-            .WithErrorMessage("Type must not exceed 50 characters");
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Type).WithErrorMessage("Type must not exceed 50 characters");
     }
 
     [Fact]
@@ -97,7 +95,7 @@ public class CreateNewsDtoValidatorTests
         // Act
         var result = _validator.TestValidate(dto);
 
-   // Assert
+        // Assert
         result.ShouldNotHaveValidationErrorFor(x => x.Type);
     }
 
@@ -107,16 +105,15 @@ public class CreateNewsDtoValidatorTests
 
     [Fact]
     public void Caption_WhenEmpty_ShouldHaveValidationError()
-  {
+    {
         // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithCaption(string.Empty).Build();
 
         // Act
         var result = _validator.TestValidate(dto);
 
-     // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Caption)
-        .WithErrorMessage("Caption is required");
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Caption).WithErrorMessage("Caption is required");
     }
 
     [Fact]
@@ -128,9 +125,8 @@ public class CreateNewsDtoValidatorTests
         // Act
         var result = _validator.TestValidate(dto);
 
-     // Assert
- result.ShouldHaveValidationErrorFor(x => x.Caption)
-            .WithErrorMessage("Caption must not exceed 500 characters");
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Caption).WithErrorMessage("Caption must not exceed 500 characters");
     }
 
     [Fact]
@@ -142,8 +138,8 @@ public class CreateNewsDtoValidatorTests
         // Act
         var result = _validator.TestValidate(dto);
 
-    // Assert
-     result.ShouldNotHaveValidationErrorFor(x => x.Caption);
+        // Assert
+        result.ShouldNotHaveValidationErrorFor(x => x.Caption);
     }
 
     #endregion
@@ -154,58 +150,60 @@ public class CreateNewsDtoValidatorTests
     public void Keywords_WhenExceedsMaxLength_ShouldHaveValidationError()
     {
         // Arrange
-    var dto = CreateNewsDtoBuilder.Create().WithKeywords(new string('a', 1001)).Build();
+        var dto = CreateNewsDtoBuilder.Create().WithKeywords(new string('a', 1001)).Build();
 
         // Act
         var result = _validator.TestValidate(dto);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Keywords)
-    .WithErrorMessage("Keywords must not exceed 1000 characters");
+        result
+            .ShouldHaveValidationErrorFor(x => x.Keywords)
+            .WithErrorMessage("Keywords must not exceed 1000 characters");
     }
 
     [Fact]
- public void Keywords_WhenValid_ShouldNotHaveValidationError()
+    public void Keywords_WhenValid_ShouldNotHaveValidationError()
     {
         // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithKeywords("tech, news, innovation").Build();
 
         // Act
-      var result = _validator.TestValidate(dto);
+        var result = _validator.TestValidate(dto);
 
-      // Assert
-  result.ShouldNotHaveValidationErrorFor(x => x.Keywords);
+        // Assert
+        result.ShouldNotHaveValidationErrorFor(x => x.Keywords);
     }
 
     [Fact]
     public void Keywords_WhenNull_ShouldNotHaveValidationError()
     {
-    // Arrange
+        // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithKeywords(null).Build();
 
         // Act
         var result = _validator.TestValidate(dto);
 
-      // Assert
-    result.ShouldNotHaveValidationErrorFor(x => x.Keywords);
+        // Assert
+        result.ShouldNotHaveValidationErrorFor(x => x.Keywords);
     }
 
     #endregion
 
-  #region SocialTags Tests
+    #region SocialTags Tests
 
     [Fact]
     public void SocialTags_WhenExceedsMaxLength_ShouldHaveValidationError()
     {
         // Arrange
-    var dto = CreateNewsDtoBuilder.Create().WithSocialTags(new string('a', 501)).Build();
+        var dto = CreateNewsDtoBuilder.Create().WithSocialTags(new string('a', 501)).Build();
 
-     // Act
+        // Act
         var result = _validator.TestValidate(dto);
 
         // Assert
-    result.ShouldHaveValidationErrorFor(x => x.SocialTags)
-         .WithErrorMessage("Social tags must not exceed 500 characters");
+        result
+            .ShouldHaveValidationErrorFor(x => x.SocialTags)
+            .WithErrorMessage("Social tags must not exceed 500 characters");
     }
 
     [Fact]
@@ -214,11 +212,11 @@ public class CreateNewsDtoValidatorTests
         // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithSocialTags("#tech #news").Build();
 
-    // Act
-  var result = _validator.TestValidate(dto);
+        // Act
+        var result = _validator.TestValidate(dto);
 
         // Assert
-   result.ShouldNotHaveValidationErrorFor(x => x.SocialTags);
+        result.ShouldNotHaveValidationErrorFor(x => x.SocialTags);
     }
 
     #endregion
@@ -228,50 +226,50 @@ public class CreateNewsDtoValidatorTests
     [Fact]
     public void Summary_WhenEmpty_ShouldHaveValidationError()
     {
- // Arrange
+        // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithSummary(string.Empty).Build();
 
         // Act
         var result = _validator.TestValidate(dto);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Summary)
- .WithErrorMessage("Summary is required");
+        result.ShouldHaveValidationErrorFor(x => x.Summary).WithErrorMessage("Summary is required");
     }
 
     [Fact]
     public void Summary_WhenExceedsMaxLength_ShouldHaveValidationError()
     {
-   // Arrange
- var dto = CreateNewsDtoBuilder.Create().WithSummary(new string('a', 2001)).Build();
+        // Arrange
+        var dto = CreateNewsDtoBuilder.Create().WithSummary(new string('a', 2001)).Build();
 
         // Act
         var result = _validator.TestValidate(dto);
 
-  // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Summary)
+        // Assert
+        result
+            .ShouldHaveValidationErrorFor(x => x.Summary)
             .WithErrorMessage("Summary must not exceed 2000 characters");
     }
 
-  [Fact]
+    [Fact]
     public void Summary_WhenValid_ShouldNotHaveValidationError()
     {
         // Arrange
-    var dto = CreateNewsDtoBuilder.Create().WithSummary("Valid summary text").Build();
+        var dto = CreateNewsDtoBuilder.Create().WithSummary("Valid summary text").Build();
 
         // Act
         var result = _validator.TestValidate(dto);
 
-  // Assert
+        // Assert
         result.ShouldNotHaveValidationErrorFor(x => x.Summary);
     }
 
- #endregion
+    #endregion
 
     #region Content Tests
 
     [Fact]
-  public void Content_WhenEmpty_ShouldHaveValidationError()
+    public void Content_WhenEmpty_ShouldHaveValidationError()
     {
         // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithContent(string.Empty).Build();
@@ -280,8 +278,7 @@ public class CreateNewsDtoValidatorTests
         var result = _validator.TestValidate(dto);
 
         // Assert
-   result.ShouldHaveValidationErrorFor(x => x.Content)
-    .WithErrorMessage("Content is required");
+        result.ShouldHaveValidationErrorFor(x => x.Content).WithErrorMessage("Content is required");
     }
 
     [Fact]
@@ -304,11 +301,11 @@ public class CreateNewsDtoValidatorTests
     [Fact]
     public void ExpressDate_WhenMinValue_ShouldHaveValidationError()
     {
-      // Arrange
-  var dto = CreateNewsDtoBuilder.Create().WithExpressDate(DateTime.MinValue).Build();
+        // Arrange
+        var dto = CreateNewsDtoBuilder.Create().WithExpressDate(DateTime.MinValue).Build();
 
         // Act
-   var result = _validator.TestValidate(dto);
+        var result = _validator.TestValidate(dto);
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.ExpressDate);
@@ -317,8 +314,8 @@ public class CreateNewsDtoValidatorTests
     [Fact]
     public void ExpressDate_WhenValid_ShouldNotHaveValidationError()
     {
-     // Arrange
-var dto = CreateNewsDtoBuilder.Create().WithExpressDate(DateTime.UtcNow).Build();
+        // Arrange
+        var dto = CreateNewsDtoBuilder.Create().WithExpressDate(DateTime.UtcNow).Build();
 
         // Act
         var result = _validator.TestValidate(dto);
@@ -327,39 +324,38 @@ var dto = CreateNewsDtoBuilder.Create().WithExpressDate(DateTime.UtcNow).Build()
         result.ShouldNotHaveValidationErrorFor(x => x.ExpressDate);
     }
 
-  #endregion
+    #endregion
 
     #region Priority Tests
 
     [Theory]
     [InlineData(0)]
- [InlineData(-1)]
+    [InlineData(-1)]
     [InlineData(101)]
     [InlineData(1000)]
     public void Priority_WhenOutOfRange_ShouldHaveValidationError(int priority)
     {
-  // Arrange
+        // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithPriority(priority).Build();
 
         // Act
         var result = _validator.TestValidate(dto);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Priority)
-            .WithErrorMessage("Priority must be between 1 and 100");
-  }
+        result.ShouldHaveValidationErrorFor(x => x.Priority).WithErrorMessage("Priority must be between 1 and 100");
+    }
 
     [Theory]
     [InlineData(1)]
     [InlineData(50)]
     [InlineData(100)]
     public void Priority_WhenInRange_ShouldNotHaveValidationError(int priority)
-  {
+    {
         // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithPriority(priority).Build();
 
- // Act
- var result = _validator.TestValidate(dto);
+        // Act
+        var result = _validator.TestValidate(dto);
 
         // Assert
         result.ShouldNotHaveValidationErrorFor(x => x.Priority);
@@ -369,7 +365,7 @@ var dto = CreateNewsDtoBuilder.Create().WithExpressDate(DateTime.UtcNow).Build()
 
     #region Url Tests
 
-  [Fact]
+    [Fact]
     public void Url_WhenExceedsMaxLength_ShouldHaveValidationError()
     {
         // Arrange
@@ -378,21 +374,20 @@ var dto = CreateNewsDtoBuilder.Create().WithExpressDate(DateTime.UtcNow).Build()
         // Act
         var result = _validator.TestValidate(dto);
 
-   // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Url)
-            .WithErrorMessage("URL must not exceed 500 characters");
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Url).WithErrorMessage("URL must not exceed 500 characters");
     }
 
     [Fact]
     public void Url_WhenValid_ShouldNotHaveValidationError()
     {
-      // Arrange
+        // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithUrl("valid-url-slug").Build();
 
         // Act
         var result = _validator.TestValidate(dto);
 
-  // Assert
+        // Assert
         result.ShouldNotHaveValidationErrorFor(x => x.Url);
     }
 
@@ -406,12 +401,13 @@ var dto = CreateNewsDtoBuilder.Create().WithExpressDate(DateTime.UtcNow).Build()
         // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithImagePath(new string('a', 501)).Build();
 
-    // Act
+        // Act
         var result = _validator.TestValidate(dto);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(x => x.ImgPath)
-      .WithErrorMessage("Image path must not exceed 500 characters");
+        result
+            .ShouldHaveValidationErrorFor(x => x.ImgPath)
+            .WithErrorMessage("Image path must not exceed 500 characters");
     }
 
     [Fact]
@@ -420,28 +416,29 @@ var dto = CreateNewsDtoBuilder.Create().WithExpressDate(DateTime.UtcNow).Build()
         // Arrange
         var dto = CreateNewsDtoBuilder.Create().WithImageAlt(new string('a', 201)).Build();
 
-      // Act
+        // Act
         var result = _validator.TestValidate(dto);
 
         // Assert
-    result.ShouldHaveValidationErrorFor(x => x.ImgAlt)
-   .WithErrorMessage("Image alt text must not exceed 200 characters");
+        result
+            .ShouldHaveValidationErrorFor(x => x.ImgAlt)
+            .WithErrorMessage("Image alt text must not exceed 200 characters");
     }
 
     #endregion
 
     #region Complete DTO Tests
 
- [Fact]
+    [Fact]
     public void CompleteValidDto_ShouldNotHaveAnyValidationErrors()
     {
-    // Arrange
-      var dto = CreateNewsDtoBuilder.Create().AsValidTechnologyNews().Build();
+        // Arrange
+        var dto = CreateNewsDtoBuilder.Create().AsValidTechnologyNews().Build();
 
         // Act
-    var result = _validator.TestValidate(dto);
+        var result = _validator.TestValidate(dto);
 
-      // Assert
+        // Assert
         result.ShouldNotHaveAnyValidationErrors();
     }
 
@@ -449,16 +446,16 @@ var dto = CreateNewsDtoBuilder.Create().WithExpressDate(DateTime.UtcNow).Build()
     public void InvalidDto_WithMultipleErrors_ShouldHaveMultipleValidationErrors()
     {
         // Arrange
-   var dto = CreateNewsDtoBuilder.Create().AsInvalidDto().Build();
+        var dto = CreateNewsDtoBuilder.Create().AsInvalidDto().Build();
 
         // Act
-var result = _validator.TestValidate(dto);
+        var result = _validator.TestValidate(dto);
 
-   // Assert
+        // Assert
         result.ShouldHaveValidationErrorFor(x => x.Category);
-     result.ShouldHaveValidationErrorFor(x => x.Type);
+        result.ShouldHaveValidationErrorFor(x => x.Type);
         result.ShouldHaveValidationErrorFor(x => x.Caption);
-   result.ShouldHaveValidationErrorFor(x => x.Summary);
+        result.ShouldHaveValidationErrorFor(x => x.Summary);
         result.ShouldHaveValidationErrorFor(x => x.Content);
     }
 

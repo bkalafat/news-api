@@ -31,6 +31,6 @@ public class SecurityHeadersMiddleware
         context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
         context.Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
 
-        await _next(context);
+        await _next(context).ConfigureAwait(false);
     }
 }

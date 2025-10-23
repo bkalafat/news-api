@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using FluentAssertions;
 using Moq;
 using NewsApi.Application.Services;
@@ -5,7 +6,6 @@ using NewsApi.Common;
 using NewsApi.Domain.Entities;
 using NewsApi.Domain.Interfaces;
 using NewsApi.Tests.Helpers;
-using System.Diagnostics;
 
 namespace NewsApi.Tests.Unit.Performance;
 
@@ -15,11 +15,11 @@ public class NewsServicePerformanceTests
     private readonly TestMemoryCache _cache;
     private readonly NewsService _newsService;
 
-  public NewsServicePerformanceTests()
+    public NewsServicePerformanceTests()
     {
         _mockRepository = new Mock<INewsRepository>();
-   _cache = new TestMemoryCache();
-_newsService = new NewsService(_mockRepository.Object, _cache);
+        _cache = new TestMemoryCache();
+        _newsService = new NewsService(_mockRepository.Object, _cache);
     }
 
     [Fact]
@@ -50,18 +50,18 @@ _newsService = new NewsService(_mockRepository.Object, _cache);
     [Fact]
     public async Task GetAllNewsAsync_WithLargeDataset_ShouldCompleteWithinTimeout()
     {
-   // Arrange
+        // Arrange
         var largeNewsList = NewsBuilder.Create().BuildMany(10000);
-   _mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(largeNewsList);
+        _mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(largeNewsList);
 
-   // Act
-    var stopwatch = Stopwatch.StartNew();
-     var result = await _newsService.GetAllNewsAsync();
+        // Act
+        var stopwatch = Stopwatch.StartNew();
+        var result = await _newsService.GetAllNewsAsync();
         stopwatch.Stop();
 
         // Assert
-   result.Should().HaveCount(10000);
-     stopwatch.ElapsedMilliseconds.Should().BeLessThan(1000); // Should complete within 1 second
+        result.Should().HaveCount(10000);
+        stopwatch.ElapsedMilliseconds.Should().BeLessThan(1000); // Should complete within 1 second
     }
 
     [Fact]
@@ -93,153 +93,150 @@ _newsService = new NewsService(_mockRepository.Object, _cache);
     [Fact]
     public async Task CreateNewsAsync_MultipleConcurrentCalls_ShouldHandleCorrectly()
     {
- // Arrange
-   _mockRepository.Setup(x => x.CreateAsync(It.IsAny<News>()))
-     .ReturnsAsync((News n) => n);
+        // Arrange
+        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<News>())).ReturnsAsync((News n) => n);
 
-    var tasks = new List<Task<News>>();
+        var tasks = new List<Task<News>>();
 
- // Act
-     for (int i = 0; i < 100; i++)
-  {
-  var news = NewsBuilder.Create().WithCaption($"News {i}").Build();
-      tasks.Add(_newsService.CreateNewsAsync(news));
+        // Act
+        for (int i = 0; i < 100; i++)
+        {
+            var news = NewsBuilder.Create().WithCaption($"News {i}").Build();
+            tasks.Add(_newsService.CreateNewsAsync(news));
         }
 
         var stopwatch = Stopwatch.StartNew();
-   var results = await Task.WhenAll(tasks);
-stopwatch.Stop();
-
-  // Assert
-        results.Should().HaveCount(100);
-   stopwatch.ElapsedMilliseconds.Should().BeLessThan(5000); // Should complete within 5 seconds
-  _mockRepository.Verify(x => x.CreateAsync(It.IsAny<News>()), Times.Exactly(100));
-    }
-
-  [Fact]
-    public async Task GetAllNewsAsync_RepeatedCalls_ShouldUseCacheEfficiently()
-    {
-// Arrange
-        var newsList = NewsBuilder.Create().BuildMany(100);
-    _mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(newsList);
-
-     // Act - Make 100 calls
-   var stopwatch = Stopwatch.StartNew();
-   for (int i = 0; i < 100; i++)
-   {
-      await _newsService.GetAllNewsAsync();
-  }
-   stopwatch.Stop();
-
-   // Assert
-        stopwatch.ElapsedMilliseconds.Should().BeLessThan(1000); // All 100 calls should complete within 1 second
-_mockRepository.Verify(x => x.GetAllAsync(), Times.Once); // Repository should only be called once
-    }
-
- [Fact]
-    public async Task CreateNewsAsync_WithLargeContent_ShouldHandleEfficiently()
-    {
-   // Arrange
-      var largeContent = new string('a', 1000000); // 1MB of content
-      var news = NewsBuilder.Create().WithContent(largeContent).Build();
-        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<News>())).ReturnsAsync(news);
-
-   // Act
-      var stopwatch = Stopwatch.StartNew();
-     var result = await _newsService.CreateNewsAsync(news);
-   stopwatch.Stop();
-
-  // Assert
-     result.Content.Should().HaveLength(1000000);
-   stopwatch.ElapsedMilliseconds.Should().BeLessThan(100); // Should complete quickly
-    }
-
- [Fact]
-  public async Task UpdateNewsAsync_CacheInvalidation_ShouldBeEfficient()
-    {
-// Arrange
-        var newsId = Guid.NewGuid().ToString();
-   var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
-   _cache.Set(CacheKeys.NewsList, new List<News> { news });
-        _cache.Set(newsId, news);
-
-      // Act
-var stopwatch = Stopwatch.StartNew();
-        await _newsService.UpdateNewsAsync(newsId, news);
+        var results = await Task.WhenAll(tasks);
         stopwatch.Stop();
 
-   // Assert
-   stopwatch.ElapsedMilliseconds.Should().BeLessThan(50);
-        _cache.TryGetValue(CacheKeys.NewsList, out _).Should().BeFalse();
-   _cache.TryGetValue(newsId, out _).Should().BeFalse();
+        // Assert
+        results.Should().HaveCount(100);
+        stopwatch.ElapsedMilliseconds.Should().BeLessThan(5000); // Should complete within 5 seconds
+        _mockRepository.Verify(x => x.CreateAsync(It.IsAny<News>()), Times.Exactly(100));
     }
 
     [Fact]
- public async Task DeleteNewsAsync_CacheInvalidation_ShouldBeEfficient()
+    public async Task GetAllNewsAsync_RepeatedCalls_ShouldUseCacheEfficiently()
     {
-   // Arrange
-  var newsId = Guid.NewGuid().ToString();
-      var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
-   _cache.Set(CacheKeys.NewsList, new List<News> { news });
+        // Arrange
+        var newsList = NewsBuilder.Create().BuildMany(100);
+        _mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(newsList);
+
+        // Act - Make 100 calls
+        var stopwatch = Stopwatch.StartNew();
+        for (int i = 0; i < 100; i++)
+        {
+            await _newsService.GetAllNewsAsync();
+        }
+        stopwatch.Stop();
+
+        // Assert
+        stopwatch.ElapsedMilliseconds.Should().BeLessThan(1000); // All 100 calls should complete within 1 second
+        _mockRepository.Verify(x => x.GetAllAsync(), Times.Once); // Repository should only be called once
+    }
+
+    [Fact]
+    public async Task CreateNewsAsync_WithLargeContent_ShouldHandleEfficiently()
+    {
+        // Arrange
+        var largeContent = new string('a', 1000000); // 1MB of content
+        var news = NewsBuilder.Create().WithContent(largeContent).Build();
+        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<News>())).ReturnsAsync(news);
+
+        // Act
+        var stopwatch = Stopwatch.StartNew();
+        var result = await _newsService.CreateNewsAsync(news);
+        stopwatch.Stop();
+
+        // Assert
+        result.Content.Should().HaveLength(1000000);
+        stopwatch.ElapsedMilliseconds.Should().BeLessThan(100); // Should complete quickly
+    }
+
+    [Fact]
+    public async Task UpdateNewsAsync_CacheInvalidation_ShouldBeEfficient()
+    {
+        // Arrange
+        var newsId = Guid.NewGuid().ToString();
+        var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
+        _cache.Set(CacheKeys.NewsList, new List<News> { news });
         _cache.Set(newsId, news);
 
         // Act
         var stopwatch = Stopwatch.StartNew();
-   await _newsService.DeleteNewsAsync(newsId);
-stopwatch.Stop();
+        await _newsService.UpdateNewsAsync(newsId, news);
+        stopwatch.Stop();
 
         // Assert
         stopwatch.ElapsedMilliseconds.Should().BeLessThan(50);
         _cache.TryGetValue(CacheKeys.NewsList, out _).Should().BeFalse();
-_cache.TryGetValue(newsId, out _).Should().BeFalse();
+        _cache.TryGetValue(newsId, out _).Should().BeFalse();
     }
 
     [Fact]
-public async Task GetNewsByIdAsync_WithMultipleConcurrentRequests_ShouldHandleCorrectly()
+    public async Task DeleteNewsAsync_CacheInvalidation_ShouldBeEfficient()
     {
-   // Arrange
+        // Arrange
         var newsId = Guid.NewGuid().ToString();
-  var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
+        var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
+        _cache.Set(CacheKeys.NewsList, new List<News> { news });
+        _cache.Set(newsId, news);
+
+        // Act
+        var stopwatch = Stopwatch.StartNew();
+        await _newsService.DeleteNewsAsync(newsId);
+        stopwatch.Stop();
+
+        // Assert
+        stopwatch.ElapsedMilliseconds.Should().BeLessThan(50);
+        _cache.TryGetValue(CacheKeys.NewsList, out _).Should().BeFalse();
+        _cache.TryGetValue(newsId, out _).Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task GetNewsByIdAsync_WithMultipleConcurrentRequests_ShouldHandleCorrectly()
+    {
+        // Arrange
+        var newsId = Guid.NewGuid().ToString();
+        var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
         _mockRepository.Setup(x => x.GetByIdAsync(newsId)).ReturnsAsync(news);
 
-   // Act
-   var tasks = Enumerable.Range(0, 50)
-  .Select(_ => _newsService.GetNewsByIdAsync(newsId))
-  .ToList();
+        // Act
+        var tasks = Enumerable.Range(0, 50).Select(_ => _newsService.GetNewsByIdAsync(newsId)).ToList();
 
-    var stopwatch = Stopwatch.StartNew();
-     var results = await Task.WhenAll(tasks);
-   stopwatch.Stop();
+        var stopwatch = Stopwatch.StartNew();
+        var results = await Task.WhenAll(tasks);
+        stopwatch.Stop();
 
-   // Assert
+        // Assert
         results.Should().HaveCount(50);
         results.Should().OnlyContain(n => n!.Id == newsId);
-   stopwatch.ElapsedMilliseconds.Should().BeLessThan(1000);
+        stopwatch.ElapsedMilliseconds.Should().BeLessThan(1000);
     }
 
     [Fact]
     public async Task NewsService_MemoryUsage_ShouldNotGrowExcessively()
-  {
+    {
         // Arrange
         var newsList = NewsBuilder.Create().BuildMany(1000);
         _mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(newsList);
 
-   var initialMemory = GC.GetTotalMemory(true);
+        var initialMemory = GC.GetTotalMemory(true);
 
-      // Act - Make multiple calls
-for (int i = 0; i < 100; i++)
+        // Act - Make multiple calls
+        for (int i = 0; i < 100; i++)
         {
-    await _newsService.GetAllNewsAsync();
+            await _newsService.GetAllNewsAsync();
         }
 
-  GC.Collect();
+        GC.Collect();
         GC.WaitForPendingFinalizers();
-GC.Collect();
+        GC.Collect();
 
-   var finalMemory = GC.GetTotalMemory(true);
-   var memoryGrowth = finalMemory - initialMemory;
+        var finalMemory = GC.GetTotalMemory(true);
+        var memoryGrowth = finalMemory - initialMemory;
 
-   // Assert
-   memoryGrowth.Should().BeLessThan(10_000_000); // Less than 10MB growth
+        // Assert
+        memoryGrowth.Should().BeLessThan(10_000_000); // Less than 10MB growth
     }
 }

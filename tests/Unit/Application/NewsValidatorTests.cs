@@ -21,8 +21,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Category)
-              .WithErrorMessage("Category is required");
+        result.ShouldHaveValidationErrorFor(x => x.Category).WithErrorMessage("Category is required");
     }
 
     [Fact]
@@ -44,8 +43,9 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Category)
-              .WithErrorMessage("Category must not exceed 100 characters");
+        result
+            .ShouldHaveValidationErrorFor(x => x.Category)
+            .WithErrorMessage("Category must not exceed 100 characters");
     }
 
     [Fact]
@@ -67,8 +67,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Type)
-              .WithErrorMessage("Type is required");
+        result.ShouldHaveValidationErrorFor(x => x.Type).WithErrorMessage("Type is required");
     }
 
     [Fact]
@@ -79,8 +78,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Type)
-              .WithErrorMessage("Type must not exceed 50 characters");
+        result.ShouldHaveValidationErrorFor(x => x.Type).WithErrorMessage("Type must not exceed 50 characters");
     }
 
     [Fact]
@@ -91,8 +89,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Caption)
-              .WithErrorMessage("Caption is required");
+        result.ShouldHaveValidationErrorFor(x => x.Caption).WithErrorMessage("Caption is required");
     }
 
     [Fact]
@@ -103,8 +100,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Caption)
-              .WithErrorMessage("Caption must not exceed 500 characters");
+        result.ShouldHaveValidationErrorFor(x => x.Caption).WithErrorMessage("Caption must not exceed 500 characters");
     }
 
     [Fact]
@@ -115,8 +111,9 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Keywords)
-              .WithErrorMessage("Keywords must not exceed 1000 characters");
+        result
+            .ShouldHaveValidationErrorFor(x => x.Keywords)
+            .WithErrorMessage("Keywords must not exceed 1000 characters");
     }
 
     [Fact]
@@ -138,8 +135,9 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.SocialTags)
-              .WithErrorMessage("Social tags must not exceed 500 characters");
+        result
+            .ShouldHaveValidationErrorFor(x => x.SocialTags)
+            .WithErrorMessage("Social tags must not exceed 500 characters");
     }
 
     [Fact]
@@ -150,8 +148,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Summary)
-              .WithErrorMessage("Summary is required");
+        result.ShouldHaveValidationErrorFor(x => x.Summary).WithErrorMessage("Summary is required");
     }
 
     [Fact]
@@ -162,8 +159,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Summary)
-              .WithErrorMessage("Summary must not exceed 2000 characters");
+        result.ShouldHaveValidationErrorFor(x => x.Summary).WithErrorMessage("Summary must not exceed 2000 characters");
     }
 
     [Fact]
@@ -174,8 +170,9 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.ImgPath)
-              .WithErrorMessage("Image path must not exceed 500 characters");
+        result
+            .ShouldHaveValidationErrorFor(x => x.ImgPath)
+            .WithErrorMessage("Image path must not exceed 500 characters");
     }
 
     [Fact]
@@ -186,8 +183,9 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.ImgAlt)
-              .WithErrorMessage("Image alt text must not exceed 200 characters");
+        result
+            .ShouldHaveValidationErrorFor(x => x.ImgAlt)
+            .WithErrorMessage("Image alt text must not exceed 200 characters");
     }
 
     [Fact]
@@ -198,8 +196,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Content)
-              .WithErrorMessage("Content is required");
+        result.ShouldHaveValidationErrorFor(x => x.Content).WithErrorMessage("Content is required");
     }
 
     [Fact]
@@ -234,8 +231,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Priority)
-              .WithErrorMessage("Priority must be between 1 and 100");
+        result.ShouldHaveValidationErrorFor(x => x.Priority).WithErrorMessage("Priority must be between 1 and 100");
     }
 
     [Theory]
@@ -260,8 +256,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Url)
-              .WithErrorMessage("URL must not exceed 500 characters");
+        result.ShouldHaveValidationErrorFor(x => x.Url).WithErrorMessage("URL must not exceed 500 characters");
     }
 
     [Fact]
@@ -281,7 +276,7 @@ public class NewsValidatorTests
             Content = "Full content of the news article",
             ExpressDate = DateTime.UtcNow,
             Priority = 1,
-            Url = "test-article"
+            Url = "test-article",
         };
 
         // Act & Assert

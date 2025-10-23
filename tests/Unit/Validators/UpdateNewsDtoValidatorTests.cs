@@ -7,26 +7,26 @@ namespace NewsApi.Tests.Unit.Validators;
 
 public class UpdateNewsDtoValidatorTests
 {
-private readonly UpdateNewsDtoValidator _validator;
+    private readonly UpdateNewsDtoValidator _validator;
 
-  public UpdateNewsDtoValidatorTests()
+    public UpdateNewsDtoValidatorTests()
     {
-  _validator = new UpdateNewsDtoValidator();
+        _validator = new UpdateNewsDtoValidator();
     }
 
     [Fact]
     public void Category_WhenExceedsMaxLength_ShouldHaveValidationError()
     {
-     var dto = UpdateNewsDtoBuilder.Create().WithCategory(new string('a', 101)).Build();
-   var result = _validator.TestValidate(dto);
-   result.ShouldHaveValidationErrorFor(x => x.Category);
+        var dto = UpdateNewsDtoBuilder.Create().WithCategory(new string('a', 101)).Build();
+        var result = _validator.TestValidate(dto);
+        result.ShouldHaveValidationErrorFor(x => x.Category);
     }
 
     [Fact]
     public void Category_WhenValidLength_ShouldNotHaveValidationError()
     {
-     var dto = UpdateNewsDtoBuilder.Create().WithCategory("Technology").Build();
-     var result = _validator.TestValidate(dto);
+        var dto = UpdateNewsDtoBuilder.Create().WithCategory("Technology").Build();
+        var result = _validator.TestValidate(dto);
         result.ShouldNotHaveValidationErrorFor(x => x.Category);
     }
 
@@ -41,24 +41,24 @@ private readonly UpdateNewsDtoValidator _validator;
     [Fact]
     public void Type_WhenExceedsMaxLength_ShouldHaveValidationError()
     {
-     var dto = UpdateNewsDtoBuilder.Create().WithSummary(new string('a', 2001)).Build();
+        var dto = UpdateNewsDtoBuilder.Create().WithSummary(new string('a', 2001)).Build();
         var result = _validator.TestValidate(dto);
-      result.ShouldHaveValidationErrorFor(x => x.Summary);
+        result.ShouldHaveValidationErrorFor(x => x.Summary);
     }
 
     [Fact]
     public void Caption_WhenExceedsMaxLength_ShouldHaveValidationError()
-  {
+    {
         var dto = UpdateNewsDtoBuilder.Create().WithCaption(new string('a', 501)).Build();
-var result = _validator.TestValidate(dto);
+        var result = _validator.TestValidate(dto);
         result.ShouldHaveValidationErrorFor(x => x.Caption);
     }
 
     [Fact]
     public void Priority_WhenOutOfRange_ShouldHaveValidationError()
     {
-      var dto = new UpdateNewsDto { Priority = 101 };
-      var result = _validator.TestValidate(dto);
+        var dto = new UpdateNewsDto { Priority = 101 };
+        var result = _validator.TestValidate(dto);
         result.ShouldHaveValidationErrorFor(x => x.Priority);
     }
 
@@ -67,49 +67,49 @@ var result = _validator.TestValidate(dto);
     [InlineData(50)]
     [InlineData(100)]
     public void Priority_WhenInRange_ShouldNotHaveValidationError(int priority)
-  {
-    var dto = new UpdateNewsDto { Priority = priority };
+    {
+        var dto = new UpdateNewsDto { Priority = priority };
         var result = _validator.TestValidate(dto);
-     result.ShouldNotHaveValidationErrorFor(x => x.Priority);
+        result.ShouldNotHaveValidationErrorFor(x => x.Priority);
     }
 
     [Fact]
     public void Priority_WhenNull_ShouldNotHaveValidationError()
     {
-   var dto = new UpdateNewsDto { Priority = null };
-  var result = _validator.TestValidate(dto);
+        var dto = new UpdateNewsDto { Priority = null };
+        var result = _validator.TestValidate(dto);
         result.ShouldNotHaveValidationErrorFor(x => x.Priority);
     }
 
     [Fact]
-public void ExpressDate_WhenMinValue_ShouldHaveValidationError()
+    public void ExpressDate_WhenMinValue_ShouldHaveValidationError()
     {
         var dto = new UpdateNewsDto { ExpressDate = DateTime.MinValue };
         var result = _validator.TestValidate(dto);
         result.ShouldHaveValidationErrorFor(x => x.ExpressDate);
     }
 
-  [Fact]
+    [Fact]
     public void ExpressDate_WhenValid_ShouldNotHaveValidationError()
     {
         var dto = new UpdateNewsDto { ExpressDate = DateTime.UtcNow };
         var result = _validator.TestValidate(dto);
-   result.ShouldNotHaveValidationErrorFor(x => x.ExpressDate);
+        result.ShouldNotHaveValidationErrorFor(x => x.ExpressDate);
     }
 
     [Fact]
     public void CompleteValidDto_ShouldNotHaveAnyValidationErrors()
     {
-var dto = UpdateNewsDtoBuilder.Create().Build();
+        var dto = UpdateNewsDtoBuilder.Create().Build();
         var result = _validator.TestValidate(dto);
-   result.ShouldNotHaveAnyValidationErrors();
+        result.ShouldNotHaveAnyValidationErrors();
     }
 
     [Fact]
     public void AllFieldsNull_ShouldNotHaveValidationErrors()
     {
         var dto = new UpdateNewsDto();
-  var result = _validator.TestValidate(dto);
-   result.ShouldNotHaveAnyValidationErrors();
+        var result = _validator.TestValidate(dto);
+        result.ShouldNotHaveAnyValidationErrors();
     }
 }

@@ -15,25 +15,25 @@ public class NewsBuilder
         _news = new News
         {
             Id = Guid.NewGuid().ToString(),
-      Category = "Technology",
-      Type = "Article",
-      Caption = "Default Test Caption",
-      Keywords = "test, default",
-      SocialTags = "#test #default",
-      Summary = "Default test summary",
-      ImgPath = "/images/default-test.jpg",
-      ImgAlt = "Default test image",
-      Content = "Default test content for news article",
-      Subjects = ["Testing"],
-      Authors = ["Test Author"],
-      ExpressDate = DateTime.UtcNow,
-      CreateDate = DateTime.UtcNow,
-      UpdateDate = DateTime.UtcNow,
-      Priority = 1,
-      IsActive = true,
-      Url = "default-test-news",
-      ViewCount = 0,
-      IsSecondPageNews = false
+            Category = "Technology",
+            Type = "Article",
+            Caption = "Default Test Caption",
+            Keywords = "test, default",
+            SocialTags = "#test #default",
+            Summary = "Default test summary",
+            ImgPath = "/images/default-test.jpg",
+            ImgAlt = "Default test image",
+            Content = "Default test content for news article",
+            Subjects = ["Testing"],
+            Authors = ["Test Author"],
+            ExpressDate = DateTime.UtcNow,
+            CreateDate = DateTime.UtcNow,
+            UpdateDate = DateTime.UtcNow,
+            Priority = 1,
+            IsActive = true,
+            Url = "default-test-news",
+            ViewCount = 0,
+            IsSecondPageNews = false,
         };
     }
 
@@ -162,31 +162,31 @@ public class NewsBuilder
     public NewsBuilder AsTechnologyNews()
     {
         return WithCategory("Technology")
-               .WithType("Article")
-               .WithCaption("Technology News Article")
-               .WithKeywords("tech, innovation, digital")
-               .WithSocialTags("#tech #innovation #digital")
-               .WithSubjects("Technology", "Innovation")
-               .WithUrl("technology-news-article");
+            .WithType("Article")
+            .WithCaption("Technology News Article")
+            .WithKeywords("tech, innovation, digital")
+            .WithSocialTags("#tech #innovation #digital")
+            .WithSubjects("Technology", "Innovation")
+            .WithUrl("technology-news-article");
     }
 
     public NewsBuilder AsSportsNews()
     {
         return WithCategory("Sports")
-               .WithType("Breaking")
-               .WithCaption("Sports Breaking News")
-               .WithKeywords("sports, game, competition")
-               .WithSocialTags("#sports #game #competition")
-               .WithSubjects("Sports", "Competition")
-               .WithUrl("sports-breaking-news");
+            .WithType("Breaking")
+            .WithCaption("Sports Breaking News")
+            .WithKeywords("sports, game, competition")
+            .WithSocialTags("#sports #game #competition")
+            .WithSubjects("Sports", "Competition")
+            .WithUrl("sports-breaking-news");
     }
 
     public NewsBuilder AsBreakingNews()
     {
         return WithType("Breaking")
-               .WithPriority(10)
-               .WithExpressDate(DateTime.UtcNow)
-               .WithCaption("Breaking News Alert");
+            .WithPriority(10)
+            .WithExpressDate(DateTime.UtcNow)
+            .WithCaption("Breaking News Alert");
     }
 
     public NewsBuilder AsInactive()
@@ -196,14 +196,12 @@ public class NewsBuilder
 
     public NewsBuilder AsPopular()
     {
-        return WithViewCount(1000)
-               .WithPriority(8);
+        return WithViewCount(1000).WithPriority(8);
     }
 
     public NewsBuilder AsSecondPageNews()
     {
-        return WithIsSecondPageNews(true)
-               .WithPriority(1);
+        return WithIsSecondPageNews(true).WithPriority(1);
     }
 
     public News Build() => _news;
@@ -247,7 +245,7 @@ public class CreateNewsDtoBuilder
             Authors = ["Test Author"],
             ExpressDate = DateTime.UtcNow,
             Priority = 1,
-            Url = "default-test-news"
+            Url = "default-test-news",
         };
     }
 
@@ -340,37 +338,37 @@ public class CreateNewsDtoBuilder
     public CreateNewsDtoBuilder AsValidTechnologyNews()
     {
         return WithCategory("Technology")
-               .WithType("Article")
-               .WithCaption("Valid Technology News")
-               .WithSummary("A valid technology news article for testing")
-               .WithContent("This is a comprehensive technology article with valid content")
-               .WithExpressDate(DateTime.UtcNow)
-               .WithPriority(1);
+            .WithType("Article")
+            .WithCaption("Valid Technology News")
+            .WithSummary("A valid technology news article for testing")
+            .WithContent("This is a comprehensive technology article with valid content")
+            .WithExpressDate(DateTime.UtcNow)
+            .WithPriority(1);
     }
 
     public CreateNewsDtoBuilder AsInvalidDto()
     {
         return WithCategory("")
-               .WithType("")
-               .WithCaption("")
-               .WithSummary("")
-               .WithContent("")
-               .WithExpressDate(DateTime.MinValue)
-               .WithPriority(0);
+            .WithType("")
+            .WithCaption("")
+            .WithSummary("")
+            .WithContent("")
+            .WithExpressDate(DateTime.MinValue)
+            .WithPriority(0);
     }
 
     public CreateNewsDtoBuilder WithTooLongFields()
     {
         return WithCategory(new string('a', 101))
-               .WithType(new string('b', 51))
-               .WithCaption(new string('c', 501))
-               .WithKeywords(new string('d', 1001))
-               .WithSocialTags(new string('e', 501))
-               .WithSummary(new string('f', 2001))
-               .WithImagePath(new string('g', 501))
-               .WithImageAlt(new string('h', 201))
-               .WithUrl(new string('i', 501))
-               .WithPriority(101);
+            .WithType(new string('b', 51))
+            .WithCaption(new string('c', 501))
+            .WithKeywords(new string('d', 1001))
+            .WithSocialTags(new string('e', 501))
+            .WithSummary(new string('f', 2001))
+            .WithImagePath(new string('g', 501))
+            .WithImageAlt(new string('h', 201))
+            .WithUrl(new string('i', 501))
+            .WithPriority(101);
     }
 
     public CreateNewsDto Build() => _dto;
@@ -400,7 +398,7 @@ public class UpdateNewsDtoBuilder
             Authors = ["Updated Test Author"],
             ExpressDate = DateTime.UtcNow,
             Priority = 2,
-            Url = "updated-test-news"
+            Url = "updated-test-news",
         };
     }
 

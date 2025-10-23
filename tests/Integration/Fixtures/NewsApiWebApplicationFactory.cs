@@ -22,36 +22,45 @@ public class NewsApiWebApplicationFactory : WebApplicationFactory<Program>
         // Configure to use Testing environment and load Testing settings
         builder
             .UseEnvironment("Testing")
-            .ConfigureAppConfiguration((hostContext, config) =>
-            {
-                // The hostContext should have ContentRootPath set to the newsApi project directory
-                // Load the base appsettings.json first
-                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
-                // Then overlay the Testing-specific settings
-                config.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", 
-                    optional: true, reloadOnChange: false);
+            .ConfigureAppConfiguration(
+                (hostContext, config) =>
+                {
+                    // The hostContext should have ContentRootPath set to the newsApi project directory
+                    // Load the base appsettings.json first
+                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
+                    // Then overlay the Testing-specific settings
+                    config.AddJsonFile(
+                        $"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json",
+                        optional: true,
+                        reloadOnChange: false
+                    );
 
-                // Override the MongoDB database name so the application uses the generated test DB from startup
-                var overrides = new Dictionary<string, string>
-                {
-                    { "MongoDbSettings:DatabaseName", TestDatabaseName }
-                };
-                config.AddInMemoryCollection(overrides as IEnumerable<KeyValuePair<string, string?>>);
+                    // Override the MongoDB database name so the application uses the generated test DB from startup
+                    var overrides = new Dictionary<string, string>
+                    {
+                        { "MongoDbSettings:DatabaseName", TestDatabaseName },
+                    };
+                    config.AddInMemoryCollection(overrides as IEnumerable<KeyValuePair<string, string?>>);
 
-                // Attempt to drop any leftover test databases early so the app starts with a clean DB.
-                try
-                {
-                    var built = config.Build();
-                    var conn = built["MongoDbSettings:ConnectionString"] ?? "mongodb://localhost:27017";
-                    var client = new MongoClient(conn);
-                    client.DropDatabase(TestDatabaseName);
-                    try { client.DropDatabase("NewsApiTestDb"); } catch { }
+                    // Attempt to drop any leftover test databases early so the app starts with a clean DB.
+                    try
+                    {
+                        var built = config.Build();
+                        var conn = built["MongoDbSettings:ConnectionString"] ?? "mongodb://localhost:27017";
+                        var client = new MongoClient(conn);
+                        client.DropDatabase(TestDatabaseName);
+                        try
+                        {
+                            client.DropDatabase("NewsApiTestDb");
+                        }
+                        catch { }
+                    }
+                    catch
+                    {
+                        // ignore - this is a best-effort cleanup before the host starts
+                    }
                 }
-                catch
-                {
-                    // ignore - this is a best-effort cleanup before the host starts
-                }
-            });
+            );
 
         builder.ConfigureTestServices(services =>
         {
@@ -69,7 +78,7 @@ public class NewsApiWebApplicationFactory : WebApplicationFactory<Program>
             var testSettings = new MongoDbSettings
             {
                 ConnectionString = "mongodb://localhost:27017",
-                DatabaseName = TestDatabaseName
+                DatabaseName = TestDatabaseName,
             };
 
             services.AddSingleton(testSettings);
@@ -125,7 +134,11 @@ public class NewsApiWebApplicationFactory : WebApplicationFactory<Program>
         {
             var client = new MongoClient("mongodb://localhost:27017");
             client.DropDatabase(TestDatabaseName);
-            try { client.DropDatabase("NewsApiTestDb"); } catch { }
+            try
+            {
+                client.DropDatabase("NewsApiTestDb");
+            }
+            catch { }
         }
         catch
         {

@@ -32,10 +32,10 @@ public static class SlugHelper
             .Replace("Ç", "c");
 
         // Remove special characters and replace spaces with hyphens
-        text = Regex.Replace(text, @"[^a-z0-9\s-]", "");
-        text = Regex.Replace(text, @"\s+", " ").Trim();
-        text = Regex.Replace(text, @"\s", "-");
-        text = Regex.Replace(text, @"-+", "-");
+        text = Regex.Replace(text, @"[^a-z0-9\s-]", "", RegexOptions.NonBacktracking);
+        text = Regex.Replace(text, @"\s+", " ", RegexOptions.NonBacktracking).Trim();
+        text = Regex.Replace(text, @"\s", "-", RegexOptions.NonBacktracking);
+        text = Regex.Replace(text, @"-+", "-", RegexOptions.NonBacktracking);
 
         // Limit length to 100 characters
         if (text.Length > 100)

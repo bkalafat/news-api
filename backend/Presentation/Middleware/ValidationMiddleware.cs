@@ -21,11 +21,11 @@ public class ValidationMiddleware
     {
         try
         {
-            await _next(context);
+            await _next(context).ConfigureAwait(false);
         }
         catch (ValidationException ex)
         {
-            await HandleValidationExceptionAsync(context, ex);
+            await HandleValidationExceptionAsync(context, ex).ConfigureAwait(false);
         }
     }
 
@@ -46,12 +46,13 @@ public class ValidationMiddleware
             new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
         );
 
-        await response.WriteAsync(jsonResponse);
+        await response.WriteAsync(jsonResponse).ConfigureAwait(false);
     }
 }
 
 public class ValidationErrorResponse
 {
     public string Message { get; set; } = string.Empty;
+
     public Dictionary<string, string[]> Errors { get; set; } = new();
 }

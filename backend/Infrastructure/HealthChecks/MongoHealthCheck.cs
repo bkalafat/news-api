@@ -24,10 +24,14 @@ public class MongoHealthCheck : IHealthCheck
         {
             // Test database connectivity by running a simple command
             var database = _context.News.Database;
-            await database.RunCommandAsync<object>("{ ping: 1 }", cancellationToken: cancellationToken);
+            await database
+                .RunCommandAsync<object>("{ ping: 1 }", cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
 
             // Optionally check collection accessibility
-            var collectionCount = await _context.News.EstimatedDocumentCountAsync(cancellationToken: cancellationToken);
+            var collectionCount = await _context
+                .News.EstimatedDocumentCountAsync(cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
 
             return HealthCheckResult.Healthy(
                 $"MongoDB is healthy. Collection has approximately {collectionCount} documents."

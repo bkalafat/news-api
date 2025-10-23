@@ -22,7 +22,8 @@ public class NewsRepository : INewsRepository
         return await _newsCollection
             .Find(news => news.IsActive)
             .SortByDescending(news => news.ExpressDate)
-            .ToListAsync();
+            .ToListAsync()
+            .ConfigureAwait(false);
     }
 
     public async Task<News?> GetByIdAsync(string id)
@@ -37,7 +38,10 @@ public class NewsRepository : INewsRepository
                 return null;
             }
 
-            return await _newsCollection.Find(news => news.Id == id && news.IsActive).FirstOrDefaultAsync();
+            return await _newsCollection
+                .Find(news => news.Id == id && news.IsActive)
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -54,22 +58,25 @@ public class NewsRepository : INewsRepository
 
     public async Task<News?> GetByUrlAsync(string url)
     {
-        return await _newsCollection.Find(news => news.Url == url && news.IsActive).FirstOrDefaultAsync();
+        return await _newsCollection
+            .Find(news => news.Url == url && news.IsActive)
+            .FirstOrDefaultAsync()
+            .ConfigureAwait(false);
     }
 
     public async Task<News> CreateAsync(News news)
     {
-        await _newsCollection.InsertOneAsync(news);
+        await _newsCollection.InsertOneAsync(news).ConfigureAwait(false);
         return news;
     }
 
     public async Task UpdateAsync(string id, News news)
     {
-        await _newsCollection.ReplaceOneAsync(filter: n => n.Id == id, replacement: news);
+        await _newsCollection.ReplaceOneAsync(filter: n => n.Id == id, replacement: news).ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(string id)
     {
-        await _newsCollection.DeleteOneAsync(news => news.Id == id);
+        await _newsCollection.DeleteOneAsync(news => news.Id == id).ConfigureAwait(false);
     }
 }

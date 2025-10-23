@@ -81,7 +81,7 @@ public class NewsEntityTests
             IsSecondPageNews = isSecondPageNews,
             ExpressDate = expressDate,
             CreateDate = createDate,
-            UpdateDate = updateDate
+            UpdateDate = updateDate,
         };
 
         // Assert
@@ -110,7 +110,9 @@ public class NewsEntityTests
     [Theory]
     [InlineData("")]
     [InlineData("Short")]
-    [InlineData("This is a very long category name that could potentially exceed normal limits but should still be handled properly by the entity")]
+    [InlineData(
+        "This is a very long category name that could potentially exceed normal limits but should still be handled properly by the entity"
+    )]
     public void News_Category_ShouldAcceptVariousLengths(string category)
     {
         // Arrange & Act

@@ -49,7 +49,8 @@ public class TestCacheEntry : ICacheEntry
     public TimeSpan? AbsoluteExpirationRelativeToNow { get; set; }
     public TimeSpan? SlidingExpiration { get; set; }
     public IList<IChangeToken> ExpirationTokens { get; } = new List<IChangeToken>();
-    public IList<PostEvictionCallbackRegistration> PostEvictionCallbacks { get; } = new List<PostEvictionCallbackRegistration>();
+    public IList<PostEvictionCallbackRegistration> PostEvictionCallbacks { get; } =
+        new List<PostEvictionCallbackRegistration>();
     public CacheItemPriority Priority { get; set; } = CacheItemPriority.Normal;
     public long? Size { get; set; }
 

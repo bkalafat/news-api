@@ -15,11 +15,13 @@ public static class SeedNewsData
         var newsCollection = context.News;
 
         // Check if we already have data and clear it
-        var existingCount = await newsCollection.CountDocumentsAsync(FilterDefinition<News>.Empty);
+        var existingCount = await newsCollection
+            .CountDocumentsAsync(FilterDefinition<News>.Empty)
+            .ConfigureAwait(false);
         if (existingCount > 0)
         {
             Console.WriteLine($"Database already contains {existingCount} news articles. Clearing old data...");
-            await newsCollection.DeleteManyAsync(FilterDefinition<News>.Empty);
+            await newsCollection.DeleteManyAsync(FilterDefinition<News>.Empty).ConfigureAwait(false);
             Console.WriteLine("Old data cleared successfully!");
         }
 
@@ -596,7 +598,7 @@ public static class SeedNewsData
             }
         }
 
-        await newsCollection.InsertManyAsync(newsList);
+        await newsCollection.InsertManyAsync(newsList).ConfigureAwait(false);
         Console.WriteLine($"Successfully seeded {newsList.Count} news articles to the database!");
     }
 }

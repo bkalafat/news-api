@@ -27,7 +27,7 @@ public class NewsService : INewsService
             return cachedNews;
         }
 
-        var news = await _newsRepository.GetAllAsync();
+        var news = await _newsRepository.GetAllAsync().ConfigureAwait(false);
         _cache.Set(CacheKeys.NewsList, news, TimeSpan.FromMinutes(30));
 
         return news;
@@ -40,17 +40,18 @@ public class NewsService : INewsService
             return cachedNews;
         }
 
-        var news = await _newsRepository.GetByIdAsync(id);
+        var news = await _newsRepository.GetByIdAsync(id).ConfigureAwait(false);
         if (news != null)
         {
             _cache.Set(id, news, TimeSpan.FromMinutes(30));
         }
+
         return news;
     }
 
     public async Task<News?> GetNewsByUrlAsync(string url)
     {
-        return await _newsRepository.GetByUrlAsync(url);
+        return await _newsRepository.GetByUrlAsync(url).ConfigureAwait(false);
     }
 
     public async Task<News> CreateNewsAsync(News news)
@@ -59,7 +60,7 @@ public class NewsService : INewsService
         news.CreateDate = DateTime.UtcNow;
         news.UpdateDate = DateTime.UtcNow;
 
-        var createdNews = await _newsRepository.CreateAsync(news);
+        var createdNews = await _newsRepository.CreateAsync(news).ConfigureAwait(false);
 
         // Invalidate cache
         _cache.Remove(CacheKeys.NewsList);
@@ -70,7 +71,7 @@ public class NewsService : INewsService
     public async Task UpdateNewsAsync(string id, News news)
     {
         news.UpdateDate = DateTime.UtcNow;
-        await _newsRepository.UpdateAsync(id, news);
+        await _newsRepository.UpdateAsync(id, news).ConfigureAwait(false);
 
         // Invalidate cache
         _cache.Remove(CacheKeys.NewsList);
@@ -79,7 +80,7 @@ public class NewsService : INewsService
 
     public async Task DeleteNewsAsync(string id)
     {
-        await _newsRepository.DeleteAsync(id);
+        await _newsRepository.DeleteAsync(id).ConfigureAwait(false);
 
         // Invalidate cache
         _cache.Remove(CacheKeys.NewsList);

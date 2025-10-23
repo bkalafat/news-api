@@ -241,7 +241,8 @@ namespace NewsApi.Tests.Integration.Controllers
         [Fact]
         public async Task CompleteCRUDWorkflow_ShouldWork()
         {
-            var createDto = CreateNewsDtoBuilder.Create()
+            var createDto = CreateNewsDtoBuilder
+                .Create()
                 .AsValidTechnologyNews()
                 .WithCaption("Original Caption")
                 .Build();
@@ -256,9 +257,7 @@ namespace NewsApi.Tests.Integration.Controllers
             var retrievedNews = await getResponse.Content.ReadFromJsonAsync<News>();
             retrievedNews!.Caption.Should().Be("Original Caption");
 
-            var updateDto = UpdateNewsDtoBuilder.Create()
-                .WithCaption("Updated Caption")
-                .Build();
+            var updateDto = UpdateNewsDtoBuilder.Create().WithCaption("Updated Caption").Build();
 
             var updateResponse = await UpdateNewsWithAuth(createdNews.Id, updateDto);
             updateResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -280,10 +279,7 @@ namespace NewsApi.Tests.Integration.Controllers
 
         private async Task<HttpResponseMessage> CreateNewsWithAuth(CreateNewsDto dto)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "/api/news")
-            {
-                Content = JsonContent.Create(dto)
-            };
+            var request = new HttpRequestMessage(HttpMethod.Post, "/api/news") { Content = JsonContent.Create(dto) };
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _authToken);
             return await _client.SendAsync(request);
         }
@@ -292,7 +288,7 @@ namespace NewsApi.Tests.Integration.Controllers
         {
             var request = new HttpRequestMessage(HttpMethod.Put, $"/api/news/{id}")
             {
-                Content = JsonContent.Create(dto)
+                Content = JsonContent.Create(dto),
             };
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _authToken);
             return await _client.SendAsync(request);

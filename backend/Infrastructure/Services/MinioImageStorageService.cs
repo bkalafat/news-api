@@ -47,7 +47,7 @@ public class MinioImageStorageService : IImageStorageService
         ValidateImage(image);
 
         // Ensure bucket exists
-        await EnsureBucketExistsAsync();
+        await EnsureBucketExistsAsync().ConfigureAwait(false);
 
         // Generate object keys
         var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
@@ -56,7 +56,7 @@ public class MinioImageStorageService : IImageStorageService
 
         // Upload original image
         using var imageStream = image.OpenReadStream();
-        var imageBytes = await ReadStreamToBytes(imageStream);
+        var imageBytes = await ReadStreamToBytes(imageStream).ConfigureAwait(false);
 
         // Get image dimensions
         using var img = Image.Load(imageBytes);
@@ -64,15 +64,17 @@ public class MinioImageStorageService : IImageStorageService
         var height = img.Height;
 
         // Upload to MinIO
-        await using var uploadStream = new MemoryStream(imageBytes);
-        await _minioClient.PutObjectAsync(
-            new PutObjectArgs()
-                .WithBucket(_settings.BucketName)
-                .WithObject(objectKey)
-                .WithStreamData(uploadStream)
-                .WithObjectSize(imageBytes.Length)
-                .WithContentType(image.ContentType)
-        );
+        using var uploadStream = new MemoryStream(imageBytes);
+        await _minioClient
+            .PutObjectAsync(
+                new PutObjectArgs()
+                    .WithBucket(_settings.BucketName)
+                    .WithObject(objectKey)
+                    .WithStreamData(uploadStream)
+                    .WithObjectSize(imageBytes.Length)
+                    .WithContentType(image.ContentType)
+            )
+            .ConfigureAwait(false);
 
         _logger.LogInformation("Uploaded image {ObjectKey} to MinIO", objectKey);
 
@@ -80,26 +82,29 @@ public class MinioImageStorageService : IImageStorageService
         if (generateThumbnail)
         {
             var thumbnailBytes = await GenerateThumbnailAsync(
-                imageBytes,
-                _settings.ThumbnailWidth,
-                _settings.ThumbnailHeight
-            );
-            await using var thumbnailStream = new MemoryStream(thumbnailBytes);
+                    imageBytes,
+                    _settings.ThumbnailWidth,
+                    _settings.ThumbnailHeight
+                )
+                .ConfigureAwait(false);
+            using var thumbnailStream = new MemoryStream(thumbnailBytes);
 
-            await _minioClient.PutObjectAsync(
-                new PutObjectArgs()
-                    .WithBucket(_settings.BucketName)
-                    .WithObject(thumbnailKey)
-                    .WithStreamData(thumbnailStream)
-                    .WithObjectSize(thumbnailBytes.Length)
-                    .WithContentType(image.ContentType)
-            );
+            await _minioClient
+                .PutObjectAsync(
+                    new PutObjectArgs()
+                        .WithBucket(_settings.BucketName)
+                        .WithObject(thumbnailKey)
+                        .WithStreamData(thumbnailStream)
+                        .WithObjectSize(thumbnailBytes.Length)
+                        .WithContentType(image.ContentType)
+                )
+                .ConfigureAwait(false);
 
             _logger.LogInformation("Uploaded thumbnail {ThumbnailKey} to MinIO", thumbnailKey);
         }
 
         // Build image metadata
-        var metadata = new ImageMetadata
+        return new ImageMetadata
         {
             FileName = image.FileName,
             ContentType = image.ContentType,
@@ -110,8 +115,6 @@ public class MinioImageStorageService : IImageStorageService
             MinioObjectKey = objectKey,
             AltText = altText ?? "",
         };
-
-        return metadata;
     }
 
     /// <inheritdoc />
@@ -119,9 +122,9 @@ public class MinioImageStorageService : IImageStorageService
     {
         try
         {
-            await _minioClient.RemoveObjectAsync(
-                new RemoveObjectArgs().WithBucket(_settings.BucketName).WithObject(objectKey)
-            );
+            await _minioClient
+                .RemoveObjectAsync(new RemoveObjectArgs().WithBucket(_settings.BucketName).WithObject(objectKey))
+                .ConfigureAwait(false);
 
             _logger.LogInformation("Deleted image {ObjectKey} from MinIO", objectKey);
         }
@@ -136,14 +139,14 @@ public class MinioImageStorageService : IImageStorageService
     public async Task DeleteImageWithThumbnailAsync(ImageMetadata imageMetadata)
     {
         // Delete original image
-        await DeleteImageAsync(imageMetadata.MinioObjectKey);
+        await DeleteImageAsync(imageMetadata.MinioObjectKey).ConfigureAwait(false);
 
         // Delete thumbnail
         var extension = Path.GetExtension(imageMetadata.FileName).ToLowerInvariant();
         var newsId = Path.GetFileNameWithoutExtension(imageMetadata.MinioObjectKey);
         var thumbnailKey = $"{newsId}-thumb{extension}";
 
-        await DeleteImageAsync(thumbnailKey);
+        await DeleteImageAsync(thumbnailKey).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -154,8 +157,7 @@ public class MinioImageStorageService : IImageStorageService
             .WithObject(objectKey)
             .WithExpiry(expirySeconds);
 
-        var url = await _minioClient.PresignedGetObjectAsync(args);
-        return url;
+        return await _minioClient.PresignedGetObjectAsync(args).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -163,9 +165,9 @@ public class MinioImageStorageService : IImageStorageService
     {
         try
         {
-            await _minioClient.StatObjectAsync(
-                new StatObjectArgs().WithBucket(_settings.BucketName).WithObject(objectKey)
-            );
+            await _minioClient
+                .StatObjectAsync(new StatObjectArgs().WithBucket(_settings.BucketName).WithObject(objectKey))
+                .ConfigureAwait(false);
             return true;
         }
         catch
@@ -186,6 +188,8 @@ public class MinioImageStorageService : IImageStorageService
     /// <summary>
     /// Validate the uploaded image
     /// </summary>
+    /// <param name="image">The image file to validate</param>
+    /// <exception cref="ArgumentException">Thrown when the image is null, exceeds size limit, has an unsupported format, or has an invalid content type</exception>
     private void ValidateImage(IFormFile image)
     {
         if (image == null || image.Length == 0)
@@ -224,13 +228,15 @@ public class MinioImageStorageService : IImageStorageService
     /// </summary>
     private async Task EnsureBucketExistsAsync()
     {
-        var bucketExists = await _minioClient.BucketExistsAsync(
-            new BucketExistsArgs().WithBucket(_settings.BucketName)
-        );
+        var bucketExists = await _minioClient
+            .BucketExistsAsync(new BucketExistsArgs().WithBucket(_settings.BucketName))
+            .ConfigureAwait(false);
 
         if (!bucketExists)
         {
-            await _minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(_settings.BucketName));
+            await _minioClient
+                .MakeBucketAsync(new MakeBucketArgs().WithBucket(_settings.BucketName))
+                .ConfigureAwait(false);
 
             _logger.LogInformation("Created MinIO bucket: {BucketName}", _settings.BucketName);
         }
@@ -248,7 +254,7 @@ public class MinioImageStorageService : IImageStorageService
 
         // Save to memory stream
         using var outputStream = new MemoryStream();
-        await image.SaveAsync(outputStream, new JpegEncoder { Quality = 80 });
+        await image.SaveAsync(outputStream, new JpegEncoder { Quality = 80 }).ConfigureAwait(false);
 
         return outputStream.ToArray();
     }
@@ -259,7 +265,7 @@ public class MinioImageStorageService : IImageStorageService
     private async Task<byte[]> ReadStreamToBytes(Stream stream)
     {
         using var memoryStream = new MemoryStream();
-        await stream.CopyToAsync(memoryStream);
+        await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
         return memoryStream.ToArray();
     }
 }
