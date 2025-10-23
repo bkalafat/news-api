@@ -47,19 +47,19 @@ interface News {
 
 async function getNewsBySlug(slug: string): Promise<News | null> {
   try {
-    // First, try to get all news and find by slug
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/news`, {
+    // Use the by-slug endpoint for better performance
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${apiUrl}/api/NewsArticle/by-slug?slug=${encodeURIComponent(slug)}`, {
       next: { revalidate: 60 },
     });
 
     if (!response.ok) {
+      console.error(`Failed to fetch news by slug: ${response.status}`);
       return null;
     }
 
-    const allNews: News[] = await response.json();
-    const news = allNews.find(n => n.slug === slug);
-    
-    return news || null;
+    const news: News = await response.json();
+    return news;
   } catch (error) {
     console.error("Error fetching news by slug:", error);
     return null;

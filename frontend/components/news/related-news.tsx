@@ -34,7 +34,7 @@ export function RelatedNews({ category, currentNewsId, limit = 5 }: RelatedNewsP
     async function fetchRelatedNews() {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-        const response = await fetch(`${apiUrl}/api/news?category=${category}`);
+        const response = await fetch(`${apiUrl}/api/NewsArticle?category=${category}`);
         
         if (!response.ok) {
           throw new Error("Failed to fetch related news");
