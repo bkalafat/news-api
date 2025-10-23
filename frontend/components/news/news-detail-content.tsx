@@ -19,8 +19,8 @@ interface NewsDetailContentProps {
 }
 
 export function NewsDetailContent({ news }: NewsDetailContentProps) {
-  // Split content into paragraphs
-  const paragraphs = news.content.split("\n").filter((p) => p.trim().length > 0);
+  // Check if content is HTML
+  const isHtmlContent = news.content.trim().startsWith('<');
 
   return (
     <div className="space-y-8">
@@ -48,13 +48,22 @@ export function NewsDetailContent({ news }: NewsDetailContentProps) {
       {/* Article Content */}
       <Card>
         <CardContent className="pt-6">
-          <article className="prose prose-lg dark:prose-invert max-w-none">
-            {paragraphs.map((paragraph, index) => (
-              <p key={index} className="mb-4 leading-relaxed text-foreground">
-                {paragraph}
-              </p>
-            ))}
-          </article>
+          {isHtmlContent ? (
+            // Render HTML content
+            <article 
+              className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3 prose-p:mb-4 prose-p:leading-relaxed prose-ul:my-4 prose-ol:my-4 prose-li:my-2 prose-img:rounded-lg prose-img:my-6 prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:my-6 prose-table:w-full prose-table:my-6 prose-th:bg-muted prose-th:p-3 prose-td:p-3 prose-td:border"
+              dangerouslySetInnerHTML={{ __html: news.content }}
+            />
+          ) : (
+            // Render plain text content
+            <article className="prose prose-lg dark:prose-invert max-w-none">
+              {news.content.split("\n").filter((p) => p.trim().length > 0).map((paragraph, index) => (
+                <p key={index} className="mb-4 leading-relaxed text-foreground">
+                  {paragraph}
+                </p>
+              ))}
+            </article>
+          )}
         </CardContent>
       </Card>
 
