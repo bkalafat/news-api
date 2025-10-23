@@ -3,7 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NewsApi.Application.DTOs;
 
-public class UpdateNewsDto
+/// <summary>
+/// Data transfer object for updating an existing news article.
+/// All properties are optional to support partial updates.
+/// </summary>
+public sealed record UpdateNewsArticleDto
 {
     [StringLength(100)]
     public string? Category { get; set; }
@@ -30,13 +34,13 @@ public class UpdateNewsDto
     public string? ImgAlt { get; set; }
 
     /// <summary>
-    /// Full-size image URL (can be external URL or MinIO URL)
+    /// Gets or sets full-size image URL (can be external URL or MinIO URL)
     /// </summary>
     [StringLength(1000)]
     public string? ImageUrl { get; set; }
 
     /// <summary>
-    /// Thumbnail image URL (can be external URL or MinIO URL)
+    /// Gets or sets thumbnail image URL (can be external URL or MinIO URL)
     /// </summary>
     [StringLength(1000)]
     public string? ThumbnailUrl { get; set; }
@@ -53,9 +57,6 @@ public class UpdateNewsDto
     public int? Priority { get; set; }
 
     public bool? IsActive { get; set; }
-
-    [StringLength(500)]
-    public string? Url { get; set; }
 
     public bool? IsSecondPageNews { get; set; }
 }

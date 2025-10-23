@@ -33,8 +33,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<MongoDbContext>();
 
         // Repository Pattern
-        services.AddScoped<INewsRepository, NewsRepository>();
-        services.AddScoped<INewsService, NewsService>();
+        services.AddScoped<INewsArticleRepository, NewsArticleRepository>();
+        services.AddScoped<INewsArticleService, NewsArticleService>();
 
         // Caching
         services.AddMemoryCache();
@@ -43,7 +43,7 @@ public static class ServiceCollectionExtensions
         // FluentValidation
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();
-        services.AddValidatorsFromAssemblyContaining<CreateNewsDtoValidator>();
+        services.AddValidatorsFromAssemblyContaining<CreateNewsArticleDtoValidator>();
 
         // MinIO Image Storage
         var minioSettings = new MinioSettings();

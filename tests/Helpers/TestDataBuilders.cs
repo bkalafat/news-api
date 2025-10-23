@@ -4,15 +4,15 @@ using NewsApi.Domain.Entities;
 namespace NewsApi.Tests.Helpers;
 
 /// <summary>
-/// Builder class for creating test News entities with fluent API
+/// Builder class for creating test NewsArticle entities with fluent API
 /// </summary>
 public class NewsBuilder
 {
-    private readonly News _news;
+    private readonly NewsArticle _news;
 
     public NewsBuilder()
     {
-        _news = new News
+        _news = new NewsArticle
         {
             Id = Guid.NewGuid().ToString(),
             Category = "Technology",
@@ -31,7 +31,6 @@ public class NewsBuilder
             UpdateDate = DateTime.UtcNow,
             Priority = 1,
             IsActive = true,
-            Url = "default-test-news",
             ViewCount = 0,
             IsSecondPageNews = false,
         };
@@ -141,12 +140,6 @@ public class NewsBuilder
         return this;
     }
 
-    public NewsBuilder WithUrl(string url)
-    {
-        _news.Url = url;
-        return this;
-    }
-
     public NewsBuilder WithViewCount(int viewCount)
     {
         _news.ViewCount = viewCount;
@@ -163,22 +156,20 @@ public class NewsBuilder
     {
         return WithCategory("Technology")
             .WithType("Article")
-            .WithCaption("Technology News Article")
+            .WithCaption("Technology NewsArticle Article")
             .WithKeywords("tech, innovation, digital")
             .WithSocialTags("#tech #innovation #digital")
-            .WithSubjects("Technology", "Innovation")
-            .WithUrl("technology-news-article");
+            .WithSubjects("Technology", "Innovation");
     }
 
     public NewsBuilder AsSportsNews()
     {
         return WithCategory("Sports")
             .WithType("Breaking")
-            .WithCaption("Sports Breaking News")
+            .WithCaption("Sports Breaking NewsArticle")
             .WithKeywords("sports, game, competition")
             .WithSocialTags("#sports #game #competition")
-            .WithSubjects("Sports", "Competition")
-            .WithUrl("sports-breaking-news");
+            .WithSubjects("Sports", "Competition");
     }
 
     public NewsBuilder AsBreakingNews()
@@ -186,7 +177,7 @@ public class NewsBuilder
         return WithType("Breaking")
             .WithPriority(10)
             .WithExpressDate(DateTime.UtcNow)
-            .WithCaption("Breaking News Alert");
+            .WithCaption("Breaking NewsArticle Alert");
     }
 
     public NewsBuilder AsInactive()
@@ -204,17 +195,16 @@ public class NewsBuilder
         return WithIsSecondPageNews(true).WithPriority(1);
     }
 
-    public News Build() => _news;
+    public NewsArticle Build() => _news;
 
-    public List<News> BuildMany(int count)
+    public List<NewsArticle> BuildMany(int count)
     {
-        var newsList = new List<News>();
+        var newsList = new List<NewsArticle>();
         for (int i = 0; i < count; i++)
         {
             var news = Build();
             news.Id = Guid.NewGuid().ToString(); // Ensure unique IDs
             news.Caption = $"{news.Caption} {i + 1}";
-            news.Url = $"{news.Url}-{i + 1}";
             newsList.Add(news);
         }
         return newsList;
@@ -222,15 +212,15 @@ public class NewsBuilder
 }
 
 /// <summary>
-/// Builder class for creating test CreateNewsDto objects
+/// Builder class for creating test CreateNewsArticleDto objects
 /// </summary>
-public class CreateNewsDtoBuilder
+public class CreateNewsArticleDtoBuilder
 {
-    private readonly CreateNewsDto _dto;
+    private readonly CreateNewsArticleDto _dto;
 
-    public CreateNewsDtoBuilder()
+    public CreateNewsArticleDtoBuilder()
     {
-        _dto = new CreateNewsDto
+        _dto = new CreateNewsArticleDto
         {
             Category = "Technology",
             Type = "Article",
@@ -245,108 +235,101 @@ public class CreateNewsDtoBuilder
             Authors = ["Test Author"],
             ExpressDate = DateTime.UtcNow,
             Priority = 1,
-            Url = "default-test-news",
         };
     }
 
-    public static CreateNewsDtoBuilder Create() => new();
+    public static CreateNewsArticleDtoBuilder Create() => new();
 
-    public CreateNewsDtoBuilder WithCategory(string category)
+    public CreateNewsArticleDtoBuilder WithCategory(string category)
     {
         _dto.Category = category;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithType(string type)
+    public CreateNewsArticleDtoBuilder WithType(string type)
     {
         _dto.Type = type;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithCaption(string caption)
+    public CreateNewsArticleDtoBuilder WithCaption(string caption)
     {
         _dto.Caption = caption;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithKeywords(string? keywords)
+    public CreateNewsArticleDtoBuilder WithKeywords(string? keywords)
     {
         _dto.Keywords = keywords ?? string.Empty;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithSocialTags(string? socialTags)
+    public CreateNewsArticleDtoBuilder WithSocialTags(string? socialTags)
     {
         _dto.SocialTags = socialTags ?? string.Empty;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithSummary(string summary)
+    public CreateNewsArticleDtoBuilder WithSummary(string summary)
     {
         _dto.Summary = summary;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithImagePath(string? imgPath)
+    public CreateNewsArticleDtoBuilder WithImagePath(string? imgPath)
     {
         _dto.ImgPath = imgPath ?? string.Empty;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithImageAlt(string? imgAlt)
+    public CreateNewsArticleDtoBuilder WithImageAlt(string? imgAlt)
     {
         _dto.ImgAlt = imgAlt ?? string.Empty;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithContent(string content)
+    public CreateNewsArticleDtoBuilder WithContent(string content)
     {
         _dto.Content = content;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithSubjects(params string[]? subjects)
+    public CreateNewsArticleDtoBuilder WithSubjects(params string[]? subjects)
     {
         _dto.Subjects = subjects ?? [];
         return this;
     }
 
-    public CreateNewsDtoBuilder WithAuthors(params string[]? authors)
+    public CreateNewsArticleDtoBuilder WithAuthors(params string[]? authors)
     {
         _dto.Authors = authors ?? [];
         return this;
     }
 
-    public CreateNewsDtoBuilder WithExpressDate(DateTime expressDate)
+    public CreateNewsArticleDtoBuilder WithExpressDate(DateTime expressDate)
     {
         _dto.ExpressDate = expressDate;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithPriority(int priority)
+    public CreateNewsArticleDtoBuilder WithPriority(int priority)
     {
         _dto.Priority = priority;
         return this;
     }
 
-    public CreateNewsDtoBuilder WithUrl(string? url)
-    {
-        _dto.Url = url ?? string.Empty;
-        return this;
-    }
-
-    public CreateNewsDtoBuilder AsValidTechnologyNews()
+    public CreateNewsArticleDtoBuilder AsValidTechnologyNews()
     {
         return WithCategory("Technology")
             .WithType("Article")
-            .WithCaption("Valid Technology News")
+            .WithCaption("Valid Technology NewsArticle")
             .WithSummary("A valid technology news article for testing")
             .WithContent("This is a comprehensive technology article with valid content")
             .WithExpressDate(DateTime.UtcNow)
             .WithPriority(1);
     }
 
-    public CreateNewsDtoBuilder AsInvalidDto()
+    public CreateNewsArticleDtoBuilder AsInvalidDto()
     {
         return WithCategory("")
             .WithType("")
@@ -357,7 +340,7 @@ public class CreateNewsDtoBuilder
             .WithPriority(0);
     }
 
-    public CreateNewsDtoBuilder WithTooLongFields()
+    public CreateNewsArticleDtoBuilder WithTooLongFields()
     {
         return WithCategory(new string('a', 101))
             .WithType(new string('b', 51))
@@ -367,23 +350,22 @@ public class CreateNewsDtoBuilder
             .WithSummary(new string('f', 2001))
             .WithImagePath(new string('g', 501))
             .WithImageAlt(new string('h', 201))
-            .WithUrl(new string('i', 501))
             .WithPriority(101);
     }
 
-    public CreateNewsDto Build() => _dto;
+    public CreateNewsArticleDto Build() => _dto;
 }
 
 /// <summary>
-/// Builder class for creating test UpdateNewsDto objects
+/// Builder class for creating test UpdateNewsArticleDto objects
 /// </summary>
-public class UpdateNewsDtoBuilder
+public class UpdateNewsArticleDtoBuilder
 {
-    private readonly UpdateNewsDto _dto;
+    private readonly UpdateNewsArticleDto _dto;
 
-    public UpdateNewsDtoBuilder()
+    public UpdateNewsArticleDtoBuilder()
     {
-        _dto = new UpdateNewsDto
+        _dto = new UpdateNewsArticleDto
         {
             Category = "Technology",
             Type = "Article",
@@ -398,35 +380,34 @@ public class UpdateNewsDtoBuilder
             Authors = ["Updated Test Author"],
             ExpressDate = DateTime.UtcNow,
             Priority = 2,
-            Url = "updated-test-news",
         };
     }
 
-    public static UpdateNewsDtoBuilder Create() => new();
+    public static UpdateNewsArticleDtoBuilder Create() => new();
 
-    public UpdateNewsDtoBuilder WithCategory(string category)
+    public UpdateNewsArticleDtoBuilder WithCategory(string category)
     {
         _dto.Category = category;
         return this;
     }
 
-    public UpdateNewsDtoBuilder WithCaption(string caption)
+    public UpdateNewsArticleDtoBuilder WithCaption(string caption)
     {
         _dto.Caption = caption;
         return this;
     }
 
-    public UpdateNewsDtoBuilder WithSummary(string summary)
+    public UpdateNewsArticleDtoBuilder WithSummary(string summary)
     {
         _dto.Summary = summary;
         return this;
     }
 
-    public UpdateNewsDtoBuilder WithContent(string content)
+    public UpdateNewsArticleDtoBuilder WithContent(string content)
     {
         _dto.Content = content;
         return this;
     }
 
-    public UpdateNewsDto Build() => _dto;
+    public UpdateNewsArticleDto Build() => _dto;
 }

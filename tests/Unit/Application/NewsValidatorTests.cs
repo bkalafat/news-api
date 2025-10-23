@@ -1,4 +1,4 @@
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 using NewsApi.Application.DTOs;
 using NewsApi.Application.Validators;
 
@@ -6,18 +6,18 @@ namespace NewsApi.Tests.Unit.Application;
 
 public class NewsValidatorTests
 {
-    private readonly CreateNewsDtoValidator _validator;
+    private readonly CreateNewsArticleDtoValidator _validator;
 
     public NewsValidatorTests()
     {
-        _validator = new CreateNewsDtoValidator();
+        _validator = new CreateNewsArticleDtoValidator();
     }
 
     [Fact]
     public void Category_WhenEmpty_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Category = "" };
+        var dto = new CreateNewsArticleDto { Category = "" };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -28,7 +28,7 @@ public class NewsValidatorTests
     public void Category_WhenNull_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Category = null! };
+        var dto = new CreateNewsArticleDto { Category = null! };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -39,7 +39,7 @@ public class NewsValidatorTests
     public void Category_WhenTooLong_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Category = new string('a', 101) };
+        var dto = new CreateNewsArticleDto { Category = new string('a', 101) };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -52,7 +52,7 @@ public class NewsValidatorTests
     public void Category_WhenValid_ShouldNotHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Category = "Technology" };
+        var dto = new CreateNewsArticleDto { Category = "Technology" };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -63,7 +63,7 @@ public class NewsValidatorTests
     public void Type_WhenEmpty_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Type = "" };
+        var dto = new CreateNewsArticleDto { Type = "" };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -74,7 +74,7 @@ public class NewsValidatorTests
     public void Type_WhenTooLong_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Type = new string('a', 51) };
+        var dto = new CreateNewsArticleDto { Type = new string('a', 51) };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -85,7 +85,7 @@ public class NewsValidatorTests
     public void Caption_WhenEmpty_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Caption = "" };
+        var dto = new CreateNewsArticleDto { Caption = "" };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -96,7 +96,7 @@ public class NewsValidatorTests
     public void Caption_WhenTooLong_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Caption = new string('a', 501) };
+        var dto = new CreateNewsArticleDto { Caption = new string('a', 501) };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -107,7 +107,7 @@ public class NewsValidatorTests
     public void Keywords_WhenTooLong_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Keywords = new string('a', 1001) };
+        var dto = new CreateNewsArticleDto { Keywords = new string('a', 1001) };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -120,7 +120,7 @@ public class NewsValidatorTests
     public void Keywords_WhenEmpty_ShouldNotHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Keywords = "" };
+        var dto = new CreateNewsArticleDto { Keywords = "" };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -131,7 +131,7 @@ public class NewsValidatorTests
     public void SocialTags_WhenTooLong_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { SocialTags = new string('a', 501) };
+        var dto = new CreateNewsArticleDto { SocialTags = new string('a', 501) };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -144,7 +144,7 @@ public class NewsValidatorTests
     public void Summary_WhenEmpty_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Summary = "" };
+        var dto = new CreateNewsArticleDto { Summary = "" };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -155,7 +155,7 @@ public class NewsValidatorTests
     public void Summary_WhenTooLong_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Summary = new string('a', 2001) };
+        var dto = new CreateNewsArticleDto { Summary = new string('a', 2001) };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -166,7 +166,7 @@ public class NewsValidatorTests
     public void ImgPath_WhenTooLong_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { ImgPath = new string('a', 501) };
+        var dto = new CreateNewsArticleDto { ImgPath = new string('a', 501) };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -179,7 +179,7 @@ public class NewsValidatorTests
     public void ImgAlt_WhenTooLong_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { ImgAlt = new string('a', 201) };
+        var dto = new CreateNewsArticleDto { ImgAlt = new string('a', 201) };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -192,7 +192,7 @@ public class NewsValidatorTests
     public void Content_WhenEmpty_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { Content = "" };
+        var dto = new CreateNewsArticleDto { Content = "" };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -203,7 +203,7 @@ public class NewsValidatorTests
     public void ExpressDate_WhenEmpty_ShouldHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { ExpressDate = DateTime.MinValue };
+        var dto = new CreateNewsArticleDto { ExpressDate = DateTime.MinValue };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -214,7 +214,7 @@ public class NewsValidatorTests
     public void ExpressDate_WhenValid_ShouldNotHaveValidationError()
     {
         // Arrange
-        var dto = new CreateNewsDto { ExpressDate = DateTime.UtcNow };
+        var dto = new CreateNewsArticleDto { ExpressDate = DateTime.UtcNow };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -227,7 +227,7 @@ public class NewsValidatorTests
     public void Priority_WhenOutOfRange_ShouldHaveValidationError(int priority)
     {
         // Arrange
-        var dto = new CreateNewsDto { Priority = priority };
+        var dto = new CreateNewsArticleDto { Priority = priority };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -241,7 +241,7 @@ public class NewsValidatorTests
     public void Priority_WhenInRange_ShouldNotHaveValidationError(int priority)
     {
         // Arrange
-        var dto = new CreateNewsDto { Priority = priority };
+        var dto = new CreateNewsArticleDto { Priority = priority };
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
@@ -249,21 +249,10 @@ public class NewsValidatorTests
     }
 
     [Fact]
-    public void Url_WhenTooLong_ShouldHaveValidationError()
-    {
-        // Arrange
-        var dto = new CreateNewsDto { Url = new string('a', 501) };
-
-        // Act & Assert
-        var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Url).WithErrorMessage("URL must not exceed 500 characters");
-    }
-
-    [Fact]
     public void ValidDto_ShouldNotHaveAnyValidationErrors()
     {
         // Arrange
-        var dto = new CreateNewsDto
+        var dto = new CreateNewsArticleDto
         {
             Category = "Technology",
             Type = "Article",
@@ -276,7 +265,6 @@ public class NewsValidatorTests
             Content = "Full content of the news article",
             ExpressDate = DateTime.UtcNow,
             Priority = 1,
-            Url = "test-article",
         };
 
         // Act & Assert

@@ -3,7 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NewsApi.Application.DTOs;
 
-public class CreateNewsDto
+/// <summary>
+/// Data transfer object for creating a new news article.
+/// </summary>
+public sealed record CreateNewsArticleDto
 {
     [Required]
     [StringLength(100)]
@@ -34,13 +37,13 @@ public class CreateNewsDto
     public string ImgAlt { get; set; } = string.Empty;
 
     /// <summary>
-    /// Full-size image URL (can be external URL or MinIO URL)
+    /// Gets or sets full-size image URL (can be external URL or MinIO URL)
     /// </summary>
     [StringLength(1000)]
     public string ImageUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// Thumbnail image URL (can be external URL or MinIO URL)
+    /// Gets or sets thumbnail image URL (can be external URL or MinIO URL)
     /// </summary>
     [StringLength(1000)]
     public string ThumbnailUrl { get; set; } = string.Empty;
@@ -48,9 +51,9 @@ public class CreateNewsDto
     [Required]
     public string Content { get; set; } = string.Empty;
 
-    public string[] Subjects { get; set; } = Array.Empty<string>();
+    public string[] Subjects { get; set; } = [];
 
-    public string[] Authors { get; set; } = Array.Empty<string>();
+    public string[] Authors { get; set; } = [];
 
     [Required]
     public DateTime ExpressDate { get; set; }
@@ -59,9 +62,6 @@ public class CreateNewsDto
     public int Priority { get; set; } = 1;
 
     public bool IsActive { get; set; } = true;
-
-    [StringLength(500)]
-    public string Url { get; set; } = string.Empty;
 
     public bool IsSecondPageNews { get; set; } = false;
 }

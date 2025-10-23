@@ -10,7 +10,7 @@ A modern, full-stack Turkish technology news platform. Features a production-rea
 ## 🌟 Platform Components
 
 ### Backend API (backend/)
-Modern news management API built with .NET 10, following Clean Architecture principles. Features real-time RSS integration with BBC News feeds, JWT authentication, comprehensive caching, and MongoDB persistence.
+Modern news management API built with .NET 10, following Clean Architecture principles. Features JWT authentication, comprehensive caching, and MongoDB persistence.
 
 ### Frontend Web (frontend/)
 Modern, SEO-optimized Turkish tech news website built with Next.js 15, TypeScript, TailwindCSS, and Shadcn/ui. Features responsive design, React Query data management, and Turkish localization.
@@ -18,7 +18,6 @@ Modern, SEO-optimized Turkish tech news website built with Next.js 15, TypeScrip
 ## ✨ Features
 
 - **Clean Architecture** - Clear separation of concerns with Domain, Application, Infrastructure, and Presentation layers
-- **RSS Integration** - Automatic news fetching from BBC RSS feeds across multiple categories
 - **JWT Authentication** - Secure API endpoints with OAuth2/OpenID Connect standards
 - **MongoDB Persistence** - Flexible NoSQL data storage with optimized queries
 - **Memory Caching** - High-performance caching layer with configurable TTL
@@ -331,7 +330,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - Built with [.NET 10](https://dotnet.microsoft.com/)
-- RSS feeds powered by [BBC News](https://www.bbc.com/news)
 - MongoDB data persistence
 - Swagger documentation via [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
 

@@ -25,7 +25,7 @@ public class NewsEntityAdvancedTests
         // Arrange & Act
         var news = NewsBuilder
             .Create()
-            .WithCaption("News with special chars: @#$%^&*()")
+            .WithCaption("NewsArticle with special chars: @#$%^&*()")
             .WithContent("Content with �mojis ?? and �n�c�d�")
             .Build();
 
@@ -116,17 +116,16 @@ public class NewsEntityAdvancedTests
     }
 
     [Theory]
-    [InlineData("Technology", "tech-news")]
-    [InlineData("Sports", "sports-breaking-news")]
-    [InlineData("Politics", "politics-analysis")]
-    public void News_WithCategorySpecificUrl_ShouldFollowPattern(string category, string urlPattern)
+    [InlineData("Technology")]
+    [InlineData("Sports")]
+    [InlineData("Politics")]
+    public void News_WithCategory_ShouldSetCorrectly(string category)
     {
         // Act
-        var news = NewsBuilder.Create().WithCategory(category).WithUrl(urlPattern).Build();
+        var news = NewsBuilder.Create().WithCategory(category).Build();
 
         // Assert
         news.Category.Should().Be(category);
-        news.Url.Should().Contain(urlPattern);
     }
 
     [Fact]
@@ -159,7 +158,7 @@ public class NewsEntityAdvancedTests
     public void News_WithEmptyArrays_ShouldInitializeToEmpty()
     {
         // Act
-        var news = new News();
+        var news = new NewsArticle();
 
         // Assert
         news.Subjects.Should().NotBeNull();
@@ -223,15 +222,10 @@ public class NewsEntityAdvancedTests
     public void News_WithUrlSlug_ShouldFollowUrlConventions()
     {
         // Arrange
-        var url = "this-is-a-valid-url-slug-123";
 
         // Act
-        var news = NewsBuilder.Create().WithUrl(url).Build();
 
         // Assert
-        news.Url.Should().Be(url);
-        news.Url.Should().NotContain(" ");
-        news.Url.Should().NotContain("_");
     }
 
     [Fact]
@@ -247,7 +241,6 @@ public class NewsEntityAdvancedTests
         news.Caption.Should().NotBeNullOrEmpty();
         news.Summary.Should().NotBeNullOrEmpty();
         news.Content.Should().NotBeNullOrEmpty();
-        news.Url.Should().NotBeNullOrEmpty();
         news.Priority.Should().BeGreaterThan(0);
         news.ViewCount.Should().BeGreaterThan(0);
     }

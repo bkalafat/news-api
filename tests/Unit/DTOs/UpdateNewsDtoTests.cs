@@ -3,13 +3,13 @@ using NewsApi.Application.DTOs;
 
 namespace NewsApi.Tests.Unit.DTOs;
 
-public class UpdateNewsDtoTests
+public class UpdateNewsArticleDtoTests
 {
     [Fact]
-    public void UpdateNewsDto_WithAllProperties_ShouldAllowPartialUpdates()
+    public void UpdateNewsArticleDto_WithAllProperties_ShouldAllowPartialUpdates()
     {
         // Arrange & Act
-        var dto = new UpdateNewsDto
+        var dto = new UpdateNewsArticleDto
         {
             Category = "Updated Category",
             Type = "Updated Type",
@@ -25,7 +25,6 @@ public class UpdateNewsDtoTests
             ExpressDate = DateTime.UtcNow,
             Priority = 10,
             IsActive = false,
-            Url = "updated-article",
             IsSecondPageNews = true,
         };
 
@@ -39,10 +38,10 @@ public class UpdateNewsDtoTests
     }
 
     [Fact]
-    public void UpdateNewsDto_WithOnlyCategory_ShouldLeaveOthersNull()
+    public void UpdateNewsArticleDto_WithOnlyCategory_ShouldLeaveOthersNull()
     {
         // Arrange & Act
-        var dto = new UpdateNewsDto { Category = "Updated Category" };
+        var dto = new UpdateNewsArticleDto { Category = "Updated Category" };
 
         // Assert
         dto.Category.Should().Be("Updated Category");
@@ -53,10 +52,10 @@ public class UpdateNewsDtoTests
     }
 
     [Fact]
-    public void UpdateNewsDto_WithNullValues_ShouldAllowNulls()
+    public void UpdateNewsArticleDto_WithNullValues_ShouldAllowNulls()
     {
         // Arrange & Act
-        var dto = new UpdateNewsDto
+        var dto = new UpdateNewsArticleDto
         {
             Category = null,
             Type = null,
@@ -74,10 +73,10 @@ public class UpdateNewsDtoTests
     }
 
     [Fact]
-    public void UpdateNewsDto_WithPriorityChange_ShouldUpdatePriority()
+    public void UpdateNewsArticleDto_WithPriorityChange_ShouldUpdatePriority()
     {
         // Arrange & Act
-        var dto = new UpdateNewsDto { Priority = 100 };
+        var dto = new UpdateNewsArticleDto { Priority = 100 };
 
         // Assert
         dto.Priority.Should().Be(100);
@@ -85,10 +84,10 @@ public class UpdateNewsDtoTests
     }
 
     [Fact]
-    public void UpdateNewsDto_WithIsActiveChange_ShouldUpdateStatus()
+    public void UpdateNewsArticleDto_WithIsActiveChange_ShouldUpdateStatus()
     {
         // Arrange & Act
-        var dto = new UpdateNewsDto { IsActive = false };
+        var dto = new UpdateNewsArticleDto { IsActive = false };
 
         // Assert
         dto.IsActive.Should().BeFalse();
@@ -96,13 +95,13 @@ public class UpdateNewsDtoTests
     }
 
     [Fact]
-    public void UpdateNewsDto_WithExpressDateChange_ShouldUpdateDate()
+    public void UpdateNewsArticleDto_WithExpressDateChange_ShouldUpdateDate()
     {
         // Arrange
         var newDate = DateTime.UtcNow.AddDays(5);
 
         // Act
-        var dto = new UpdateNewsDto { ExpressDate = newDate };
+        var dto = new UpdateNewsArticleDto { ExpressDate = newDate };
 
         // Assert
         dto.ExpressDate.Should().Be(newDate);
@@ -110,10 +109,10 @@ public class UpdateNewsDtoTests
     }
 
     [Fact]
-    public void UpdateNewsDto_WithArrays_ShouldReplaceArrays()
+    public void UpdateNewsArticleDto_WithArrays_ShouldReplaceArrays()
     {
         // Arrange & Act
-        var dto = new UpdateNewsDto
+        var dto = new UpdateNewsArticleDto
         {
             Subjects = new[] { "New Subject 1", "New Subject 2" },
             Authors = new[] { "New Author 1" },
@@ -127,10 +126,10 @@ public class UpdateNewsDtoTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void UpdateNewsDto_WithIsSecondPageNews_ShouldUpdate(bool value)
+    public void UpdateNewsArticleDto_WithIsSecondPageNews_ShouldUpdate(bool value)
     {
         // Arrange & Act
-        var dto = new UpdateNewsDto { IsSecondPageNews = value };
+        var dto = new UpdateNewsArticleDto { IsSecondPageNews = value };
 
         // Assert
         dto.IsSecondPageNews.Should().Be(value);
@@ -138,10 +137,10 @@ public class UpdateNewsDtoTests
     }
 
     [Fact]
-    public void UpdateNewsDto_WhenEmpty_ShouldHaveAllNullValues()
+    public void UpdateNewsArticleDto_WhenEmpty_ShouldHaveAllNullValues()
     {
         // Arrange & Act
-        var dto = new UpdateNewsDto();
+        var dto = new UpdateNewsArticleDto();
 
         // Assert
         dto.Category.Should().BeNull();
@@ -158,7 +157,6 @@ public class UpdateNewsDtoTests
         dto.ExpressDate.Should().BeNull();
         dto.Priority.Should().BeNull();
         dto.IsActive.Should().BeNull();
-        dto.Url.Should().BeNull();
         dto.IsSecondPageNews.Should().BeNull();
     }
 }

@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen(options =>
             Title = "News API",
             Version = "v1",
             Description =
-                "A comprehensive news management API with RSS integration, JWT authentication, and real-time data fetching from BBC News feeds.",
+                "A comprehensive news management API with JWT authentication and flexible content management capabilities.",
             Contact = new Microsoft.OpenApi.Models.OpenApiContact
             {
                 Name = "News API Support",

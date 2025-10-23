@@ -8,33 +8,33 @@ using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Unit.Application;
 
-public class NewsServiceTests
+public class NewsArticleServiceTests
 {
-    private readonly Mock<INewsRepository> _mockRepository;
+    private readonly Mock<INewsArticleRepository> _mockRepository;
     private readonly TestMemoryCache _cache;
-    private readonly NewsService _newsService;
+    private readonly NewsArticleService _NewsArticleService;
 
-    public NewsServiceTests()
+    public NewsArticleServiceTests()
     {
-        _mockRepository = new Mock<INewsRepository>();
+        _mockRepository = new Mock<INewsArticleRepository>();
         _cache = new TestMemoryCache();
-        _newsService = new NewsService(_mockRepository.Object, _cache);
+        _NewsArticleService = new NewsArticleService(_mockRepository.Object, _cache);
     }
 
     [Fact]
     public async Task GetAllNewsAsync_WhenCacheHit_ShouldReturnCachedData()
     {
         // Arrange
-        var cachedNews = new List<News>
+        var cachedNews = new List<NewsArticle>
         {
-            new() { Id = Guid.NewGuid().ToString(), Caption = "Cached News 1" },
-            new() { Id = Guid.NewGuid().ToString(), Caption = "Cached News 2" },
+            new() { Id = Guid.NewGuid().ToString(), Caption = "Cached NewsArticle 1" },
+            new() { Id = Guid.NewGuid().ToString(), Caption = "Cached NewsArticle 2" },
         };
 
         _cache.Set(CacheKeys.NewsList, cachedNews);
 
         // Act
-        var result = await _newsService.GetAllNewsAsync();
+        var result = await _NewsArticleService.GetAllNewsAsync();
 
         // Assert
         result.Should().BeEquivalentTo(cachedNews);
@@ -45,16 +45,16 @@ public class NewsServiceTests
     public async Task GetAllNewsAsync_WhenCacheMiss_ShouldFetchFromRepositoryAndCache()
     {
         // Arrange
-        var newsFromRepo = new List<News>
+        var newsFromRepo = new List<NewsArticle>
         {
-            new() { Id = Guid.NewGuid().ToString(), Caption = "Repo News 1" },
-            new() { Id = Guid.NewGuid().ToString(), Caption = "Repo News 2" },
+            new() { Id = Guid.NewGuid().ToString(), Caption = "Repo NewsArticle 1" },
+            new() { Id = Guid.NewGuid().ToString(), Caption = "Repo NewsArticle 2" },
         };
 
         _mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(newsFromRepo);
 
         // Act
-        var result = await _newsService.GetAllNewsAsync();
+        var result = await _NewsArticleService.GetAllNewsAsync();
 
         // Assert
         result.Should().BeEquivalentTo(newsFromRepo);
@@ -70,12 +70,12 @@ public class NewsServiceTests
     {
         // Arrange
         var newsId = Guid.NewGuid().ToString();
-        var cachedNews = new News { Id = newsId, Caption = "Cached News" };
+        var cachedNews = new NewsArticle { Id = newsId, Caption = "Cached NewsArticle" };
 
         _cache.Set(newsId, cachedNews);
 
         // Act
-        var result = await _newsService.GetNewsByIdAsync(newsId);
+        var result = await _NewsArticleService.GetNewsByIdAsync(newsId);
 
         // Assert
         result.Should().BeEquivalentTo(cachedNews);
@@ -87,12 +87,12 @@ public class NewsServiceTests
     {
         // Arrange
         var newsId = Guid.NewGuid().ToString();
-        var newsFromRepo = new News { Id = newsId, Caption = "Repo News" };
+        var newsFromRepo = new NewsArticle { Id = newsId, Caption = "Repo NewsArticle" };
 
         _mockRepository.Setup(x => x.GetByIdAsync(newsId)).ReturnsAsync(newsFromRepo);
 
         // Act
-        var result = await _newsService.GetNewsByIdAsync(newsId);
+        var result = await _NewsArticleService.GetNewsByIdAsync(newsId);
 
         // Assert
         result.Should().BeEquivalentTo(newsFromRepo);
@@ -109,10 +109,10 @@ public class NewsServiceTests
         // Arrange
         var newsId = Guid.NewGuid().ToString();
 
-        _mockRepository.Setup(x => x.GetByIdAsync(newsId)).ReturnsAsync((News?)null);
+        _mockRepository.Setup(x => x.GetByIdAsync(newsId)).ReturnsAsync((NewsArticle?)null);
 
         // Act
-        var result = await _newsService.GetNewsByIdAsync(newsId);
+        var result = await _NewsArticleService.GetNewsByIdAsync(newsId);
 
         // Assert
         result.Should().BeNull();
@@ -123,48 +123,33 @@ public class NewsServiceTests
     }
 
     [Fact]
-    public async Task GetNewsByUrlAsync_ShouldCallRepository()
-    {
-        // Arrange
-        var url = "test-news-url";
-        var expectedNews = new News { Id = Guid.NewGuid().ToString(), Url = url };
-
-        _mockRepository.Setup(x => x.GetByUrlAsync(url)).ReturnsAsync(expectedNews);
-
-        // Act
-        var result = await _newsService.GetNewsByUrlAsync(url);
-
-        // Assert
-        result.Should().BeEquivalentTo(expectedNews);
-        _mockRepository.Verify(x => x.GetByUrlAsync(url), Times.Once);
-    }
-
-    [Fact]
     public async Task CreateNewsAsync_ShouldSetIdAndDatesAndInvalidateCache()
     {
         // Arrange
-        var news = new News { Caption = "New News Article" };
+        var news = new NewsArticle { Caption = "New NewsArticle Article" };
         var beforeCreate = DateTime.UtcNow.AddSeconds(-1);
 
         // Setup cache with some data to verify it gets invalidated
-        _cache.Set(CacheKeys.NewsList, new List<News>());
+        _cache.Set(CacheKeys.NewsList, new List<NewsArticle>());
 
-        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<News>())).ReturnsAsync((News n) => n);
+        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<NewsArticle>())).ReturnsAsync((NewsArticle n) => n);
 
         // Act
-        var result = await _newsService.CreateNewsAsync(news);
+        var result = await _NewsArticleService.CreateNewsAsync(news);
         var afterCreate = DateTime.UtcNow.AddSeconds(1);
 
         // Assert
         result.Id.Should().NotBeEmpty();
         result.CreateDate.Should().BeAfter(beforeCreate).And.BeBefore(afterCreate);
         result.UpdateDate.Should().BeAfter(beforeCreate).And.BeBefore(afterCreate);
-        result.Caption.Should().Be("New News Article");
+        result.Caption.Should().Be("New NewsArticle Article");
 
         _mockRepository.Verify(
             x =>
                 x.CreateAsync(
-                    It.Is<News>(n => n.Id != string.Empty && n.CreateDate > beforeCreate && n.UpdateDate > beforeCreate)
+                    It.Is<NewsArticle>(n =>
+                        n.Id != string.Empty && n.CreateDate > beforeCreate && n.UpdateDate > beforeCreate
+                    )
                 ),
             Times.Once
         );
@@ -178,21 +163,24 @@ public class NewsServiceTests
     {
         // Arrange
         var newsId = Guid.NewGuid().ToString();
-        var news = new News { Caption = "Updated News Article" };
+        var news = new NewsArticle { Caption = "Updated NewsArticle Article" };
         var beforeUpdate = DateTime.UtcNow.AddSeconds(-1);
 
         // Setup cache with some data to verify it gets invalidated
-        _cache.Set(CacheKeys.NewsList, new List<News>());
-        _cache.Set(newsId, new News());
+        _cache.Set(CacheKeys.NewsList, new List<NewsArticle>());
+        _cache.Set(newsId, new NewsArticle());
 
         // Act
-        await _newsService.UpdateNewsAsync(newsId, news);
+        await _NewsArticleService.UpdateNewsAsync(newsId, news);
         var afterUpdate = DateTime.UtcNow.AddSeconds(1);
 
         // Assert
         news.UpdateDate.Should().BeAfter(beforeUpdate).And.BeBefore(afterUpdate);
 
-        _mockRepository.Verify(x => x.UpdateAsync(newsId, It.Is<News>(n => n.UpdateDate > beforeUpdate)), Times.Once);
+        _mockRepository.Verify(
+            x => x.UpdateAsync(newsId, It.Is<NewsArticle>(n => n.UpdateDate > beforeUpdate)),
+            Times.Once
+        );
 
         // Verify cache was invalidated
         _cache.TryGetValue(CacheKeys.NewsList, out _).Should().BeFalse();
@@ -206,11 +194,11 @@ public class NewsServiceTests
         var newsId = Guid.NewGuid().ToString();
 
         // Setup cache with some data to verify it gets invalidated
-        _cache.Set(CacheKeys.NewsList, new List<News>());
-        _cache.Set(newsId, new News());
+        _cache.Set(CacheKeys.NewsList, new List<NewsArticle>());
+        _cache.Set(newsId, new NewsArticle());
 
         // Act
-        await _newsService.DeleteNewsAsync(newsId);
+        await _NewsArticleService.DeleteNewsAsync(newsId);
 
         // Assert
         _mockRepository.Verify(x => x.DeleteAsync(newsId), Times.Once);
@@ -224,13 +212,15 @@ public class NewsServiceTests
     public async Task CreateNewsAsync_WhenRepositoryThrows_ShouldPropagateException()
     {
         // Arrange
-        var news = new News { Caption = "Test News" };
+        var news = new NewsArticle { Caption = "Test NewsArticle" };
         var expectedException = new InvalidOperationException("Database error");
 
-        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<News>())).ThrowsAsync(expectedException);
+        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<NewsArticle>())).ThrowsAsync(expectedException);
 
         // Act & Assert
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => _newsService.CreateNewsAsync(news));
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _NewsArticleService.CreateNewsAsync(news)
+        );
 
         exception.Should().Be(expectedException);
     }
@@ -240,14 +230,14 @@ public class NewsServiceTests
     {
         // Arrange
         var newsId = Guid.NewGuid().ToString();
-        var news = new News { Caption = "Updated News" };
+        var news = new NewsArticle { Caption = "Updated NewsArticle" };
         var expectedException = new InvalidOperationException("Update failed");
 
-        _mockRepository.Setup(x => x.UpdateAsync(newsId, It.IsAny<News>())).ThrowsAsync(expectedException);
+        _mockRepository.Setup(x => x.UpdateAsync(newsId, It.IsAny<NewsArticle>())).ThrowsAsync(expectedException);
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            _newsService.UpdateNewsAsync(newsId, news)
+            _NewsArticleService.UpdateNewsAsync(newsId, news)
         );
 
         exception.Should().Be(expectedException);
@@ -263,7 +253,9 @@ public class NewsServiceTests
         _mockRepository.Setup(x => x.DeleteAsync(newsId)).ThrowsAsync(expectedException);
 
         // Act & Assert
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => _newsService.DeleteNewsAsync(newsId));
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _NewsArticleService.DeleteNewsAsync(newsId)
+        );
 
         exception.Should().Be(expectedException);
     }

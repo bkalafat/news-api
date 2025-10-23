@@ -4,13 +4,13 @@ using NewsApi.Domain.Entities;
 
 namespace NewsApi.Tests.Unit.DTOs;
 
-public class CreateNewsDtoTests
+public class CreateNewsArticleDtoTests
 {
     [Fact]
-    public void CreateNewsDto_WithAllProperties_ShouldMapToNewsEntity()
+    public void CreateNewsArticleDto_WithAllProperties_ShouldMapToNewsEntity()
     {
         // Arrange
-        var dto = new CreateNewsDto
+        var dto = new CreateNewsArticleDto
         {
             Category = "Technology",
             Type = "Article",
@@ -26,12 +26,11 @@ public class CreateNewsDtoTests
             ExpressDate = DateTime.UtcNow,
             Priority = 5,
             IsActive = true,
-            Url = "test-article",
             IsSecondPageNews = false,
         };
 
         // Act
-        var news = new News
+        var news = new NewsArticle
         {
             Category = dto.Category,
             Type = dto.Type,
@@ -47,7 +46,6 @@ public class CreateNewsDtoTests
             ExpressDate = dto.ExpressDate,
             Priority = dto.Priority,
             IsActive = dto.IsActive,
-            Url = dto.Url,
             IsSecondPageNews = dto.IsSecondPageNews,
         };
 
@@ -66,15 +64,14 @@ public class CreateNewsDtoTests
         news.ExpressDate.Should().Be(dto.ExpressDate);
         news.Priority.Should().Be(dto.Priority);
         news.IsActive.Should().Be(dto.IsActive);
-        news.Url.Should().Be(dto.Url);
         news.IsSecondPageNews.Should().Be(dto.IsSecondPageNews);
     }
 
     [Fact]
-    public void CreateNewsDto_WithMinimalProperties_ShouldBeValid()
+    public void CreateNewsArticleDto_WithMinimalProperties_ShouldBeValid()
     {
         // Arrange & Act
-        var dto = new CreateNewsDto
+        var dto = new CreateNewsArticleDto
         {
             Category = "Tech",
             Type = "Article",
@@ -95,10 +92,10 @@ public class CreateNewsDtoTests
     }
 
     [Fact]
-    public void CreateNewsDto_WithArrays_ShouldHandleMultipleValues()
+    public void CreateNewsArticleDto_WithArrays_ShouldHandleMultipleValues()
     {
         // Arrange & Act
-        var dto = new CreateNewsDto
+        var dto = new CreateNewsArticleDto
         {
             Category = "Technology",
             Type = "Article",
@@ -117,10 +114,10 @@ public class CreateNewsDtoTests
     }
 
     [Fact]
-    public void CreateNewsDto_WithNullableProperties_ShouldAllowNulls()
+    public void CreateNewsArticleDto_WithNullableProperties_ShouldAllowNulls()
     {
         // Arrange & Act
-        var dto = new CreateNewsDto
+        var dto = new CreateNewsArticleDto
         {
             Category = "Tech",
             Type = "Article",
@@ -135,7 +132,6 @@ public class CreateNewsDtoTests
             ImgAlt = string.Empty,
             Subjects = Array.Empty<string>(),
             Authors = Array.Empty<string>(),
-            Url = string.Empty,
         };
 
         // Assert
@@ -147,11 +143,11 @@ public class CreateNewsDtoTests
     }
 
     [Fact]
-    public void CreateNewsDto_WithFutureExpressDate_ShouldBeValid()
+    public void CreateNewsArticleDto_WithFutureExpressDate_ShouldBeValid()
     {
         // Arrange & Act
         var futureDate = DateTime.UtcNow.AddDays(7);
-        var dto = new CreateNewsDto
+        var dto = new CreateNewsArticleDto
         {
             Category = "Tech",
             Type = "Article",
@@ -170,10 +166,10 @@ public class CreateNewsDtoTests
     [InlineData(1)]
     [InlineData(50)]
     [InlineData(100)]
-    public void CreateNewsDto_WithValidPriority_ShouldBeAccepted(int priority)
+    public void CreateNewsArticleDto_WithValidPriority_ShouldBeAccepted(int priority)
     {
         // Arrange & Act
-        var dto = new CreateNewsDto
+        var dto = new CreateNewsArticleDto
         {
             Category = "Tech",
             Type = "Article",

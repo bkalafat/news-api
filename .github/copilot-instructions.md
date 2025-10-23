@@ -4,7 +4,7 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 
 ## 📋 Project Overview
 
-**News API** is a modern news management system built with .NET 10 that aggregates and serves news content from BBC RSS feeds. The application provides a RESTful API for managing news articles with features including real-time RSS integration, JWT authentication, MongoDB persistence, and comprehensive caching.
+**News API** is a modern news management system built with .NET 10 that provides a RESTful API for managing news articles with features including JWT authentication, MongoDB persistence, and comprehensive caching.
 
 **Target Audience**: 
 - Frontend developers building news consumption applications
@@ -12,7 +12,6 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 - DevOps engineers deploying and monitoring the service
 
 **Key Features**:
-- Real-time news aggregation from BBC RSS feeds (Technology, World, Business, Science, Health, Entertainment)
 - JWT-based authentication for protected endpoints
 - Clean Architecture with clear separation of concerns
 - MongoDB for flexible NoSQL storage

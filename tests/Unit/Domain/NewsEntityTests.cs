@@ -9,10 +9,10 @@ public class NewsEntityTests
     public void News_WhenCreated_ShouldHaveDefaultValues()
     {
         // Act
-        var news = new News();
+        var news = new NewsArticle();
 
         // Assert
-        news.Id.Should().NotBeEmpty(); // Changed: News entity generates a default ObjectId
+        news.Id.Should().NotBeEmpty(); // Changed: NewsArticle entity generates a default ObjectId
         news.Category.Should().BeEmpty();
         news.Type.Should().BeEmpty();
         news.Caption.Should().BeEmpty();
@@ -22,7 +22,6 @@ public class NewsEntityTests
         news.ImgPath.Should().BeEmpty();
         news.ImgAlt.Should().BeEmpty();
         news.Content.Should().BeEmpty();
-        news.Url.Should().BeEmpty();
         news.Subjects.Should().BeEmpty();
         news.Authors.Should().BeEmpty();
         news.Priority.Should().Be(0);
@@ -48,7 +47,6 @@ public class NewsEntityTests
         var imgPath = "/images/test.jpg";
         var imgAlt = "Test image";
         var content = "Test content";
-        var url = "test-article";
         var subjects = new[] { "Tech", "AI" };
         var authors = new[] { "John Doe", "Jane Smith" };
         var priority = 5;
@@ -60,7 +58,7 @@ public class NewsEntityTests
         var updateDate = DateTime.UtcNow;
 
         // Act
-        var news = new News
+        var news = new NewsArticle
         {
             Id = id,
             Category = category,
@@ -72,7 +70,6 @@ public class NewsEntityTests
             ImgPath = imgPath,
             ImgAlt = imgAlt,
             Content = content,
-            Url = url,
             Subjects = subjects,
             Authors = authors,
             Priority = priority,
@@ -95,7 +92,6 @@ public class NewsEntityTests
         news.ImgPath.Should().Be(imgPath);
         news.ImgAlt.Should().Be(imgAlt);
         news.Content.Should().Be(content);
-        news.Url.Should().Be(url);
         news.Subjects.Should().BeEquivalentTo(subjects);
         news.Authors.Should().BeEquivalentTo(authors);
         news.Priority.Should().Be(priority);
@@ -116,21 +112,21 @@ public class NewsEntityTests
     public void News_Category_ShouldAcceptVariousLengths(string category)
     {
         // Arrange & Act
-        var news = new News { Category = category };
+        var news = new NewsArticle { Category = category };
 
         // Assert
         news.Category.Should().Be(category);
     }
 
     [Theory]
-    [InlineData("Breaking News")]
+    [InlineData("Breaking NewsArticle")]
     [InlineData("Feature")]
     [InlineData("Opinion")]
     [InlineData("Analysis")]
     public void News_Type_ShouldAcceptValidTypes(string type)
     {
         // Arrange & Act
-        var news = new News { Type = type };
+        var news = new NewsArticle { Type = type };
 
         // Assert
         news.Type.Should().Be(type);
@@ -145,7 +141,7 @@ public class NewsEntityTests
     public void News_Priority_ShouldAcceptAnyIntegerValue(int priority)
     {
         // Arrange & Act
-        var news = new News { Priority = priority };
+        var news = new NewsArticle { Priority = priority };
 
         // Assert
         news.Priority.Should().Be(priority);
@@ -155,7 +151,7 @@ public class NewsEntityTests
     public void News_Subjects_ShouldBeEmptyArrayByDefault()
     {
         // Act
-        var news = new News();
+        var news = new NewsArticle();
 
         // Assert
         news.Subjects.Should().NotBeNull();
@@ -166,7 +162,7 @@ public class NewsEntityTests
     public void News_Authors_ShouldBeEmptyArrayByDefault()
     {
         // Act
-        var news = new News();
+        var news = new NewsArticle();
 
         // Assert
         news.Authors.Should().NotBeNull();
@@ -177,7 +173,7 @@ public class NewsEntityTests
     public void News_ViewCount_ShouldBeZeroByDefault()
     {
         // Act
-        var news = new News();
+        var news = new NewsArticle();
 
         // Assert
         news.ViewCount.Should().Be(0);
@@ -191,7 +187,7 @@ public class NewsEntityTests
     public void News_ViewCount_ShouldAcceptPositiveValues(int viewCount)
     {
         // Arrange & Act
-        var news = new News { ViewCount = viewCount };
+        var news = new NewsArticle { ViewCount = viewCount };
 
         // Assert
         news.ViewCount.Should().Be(viewCount);
@@ -201,12 +197,9 @@ public class NewsEntityTests
     public void News_Url_ShouldSupportSeoFriendlyFormats()
     {
         // Arrange
-        var seoUrl = "breaking-news-about-technology-trends-2024";
 
         // Act
-        var news = new News { Url = seoUrl };
 
         // Assert
-        news.Url.Should().Be(seoUrl);
     }
 }

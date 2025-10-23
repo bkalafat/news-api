@@ -4,9 +4,9 @@ using NewsApi.Application.DTOs;
 
 namespace NewsApi.Application.Validators;
 
-public class CreateNewsDtoValidator : AbstractValidator<CreateNewsDto>
+public class CreateNewsArticleDtoValidator : AbstractValidator<CreateNewsArticleDto>
 {
-    public CreateNewsDtoValidator()
+    public CreateNewsArticleDtoValidator()
     {
         RuleFor(x => x.Category)
             .NotEmpty()
@@ -49,14 +49,12 @@ public class CreateNewsDtoValidator : AbstractValidator<CreateNewsDto>
             .WithMessage("Express date must be valid");
 
         RuleFor(x => x.Priority).InclusiveBetween(1, 100).WithMessage("Priority must be between 1 and 100");
-
-        RuleFor(x => x.Url).MaximumLength(500).WithMessage("URL must not exceed 500 characters");
     }
 }
 
-public class UpdateNewsDtoValidator : AbstractValidator<UpdateNewsDto>
+public class UpdateNewsArticleDtoValidator : AbstractValidator<UpdateNewsArticleDto>
 {
-    public UpdateNewsDtoValidator()
+    public UpdateNewsArticleDtoValidator()
     {
         RuleFor(x => x.Category)
             .MaximumLength(100)
@@ -107,10 +105,5 @@ public class UpdateNewsDtoValidator : AbstractValidator<UpdateNewsDto>
             .InclusiveBetween(1, 100)
             .WithMessage("Priority must be between 1 and 100")
             .When(x => x.Priority.HasValue);
-
-        RuleFor(x => x.Url)
-            .MaximumLength(500)
-            .WithMessage("URL must not exceed 500 characters")
-            .When(x => !string.IsNullOrEmpty(x.Url));
     }
 }

@@ -9,17 +9,17 @@ using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Unit.Performance;
 
-public class NewsServicePerformanceTests
+public class NewsArticleServicePerformanceTests
 {
-    private readonly Mock<INewsRepository> _mockRepository;
+    private readonly Mock<INewsArticleRepository> _mockRepository;
     private readonly TestMemoryCache _cache;
-    private readonly NewsService _newsService;
+    private readonly NewsArticleService _NewsArticleService;
 
-    public NewsServicePerformanceTests()
+    public NewsArticleServicePerformanceTests()
     {
-        _mockRepository = new Mock<INewsRepository>();
+        _mockRepository = new Mock<INewsArticleRepository>();
         _cache = new TestMemoryCache();
-        _newsService = new NewsService(_mockRepository.Object, _cache);
+        _NewsArticleService = new NewsArticleService(_mockRepository.Object, _cache);
     }
 
     [Fact]
@@ -31,13 +31,13 @@ public class NewsServicePerformanceTests
 
         // First call (no cache)
         var stopwatch1 = Stopwatch.StartNew();
-        await _newsService.GetAllNewsAsync();
+        await _NewsArticleService.GetAllNewsAsync();
         stopwatch1.Stop();
         var firstCallTime = stopwatch1.ElapsedMilliseconds;
 
         // Second call (with cache)
         var stopwatch2 = Stopwatch.StartNew();
-        await _newsService.GetAllNewsAsync();
+        await _NewsArticleService.GetAllNewsAsync();
         stopwatch2.Stop();
         var secondCallTime = stopwatch2.ElapsedMilliseconds;
 
@@ -56,7 +56,7 @@ public class NewsServicePerformanceTests
 
         // Act
         var stopwatch = Stopwatch.StartNew();
-        var result = await _newsService.GetAllNewsAsync();
+        var result = await _NewsArticleService.GetAllNewsAsync();
         stopwatch.Stop();
 
         // Assert
@@ -74,13 +74,13 @@ public class NewsServicePerformanceTests
 
         // First call (no cache)
         var stopwatch1 = Stopwatch.StartNew();
-        await _newsService.GetNewsByIdAsync(newsId);
+        await _NewsArticleService.GetNewsByIdAsync(newsId);
         stopwatch1.Stop();
         var firstCallTime = stopwatch1.ElapsedMilliseconds;
 
         // Second call (with cache)
         var stopwatch2 = Stopwatch.StartNew();
-        await _newsService.GetNewsByIdAsync(newsId);
+        await _NewsArticleService.GetNewsByIdAsync(newsId);
         stopwatch2.Stop();
         var secondCallTime = stopwatch2.ElapsedMilliseconds;
 
@@ -94,15 +94,15 @@ public class NewsServicePerformanceTests
     public async Task CreateNewsAsync_MultipleConcurrentCalls_ShouldHandleCorrectly()
     {
         // Arrange
-        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<News>())).ReturnsAsync((News n) => n);
+        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<NewsArticle>())).ReturnsAsync((NewsArticle n) => n);
 
-        var tasks = new List<Task<News>>();
+        var tasks = new List<Task<NewsArticle>>();
 
         // Act
         for (int i = 0; i < 100; i++)
         {
-            var news = NewsBuilder.Create().WithCaption($"News {i}").Build();
-            tasks.Add(_newsService.CreateNewsAsync(news));
+            var news = NewsBuilder.Create().WithCaption($"NewsArticle {i}").Build();
+            tasks.Add(_NewsArticleService.CreateNewsAsync(news));
         }
 
         var stopwatch = Stopwatch.StartNew();
@@ -112,7 +112,7 @@ public class NewsServicePerformanceTests
         // Assert
         results.Should().HaveCount(100);
         stopwatch.ElapsedMilliseconds.Should().BeLessThan(5000); // Should complete within 5 seconds
-        _mockRepository.Verify(x => x.CreateAsync(It.IsAny<News>()), Times.Exactly(100));
+        _mockRepository.Verify(x => x.CreateAsync(It.IsAny<NewsArticle>()), Times.Exactly(100));
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public class NewsServicePerformanceTests
         var stopwatch = Stopwatch.StartNew();
         for (int i = 0; i < 100; i++)
         {
-            await _newsService.GetAllNewsAsync();
+            await _NewsArticleService.GetAllNewsAsync();
         }
         stopwatch.Stop();
 
@@ -141,11 +141,11 @@ public class NewsServicePerformanceTests
         // Arrange
         var largeContent = new string('a', 1000000); // 1MB of content
         var news = NewsBuilder.Create().WithContent(largeContent).Build();
-        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<News>())).ReturnsAsync(news);
+        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<NewsArticle>())).ReturnsAsync(news);
 
         // Act
         var stopwatch = Stopwatch.StartNew();
-        var result = await _newsService.CreateNewsAsync(news);
+        var result = await _NewsArticleService.CreateNewsAsync(news);
         stopwatch.Stop();
 
         // Assert
@@ -159,12 +159,12 @@ public class NewsServicePerformanceTests
         // Arrange
         var newsId = Guid.NewGuid().ToString();
         var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
-        _cache.Set(CacheKeys.NewsList, new List<News> { news });
+        _cache.Set(CacheKeys.NewsList, new List<NewsArticle> { news });
         _cache.Set(newsId, news);
 
         // Act
         var stopwatch = Stopwatch.StartNew();
-        await _newsService.UpdateNewsAsync(newsId, news);
+        await _NewsArticleService.UpdateNewsAsync(newsId, news);
         stopwatch.Stop();
 
         // Assert
@@ -179,12 +179,12 @@ public class NewsServicePerformanceTests
         // Arrange
         var newsId = Guid.NewGuid().ToString();
         var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
-        _cache.Set(CacheKeys.NewsList, new List<News> { news });
+        _cache.Set(CacheKeys.NewsList, new List<NewsArticle> { news });
         _cache.Set(newsId, news);
 
         // Act
         var stopwatch = Stopwatch.StartNew();
-        await _newsService.DeleteNewsAsync(newsId);
+        await _NewsArticleService.DeleteNewsAsync(newsId);
         stopwatch.Stop();
 
         // Assert
@@ -202,7 +202,7 @@ public class NewsServicePerformanceTests
         _mockRepository.Setup(x => x.GetByIdAsync(newsId)).ReturnsAsync(news);
 
         // Act
-        var tasks = Enumerable.Range(0, 50).Select(_ => _newsService.GetNewsByIdAsync(newsId)).ToList();
+        var tasks = Enumerable.Range(0, 50).Select(_ => _NewsArticleService.GetNewsByIdAsync(newsId)).ToList();
 
         var stopwatch = Stopwatch.StartNew();
         var results = await Task.WhenAll(tasks);
@@ -215,7 +215,7 @@ public class NewsServicePerformanceTests
     }
 
     [Fact]
-    public async Task NewsService_MemoryUsage_ShouldNotGrowExcessively()
+    public async Task NewsArticleService_MemoryUsage_ShouldNotGrowExcessively()
     {
         // Arrange
         var newsList = NewsBuilder.Create().BuildMany(1000);
@@ -226,7 +226,7 @@ public class NewsServicePerformanceTests
         // Act - Make multiple calls
         for (int i = 0; i < 100; i++)
         {
-            await _newsService.GetAllNewsAsync();
+            await _NewsArticleService.GetAllNewsAsync();
         }
 
         GC.Collect();

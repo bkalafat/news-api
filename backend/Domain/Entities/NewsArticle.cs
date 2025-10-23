@@ -4,7 +4,10 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace NewsApi.Domain.Entities;
 
-public class News
+/// <summary>
+/// Represents a news article entity with full content and metadata.
+/// </summary>
+public class NewsArticle
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -17,7 +20,7 @@ public class News
     public string Caption { get; set; } = string.Empty;
 
     /// <summary>
-    /// SEO-friendly URL slug generated from Caption
+    /// Gets or sets SEO-friendly URL slug generated from Caption
     /// </summary>
     public string Slug { get; set; } = string.Empty;
 
@@ -32,25 +35,25 @@ public class News
     public string ImgAlt { get; set; } = string.Empty;
 
     /// <summary>
-    /// Full-size image URL from MinIO storage
+    /// Gets or sets full-size image URL from MinIO storage
     /// </summary>
     public string ImageUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// Thumbnail image URL from MinIO storage (optimized for lists/previews)
+    /// Gets or sets thumbnail image URL from MinIO storage (optimized for lists/previews)
     /// </summary>
     public string ThumbnailUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// Metadata about the uploaded image
+    /// Gets or sets metadata about the uploaded image
     /// </summary>
     public ImageMetadata? ImageMetadata { get; set; }
 
     public string Content { get; set; } = string.Empty;
 
-    public string[] Subjects { get; set; } = Array.Empty<string>();
+    public string[] Subjects { get; set; } = [];
 
-    public string[] Authors { get; set; } = Array.Empty<string>();
+    public string[] Authors { get; set; } = [];
 
     public DateTime ExpressDate { get; set; }
 
@@ -62,12 +65,7 @@ public class News
 
     public bool IsActive { get; set; }
 
-    public string Url { get; set; } = string.Empty;
-
     public int ViewCount { get; set; }
 
     public bool IsSecondPageNews { get; set; }
-
-    // Optional field used by integration tests to scope documents to a test run.
-    public string? TestRunId { get; set; }
 }
