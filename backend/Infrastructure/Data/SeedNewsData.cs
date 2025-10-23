@@ -41,7 +41,8 @@ public static class SeedNewsData
                     "OpenAI'nin yeni GPT-5 modeli, yapay zeka dünyasında devrim yaratmaya hazırlanıyor. Model, daha gelişmiş anlama ve üretim yetenekleriyle dikkat çekiyor.",
                 ImgPath = "http://localhost:9000/news-images/technology/ai-development.jpg",
                 ImgAlt = "Yapay Zeka Görseli",
-                Content = @"<p>OpenAI, yapay zeka alanındaki en son hamlesiyle <strong>GPT-5 modelini</strong> tanıttı. Yeni model, önceki versiyonlara göre <strong>%300 daha hızlı</strong> ve daha doğru sonuçlar üretiyor.</p>
+                Content =
+                    @"<p>OpenAI, yapay zeka alanındaki en son hamlesiyle <strong>GPT-5 modelini</strong> tanıttı. Yeni model, önceki versiyonlara göre <strong>%300 daha hızlı</strong> ve daha doğru sonuçlar üretiyor.</p>
 
 <img src=""https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80"" alt=""GPT-5 Model Mimarisi"" style=""width:100%;max-width:800px;margin:20px 0;border-radius:8px"" />
 
@@ -95,7 +96,8 @@ public static class SeedNewsData
                     "Google'ın yeni quantum işlemcisi, klasik bilgisayarların yıllarca sürdüreceği hesaplamaları dakikalar içinde tamamlıyor.",
                 ImgPath = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1200&q=80",
                 ImgAlt = "Quantum Bilgisayar",
-                Content = @"<p>Google, <strong>Willow</strong> adlı yeni quantum işlemcisini duyurdu. Bu işlemci, <em>quantum supremacy</em>'yi kanıtlayan önemli bir adım olarak değerlendiriliyor.</p>
+                Content =
+                    @"<p>Google, <strong>Willow</strong> adlı yeni quantum işlemcisini duyurdu. Bu işlemci, <em>quantum supremacy</em>'yi kanıtlayan önemli bir adım olarak değerlendiriliyor.</p>
 
 <h2>Quantum Supremacy Kanıtlandı</h2>
 <p>100 qubit'lik sistemle gerçekleştirilen testler, klasik süper bilgisayarların <strong>10,000 yıl</strong> süreceği hesaplamaları yalnızca <strong>200 saniye</strong>de tamamladı.</p>
@@ -370,7 +372,8 @@ public static class SeedNewsData
                     "NASA'nın Perseverance rover'ı, Mars'ın yüzeyinin altında sıvı su izleri ve olası mikrobiyal yaşam belirtileri tespit etti.",
                 ImgPath = "http://localhost:9000/news-images/science/mars-discovery.jpg",
                 ImgAlt = "Mars Yüzeyi",
-                Content = @"<p>NASA'nın <strong>Perseverance uzay aracı</strong>, Mars'ta devrim niteliğinde bir keşif yaptı. Jezero Krateri'nin altında sıvı su rezervleri tespit edildi. Daha da önemlisi, su örneklerinde organik moleküller ve olası mikrobiyal yaşam izleri bulundu.</p>
+                Content =
+                    @"<p>NASA'nın <strong>Perseverance uzay aracı</strong>, Mars'ta devrim niteliğinde bir keşif yaptı. Jezero Krateri'nin altında sıvı su rezervleri tespit edildi. Daha da önemlisi, su örneklerinde organik moleküller ve olası mikrobiyal yaşam izleri bulundu.</p>
 
 <img src=""https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=800&q=80"" alt=""Mars Perseverance Rover"" style=""width:100%;max-width:800px;margin:20px 0;border-radius:8px"" />
 
@@ -642,7 +645,8 @@ public static class SeedNewsData
                     "Galatasaray, Şampiyonlar Ligi'nde çeyrek finale yükselen ilk Türk takımı oldu. Manchester City'yi eleyerek tarihi başarıya imza attı.",
                 ImgPath = "http://localhost:9000/news-images/sports/galatasaray-champions.jpg",
                 ImgAlt = "Galatasaray Taraftarları Kutlama",
-                Content = @"<p>Galatasaray, Manchester City'yi penaltılarla 5-4 yenerek <strong>Şampiyonlar Ligi çeyrek finaline</strong> yükseldi. Türk futbol tarihinde bir ilke imza atan sarı-kırmızılılar, Avrupa'nın en büyük kulüplerinden birini eleyerek dev bir başarı elde etti.</p>
+                Content =
+                    @"<p>Galatasaray, Manchester City'yi penaltılarla 5-4 yenerek <strong>Şampiyonlar Ligi çeyrek finaline</strong> yükseldi. Türk futbol tarihinde bir ilke imza atan sarı-kırmızılılar, Avrupa'nın en büyük kulüplerinden birini eleyerek dev bir başarı elde etti.</p>
 
 <img src=""https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80"" alt=""Galatasaray Taraftarları"" style=""width:100%;max-width:800px;margin:20px 0;border-radius:8px"" />
 
