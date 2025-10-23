@@ -32,11 +32,60 @@ Modern, SEO-optimized Turkish tech news website built with Next.js 15, TypeScrip
 
 ### Prerequisites
 
-- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later
-- [MongoDB](https://www.mongodb.com/try/download/community) (local or cloud instance)
-- [Docker](https://www.docker.com/) (optional, for containerized deployment)
+- **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux) - [Download](https://www.docker.com/products/docker-desktop/)
+- **OR** Manual setup:
+  - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later
+  - [MongoDB](https://www.mongodb.com/try/download/community) (local or cloud instance)
 
-### Installation
+### 🐳 Docker Setup (Recommended)
+
+The easiest way to run the entire stack locally is using Docker Compose.
+
+#### 1. Start All Services
+
+```powershell
+# Copy environment template
+Copy-Item .env.example .env
+
+# Start services (builds images if needed)
+.\docker-start.ps1 -Build
+
+# Or use docker-compose directly
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+```
+
+#### 2. Access Services
+
+| Service | URL | Credentials |
+|---------|-----|-------------|
+| **News API** | http://localhost:5000 | N/A |
+| **Swagger UI** | http://localhost:5000/swagger | N/A |
+| **MinIO Console** | http://localhost:9001 | `minioadmin` / `minioadmin123` |
+| **Mongo Express** | http://localhost:8081 | `admin` / `admin123` |
+| **MongoDB** | `mongodb://localhost:27017` | `admin` / `password123` |
+
+#### 3. Helper Scripts
+
+```powershell
+# View logs
+.\docker-logs.ps1 newsapi -Follow
+
+# Check service status
+.\docker-status.ps1
+
+# Rebuild after code changes
+.\docker-rebuild.ps1
+
+# Stop services
+.\docker-stop.ps1
+
+# Clean everything (removes data!)
+.\docker-clean.ps1
+```
+
+For complete Docker documentation, see [DOCKER_GUIDE.md](DOCKER_GUIDE.md).
+
+### 💻 Manual Setup
 
 ### Quick Start with Scripts
 

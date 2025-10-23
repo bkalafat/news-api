@@ -2,6 +2,15 @@
 
 This file provides comprehensive context for GitHub Copilot to assist effectively with the News API project.
 
+## ⚠️ Important Guidelines
+
+**Do not create explainer documents or other documentation unless specifically asked to.**
+
+- Focus on completing tasks, not documenting them
+- Only create essential files needed to fulfill the user's request
+- Avoid creating summary files, completion reports, or quick reference guides
+- Update existing documentation when relevant, but don't create new MD files for every change
+
 ## 📋 Project Overview
 
 **News API** is a modern news management system built with .NET 10 that provides a RESTful API for managing news articles with features including JWT authentication, MongoDB persistence, and comprehensive caching.

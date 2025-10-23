@@ -1,0 +1,51 @@
+# ============================================
+# Development Override Configuration
+# ============================================
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+# ============================================
+
+version: '3.8'
+
+services:
+  newsapi:
+    build:
+      args:
+        BUILDCONFIG: Debug
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Logging__LogLevel__Default=Debug
+      - Logging__LogLevel__Microsoft=Information
+    volumes:
+      # Hot reload support (mount source code)
+      - ./backend:/src/backend:ro
+    ports:
+      - "5000:8080"  # HTTP
+      - "5001:8081"  # HTTPS (if configured)
+
+  # Enable Redis for development caching
+  redis:
+    image: redis:7-alpine
+    container_name: newsapi-redis-dev
+    ports:
+      - "6379:6379"
+    networks:
+      - newsapi-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Swagger UI (separate container for API docs)
+  swagger-ui:
+    image: swaggerapi/swagger-ui:latest
+    container_name: newsapi-swagger
+    ports:
+      - "8080:8080"
+    environment:
+      SWAGGER_JSON_URL: http://newsapi:8080/swagger/v1/swagger.json
+      API_URL: http://localhost:5000/swagger/v1/swagger.json
+    depends_on:
+      - newsapi
+    networks:
+      - newsapi-network
