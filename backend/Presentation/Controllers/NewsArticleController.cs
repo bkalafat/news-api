@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsApi.Application.DTOs;
 using NewsApi.Application.Services;
@@ -381,6 +383,70 @@ public sealed class NewsArticleController(INewsArticleService newsService, IImag
         {
             Console.WriteLine($"Error in DeleteImage: {ex}");
             return StatusCode(500, new { message = "An error occurred while deleting the image", error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Upload an image for use in article content (requires authentication)
+    /// </summary>
+    /// <param name="file">Image file</param>
+    /// <param name="altText">Alternative text for the image</param>
+    /// <returns>Image URL</returns>
+    [HttpPost("upload-content-image")]
+    [Authorize]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType(typeof(object), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult> UploadContentImage([FromForm] IFormFile file, [FromForm] string? altText = null)
+    {
+        try
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest(new { message = "No file provided" });
+            }
+
+            // Validate file type
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!allowedExtensions.Contains(extension))
+            {
+                return BadRequest(new { message = "Invalid file type. Only images are allowed." });
+            }
+
+            // Generate unique filename
+            var fileName = $"content-{Guid.NewGuid()}{extension}";
+
+            // Upload to MinIO
+            var imageMetadata = await imageStorageService.UploadImageAsync(
+                fileName,
+                file,
+                generateThumbnail: false,
+                altText: altText ?? file.FileName
+            );
+
+            var imageUrl = GetImageUrl(imageMetadata.MinioObjectKey);
+
+            return Ok(
+                new
+                {
+                    url = imageUrl,
+                    fileName = imageMetadata.FileName,
+                    altText = imageMetadata.AltText,
+                    size = imageMetadata.FileSize,
+                    contentType = imageMetadata.ContentType,
+                }
+            );
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in UploadContentImage: {ex}");
+            return StatusCode(500, new { message = "An error occurred while uploading the image", error = ex.Message });
         }
     }
 

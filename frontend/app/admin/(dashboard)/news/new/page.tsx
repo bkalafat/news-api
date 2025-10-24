@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-// import { RichTextEditor } from '@/components/admin/rich-text-editor';
+import { MarkdownEditor } from '@/components/admin/markdown-editor';
 import {
   Select,
   SelectContent,
@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/select';
 import { ArrowLeft, Save, Eye } from 'lucide-react';
 import Link from 'next/link';
+import { authFetch } from '@/lib/auth';
 
 interface NewsFormData {
   title: string;
@@ -81,25 +82,47 @@ export default function NewsEditorPage() {
 
     try {
       const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${API_URL}/api/News`, {
+      
+      // Backend NewsArticle DTO'suna uygun format
+      const newsData = {
+        category: formData.category,
+        type: 'standard', // Backend için gerekli
+        caption: formData.title, // Backend caption field'ı title için kullanılıyor
+        keywords: formData.tags.filter(t => t).join(', '), // Array'i string'e çevir
+        socialTags: formData.topics.filter(t => t).join(', '), // Array'i string'e çevir
+        summary: formData.caption, // Frontend caption backend summary'ye map ediliyor
+        imgPath: formData.imageUrl,
+        imgAlt: formData.imgAlt,
+        imageUrl: formData.imageUrl,
+        thumbnailUrl: formData.imageUrl,
+        content: formData.content,
+        subjects: formData.topics.filter(t => t), // Boş elemanları temizle
+        authors: [formData.author],
+        expressDate: new Date().toISOString(),
+        priority: status === 'published' ? 1 : 0,
+        isActive: status === 'published',
+        isSecondPageNews: false,
+      };
+
+      console.log('Sending news data:', newsData); // Debug için
+
+      const response = await authFetch(`${API_URL}/api/NewsArticle`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          status,
-          publishedAt: new Date().toISOString(),
-          views: 0,
-        }),
+        body: JSON.stringify(newsData),
       });
 
       if (response.ok) {
+        alert('Haber başarıyla kaydedildi!');
         router.push('/admin/news');
       } else {
-        alert('Haber kaydedilemedi');
+        const errorData = await response.json().catch(() => ({ message: 'Bilinmeyen hata' }));
+        console.error('Error response:', errorData);
+        alert(`Haber kaydedilemedi: ${errorData.message || JSON.stringify(errorData)}`);
       }
     } catch (error) {
       console.error('Failed to save news:', error);
-      alert('Bir hata oluştu');
+      alert('Bir hata oluştu: ' + (error instanceof Error ? error.message : 'Bilinmeyen hata'));
     } finally {
       setLoading(false);
     }
@@ -214,15 +237,13 @@ export default function NewsEditorPage() {
         {/* Content */}
         <Card>
           <CardHeader>
-            <CardTitle>İçerik</CardTitle>
+            <CardTitle>İçerik (Markdown)</CardTitle>
           </CardHeader>
           <CardContent>
-            <textarea
+            <MarkdownEditor
               value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-              placeholder="Haber içeriğini buraya yazın..."
-              className="w-full min-h-[400px] px-3 py-2 rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 resize-y font-mono text-sm"
-              required
+              onChange={(value) => setFormData({ ...formData, content: value })}
+              placeholder="Haber içeriğini Markdown formatında yazın. Resim eklemek için araç çubuğundaki 'Resim Ekle' butonunu kullanın..."
             />
           </CardContent>
         </Card>
