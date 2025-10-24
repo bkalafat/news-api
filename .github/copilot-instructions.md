@@ -60,6 +60,202 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 - **Heroku** - Cloud deployment platform
 - **Git** - Version control with feature branching
 
+## 🐳 Docker Development Environment
+
+**⚠️ IMPORTANT: This project uses Docker Compose for ALL backend services. DO NOT attempt to run backend services locally with `dotnet run`.**
+
+### Container Architecture
+
+The entire backend infrastructure runs in Docker containers orchestrated by `docker-compose.yml`:
+
+1. **newsapi-backend** (.NET 10 API)
+   - Port: `5000:8080` (host:container)
+   - URL: `http://localhost:5000`
+   - Health Check: `http://localhost:5000/health`
+   - Auto-restarts on failure
+   - Depends on MongoDB and MinIO
+
+2. **newsapi-mongodb** (MongoDB 7.0)
+   - Port: `27017:27017`
+   - Admin UI: Mongo Express on `http://localhost:8081`
+   - Credentials: admin/password123 (default)
+   - Database: NewsDb
+   - Persistent volume: `newsapi_mongodb_data`
+
+3. **newsapi-minio** (S3-compatible Object Storage)
+   - API Port: `9000:9000`
+   - Console UI: `http://localhost:9001`
+   - Credentials: minioadmin/minioadmin123 (default)
+   - Bucket: `news-images` (auto-created)
+   - Persistent volume: `newsapi_minio_data`
+
+4. **newsapi-mongo-express** (MongoDB Admin UI)
+   - Port: `8081:8081`
+   - URL: `http://localhost:8081`
+   - Basic Auth: admin/admin123 (default)
+
+### Docker Commands
+
+**Starting All Services:**
+```bash
+# Start all containers in detached mode
+docker-compose up -d
+
+# View logs for all services
+docker-compose logs -f
+
+# View logs for specific service
+docker-compose logs -f newsapi
+```
+
+**Stopping Services:**
+```bash
+# Stop all containers (preserves data)
+docker-compose down
+
+# Stop and remove volumes (DELETES ALL DATA)
+docker-compose down -v
+```
+
+**Rebuilding After Code Changes:**
+```bash
+# Rebuild and restart only the backend API
+docker-compose up -d --build newsapi
+
+# Rebuild all services
+docker-compose up -d --build
+```
+
+**Checking Service Status:**
+```bash
+# List running containers
+docker-compose ps
+
+# Check backend health
+curl http://localhost:5000/health
+
+# View backend logs
+docker-compose logs --tail=50 newsapi
+```
+
+**Accessing Container Shells:**
+```bash
+# Backend container bash
+docker exec -it newsapi-backend bash
+
+# MongoDB shell
+docker exec -it newsapi-mongodb mongosh -u admin -p password123 --authenticationDatabase admin
+
+# MinIO client
+docker exec -it newsapi-minio mc ls myminio/news-images
+```
+
+### Service URLs
+
+| Service | URL | Purpose |
+|---------|-----|---------|
+| **Backend API** | http://localhost:5000 | REST API endpoints |
+| **API Swagger** | http://localhost:5000/swagger | API documentation |
+| **MongoDB** | mongodb://localhost:27017 | Database connection |
+| **Mongo Express** | http://localhost:8081 | Database admin UI |
+| **MinIO Console** | http://localhost:9001 | Object storage admin |
+| **MinIO API** | http://localhost:9000 | S3-compatible API |
+
+### Environment Variables
+
+Configure via `.env` file in project root (create if missing):
+
+```env
+# MongoDB
+MONGO_ROOT_USER=admin
+MONGO_ROOT_PASSWORD=password123
+MONGO_DATABASE=NewsDb
+
+# MinIO
+MINIO_ROOT_USER=minioadmin
+MINIO_ROOT_PASSWORD=minioadmin123
+
+# JWT
+JWT_SECRET_KEY=your-super-secret-jwt-key-that-is-at-least-32-characters-long
+
+# Mongo Express
+MONGOEXPRESS_USER=admin
+MONGOEXPRESS_PASSWORD=admin123
+
+# ASP.NET Core
+ASPNETCORE_ENVIRONMENT=Production
+```
+
+### Development Workflow
+
+**DO THIS:**
+✅ Make code changes in `backend/` directory
+✅ Run `docker-compose up -d --build newsapi` to apply changes
+✅ Test API via `http://localhost:5000`
+✅ Check logs with `docker-compose logs -f newsapi`
+✅ Use Swagger UI for API testing
+✅ Access MongoDB via Mongo Express UI
+
+**DON'T DO THIS:**
+❌ `dotnet run` (backend is in Docker, will cause port conflicts)
+❌ Install MongoDB locally (already in Docker)
+❌ Install MinIO locally (already in Docker)
+❌ Manual database setup (auto-configured in Docker)
+
+### Common Docker Issues
+
+**Problem: Port 5000 already in use**
+```bash
+# Check what's using the port
+netstat -ano | findstr :5000
+
+# Stop the conflicting container
+docker-compose down
+```
+
+**Problem: Backend not responding**
+```bash
+# Check if container is running
+docker-compose ps
+
+# Restart backend
+docker-compose restart newsapi
+
+# View logs for errors
+docker-compose logs --tail=100 newsapi
+```
+
+**Problem: Database connection failed**
+```bash
+# Ensure MongoDB is healthy
+docker-compose ps mongodb
+
+# Check MongoDB logs
+docker-compose logs mongodb
+
+# Restart all services
+docker-compose restart
+```
+
+**Problem: Need fresh database**
+```bash
+# WARNING: This deletes all data
+docker-compose down -v
+docker-compose up -d
+```
+
+### Backend Development in Docker
+
+When making changes to the backend code:
+
+1. **Edit files** in `backend/` directory
+2. **Rebuild container**: `docker-compose up -d --build newsapi`
+3. **Check logs**: `docker-compose logs -f newsapi`
+4. **Test endpoint**: Use Swagger or curl/Postman
+5. **View database**: Open Mongo Express at http://localhost:8081
+
+**Note:** Hot reload is NOT enabled in Docker. You must rebuild after code changes.
+
 ## 📁 Project Structure
 
 ```
@@ -198,46 +394,87 @@ news-api/
 
 ## 🔧 Resources & Scripts
 
-### Available Scripts
-Located in project root or can be run via VS Code tasks:
+### Docker Commands (Primary Development Method)
 
-- **Build & Run**
+**⚠️ ALWAYS use Docker for backend development. Backend runs in containers, NOT locally.**
+
+- **Start All Services**
   ```bash
-  dotnet build
-  dotnet run --project backend/newsApi.csproj
+  docker-compose up -d              # Start in background
+  docker-compose logs -f newsapi    # Follow backend logs
   ```
 
-- **Testing**
+- **Rebuild After Code Changes**
   ```bash
-  dotnet test                           # Run all tests
-  dotnet test --filter "FullyQualifiedName~Unit"  # Unit tests only
-  dotnet test --filter "FullyQualifiedName~Integration"  # Integration tests only
+  docker-compose up -d --build newsapi   # Rebuild only backend
+  docker-compose up -d --build           # Rebuild all services
   ```
 
-- **Database Management**
-  - See `scripts/database/data-migration.md` for migration scripts
-  - MongoDB must be running locally or provide connection string
-
-- **Docker**
+- **Stop Services**
   ```bash
-  docker build -t news-api:latest .
-  docker run -p 5000:8080 news-api:latest
+  docker-compose down               # Stop containers
+  docker-compose down -v            # Stop and delete data (WARNING)
   ```
+
+- **View Logs**
+  ```bash
+  docker-compose logs -f newsapi    # Backend logs
+  docker-compose logs -f mongodb    # Database logs
+  docker-compose logs -f minio      # Storage logs
+  ```
+
+- **Service Status**
+  ```bash
+  docker-compose ps                 # List all containers
+  curl http://localhost:5000/health # Check backend health
+  ```
+
+### Testing (Local Only)
+
+**Tests run OUTSIDE Docker using local .NET SDK:**
+
+```bash
+dotnet test                                           # Run all tests
+dotnet test --filter "FullyQualifiedName~Unit"        # Unit tests only
+dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
+```
+
+**Note:** Integration tests may require Docker services (MongoDB) to be running.
+
+### Database Management
+
+- **Access MongoDB**: Open Mongo Express at `http://localhost:8081`
+  - Username: `admin`
+  - Password: `admin123`
+- **MongoDB Shell**: `docker exec -it newsapi-mongodb mongosh -u admin -p password123`
+- **Data Migration**: See `backend/Migration/data-migration.md`
 
 ### Configuration Management
-- **Development**: `dotnet user-secrets set "Key" "Value"`
+
+- **Docker Environment**: `.env` file in project root (for container config)
+- **Development Secrets**: `dotnet user-secrets set "Key" "Value"` (for local testing only)
 - **Testing**: `appsettings.Testing.json` with test-specific values
-- **Production**: Environment variables or Azure Key Vault
+- **Production**: Environment variables in `docker-compose.yml` or Azure Key Vault
 
 ### Health Checks
-- **Endpoint**: `GET /health`
-- **Monitors**: MongoDB connection status
-- **Returns**: "Healthy" (200) or error details (503)
+
+- **Backend Health**: `GET http://localhost:5000/health`
+- **MongoDB Health**: `docker-compose ps mongodb` (should show "healthy")
+- **MinIO Health**: `docker-compose ps minio` (should show "healthy")
+- **All Services**: `docker-compose ps` (check all statuses)
 
 ### Swagger/OpenAPI
+
 - **URL**: `http://localhost:5000/swagger`
 - **Authentication**: Click "Authorize" button, enter `Bearer {token}`
 - **Try It Out**: Enabled by default for testing
+- **Token Source**: Login via `/api/Auth/login` with admin/admin123
+
+### Admin UI Access
+
+- **MongoDB Admin**: http://localhost:8081 (Mongo Express)
+- **MinIO Console**: http://localhost:9001 (Object Storage)
+- **API Swagger**: http://localhost:5000/swagger (API Docs)
 
 ## 🧩 Common Development Tasks
 
@@ -266,19 +503,40 @@ Located in project root or can be run via VS Code tasks:
 5. Write validator tests in `tests/Unit/Validators/`
 
 ### Debugging Tips
-- Set breakpoints in controllers and services
-- Use Swagger UI for interactive API testing
-- Check `appsettings.Development.json` for logging levels
-- Use `dotnet watch run` for hot reload during development
-- Check MongoDB Compass for database state
+
+**Backend runs in Docker - debugging workflow is different:**
+
+- **View Logs**: `docker-compose logs -f newsapi` (NOT dotnet run)
+- **API Testing**: Use Swagger at `http://localhost:5000/swagger`
+- **Database Inspection**: Open Mongo Express at `http://localhost:8081`
+- **Health Check**: `curl http://localhost:5000/health`
+- **Restart Service**: `docker-compose restart newsapi`
+- **Full Rebuild**: `docker-compose up -d --build newsapi`
+- **Container Shell**: `docker exec -it newsapi-backend bash`
+
+**For local debugging with IDE:**
+1. Stop Docker backend: `docker-compose stop newsapi`
+2. Run locally: `dotnet run --project backend/newsApi.csproj`
+3. Set breakpoints in Visual Studio/VS Code/Rider
+4. Remember to restart Docker when done: `docker-compose start newsapi`
+
+**Note:** Local run requires MongoDB to be accessible. Keep Docker MongoDB running.
 
 ## 🚫 Patterns to Avoid
 
+### Docker & Deployment
+- **Don't run `dotnet run` for backend** - Backend is in Docker, use `docker-compose up -d`
+- **Don't install MongoDB locally** - MongoDB is in Docker container
+- **Don't install MinIO locally** - MinIO is in Docker container
+- **Don't hardcode localhost URLs** - Use service names in Docker (mongodb, minio)
+- **Don't forget to rebuild after code changes** - `docker-compose up -d --build newsapi`
+
+### Code Quality
 - **Don't use static state** - Except for constants
 - **Don't use service locator** - Always use constructor injection
 - **Don't put logic in controllers** - Keep controllers thin, delegate to services
 - **Don't expose domain entities** - Use DTOs for API responses
-- **Don't hardcode configuration** - Use appsettings.json and User Secrets
+- **Don't hardcode configuration** - Use appsettings.json and environment variables
 - **Don't use EF Core** - This is a MongoDB project
 - **Don't ignore validation** - Always validate user input
 - **Don't catch generic exceptions** - Be specific with exception handling
