@@ -1,0 +1,94 @@
+root = true
+
+# All files
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+
+# C# files
+[*.cs]
+indent_size = 4
+max_line_length = 120
+
+# Enable .NET analyzers
+dotnet_diagnostic.severity = warning
+
+# Roslynator configuration
+roslynator_accessibility_modifiers = explicit
+roslynator_use_var = when_type_is_obvious
+roslynator_array_creation_type_style = implicit_when_type_is_obvious
+roslynator_object_creation_type_style = implicit_when_type_is_obvious
+roslynator_block_braces_style = multi_line
+roslynator_configure_await = true
+roslynator_null_check_style = pattern_matching
+roslynator_prefix_field_identifier_with_underscore = true
+roslynator_max_line_length = 120
+roslynator_new_line_at_end_of_file = true
+roslynator_use_collection_expression = true
+
+# StyleCop configuration - Reduce noise
+dotnet_diagnostic.SA1101.severity = none  # Prefix local calls with this
+dotnet_diagnostic.SA1309.severity = none  # Field names should not begin with underscore
+dotnet_diagnostic.SA1633.severity = none  # File should have header
+dotnet_diagnostic.SA1200.severity = none  # Using directives placement
+dotnet_diagnostic.SA1602.severity = none  # Enumeration items should be documented
+dotnet_diagnostic.SA1600.severity = suggestion  # XML docs optional for internal members
+dotnet_diagnostic.SA1629.severity = none  # Documentation text end with period
+dotnet_diagnostic.SA1111.severity = suggestion  # Closing parenthesis placement
+dotnet_diagnostic.SA1009.severity = suggestion  # Closing parenthesis spacing
+dotnet_diagnostic.SA1503.severity = suggestion  # Braces for single-line statements
+dotnet_diagnostic.SA1501.severity = suggestion  # Statement on single line
+dotnet_diagnostic.SA1122.severity = suggestion  # Use string.Empty
+dotnet_diagnostic.SA1402.severity = none  # One type per file (allow nested classes)
+dotnet_diagnostic.SA1611.severity = suggestion  # Parameter documentation
+dotnet_diagnostic.SA1615.severity = suggestion  # Return value documentation
+
+# Meziantou.Analyzer configuration (recommended for APIs)
+dotnet_diagnostic.MA0004.severity = warning  # Use Task.ConfigureAwait (optional for now)
+dotnet_diagnostic.MA0026.severity = warning  # Fix TODO comments
+dotnet_diagnostic.MA0048.severity = none  # File name must match type name
+dotnet_diagnostic.MA0051.severity = suggestion  # Method is too long (informational)
+dotnet_diagnostic.MA0002.severity = suggestion  # IEqualityComparer parameter
+dotnet_diagnostic.MA0006.severity = suggestion  # Use string.Equals
+dotnet_diagnostic.MA0011.severity = suggestion  # IFormatProvider parameter
+dotnet_diagnostic.MA0015.severity = suggestion  # ArgumentException with parameter name
+dotnet_diagnostic.MA0016.severity = suggestion  # Prefer collection abstraction
+
+# Set severity for all Roslynator analyzers
+dotnet_analyzer_diagnostic.category-roslynator.severity = suggestion
+
+# C# code style rules
+csharp_using_directive_placement = outside_namespace
+csharp_prefer_braces = true:suggestion
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_namespace_declarations = file_scoped:suggestion
+csharp_style_prefer_method_group_conversion = true:suggestion
+csharp_style_prefer_top_level_statements = true:suggestion
+csharp_style_expression_bodied_methods = false:none
+csharp_style_expression_bodied_constructors = false:none
+csharp_style_expression_bodied_operators = false:none
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_style_expression_bodied_indexers = true:suggestion
+csharp_style_expression_bodied_accessors = true:suggestion
+
+# Disable IDE0055 (conflicts with CSharpier)
+dotnet_diagnostic.IDE0055.severity = none
+
+# XML project files
+[*.{csproj,props,targets}]
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# YAML files
+[*.{yml,yaml}]
+indent_size = 2
+
+# Markdown files
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
