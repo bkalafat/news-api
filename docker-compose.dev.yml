@@ -25,11 +25,11 @@ services:
   # Enable Redis for development caching
   redis:
     image: redis:7-alpine
-    container_name: newsapi-redis-dev
+    container_name: newsportal-redis-dev
     ports:
       - "6379:6379"
     networks:
-      - newsapi-network
+      - newsportal-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -39,7 +39,7 @@ services:
   # Swagger UI (separate container for API docs)
   swagger-ui:
     image: swaggerapi/swagger-ui:latest
-    container_name: newsapi-swagger
+    container_name: newsportal-swagger
     ports:
       - "8080:8080"
     environment:
@@ -48,4 +48,4 @@ services:
     depends_on:
       - newsapi
     networks:
-      - newsapi-network
+      - newsportal-network

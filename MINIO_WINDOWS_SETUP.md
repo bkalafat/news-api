@@ -126,7 +126,7 @@ mongod --dbpath C:\data\db
 
 ### **Terminal 3: Start News API**
 ```powershell
-cd c:\dev\news-api\backend
+cd c:\dev\newsportal\backend
 dotnet run
 ```
 
@@ -197,7 +197,7 @@ Once MinIO and MongoDB are running, test your setup:
 
 ```powershell
 # Start your API
-cd c:\dev\news-api\backend
+cd c:\dev\newsportal\backend
 dotnet run
 
 # Open Swagger

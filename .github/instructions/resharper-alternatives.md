@@ -109,7 +109,7 @@ dotnet tool install dotnet-format
 
 ### `.editorconfig` (Root of repository)
 
-Create or update `.editorconfig` in the root of `news-api/`:
+Create or update `.editorconfig` in the root of `newsportal/`:
 
 ```ini
 root = true

@@ -57,7 +57,7 @@ Write-Host ""
 
 # Network info
 Write-Host "Networks:" -ForegroundColor Yellow
-docker network ls --filter "name=news-api" --format "table {{.Name}}\t{{.Driver}}\t{{.Scope}}"
+docker network ls --filter "name=newsportal" --format "table {{.Name}}\t{{.Driver}}\t{{.Scope}}"
 Write-Host ""
 
 # Volume info

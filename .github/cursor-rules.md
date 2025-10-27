@@ -4,12 +4,12 @@
 
 Full-stack Turkish tech news platform:
 - **Backend**: .NET 10 Web API with Clean Architecture, MongoDB, JWT auth
-- **Frontend**: Next.js 15 with TypeScript, TailwindCSS v4, React Query, Turkish i18n
+- **Frontend**: Next.js 16 with TypeScript, TailwindCSS v4, React Query, Turkish i18n
 
 ## General Rules
 
 1. **Always use Context7 MCP** for up-to-date documentation
-   - Next.js 15, React Query, TailwindCSS v4, .NET 10, MongoDB
+   - Next.js 16, React Query, TailwindCSS v4, .NET 10, MongoDB
    - Add "use context7" to prompts automatically when working with these technologies
 
 2. **Follow project architecture**
@@ -53,7 +53,7 @@ Full-stack Turkish tech news platform:
 
 ## Frontend (Next.js) Rules
 
-### Next.js 15 Patterns
+### Next.js 16 Patterns
 - Use App Router (not Pages Router)
 - Server Components by default, 'use client' when needed
 - TypeScript for all files
@@ -152,7 +152,7 @@ Full-stack Turkish tech news platform:
 ## Context7 Usage
 
 Always use Context7 for:
-- Next.js 15 features (App Router, Metadata API, Server Actions)
+- Next.js 16 features (App Router, Metadata API, Server Actions)
 - React Query patterns (useQuery, useMutation, cache management)
 - TailwindCSS v4 utilities and configuration
 - Shadcn/ui component usage

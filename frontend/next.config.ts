@@ -31,9 +31,14 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
 
+  /* Enable React Compiler for automatic performance optimizations */
+  reactCompiler: true,
+
   /* Performance optimizations */
   experimental: {
     optimizePackageImports: ['lucide-react', 'date-fns'],
+    // Enable Turbopack filesystem caching for faster dev restarts
+    turbopackFileSystemCacheForDev: true,
   },
 };
 

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   const techStack = [
-    'Next.js 15',
+    'Next.js 16',
     'React 19',
     'TypeScript',
     'TailwindCSS v4',
@@ -122,7 +122,7 @@ export default function AboutPage() {
             <div>
               <h3 className="font-semibold mb-2">Frontend</h3>
               <p className="text-sm text-muted-foreground">
-                Next.js 15 App Router, React 19, TypeScript, TailwindCSS v4 ile modern,
+                Next.js 16 App Router, React 19, TypeScript, TailwindCSS v4 ile modern,
                 hızlı ve SEO-friendly bir kullanıcı arayüzü
               </p>
             </div>

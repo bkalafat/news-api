@@ -1,10 +1,10 @@
 # 📰 Teknoloji Haberleri - Frontend
 
-Modern, performanslı ve SEO-dostu Türk teknoloji haberleri web sitesi. Next.js 15, TypeScript, ve TailwindCSS ile geliştirilmiştir.
+Modern, performanslı ve SEO-dostu Türk teknoloji haberleri web sitesi. Next.js 16, TypeScript, ve TailwindCSS ile geliştirilmiştir.
 
 ## 🌟 Özellikler
 
-- ⚡ **Next.js 15** - App Router ile modern React framework
+- ⚡ **Next.js 16** - App Router ile modern React framework
 - 🎨 **TailwindCSS v4** - Utility-first CSS framework
 - 🔷 **TypeScript** - Type-safe development
 - 🎯 **Shadcn/ui** - Beautiful, accessible components

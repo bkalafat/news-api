@@ -4,7 +4,7 @@ services:
   # MinIO - S3-compatible object storage for images
   minio:
     image: minio/minio:latest
-    container_name: news-api-minio
+    container_name: newsportal-minio
     ports:
       - "9000:9000"  # API port
       - "9001:9001"  # Web Console port
@@ -21,12 +21,12 @@ services:
       timeout: 20s
       retries: 3
     networks:
-      - news-api-network
+      - newsportal-network
 
   # MinIO Client - For initialization
   minio-init:
     image: minio/mc:latest
-    container_name: news-api-minio-init
+    container_name: newsportal-minio-init
     depends_on:
       - minio
     entrypoint: >
@@ -40,12 +40,12 @@ services:
       exit 0;
       "
     networks:
-      - news-api-network
+      - newsportal-network
 
   # MongoDB - NoSQL database
   mongodb:
     image: mongo:latest
-    container_name: news-api-mongodb
+    container_name: newsportal-mongodb
     ports:
       - "27017:27017"
     environment:
@@ -59,7 +59,7 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - news-api-network
+      - newsportal-network
 
 volumes:
   minio_data:
@@ -68,5 +68,5 @@ volumes:
     driver: local
 
 networks:
-  news-api-network:
+  newsportal-network:
     driver: bridge

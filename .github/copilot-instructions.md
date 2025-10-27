@@ -68,28 +68,28 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 
 The entire backend infrastructure runs in Docker containers orchestrated by `docker-compose.yml`:
 
-1. **newsapi-backend** (.NET 10 API)
+1. **newsportal-backend** (.NET 10 API)
    - Port: `5000:8080` (host:container)
    - URL: `http://localhost:5000`
    - Health Check: `http://localhost:5000/health`
    - Auto-restarts on failure
    - Depends on MongoDB and MinIO
 
-2. **newsapi-mongodb** (MongoDB 7.0)
+2. **newsportal-mongodb** (MongoDB 7.0)
    - Port: `27017:27017`
    - Admin UI: Mongo Express on `http://localhost:8081`
    - Credentials: admin/password123 (default)
    - Database: NewsDb
-   - Persistent volume: `newsapi_mongodb_data`
+   - Persistent volume: `newsportal_mongodb_data`
 
-3. **newsapi-minio** (S3-compatible Object Storage)
+3. **newsportal-minio** (S3-compatible Object Storage)
    - API Port: `9000:9000`
    - Console UI: `http://localhost:9001`
    - Credentials: minioadmin/minioadmin123 (default)
    - Bucket: `news-images` (auto-created)
-   - Persistent volume: `newsapi_minio_data`
+   - Persistent volume: `newsportal_minio_data`
 
-4. **newsapi-mongo-express** (MongoDB Admin UI)
+4. **newsportal-mongo-express** (MongoDB Admin UI)
    - Port: `8081:8081`
    - URL: `http://localhost:8081`
    - Basic Auth: admin/admin123 (default)
@@ -141,13 +141,13 @@ docker-compose logs --tail=50 newsapi
 **Accessing Container Shells:**
 ```bash
 # Backend container bash
-docker exec -it newsapi-backend bash
+docker exec -it newsportal-backend bash
 
 # MongoDB shell
-docker exec -it newsapi-mongodb mongosh -u admin -p password123 --authenticationDatabase admin
+docker exec -it newsportal-mongodb mongosh -u admin -p password123 --authenticationDatabase admin
 
 # MinIO client
-docker exec -it newsapi-minio mc ls myminio/news-images
+docker exec -it newsportal-minio mc ls myminio/news-images
 ```
 
 ### Service URLs
@@ -259,7 +259,7 @@ When making changes to the backend code:
 ## 📁 Project Structure
 
 ```
-news-api/
+newsportal/
 ├── backend/                          # Main API project
 │   ├── Domain/                       # Core business entities (no external dependencies)
 │   │   ├── Entities/                # News entity models
@@ -286,7 +286,7 @@ news-api/
 │   ├── Integration/                 # Controller & repository integration tests
 │   ├── Performance/                 # Performance benchmarks
 │   └── Helpers/                     # Test utilities (TestDataBuilders, TestMemoryCache)
-├── frontend/                        # Next.js 15 frontend
+├── frontend/                        # Next.js 16 frontend
 ├── docker/                          # Docker configurations
 ├── scripts/                         # Development scripts
 │   └── database/                    # Data migration scripts
@@ -446,7 +446,7 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
 - **Access MongoDB**: Open Mongo Express at `http://localhost:8081`
   - Username: `admin`
   - Password: `admin123`
-- **MongoDB Shell**: `docker exec -it newsapi-mongodb mongosh -u admin -p password123`
+- **MongoDB Shell**: `docker exec -it newsportal-mongodb mongosh -u admin -p password123`
 - **Data Migration**: See `backend/Migration/data-migration.md`
 
 ### Configuration Management
@@ -512,7 +512,7 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
 - **Health Check**: `curl http://localhost:5000/health`
 - **Restart Service**: `docker-compose restart newsapi`
 - **Full Rebuild**: `docker-compose up -d --build newsapi`
-- **Container Shell**: `docker exec -it newsapi-backend bash`
+- **Container Shell**: `docker exec -it newsportal-backend bash`
 
 **For local debugging with IDE:**
 1. Stop Docker backend: `docker-compose stop newsapi`

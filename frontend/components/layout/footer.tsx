@@ -55,7 +55,7 @@ export function Footer() {
             <h3 className="font-semibold">İletişim</h3>
             <div className="flex space-x-4">
               <a
-                href="https://github.com/bkalafat/news-api"
+                href="https://github.com/bkalafat/newsportal"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-primary transition-colors"

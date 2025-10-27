@@ -45,13 +45,18 @@ export default function AdminDashboardPage() {
     try {
       const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
       
-      // Fetch news for stats
-      const newsResponse = await fetch(`${API_URL}/api/News`);
+      // Fetch news for stats - Correct endpoint is /api/NewsArticle
+      const newsResponse = await fetch(`${API_URL}/api/NewsArticle`);
+      
+      if (!newsResponse.ok) {
+        throw new Error(`API returned ${newsResponse.status}`);
+      }
+      
       const newsData = await newsResponse.json();
 
-      // Calculate stats
+      // Calculate stats - Backend uses IsActive instead of status
       const totalNews = newsData.length;
-      const publishedNews = newsData.filter((n: any) => n.status === 'published').length;
+      const publishedNews = newsData.filter((n: any) => n.isActive === true).length;
       const draftNews = totalNews - publishedNews;
       const totalViews = newsData.reduce((sum: number, n: any) => sum + (n.views || 0), 0);
       const todayViews = Math.floor(totalViews * 0.1); // Mock data
@@ -66,22 +71,33 @@ export default function AdminDashboardPage() {
         weeklyChange,
       });
 
-      // Get recent news
+      // Get recent news - Backend uses Caption as title and ExpressDate
       const recent = newsData
-        .sort((a: any, b: any) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+        .sort((a: any, b: any) => new Date(b.expressDate || b.createdDate).getTime() - new Date(a.expressDate || a.createdDate).getTime())
         .slice(0, 5)
         .map((n: any) => ({
           id: n.id,
-          title: n.title,
+          title: n.caption || 'Başlıksız',
           category: n.category,
-          publishedAt: n.publishedAt,
+          publishedAt: n.expressDate || n.createdDate,
           views: n.views || 0,
-          status: n.status || 'published',
+          status: n.isActive ? 'published' : 'draft',
         }));
 
       setRecentNews(recent);
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
+      
+      // Set default empty stats on error
+      setStats({
+        totalNews: 0,
+        publishedNews: 0,
+        draftNews: 0,
+        totalViews: 0,
+        todayViews: 0,
+        weeklyChange: 0,
+      });
+      setRecentNews([]);
     } finally {
       setLoading(false);
     }

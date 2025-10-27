@@ -4,7 +4,7 @@ services:
   # ============================================
   minio:
     image: quay.io/minio/minio:latest
-    container_name: newsapi-minio
+    container_name: newsportal-minio
     restart: unless-stopped
     ports:
       - "9000:9000"  # S3 API endpoint
@@ -18,7 +18,7 @@ services:
       - ./docker/minio/init:/docker-entrypoint-initdb.d
     command: server /data --console-address ":9001"
     networks:
-      - newsapi-network
+      - newsportal-network
     healthcheck:
       test: ["CMD", "mc", "ready", "local"]
       interval: 30s
@@ -26,18 +26,18 @@ services:
       retries: 3
       start_period: 10s
     labels:
-      - "com.newsapi.service=storage"
-      - "com.newsapi.description=MinIO object storage for images"
+      - "com.newsportal.service=storage"
+      - "com.newsportal.description=MinIO object storage for images"
 
   # MinIO Client - Auto-create bucket on startup
   minio-init:
     image: quay.io/minio/mc:latest
-    container_name: newsapi-minio-init
+    container_name: newsportal-minio-init
     depends_on:
       minio:
         condition: service_healthy
     networks:
-      - newsapi-network
+      - newsportal-network
     entrypoint: >
       /bin/sh -c "
       echo 'Waiting for MinIO to be ready...';
@@ -54,7 +54,7 @@ services:
   # ============================================
   mongodb:
     image: mongo:7.0
-    container_name: newsapi-mongodb
+    container_name: newsportal-mongodb
     restart: unless-stopped
     ports:
       - "27017:27017"
@@ -67,7 +67,7 @@ services:
       - mongodb_config:/data/configdb
       - ./docker/mongodb/init:/docker-entrypoint-initdb.d
     networks:
-      - newsapi-network
+      - newsportal-network
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/${MONGO_DATABASE:-NewsDb} --quiet
       interval: 10s
@@ -75,8 +75,8 @@ services:
       retries: 5
       start_period: 20s
     labels:
-      - "com.newsapi.service=database"
-      - "com.newsapi.description=MongoDB primary database"
+      - "com.newsportal.service=database"
+      - "com.newsportal.description=MongoDB primary database"
 
   # ============================================
   # News API Backend (.NET 10)
@@ -87,7 +87,7 @@ services:
       dockerfile: Dockerfile
       args:
         BUILDCONFIG: Release
-    container_name: newsapi-backend
+    container_name: newsportal-backend
     restart: unless-stopped
     ports:
       - "5000:8080"
@@ -112,7 +112,7 @@ services:
       minio-init:
         condition: service_completed_successfully
     networks:
-      - newsapi-network
+      - newsportal-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
@@ -120,15 +120,15 @@ services:
       retries: 3
       start_period: 40s
     labels:
-      - "com.newsapi.service=api"
-      - "com.newsapi.description=News API backend service"
+      - "com.newsportal.service=api"
+      - "com.newsportal.description=News API backend service"
 
   # ============================================
   # MongoDB Express (Database Admin UI)
   # ============================================
   mongo-express:
     image: mongo-express:latest
-    container_name: newsapi-mongo-express
+    container_name: newsportal-mongo-express
     restart: unless-stopped
     ports:
       - "8081:8081"
@@ -143,24 +143,24 @@ services:
       mongodb:
         condition: service_healthy
     networks:
-      - newsapi-network
+      - newsportal-network
     labels:
-      - "com.newsapi.service=admin-ui"
-      - "com.newsapi.description=MongoDB web admin interface"
+      - "com.newsportal.service=admin-ui"
+      - "com.newsportal.description=MongoDB web admin interface"
 
   # ============================================
   # Redis Cache (Optional - for future use)
   # ============================================
   # redis:
   #   image: redis:7-alpine
-  #   container_name: newsapi-redis
+  #   container_name: newsportal-redis
   #   restart: unless-stopped
   #   ports:
   #     - "6379:6379"
   #   volumes:
   #     - redis_data:/data
   #   networks:
-  #     - newsapi-network
+  #     - newsportal-network
   #   healthcheck:
   #     test: ["CMD", "redis-cli", "ping"]
   #     interval: 10s
@@ -173,23 +173,23 @@ services:
 volumes:
   minio_data:
     driver: local
-    name: newsapi_minio_data
+    name: newsportal_minio_data
   mongodb_data:
     driver: local
-    name: newsapi_mongodb_data
+    name: newsportal_mongodb_data
   mongodb_config:
     driver: local
-    name: newsapi_mongodb_config
+    name: newsportal_mongodb_config
   # redis_data:
   #   driver: local
-  #   name: newsapi_redis_data
+  #   name: newsportal_redis_data
 
 # ============================================
 # Networks
 # ============================================
 networks:
-  newsapi-network:
+  newsportal-network:
     driver: bridge
-    name: newsapi_network
+    name: newsportal_network
     labels:
-      - "com.newsapi.network=primary"
+      - "com.newsportal.network=primary"

@@ -50,11 +50,29 @@ export default function AdminNewsPage() {
   const fetchNews = async () => {
     try {
       const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${API_URL}/api/News`);
+      const response = await fetch(`${API_URL}/api/NewsArticle`);
+      
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}`);
+      }
+      
       const data = await response.json();
-      setNews(data);
+      
+      // Map backend data to frontend format
+      const mappedData = data.map((article: any) => ({
+        id: article.id,
+        title: article.caption || 'Başlıksız',
+        category: article.category,
+        author: article.author || 'Bilinmeyen',
+        publishedAt: article.expressDate || article.createdDate,
+        status: article.isActive ? 'published' : 'draft',
+        views: article.views || 0,
+      }));
+      
+      setNews(mappedData);
     } catch (error) {
       console.error('Failed to fetch news:', error);
+      setNews([]);
     } finally {
       setLoading(false);
     }

@@ -5,7 +5,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Latest-green)](https://www.mongodb.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A modern, full-stack Turkish technology news platform. Features a production-ready .NET 10 backend API with Clean Architecture and a performant Next.js 15 frontend optimized for SEO and user experience.
+A modern, full-stack Turkish technology news platform. Features a production-ready .NET 10 backend API with Clean Architecture and a performant Next.js 16 frontend optimized for SEO and user experience.
 
 ## 🌟 Platform Components
 
@@ -13,7 +13,7 @@ A modern, full-stack Turkish technology news platform. Features a production-rea
 Modern news management API built with .NET 10, following Clean Architecture principles. Features JWT authentication, comprehensive caching, and MongoDB persistence.
 
 ### Frontend Web (frontend/)
-Modern, SEO-optimized Turkish tech news website built with Next.js 15, TypeScript, TailwindCSS, and Shadcn/ui. Features responsive design, React Query data management, and Turkish localization.
+Modern, SEO-optimized Turkish tech news website built with Next.js 16, TypeScript, TailwindCSS, and Shadcn/ui. Features responsive design, React Query data management, and Turkish localization.
 
 ## ✨ Features
 
@@ -106,8 +106,8 @@ scripts\build.bat
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/bkalafat/news-api.git
-   cd news-api
+   git clone https://github.com/bkalafat/newsportal.git
+   cd newsportal
    ```
 
 2. **Start Docker services** (MongoDB + MinIO)
@@ -195,7 +195,7 @@ scripts\build.bat
 This project follows modern **monorepo architecture** with clean separation:
 
 ```
-news-api/                     # Root monorepo
+newsportal/                   # Root monorepo
 ├── backend/                  # Backend (.NET 10 API)
 │   ├── Domain/              # Core business logic & entities
 │   ├── Application/         # Business rules & use cases
@@ -205,7 +205,7 @@ news-api/                     # Root monorepo
 │   ├── Unit/               # Unit tests
 │   ├── Integration/        # Integration tests
 │   └── Performance/        # Performance tests
-├── frontend/                # Frontend (Next.js 15)
+├── frontend/                # Frontend (Next.js 16)
 │   ├── app/                # Next.js pages
 │   ├── components/         # React components
 │   ├── lib/                # API client & utilities
@@ -306,7 +306,7 @@ docker-compose up -d
 ### Build Docker Image
 ```bash
 cd docker
-docker build -f Dockerfile.backend -t news-api:latest ..
+docker build -f Dockerfile.backend -t newsportal:latest ..
 ```
 
 ### Run Container
@@ -315,8 +315,8 @@ docker run -d -p 5000:8080 \
   -e DatabaseSettings__ConnectionString="mongodb://host.docker.internal:27017" \
   -e DatabaseSettings__DatabaseName="NewsDb" \
   -e JwtSettings__SecretKey="your-secret-key" \
-  --name news-api \
-  news-api:latest
+  --name newsportal \
+  newsportal:latest
 ```
 
 ### Heroku Deployment
@@ -384,8 +384,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact & Support
 
-- **Repository**: [github.com/bkalafat/news-api](https://github.com/bkalafat/news-api)
-- **Issues**: [github.com/bkalafat/news-api/issues](https://github.com/bkalafat/news-api/issues)
+- **Repository**: [github.com/bkalafat/newsportal](https://github.com/bkalafat/newsportal)
+- **Issues**: [github.com/bkalafat/newsportal/issues](https://github.com/bkalafat/newsportal/issues)
 - **Email**: support@newsapi.com
 
 ---
