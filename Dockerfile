@@ -1,48 +1,69 @@
-# Multi-stage Dockerfile for .NET 8 News API
-# Optimized for production deployment with Clean Architecture
-
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
-# Configure ASP.NET Core to use port 8080
-ENV ASPNETCORE_URLS=http://+:8080
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+# ============================================
+# Build Stage
+# ============================================
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ARG BUILDCONFIG=Release
 WORKDIR /src
 
-# Copy solution and project files
-COPY *.sln .
-COPY newsApi/*.csproj newsApi/
+# Copy project file from backend folder
+COPY ["backend/newsApi.csproj", "backend/"]
 
 # Restore dependencies
-RUN dotnet restore newsApi/newsApi.csproj
+RUN dotnet restore "backend/newsApi.csproj"
 
-# Copy source code  
-COPY . .
+# Copy all backend source code
+COPY backend/ backend/
 
 # Build the application
-WORKDIR /src/newsApi
-RUN dotnet build newsApi.csproj -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/backend"
+RUN dotnet build "newsApi.csproj" \
+    -c $BUILDCONFIG \
+    -o /app/build \
+    --no-restore
 
+# ============================================
+# Publish Stage
+# ============================================
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish newsApi.csproj -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+ARG BUILDCONFIG=Release
+WORKDIR "/src/backend"
+RUN dotnet publish "newsApi.csproj" \
+    -c $BUILDCONFIG \
+    -o /app/publish \
+    --no-restore \
+    /p:UseAppHost=false
 
-FROM base AS final
+# ============================================
+# Runtime Stage
+# ============================================
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+
+# Install curl for healthchecks
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN groupadd -r newsapi && \
+    useradd -r -g newsapi newsapi
+
 WORKDIR /app
 
-# Copy published application
+# Copy published files
 COPY --from=publish /app/publish .
 
-# Create non-root user for security
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
+# Set ownership
+RUN chown -R newsapi:newsapi /app
 
-# Health check endpoint
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8080/health || exit 1
+# Switch to non-root user
+USER newsapi
 
+# Expose port
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Entry point
 ENTRYPOINT ["dotnet", "newsApi.dll"]

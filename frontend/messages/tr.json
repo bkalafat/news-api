@@ -1,0 +1,46 @@
+{
+  "app": {
+    "title": "Teknoloji Haberleri",
+    "description": "Türkiye'nin en güncel teknoloji haberleri",
+    "tagline": "Teknoloji dünyasından son haberler"
+  },
+  "navigation": {
+    "home": "Ana Sayfa",
+    "categories": "Kategoriler",
+    "about": "Hakkımızda",
+    "search": "Ara"
+  },
+  "categories": {
+    "all": "Tüm Haberler",
+    "technology": "Teknoloji",
+    "world": "Dünya",
+    "business": "İş Dünyası",
+    "science": "Bilim",
+    "health": "Sağlık",
+    "entertainment": "Eğlence"
+  },
+  "article": {
+    "readMore": "Devamını Oku",
+    "publishedAt": "Yayınlanma",
+    "author": "Yazar",
+    "source": "Kaynak",
+    "relatedNews": "İlgili Haberler"
+  },
+  "common": {
+    "loading": "Yükleniyor...",
+    "error": "Bir hata oluştu",
+    "tryAgain": "Tekrar Dene",
+    "noResults": "Sonuç bulunamadı",
+    "seeAll": "Tümünü Gör"
+  },
+  "home": {
+    "hero": {
+      "title": "Türkiye'nin Teknoloji Gazetesi",
+      "subtitle": "Güvenilir kaynaklardan son dakika teknoloji haberleri",
+      "cta": "Haberleri Keşfet"
+    },
+    "latest": "Son Haberler",
+    "trending": "Trend Haberler",
+    "featured": "Öne Çıkan Haberler"
+  }
+}

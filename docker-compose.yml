@@ -1,0 +1,195 @@
+services:
+  # ============================================
+  # MinIO Object Storage (S3-compatible)
+  # ============================================
+  minio:
+    image: quay.io/minio/minio:latest
+    container_name: newsportal-minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"  # S3 API endpoint
+      - "9001:9001"  # Web Console UI
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+      MINIO_BROWSER_REDIRECT_URL: http://localhost:9001
+    volumes:
+      - minio_data:/data
+      - ./docker/minio/init:/docker-entrypoint-initdb.d
+    command: server /data --console-address ":9001"
+    networks:
+      - newsportal-network
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.newsportal.service=storage"
+      - "com.newsportal.description=MinIO object storage for images"
+
+  # MinIO Client - Auto-create bucket on startup
+  minio-init:
+    image: quay.io/minio/mc:latest
+    container_name: newsportal-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - newsportal-network
+    entrypoint: >
+      /bin/sh -c "
+      echo 'Waiting for MinIO to be ready...';
+      sleep 5;
+      mc alias set myminio http://minio:9000 ${MINIO_ROOT_USER:-minioadmin} ${MINIO_ROOT_PASSWORD:-minioadmin123};
+      mc mb --ignore-existing myminio/news-images;
+      mc anonymous set download myminio/news-images;
+      echo 'MinIO bucket created and configured!';
+      exit 0;
+      "
+
+  # ============================================
+  # MongoDB Database
+  # ============================================
+  mongodb:
+    image: mongo:7.0
+    container_name: newsportal-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-password123}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE:-NewsDb}
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+      - ./docker/mongodb/init:/docker-entrypoint-initdb.d
+    networks:
+      - newsportal-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/${MONGO_DATABASE:-NewsDb} --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    labels:
+      - "com.newsportal.service=database"
+      - "com.newsportal.description=MongoDB primary database"
+
+  # ============================================
+  # News API Backend (.NET 10)
+  # ============================================
+  newsapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILDCONFIG: Release
+    container_name: newsportal-backend
+    restart: unless-stopped
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
+      - ASPNETCORE_URLS=http://+:8080
+      - MongoDbSettings__ConnectionString=mongodb://${MONGO_ROOT_USER:-admin}:${MONGO_ROOT_PASSWORD:-password123}@mongodb:27017/${MONGO_DATABASE:-NewsDb}?authSource=admin
+      - MongoDbSettings__DatabaseName=${MONGO_DATABASE:-NewsDb}
+      - MinioSettings__Endpoint=minio:9000
+      - MinioSettings__AccessKey=${MINIO_ROOT_USER:-minioadmin}
+      - MinioSettings__SecretKey=${MINIO_ROOT_PASSWORD:-minioadmin123}
+      - MinioSettings__BucketName=news-images
+      - MinioSettings__UseSSL=false
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-your-super-secret-jwt-key-that-is-at-least-32-characters-long}
+      - JwtSettings__Issuer=NewsApi
+      - JwtSettings__Audience=NewsApiClients
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    networks:
+      - newsportal-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.newsportal.service=api"
+      - "com.newsportal.description=News API backend service"
+
+  # ============================================
+  # MongoDB Express (Database Admin UI)
+  # ============================================
+  mongo-express:
+    image: mongo-express:latest
+    container_name: newsportal-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USER:-admin}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD:-password123}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ROOT_USER:-admin}:${MONGO_ROOT_PASSWORD:-password123}@mongodb:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGOEXPRESS_USER:-admin}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGOEXPRESS_PASSWORD:-admin123}
+      ME_CONFIG_SITE_BASEURL: /mongo-express/
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - newsportal-network
+    labels:
+      - "com.newsportal.service=admin-ui"
+      - "com.newsportal.description=MongoDB web admin interface"
+
+  # ============================================
+  # Redis Cache (Optional - for future use)
+  # ============================================
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: newsportal-redis
+  #   restart: unless-stopped
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - newsportal-network
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+# ============================================
+# Persistent Volumes
+# ============================================
+volumes:
+  minio_data:
+    driver: local
+    name: newsportal_minio_data
+  mongodb_data:
+    driver: local
+    name: newsportal_mongodb_data
+  mongodb_config:
+    driver: local
+    name: newsportal_mongodb_config
+  # redis_data:
+  #   driver: local
+  #   name: newsportal_redis_data
+
+# ============================================
+# Networks
+# ============================================
+networks:
+  newsportal-network:
+    driver: bridge
+    name: newsportal_network
+    labels:
+      - "com.newsportal.network=primary"

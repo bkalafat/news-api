@@ -1,5 +1,5 @@
 build:
   docker:
-    web: Dockerfile
+    web: docker/Dockerfile.backend
 run:
-  web: bundle exec puma -C config/puma.rb
+  web: dotnet newsApi.dll
