@@ -1,0 +1,88 @@
+services:
+  # Backend API Service
+  - type: web
+    name: newsportal-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    region: frankfurt  # EU region (Türkiye'ye yakın)
+    plan: free
+    branch: main
+    healthCheckPath: /health
+    autoDeploy: true
+    
+    envVars:
+      # ASP.NET Core
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
+      
+      # MongoDB
+      - key: MongoDbSettings__ConnectionString
+        sync: false  # Render dashboard'dan manuel eklenecek
+      - key: MongoDbSettings__DatabaseName
+        value: NewsDb
+      
+      # JWT
+      - key: JwtSettings__SecretKey
+        generateValue: true  # Otomatik güvenli key üretir
+      - key: JwtSettings__Issuer
+        value: NewsPortalAPI
+      - key: JwtSettings__Audience
+        value: NewsPortalClients
+      - key: JwtSettings__ExpirationMinutes
+        value: 60
+      
+      # Cloudflare R2 (MinIO yerine)
+      - key: R2Settings__Endpoint
+        sync: false  # Render dashboard'dan eklenecek
+      - key: R2Settings__AccessKey
+        sync: false
+      - key: R2Settings__SecretKey
+        sync: false
+      - key: R2Settings__BucketName
+        value: news-images
+      - key: R2Settings__Region
+        value: auto
+      
+      # CORS
+      - key: AllowedOrigins
+        value: https://newsportal-frontend.vercel.app,https://newsportal.com
+      
+      # Logging
+      - key: Logging__LogLevel__Default
+        value: Information
+      - key: Logging__LogLevel__Microsoft.AspNetCore
+        value: Warning
+
+  # Background Worker - News Aggregator (Cron Job)
+  # NOT: Bu Render'ın ücretli özelliği, GitHub Actions kullanacağız
+  # Aşağıdaki kısım referans için, aktif değil
+  
+  # - type: cron
+  #   name: news-aggregator-cron
+  #   env: python
+  #   runtime: python
+  #   buildCommand: pip install -r scripts/requirements.txt
+  #   schedule: "0 2 * * *"  # Her gün 02:00 UTC (TR 05:00)
+  #   startCommand: python scripts/news_aggregator.py --once
+  #   
+  #   envVars:
+  #     - key: API_BASE_URL
+  #       value: https://newsportal-backend.onrender.com/api
+  #     - key: ADMIN_USERNAME
+  #       sync: false
+  #     - key: ADMIN_PASSWORD
+  #       sync: false
+  #     - key: UNSPLASH_ACCESS_KEY
+  #       sync: false
+
+# Database - Render PostgreSQL (MongoDB için kullanılmayacak, MongoDB Atlas kullanacağız)
+# Bu kısım sadece referans için
+
+# Notlar:
+# 1. MongoDB Atlas'tan connection string al ve Render dashboard'da environment variable olarak ekle
+# 2. Cloudflare R2 credentials'ları Render dashboard'da ekle
+# 3. Admin credentials (username/password) güvenli şekilde sakla
+# 4. GitHub Actions ile cron job'ı yönet (ücretsiz ve daha güvenilir)

@@ -1,0 +1,98 @@
+name: Daily News Aggregation
+
+on:
+  schedule:
+    # Her gün saat 02:00 UTC (Türkiye saati 05:00 - UTC+3)
+    - cron: '0 2 * * *'
+  
+  # Manuel çalıştırma için
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: 'Run in test mode (limited sources)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  aggregate-news:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: 📦 Install dependencies
+        run: |
+          pip install requests schedule pytz
+          echo "✓ Dependencies installed"
+      
+      - name: 📰 Run news aggregator
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+        run: |
+          cd scripts
+          
+          # Update API_BASE_URL in script (alternative to env vars)
+          sed -i "s|API_BASE_URL = \"http://localhost:5000/api\"|API_BASE_URL = \"$API_BASE_URL\"|g" news_aggregator.py
+          sed -i "s|ADMIN_USERNAME = \"admin\"|ADMIN_USERNAME = \"$ADMIN_USERNAME\"|g" news_aggregator.py
+          sed -i "s|ADMIN_PASSWORD = \"admin123\"|ADMIN_PASSWORD = \"$ADMIN_PASSWORD\"|g" news_aggregator.py
+          sed -i "s|UNSPLASH_ACCESS_KEY = \"YOUR_UNSPLASH_KEY\"|UNSPLASH_ACCESS_KEY = \"$UNSPLASH_ACCESS_KEY\"|g" news_aggregator.py
+          
+          echo "🚀 Starting news aggregation..."
+          echo "⏰ Current time (UTC): $(date -u)"
+          echo "🇹🇷 Turkey time (UTC+3): $(TZ='Europe/Istanbul' date)"
+          echo ""
+          
+          python news_aggregator.py --once
+      
+      - name: 📊 Upload aggregation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aggregation-logs-${{ github.run_number }}
+          path: scripts/news_aggregator.log
+          retention-days: 30
+      
+      - name: 📧 Notify on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: '❌ News Aggregation Failed - ${{ github.run_number }}'
+          to: ${{ secrets.NOTIFICATION_EMAIL }}
+          from: GitHub Actions
+          body: |
+            News aggregation workflow failed.
+            
+            Run Number: ${{ github.run_number }}
+            Time: ${{ github.event.head_commit.timestamp }}
+            
+            Check logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          attachments: scripts/news_aggregator.log
+
+# Secrets to add in GitHub (Settings → Secrets → Actions):
+# 
+# Required:
+# - API_BASE_URL: https://newsportal-backend.onrender.com/api
+# - ADMIN_USERNAME: admin (or your admin username)
+# - ADMIN_PASSWORD: your_secure_password
+# - UNSPLASH_ACCESS_KEY: your_unsplash_api_key
+#
+# Optional (for email notifications):
+# - EMAIL_USERNAME: your_gmail@gmail.com
+# - EMAIL_PASSWORD: your_gmail_app_password
+# - NOTIFICATION_EMAIL: recipient@email.com
