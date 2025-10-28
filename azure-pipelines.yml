@@ -1,29 +1,291 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+# Azure DevOps Pipeline for News API
+# Deploys backend API to Azure Container Apps
+# Uses external MongoDB and MinIO services
 
 trigger:
-- master
+  branches:
+    include:
+      - master
+      - develop
+  paths:
+    include:
+- backend/**
+      - Dockerfile
+      - azure/**
 
-resources:
-- repo: self
+pr:
+  branches:
+    include:
+      - master
+      - develop
 
 variables:
+  # Azure Configuration
+  azureSubscription: 'Azure-ServiceConnection' # TODO: Update with your service connection name
+  location: 'eastus'
+  appName: 'newsapi'
+  
+  # Container Registry
+  acrName: 'newsapidevacr' # TODO: Update with your ACR name
+  imageRepository: 'newsapi'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  
+  # Build Configuration
+  buildConfiguration: 'Release'
   tag: '$(Build.BuildId)'
 
+  # Variable Groups (create these in Azure DevOps Library)
+  # - newsapi-dev-secrets (JWT_SECRET_KEY, MONGO_CONNECTION_STRING, MINIO_*)
+  # - newsapi-prod-secrets
+
 stages:
-- stage: Build
-  displayName: Build image
-  jobs:
-  - job: Build
-    displayName: Build
+  # ============================================
+  # Build Stage
+  # ============================================
+  - stage: Build
+    displayName: 'Build and Push Docker Image'
+    jobs:
+      - job: BuildJob
+        displayName: 'Build Docker Image'
+  pool:
+   vmImage: 'ubuntu-latest'
+        
+     steps:
+        - checkout: self
+   fetchDepth: 1
+
+      - task: AzureCLI@2
+ displayName: 'Login to ACR and Build/Push Image'
+   inputs:
+         azureSubscription: $(azureSubscription)
+   scriptType: 'bash'
+ scriptLocation: 'inlineScript'
+    inlineScript: |
+    echo "Logging in to ACR..."
+     az acr login --name $(acrName)
+       
+     echo "Building Docker image..."
+        docker build -t $(acrName).azurecr.io/$(imageRepository):$(tag) \
+      -t $(acrName).azurecr.io/$(imageRepository):latest \
+   -f $(dockerfilePath) .
+      
+         echo "Pushing Docker image..."
+         docker push $(acrName).azurecr.io/$(imageRepository):$(tag)
+       docker push $(acrName).azurecr.io/$(imageRepository):latest
+   
+     echo "Image pushed successfully: $(acrName).azurecr.io/$(imageRepository):$(tag)"
+
+          - task: PublishPipelineArtifact@1
+      displayName: 'Publish Bicep Templates'
+          inputs:
+          targetPath: '$(Build.SourcesDirectory)/azure/bicep'
+   artifact: 'bicep-templates'
+      publishLocation: 'pipeline'
+
+  # ============================================
+  # Deploy to Dev
+  # ============================================
+  - stage: DeployDev
+    displayName: 'Deploy to Development'
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    variables:
+      - group: newsapi-dev-secrets # Variable group with secrets
+      - name: environment
+        value: 'dev'
+      - name: resourceGroup
+        value: 'newsapi-rg-dev'
+    
+    jobs:
+      - deployment: DeployDevJob
+    displayName: 'Deploy to Dev Environment'
     pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+          vmImage: 'ubuntu-latest'
+        environment: 'development'
+     strategy:
+          runOnce:
+        deploy:
+         steps:
+      - download: current
+       artifact: bicep-templates
+
+           - task: AzureCLI@2
+  displayName: 'Create Resource Group'
+          inputs:
+         azureSubscription: $(azureSubscription)
+           scriptType: 'bash'
+scriptLocation: 'inlineScript'
+          inlineScript: |
+        az group create \
+    --name $(resourceGroup) \
+        --location $(location)
+
+    - task: AzureCLI@2
+      displayName: 'Deploy Infrastructure'
+          inputs:
+   azureSubscription: $(azureSubscription)
+    scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+         inlineScript: |
+ az deployment group create \
+            --resource-group $(resourceGroup) \
+             --template-file $(Pipeline.Workspace)/bicep-templates/main.bicep \
+            --parameters environmentName=dev \
+                    --parameters appName=$(appName) \
+       --parameters containerImage=$(acrName).azurecr.io/$(imageRepository):$(tag) \
+    --parameters jwtSecretKey="$(JWT_SECRET_KEY)" \
+       --parameters mongoConnectionString="$(MONGO_CONNECTION_STRING)" \
+   --parameters mongoDatabaseName="$(MONGO_DATABASE_NAME)" \
+        --parameters minioEndpoint="$(MINIO_ENDPOINT)" \
+             --parameters minioAccessKey="$(MINIO_ACCESS_KEY)" \
+    --parameters minioSecretKey="$(MINIO_SECRET_KEY)" \
+  --parameters minioBucketName="$(MINIO_BUCKET_NAME)" \
+        --parameters minReplicas=1 \
+         --parameters maxReplicas=3
+
+ - task: AzureCLI@2
+  displayName: 'Get Deployment Outputs'
+       inputs:
+     azureSubscription: $(azureSubscription)
+           scriptType: 'bash'
+               scriptLocation: 'inlineScript'
+           inlineScript: |
+     APP_URL=$(az deployment group show \
+       --resource-group $(resourceGroup) \
+     --name main \
+    --query properties.outputs.containerAppUrl.value \
+             --output tsv)
+  
+    echo "##vso[task.setvariable variable=AppUrl]$APP_URL"
+     echo "Application deployed to: $APP_URL"
+
+      - task: Bash@3
+          displayName: 'Health Check'
+    inputs:
+           targetType: 'inline'
+   script: |
+        echo "Waiting for application to start..."
+        sleep 30
+           
+    MAX_RETRIES=10
+          RETRY_COUNT=0
+               
+  while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+              if curl -f -s "$(AppUrl)/health" > /dev/null; then
+       echo "✅ Health check passed!"
+     exit 0
+        fi
+               
+          RETRY_COUNT=$((RETRY_COUNT + 1))
+       echo "Health check attempt $RETRY_COUNT/$MAX_RETRIES failed. Retrying..."
+           sleep 10
+ done
+      
+                 echo "⚠️ Health check failed after $MAX_RETRIES attempts"
+       exit 1
+
+  # ============================================
+  # Deploy to Production
+  # ============================================
+  - stage: DeployProd
+    displayName: 'Deploy to Production'
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    variables:
+      - group: newsapi-prod-secrets # Variable group with secrets
+      - name: environment
+        value: 'prod'
+      - name: resourceGroup
+        value: 'newsapi-rg-prod'
+    
+    jobs:
+    - deployment: DeployProdJob
+        displayName: 'Deploy to Production Environment'
+      pool:
+        vmImage: 'ubuntu-latest'
+        environment: 'production'
+        strategy:
+          runOnce:
+    deploy:
+           steps:
+           - download: current
+             artifact: bicep-templates
+
+     - task: AzureCLI@2
+          displayName: 'Create Resource Group'
+       inputs:
+           azureSubscription: $(azureSubscription)
+  scriptType: 'bash'
+     scriptLocation: 'inlineScript'
+         inlineScript: |
+            az group create \
+       --name $(resourceGroup) \
+     --location $(location)
+
+ - task: AzureCLI@2
+      displayName: 'Deploy Infrastructure'
+        inputs:
+   azureSubscription: $(azureSubscription)
+                    scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+        inlineScript: |
+           az deployment group create \
+    --resource-group $(resourceGroup) \
+        --template-file $(Pipeline.Workspace)/bicep-templates/main.bicep \
+   --parameters environmentName=prod \
+            --parameters appName=$(appName) \
+             --parameters containerImage=$(acrName).azurecr.io/$(imageRepository):$(tag) \
+        --parameters jwtSecretKey="$(JWT_SECRET_KEY)" \
+        --parameters mongoConnectionString="$(MONGO_CONNECTION_STRING)" \
+         --parameters mongoDatabaseName="$(MONGO_DATABASE_NAME)" \
+           --parameters minioEndpoint="$(MINIO_ENDPOINT)" \
+      --parameters minioAccessKey="$(MINIO_ACCESS_KEY)" \
+       --parameters minioSecretKey="$(MINIO_SECRET_KEY)" \
+  --parameters minioBucketName="$(MINIO_BUCKET_NAME)" \
+     --parameters jwtIssuer="$(JWT_ISSUER)" \
+  --parameters jwtAudience="$(JWT_AUDIENCE)" \
+    --parameters minReplicas=2 \
+        --parameters maxReplicas=10 \
+   --parameters containerCpu="1.0" \
+   --parameters containerMemory="2Gi"
+
+         - task: AzureCLI@2
+              displayName: 'Get Deployment Outputs'
+           inputs:
+     azureSubscription: $(azureSubscription)
+        scriptType: 'bash'
+ scriptLocation: 'inlineScript'
+inlineScript: |
+    APP_URL=$(az deployment group show \
+         --resource-group $(resourceGroup) \
+             --name main \
+          --query properties.outputs.containerAppUrl.value \
+  --output tsv)
+   
+            echo "##vso[task.setvariable variable=AppUrl]$APP_URL"
+       echo "Application deployed to: $APP_URL"
+
+       - task: Bash@3
+ displayName: 'Health Check'
+   inputs:
+targetType: 'inline'
+            script: |
+   echo "Waiting for application to start..."
+        sleep 30
+          
+      MAX_RETRIES=10
+        RETRY_COUNT=0
+          
+  while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+      if curl -f -s "$(AppUrl)/health" > /dev/null; then
+        echo "✅ Health check passed!"
+         exit 0
+       fi
+  
+       RETRY_COUNT=$((RETRY_COUNT + 1))
+  echo "Health check attempt $RETRY_COUNT/$MAX_RETRIES failed. Retrying..."
+          sleep 10
+         done
+          
+    echo "⚠️ Health check failed after $MAX_RETRIES attempts"
+            exit 1

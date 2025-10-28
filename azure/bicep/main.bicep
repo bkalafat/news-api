@@ -1,8 +1,8 @@
 // ============================================
-// News API - Azure Infrastructure
+// News API - Azure Infrastructure (API Only)
 // ============================================
-// This Bicep template deploys the complete News API infrastructure to Azure
-// including Container App, Cosmos DB (MongoDB API), and Blob Storage
+// This Bicep template deploys only the News API Container App to Azure
+// External MongoDB and MinIO services will be used
 
 targetScope = 'resourceGroup'
 
@@ -30,12 +30,32 @@ param containerImage string = 'newsapi:latest'
 @secure()
 param jwtSecretKey string
 
-@description('MongoDB admin username')
-param mongoAdminUsername string = 'newsapiadmin'
-
-@description('MongoDB admin password')
+@description('External MongoDB connection string')
 @secure()
-param mongoAdminPassword string
+param mongoConnectionString string
+
+@description('MongoDB database name')
+param mongoDatabaseName string = 'NewsDb'
+
+@description('MinIO endpoint URL (e.g., https://minio.yourdomain.com)')
+param minioEndpoint string
+
+@description('MinIO access key')
+@secure()
+param minioAccessKey string
+
+@description('MinIO secret key')
+@secure()
+param minioSecretKey string
+
+@description('MinIO bucket name for images')
+param minioBucketName string = 'news-images'
+
+@description('JWT Issuer URL')
+param jwtIssuer string = ''
+
+@description('JWT Audience URL')
+param jwtAudience string = ''
 
 @description('Minimum replica count for Container App')
 @minValue(0)
@@ -47,18 +67,25 @@ param minReplicas int = 1
 @maxValue(30)
 param maxReplicas int = 5
 
+@description('Container CPU cores')
+param containerCpu string = '0.5'
+
+@description('Container memory')
+param containerMemory string = '1Gi'
+
 // ============================================
 // Variables
 // ============================================
 var resourcePrefix = '${appName}-${environmentName}'
 var containerAppEnvName = '${resourcePrefix}-env'
 var containerAppName = '${resourcePrefix}-app'
-var cosmosDbAccountName = '${resourcePrefix}-cosmos'
-var cosmosDbName = 'NewsDb'
-var storageAccountName = replace('${resourcePrefix}storage', '-', '')
 var logAnalyticsWorkspaceName = '${resourcePrefix}-logs'
 var appInsightsName = '${resourcePrefix}-insights'
 var containerRegistryName = replace('${resourcePrefix}acr', '-', '')
+
+// Dynamic JWT values
+var jwtIssuerValue = empty(jwtIssuer) ? 'https://${containerAppName}.${containerAppEnv.properties.defaultDomain}' : jwtIssuer
+var jwtAudienceValue = empty(jwtAudience) ? 'https://${containerAppName}.${containerAppEnv.properties.defaultDomain}' : jwtAudience
 
 // ============================================
 // Log Analytics Workspace
@@ -89,118 +116,13 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 }
 
 // ============================================
-// Azure Cosmos DB (MongoDB API)
-// ============================================
-resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
-  name: cosmosDbAccountName
-  location: location
-  kind: 'MongoDB'
-  properties: {
-    databaseAccountOfferType: 'Standard'
-    consistencyPolicy: {
-    defaultConsistencyLevel: 'Session'
-    }
-    locations: [
-    {
-        locationName: location
-        failoverPriority: 0
-        isZoneRedundant: false
-      }
-    ]
-    apiProperties: {
-  serverVersion: '7.0'
-    }
-    capabilities: [
-      {
-  name: 'EnableMongo'
-   }
-  ]
-    enableAutomaticFailover: false
-    enableMultipleWriteLocations: false
-  }
-}
-
-resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts/mongodbDatabases@2023-11-15' = {
-  parent: cosmosDbAccount
-  name: cosmosDbName
-  properties: {
-    resource: {
-      id: cosmosDbName
-    }
-    options: {
-      throughput: 400 // Minimum for shared throughput
-  }
-  }
-}
-
-resource newsCollection 'Microsoft.DocumentDB/databaseAccounts/mongodbDatabases/collections@2023-11-15' = {
-  parent: cosmosDb
-  name: 'News'
-  properties: {
-    resource: {
-      id: 'News'
-      shardKey: {
-        _id: 'Hash'
-    }
-      indexes: [
-     {
-          key: {
-       keys: [
-   '_id'
-  ]
-          }
-  }
-      {
-          key: {
-            keys: [
-       'CreatedDate'
-            ]
-}
-     }
-      ]
-    }
-  }
-}
-
-// ============================================
-// Storage Account (replaces MinIO)
-// ============================================
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: storageAccountName
-  location: location
-  sku: {
-    name: 'Standard_LRS'
-  }
-  kind: 'StorageV2'
-  properties: {
-    accessTier: 'Hot'
-  supportsHttpsTrafficOnly: true
-    allowBlobPublicAccess: true
-    minimumTlsVersion: 'TLS1_2'
-  }
-}
-
-resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
-  parent: storageAccount
-  name: 'default'
-}
-
-resource newsImagesContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
-  parent: blobService
-  name: 'news-images'
-  properties: {
-    publicAccess: 'Blob'
-  }
-}
-
-// ============================================
-// Container Registry (optional, for private images)
+// Container Registry
 // ============================================
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
   name: containerRegistryName
   location: location
   sku: {
-    name: 'Basic'
+  name: 'Basic'
   }
   properties: {
     adminUserEnabled: true
@@ -233,128 +155,152 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
   properties: {
     managedEnvironmentId: containerAppEnv.id
     configuration: {
-    ingress: {
-        external: true
+      ingress: {
+   external: true
         targetPort: 8080
-        transport: 'http'
+        transport: 'auto'
         allowInsecure: false
       }
-      registries: [
+    registries: [
         {
-          server: containerRegistry.properties.loginServer
-username: containerRegistry.listCredentials().username
-  passwordSecretRef: 'acr-password'
-      }
+     server: containerRegistry.properties.loginServer
+          username: containerRegistry.listCredentials().username
+          passwordSecretRef: 'acr-password'
+  }
       ]
       secrets: [
-        {
-          name: 'acr-password'
+     {
+   name: 'acr-password'
           value: containerRegistry.listCredentials().passwords[0].value
         }
         {
           name: 'jwt-secret'
-    value: jwtSecretKey
-        }
- {
-          name: 'mongo-connection'
-          value: cosmosDbAccount.listConnectionStrings().connectionStrings[0].connectionString
-        }
+        value: jwtSecretKey
+      }
         {
-          name: 'storage-connection'
-     value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=core.windows.net'
+          name: 'mongo-connection'
+     value: mongoConnectionString
+     }
+        {
+       name: 'minio-access-key'
+          value: minioAccessKey
         }
+    {
+        name: 'minio-secret-key'
+      value: minioSecretKey
+  }
       ]
-    }
+  }
     template: {
-      containers: [
+    containers: [
         {
           name: containerAppName
           image: containerImage
-      resources: {
-            cpu: json('0.5')
-            memory: '1Gi'
+ resources: {
+  cpu: json(containerCpu)
+            memory: containerMemory
           }
-  env: [
-   {
-   name: 'ASPNETCORE_ENVIRONMENT'
-       value: environmentName == 'prod' ? 'Production' : 'Development'
-    }
+ env: [
           {
+ name: 'ASPNETCORE_ENVIRONMENT'
+           value: environmentName == 'prod' ? 'Production' : 'Development'
+          }
+            {
       name: 'ASPNETCORE_URLS'
-      value: 'http://+:8080'
-     }
+            value: 'http://+:8080'
+    }
+            // MongoDB Configuration
   {
-     name: 'MongoDB__ConnectionString'
-              secretRef: 'mongo-connection'
+              name: 'MongoDB__ConnectionString'
+            secretRef: 'mongo-connection'
+            }
+       {
+         name: 'MongoDB__DatabaseName'
+       value: mongoDatabaseName
+ }
+            // JWT Configuration
+        {
+              name: 'JWT__SecretKey'
+        secretRef: 'jwt-secret'
+         }
+     {
+       name: 'JWT__Issuer'
+     value: jwtIssuerValue
+        }
+        {
+        name: 'JWT__Audience'
+  value: jwtAudienceValue
+        }
+            {
+       name: 'JWT__ExpiryMinutes'
+        value: '60'
+       }
+            // MinIO Configuration
+            {
+      name: 'MinIO__Endpoint'
+              value: minioEndpoint
           }
   {
-     name: 'MongoDB__DatabaseName'
-     value: cosmosDbName
-  }
-     {
-              name: 'JWT__SecretKey'
-   secretRef: 'jwt-secret'
-         }
-    {
-         name: 'JWT__Issuer'
-      value: 'https://${containerAppName}.${containerAppEnv.properties.defaultDomain}'
-            }
-{
-        name: 'JWT__Audience'
-              value: 'https://${containerAppName}.${containerAppEnv.properties.defaultDomain}'
-         }
-       {
-   name: 'JWT__ExpiryMinutes'
-        value: '60'
-         }
-        {
-              name: 'Storage__ConnectionString'
- secretRef: 'storage-connection'
-        }
-      {
-           name: 'Storage__ContainerName'
-              value: 'news-images'
+         name: 'MinIO__AccessKey'
+   secretRef: 'minio-access-key'
     }
-    {
-     name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-              value: appInsights.properties.ConnectionString
-        }
-          ]
-   probes: [
             {
-     type: 'Liveness'
-          httpGet: {
-    path: '/health'
-         port: 8080
-              }
-     initialDelaySeconds: 30
-          periodSeconds: 30
+  name: 'MinIO__SecretKey'
+    secretRef: 'minio-secret-key'
         }
+            {
+       name: 'MinIO__BucketName'
+        value: minioBucketName
+          }
+{
+ name: 'MinIO__UseSSL'
+   value: 'true'
+   }
+    // Application Insights
  {
-    type: 'Readiness'
-  httpGet: {
-    path: '/health'
-          port: 8080
-     }
-       initialDelaySeconds: 10
-   periodSeconds: 10
+  name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+     value: appInsights.properties.ConnectionString
             }
-    ]
-      }
-  ]
+          ]
+probes: [
+            {
+   type: 'Liveness'
+       httpGet: {
+     path: '/health'
+             port: 8080
+     }
+        initialDelaySeconds: 30
+              periodSeconds: 30
+       timeoutSeconds: 10
+              failureThreshold: 3
+            }
+            {
+      type: 'Readiness'
+     httpGet: {
+path: '/health'
+      port: 8080
+       }
+       initialDelaySeconds: 10
+    periodSeconds: 10
+  timeoutSeconds: 5
+     failureThreshold: 3
+            }
+          ]
+        }
+      ]
       scale: {
         minReplicas: minReplicas
-        maxReplicas: maxReplicas
+      maxReplicas: maxReplicas
         rules: [
-          {
-       name: 'http-scaling'
-       http: {
-  metadata: {
-                concurrentRequests: '50'
-    }
-     }
+    {
+    name: 'http-scaling'
+ http: {
+   metadata: {
+             concurrentRequests: '50'
        }
-    ]
+            }
+    }
+      ]
       }
     }
   }
@@ -364,8 +310,10 @@ username: containerRegistry.listCredentials().username
 // Outputs
 // ============================================
 output containerAppUrl string = 'https://${containerApp.properties.configuration.ingress.fqdn}'
-output cosmosDbConnectionString string = cosmosDbAccount.listConnectionStrings().connectionStrings[0].connectionString
-output storageAccountName string = storageAccount.name
+output containerAppName string = containerApp.name
 output containerRegistryLoginServer string = containerRegistry.properties.loginServer
+output containerRegistryName string = containerRegistry.name
 output appInsightsInstrumentationKey string = appInsights.properties.InstrumentationKey
+output appInsightsConnectionString string = appInsights.properties.ConnectionString
 output resourceGroupName string = resourceGroup().name
+output logAnalyticsWorkspaceId string = logAnalytics.id

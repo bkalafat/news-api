@@ -2,39 +2,73 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-"environmentName": {
+    "environmentName": {
       "value": "prod"
     },
     "appName": {
       "value": "newsapi"
- },
+    },
     "containerImage": {
       "value": "newsapi:latest"
     },
     "jwtSecretKey": {
       "reference": {
         "keyVault": {
-      "id": "/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.KeyVault/vaults/{vault-name}"
+          "id": "/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.KeyVault/vaults/{vault-name}"
         },
         "secretName": "jwt-secret-key"
       }
     },
-    "mongoAdminUsername": {
-    "value": "newsapiadmin"
- },
-    "mongoAdminPassword": {
+    "mongoConnectionString": {
       "reference": {
         "keyVault": {
           "id": "/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.KeyVault/vaults/{vault-name}"
- },
-        "secretName": "mongo-admin-password"
+        },
+        "secretName": "mongo-connection-string"
       }
+    },
+    "mongoDatabaseName": {
+      "value": "NewsDb"
+    },
+    "minioEndpoint": {
+      "value": "minio.production.yourdomain.com:9000"
+    },
+    "minioAccessKey": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.KeyVault/vaults/{vault-name}"
+        },
+        "secretName": "minio-access-key"
+      }
+    },
+    "minioSecretKey": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.KeyVault/vaults/{vault-name}"
+        },
+        "secretName": "minio-secret-key"
+      }
+    },
+    "minioBucketName": {
+      "value": "news-images"
+    },
+    "jwtIssuer": {
+      "value": "https://api.yourdomain.com"
+    },
+    "jwtAudience": {
+      "value": "https://yourdomain.com"
     },
     "minReplicas": {
       "value": 2
     },
     "maxReplicas": {
       "value": 10
+    },
+    "containerCpu": {
+      "value": "1.0"
+    },
+    "containerMemory": {
+      "value": "2Gi"
     }
   }
 }

@@ -1,5 +1,5 @@
 {
-"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "environmentName": {
@@ -12,19 +12,43 @@
       "value": "newsapi:latest"
     },
     "jwtSecretKey": {
-   "value": "REPLACE_WITH_SECURE_KEY_MIN_32_CHARS"
+      "value": "REPLACE_WITH_YOUR_JWT_SECRET_KEY_MIN_32_CHARS"
     },
-    "mongoAdminUsername": {
-      "value": "newsapiadmin"
- },
-    "mongoAdminPassword": {
-"value": "REPLACE_WITH_SECURE_PASSWORD"
+    "mongoConnectionString": {
+      "value": "mongodb://your-mongodb-server:27017/NewsDb?authSource=admin"
+    },
+    "mongoDatabaseName": {
+      "value": "NewsDb"
+    },
+    "minioEndpoint": {
+      "value": "minio.yourdomain.com:9000"
+    },
+    "minioAccessKey": {
+      "value": "REPLACE_WITH_MINIO_ACCESS_KEY"
+    },
+    "minioSecretKey": {
+      "value": "REPLACE_WITH_MINIO_SECRET_KEY"
+    },
+    "minioBucketName": {
+      "value": "news-images"
+    },
+    "jwtIssuer": {
+      "value": ""
+    },
+    "jwtAudience": {
+      "value": ""
     },
     "minReplicas": {
       "value": 1
     },
     "maxReplicas": {
       "value": 3
+    },
+    "containerCpu": {
+      "value": "0.5"
+    },
+    "containerMemory": {
+      "value": "1Gi"
     }
   }
 }
