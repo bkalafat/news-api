@@ -41,11 +41,11 @@ builder.Services.AddSwaggerGen(options =>
 // Add custom application services
 builder.Services.AddApplicationServices(builder.Configuration);
 
-// Add response caching for optimization
+// Add response caching for optimization (30 minutes to minimize backend load)
 builder.Services.AddResponseCaching();
 builder.Services.AddOutputCache(options =>
 {
-    options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromMinutes(5)));
+    options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromMinutes(30)));
 });
 
 // Add JWT authentication

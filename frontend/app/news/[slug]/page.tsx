@@ -18,18 +18,19 @@ import { Footer } from "@/components/layout/footer";
 // Static generation with periodic revalidation
 export const revalidate = 21600; // 6 hours
 
-// Generate static params for top news articles at build time
+// Generate static params for top 200 news articles at build time (maximize free Azure static hosting)
 export async function generateStaticParams() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-    const response = await fetch(`${apiUrl}/api/NewsArticle?pageSize=100`, {
+    const response = await fetch(`${apiUrl}/api/NewsArticle?pageSize=200`, {
       next: { revalidate: 86400 } // Cache for 24 hours
     });
     
     if (!response.ok) return [];
     
     const news: News[] = await response.json();
-    return news.slice(0, 50).map((item) => ({
+    // Generate static pages for all 200 articles at build time
+    return news.map((item) => ({
       slug: item.slug,
     }));
   } catch (error) {

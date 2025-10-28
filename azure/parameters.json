@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "westeurope"
+    },
+    "projectName": {
+      "value": "newsportal"
+    },
+    "repositoryUrl": {
+      "value": "https://github.com/bkalafat/newsportal"
+    },
+    "branch": {
+      "value": "master"
+    },
+    "mongoDbConnectionString": {
+      "value": "mongodb+srv://bkalafat:dbuserpassword123@cluster0.xwbfl1o.mongodb.net/NewsDb"
+    },
+    "minioEndpoint": {
+      "value": "7ac015923324a4d426c1f7782c3f41e1.r2.cloudflarestorage.com"
+    },
+    "minioAccessKey": {
+      "value": "cc61a30e775100a198836d97dbce0d79"
+    },
+    "minioSecretKey": {
+      "reference": {
+        "keyVault": {
+          "id": "WILL_BE_UPDATED_AFTER_KEYVAULT_CREATION"
+        },
+        "secretName": "cloudflare-r2-secret-key"
+      }
+    },
+    "unsplashAccessKey": {
+      "value": "ATK1ZDXPJKfdlYpm10AY1QNTvjzN4GymqQdH3JRP3qdU"
+    },
+    "jwtSecretKey": {
+      "reference": {
+        "keyVault": {
+          "id": "WILL_BE_UPDATED_AFTER_KEYVAULT_CREATION"
+        },
+        "secretName": "jwt-secret-key"
+      }
+    }
+  }
+}

@@ -1,39 +1,42 @@
-name: Keep Backend Alive
+name: Keep Backend Alive (Azure Container Apps)
 
 on:
   schedule:
-    # Hafta içi: Her 12 dakikada bir (08:00-22:00 TR saati)
-    # Weekend: Sadece gündüz (10:00-20:00 TR saati)
-    # Render 15 dk timeout - 12 dk yeterli, kredi tasarrufu
-    - cron: '5,17,29,41,53 5-19 * * 1-5'  # Weekdays 08:00-22:00 TR
-    - cron: '5,17,29,41,53 7-17 * * 0,6'  # Weekends 10:00-20:00 TR
+    # Azure Container Apps scale-to-zero destekliyor
+    # Sadece haftalık news aggregation öncesi warm-up için çalışsın
+    # Pazartesi sabah 04:00 TR (01:00 UTC) - aggregation'dan 1 saat önce
+    - cron: '0 1 * * 1'  # Weekly Monday 04:00 TR
   
   workflow_dispatch: # Manuel çalıştırma için
 
 jobs:
-  ping-backend:
+  warmup-backend:
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 3
     
     steps:
-      - name: 🏓 Ping backend health endpoint
+      - name: 🔥 Warm up Azure Container App
         run: |
-          echo "Pinging backend at $(date -u)"
+          echo "Warming up backend before weekly aggregation at $(date -u)"
           
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://newsportal-backend.onrender.com/health)
+          # Get backend URL from Azure (will be set as secret)
+          BACKEND_URL="${{ secrets.AZURE_BACKEND_URL }}"
+          
+          # Health check
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://$BACKEND_URL/health)
           
           if [ "$RESPONSE" -eq 200 ]; then
             echo "✅ Backend is healthy (HTTP $RESPONSE)"
           else
             echo "⚠️ Backend returned HTTP $RESPONSE"
-            exit 1
           fi
       
-      - name: 📊 Check API endpoint
+      - name: 📊 Verify API endpoint
         run: |
-          echo "Checking API endpoint..."
+          echo "Verifying API endpoint..."
+          BACKEND_URL="${{ secrets.AZURE_BACKEND_URL }}"
           
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://newsportal-backend.onrender.com/api/NewsArticle)
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://$BACKEND_URL/api/NewsArticle)
           
           if [ "$RESPONSE" -eq 200 ] || [ "$RESPONSE" -eq 401 ]; then
             echo "✅ API is responding (HTTP $RESPONSE)"
@@ -41,8 +44,8 @@ jobs:
             echo "⚠️ API returned HTTP $RESPONSE"
           fi
 
-# Bu workflow her 10 dakikada bir backend'i ping atar
-# Render'ın free tier'ında 15 dakika inaktiviteden sonra sleep modu var
-# Bu workflow sayesinde backend her zaman aktif kalır
-#
-# Not: Public repository'de çalışır, private'da GitHub Actions dakikası tüketir
+# Azure Container Apps Free Tier Benefits:
+# - Scale to zero when idle (saves resources)
+# - 2M requests/month free
+# - Only warm up weekly before news aggregation (99% reduction in keep-alive pings)
+# - Cold start ~2-3 seconds (acceptable for weekly batch job)
