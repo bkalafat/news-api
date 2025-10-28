@@ -42,69 +42,70 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # News Sources Configuration
+# Kategoriler backend ile uyumlu (İngilizce)
 NEWS_SOURCES = {
     # Reddit Sources
     'reddit_technology': {
         'enabled': True,
         'url': 'https://www.reddit.com/r/technology/top.json',
         'params': {'t': 'week', 'limit': 20},
-        'category': 'Teknoloji',
+        'category': 'technology',
         'parser': 'reddit'
     },
     'reddit_programming': {
         'enabled': True,
         'url': 'https://www.reddit.com/r/programming/top.json',
         'params': {'t': 'week', 'limit': 15},
-        'category': 'Programlama',
+        'category': 'technology',
         'parser': 'reddit'
     },
     'reddit_artificial': {
         'enabled': True,
         'url': 'https://www.reddit.com/r/artificial/top.json',
         'params': {'t': 'week', 'limit': 15},
-        'category': 'Yapay Zeka',
+        'category': 'technology',
         'parser': 'reddit'
     },
     'reddit_localllama': {
         'enabled': True,
         'url': 'https://www.reddit.com/r/LocalLLaMA/top.json',
         'params': {'t': 'week', 'limit': 15},
-        'category': 'Yapay Zeka',
+        'category': 'technology',
         'parser': 'reddit'
     },
     'reddit_robotics': {
         'enabled': True,
         'url': 'https://www.reddit.com/r/robotics/top.json',
         'params': {'t': 'week', 'limit': 15},
-        'category': 'Robotik',
+        'category': 'science',
         'parser': 'reddit'
     },
     'reddit_github': {
         'enabled': True,
         'url': 'https://www.reddit.com/r/github/top.json',
         'params': {'t': 'week', 'limit': 10},
-        'category': 'Yazılım',
+        'category': 'technology',
         'parser': 'reddit'
     },
     'reddit_androidapps': {
         'enabled': True,
         'url': 'https://www.reddit.com/r/Android/top.json',
         'params': {'t': 'week', 'limit': 10},
-        'category': 'Mobil',
+        'category': 'technology',
         'parser': 'reddit'
     },
     'reddit_iphone': {
         'enabled': True,
         'url': 'https://www.reddit.com/r/iphone/top.json',
         'params': {'t': 'week', 'limit': 10},
-        'category': 'Mobil',
+        'category': 'technology',
         'parser': 'reddit'
     },
     'reddit_turkey': {
         'enabled': True,
         'url': 'https://www.reddit.com/r/Turkey/top.json',
         'params': {'t': 'week', 'limit': 10},
-        'category': 'Türkiye',
+        'category': 'world',
         'parser': 'reddit'
     },
     
@@ -118,7 +119,7 @@ NEWS_SOURCES = {
             'order': 'desc',
             'per_page': 15
         },
-        'category': 'Yazılım',
+        'category': 'technology',
         'parser': 'github'
     },
     
@@ -127,7 +128,7 @@ NEWS_SOURCES = {
         'enabled': True,
         'url': 'https://hacker-news.firebaseio.com/v0/topstories.json',
         'limit': 20,
-        'category': 'Teknoloji',
+        'category': 'technology',
         'parser': 'hackernews'
     },
     
@@ -135,13 +136,13 @@ NEWS_SOURCES = {
     'webrazzi': {
         'enabled': True,
         'url': 'https://webrazzi.com/feed/',
-        'category': 'Türkiye Teknoloji',
+        'category': 'business',
         'parser': 'rss'
     },
     'shiftdelete': {
         'enabled': True,
         'url': 'https://shiftdelete.net/feed',
-        'category': 'Teknoloji',
+        'category': 'technology',
         'parser': 'rss'
     }
 }
@@ -269,7 +270,7 @@ def parse_hackernews_story(story_id: int) -> Optional[Dict]:
                 'url': story.get('url', f"https://news.ycombinator.com/item?id={story_id}"),
                 'image_url': None,
                 'score': story.get('score', 0),
-                'category': 'Teknoloji'
+                'category': 'technology'
             }
     except:
         pass

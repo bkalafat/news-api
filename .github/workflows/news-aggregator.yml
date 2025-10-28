@@ -1,9 +1,10 @@
-name: Daily News Aggregation
+name: Weekly News Aggregation
 
 on:
   schedule:
-    # Her gün saat 02:00 UTC (Türkiye saati 05:00 - UTC+3)
-    - cron: '0 2 * * *'
+    # Her Pazartesi saat 02:00 UTC (Türkiye saati 05:00 - UTC+3)
+    # Haftada 1 kez - kredi tasarrufu için
+    - cron: '0 2 * * 1'
   
   # Manuel çalıştırma için
   workflow_dispatch:
