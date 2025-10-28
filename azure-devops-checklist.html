@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure DevOps Deployment Checklist - News API</title>
+    <style>
+        body {
+       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+          margin: 0 auto;
+            padding: 20px;
+        background: #f5f5f5;
+        }
+        .header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   color: white;
+            padding: 30px;
+            border-radius: 10px;
+    margin-bottom: 30px;
+}
+        .section {
+            background: white;
+      padding: 25px;
+       margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .step {
+            margin-bottom: 30px;
+            padding: 20px;
+        background: #f9f9f9;
+   border-left: 4px solid #667eea;
+      border-radius: 5px;
+   }
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+   border-radius: 50%;
+            display: inline-flex;
+       align-items: center;
+    justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+     margin-right: 15px;
+     }
+        .step-title {
+  font-size: 20px;
+  font-weight: bold;
+     margin-bottom: 15px;
+    display: flex;
+            align-items: center;
+        }
+        .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+          padding: 15px;
+     border-radius: 5px;
+          overflow-x: auto;
+            margin: 10px 0;
+        font-family: 'Courier New', monospace;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+      padding: 15px;
+            margin: 15px 0;
+       border-radius: 5px;
+        }
+        .success {
+        background: #d4edda;
+  border-left: 4px solid #28a745;
+            padding: 15px;
+   margin: 15px 0;
+     border-radius: 5px;
+        }
+        .info {
+            background: #d1ecf1;
+    border-left: 4px solid #17a2b8;
+      padding: 15px;
+     margin: 15px 0;
+            border-radius: 5px;
+        }
+ .checkbox {
+    margin: 10px 0;
+       font-size: 16px;
+        }
+   input[type="checkbox"] {
+ width: 20px;
+            height: 20px;
+ margin-right: 10px;
+            cursor: pointer;
+        }
+  .variable-table {
+            width: 100%;
+  border-collapse: collapse;
+    margin: 15px 0;
+  }
+        .variable-table th,
+  .variable-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+     text-align: left;
+  }
+        .variable-table th {
+            background: #667eea;
+            color: white;
+        }
+        .variable-table tr:nth-child(even) {
+       background: #f9f9f9;
+        }
+        .secret-badge {
+        background: #dc3545;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+font-size: 12px;
+        }
+        .btn {
+    display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+     color: white;
+  text-decoration: none;
+            border-radius: 5px;
+    margin: 10px 5px;
+            font-weight: bold;
+        }
+        .btn:hover {
+     background: #5568d3;
+     }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Azure DevOps Deployment Checklist</h1>
+        <p>News API - Backend API Deployment Guide</p>
+    </div>
+
+    <div class="section">
+        <h2>📋 Ön Hazırlık</h2>
+  <div class="checkbox">
+         <input type="checkbox" id="check-azure"> <label for="check-azure">Azure hesabım hazır</label>
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" id="check-azuredevops"> <label for="check-azuredevops">Azure DevOps hesabım hazır (ücretsiz)</label>
+    </div>
+        <div class="checkbox">
+        <input type="checkbox" id="check-mongodb"> <label for="check-mongodb">MongoDB sunucum hazır ve connection string elimde</label>
+        </div>
+        <div class="checkbox">
+  <input type="checkbox" id="check-minio"> <label for="check-minio">MinIO sunucum hazır ve credentials elimde</label>
+   </div>
+    </div>
+
+    <div class="section">
+        <div class="step">
+            <div class="step-title">
+   <span class="step-number">1</span>
+                Azure Container Registry Oluştur
+        </div>
+  
+            <p>PowerShell'de çalıştırın:</p>
+
+         <div class="code-block">
+# Azure'a login<br>
+az login<br>
+<br>
+# Resource Group oluştur<br>
+az group create --name newsapi-infrastructure-rg --location eastus<br>
+<br>
+# ACR adı oluştur (benzersiz olmalı)<br>
+$AcrName = "newsapi" + (Get-Random -Minimum 1000 -Maximum 9999) + "acr"<br>
+Write-Host "✅ ACR Name: $AcrName" -ForegroundColor Green<br>
+<br>
+# ACR oluştur<br>
+az acr create `<br>
+&nbsp;&nbsp;&nbsp;&nbsp;--resource-group newsapi-infrastructure-rg `<br>
+&nbsp;&nbsp;&nbsp;&nbsp;--name $AcrName `<br>
+&nbsp;&nbsp;&nbsp;&nbsp;--sku Basic `<br>
+&nbsp;&nbsp;&nbsp;&nbsp;--admin-enabled true<br>
+<br>
+# ACR bilgilerini göster<br>
+Write-Host "============================================" -ForegroundColor Cyan<br>
+Write-Host "ACR Name: $AcrName" -ForegroundColor Yellow<br>
+Write-Host "ACR Server: $AcrName.azurecr.io" -ForegroundColor Yellow<br>
+Write-Host "============================================" -ForegroundColor Cyan<br>
+<br>
+# BU ADIYI KAYDET! azure-pipelines.yml dosyasında kullanacaksınız
+          </div>
+
+            <div class="warning">
+         <strong>⚠️ ÖNEMLİ:</strong> ACR adını (örn: newsapi1234acr) bir yere kaydedin!
+     </div>
+
+            <div class="checkbox">
+             <input type="checkbox" id="step1"> <label for="step1">ACR oluşturuldu ve adı kaydedildi</label>
+    </div>
+        </div>
+
+        <div class="step">
+          <div class="step-title">
+ <span class="step-number">2</span>
+       Service Principal Oluştur
+     </div>
+
+    <div class="code-block">
+# Service Principal oluştur<br>
+$SubscriptionId = az account show --query id -o tsv<br>
+$SpName = "newsapi-devops-sp-" + (Get-Random -Minimum 1000 -Maximum 9999)<br>
+<br>
+az ad sp create-for-rbac `<br>
+&nbsp;&nbsp;&nbsp;&nbsp;--name $SpName `<br>
+&nbsp;&nbsp;&nbsp;&nbsp;--role contributor `<br>
+&nbsp;&nbsp;&nbsp;&nbsp;--scopes "/subscriptions/$SubscriptionId" `<br>
+&nbsp;&nbsp;&nbsp;&nbsp;--sdk-auth
+            </div>
+
+     <div class="warning">
+       <strong>⚠️ ÇIKAN JSON'U KAYDET!</strong> Azure DevOps Service Connection için gerekli. Örnek:
+          <div class="code-block">
+{<br>
+&nbsp;&nbsp;"clientId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",<br>
+&nbsp;&nbsp;"clientSecret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",<br>
+&nbsp;&nbsp;"subscriptionId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",<br>
+&nbsp;&nbsp;"tenantId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"<br>
+}
+       </div>
+            </div>
+
+     <div class="checkbox">
+     <input type="checkbox" id="step2"> <label for="step2">Service Principal oluşturuldu ve JSON kaydedildi</label>
+ </div>
+ </div>
+
+        <div class="step">
+      <div class="step-title">
+          <span class="step-number">3</span>
+azure-pipelines.yml Dosyasını Güncelle
+       </div>
+
+            <p>azure-pipelines.yml dosyasını açın ve ACR adını güncelleyin:</p>
+
+      <div class="code-block">
+variables:<br>
+&nbsp;&nbsp;acrName: 'BURAYA_ACR_ADINIZI_YAZIN'  # Örnek: newsapi1234acr
+    </div>
+
+   <div class="checkbox">
+         <input type="checkbox" id="step3"> <label for="step3">azure-pipelines.yml güncellendi</label>
+   </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+ <span class="step-number">4</span>
+                Değişiklikleri Commit Et
+    </div>
+
+  <div class="code-block">
+git add azure-pipelines.yml<br>
+git commit -m "Configure Azure DevOps with ACR"<br>
+git push origin master
+    </div>
+
+            <div class="checkbox">
+     <input type="checkbox" id="step4"> <label for="step4">Değişiklikler commit edildi</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>☁️ Azure DevOps Kurulumu</h2>
+
+        <div class="step">
+         <div class="step-title">
+                <span class="step-number">5</span>
+     Repo'yu Azure DevOps'a Aktar
+ </div>
+
+            <p><strong>Seçenek A: Import (Önerilen)</strong></p>
+            <ol>
+         <li>Azure DevOps projenizi açın: <code>https://dev.azure.com/{organization}/{project}</code></li>
+<li>Sol menüden <strong>Repos</strong> → <strong>Files</strong> tıklayın</li>
+       <li>Üstte <strong>Import repository</strong> tıklayın</li>
+ <li>Clone URL: <code>https://github.com/bkalafat/newsportal.git</code></li>
+     <li><strong>Import</strong> tıklayın</li>
+            </ol>
+
+            <div class="info">
+     <strong>ℹ️ Not:</strong> Import işlemi 1-2 dakika sürebilir.
+ </div>
+
+        <div class="checkbox">
+          <input type="checkbox" id="step5"> <label for="step5">Repo Azure DevOps'a aktarıldı</label>
+  </div>
+        </div>
+
+ <div class="step">
+    <div class="step-title">
+     <span class="step-number">6</span>
+          Service Connection Oluştur
+        </div>
+
+          <ol>
+                <li><strong>Project Settings</strong> (sol alt) → <strong>Service connections</strong></li>
+       <li><strong>New service connection</strong> → <strong>Azure Resource Manager</strong></li>
+     <li><strong>Service principal (manual)</strong> seçin</li>
+           <li>Adım 2'de kaydettiğiniz JSON bilgilerini girin:
+        <ul>
+   <li>Subscription ID → <code>subscriptionId</code></li>
+         <li>Service Principal ID → <code>clientId</code></li>
+             <li>Service principal key → <code>clientSecret</code></li>
+    <li>Tenant ID → <code>tenantId</code></li>
+</ul>
+      </li>
+ <li><strong>Service connection name:</strong> <code>Azure-ServiceConnection</code></li>
+            <li>✅ <strong>Grant access permission to all pipelines</strong> işaretleyin</li>
+    <li><strong>Verify and save</strong></li>
+        </ol>
+
+       <div class="warning">
+                <strong>⚠️ ÖNEMLİ:</strong> Service connection adı tam olarak <code>Azure-ServiceConnection</code> olmalı!
+     </div>
+
+ <div class="checkbox">
+     <input type="checkbox" id="step6"> <label for="step6">Service Connection oluşturuldu</label>
+         </div>
+ </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">7</span>
+    Variable Groups Oluştur
+            </div>
+
+            <p><strong>Pipelines</strong> → <strong>Library</strong> → <strong>+ Variable group</strong></p>
+
+            <h3>Group 1: newsapi-dev-secrets</h3>
+          <table class="variable-table">
+        <thead>
+ <tr>
+   <th>Variable Name</th>
+   <th>Örnek Value</th>
+     <th>Secret</th>
+        </tr>
+      </thead>
+     <tbody>
+      <tr>
+        <td>JWT_SECRET_KEY</td>
+              <td>your-super-secret-key-min-32-chars</td>
+ <td><span class="secret-badge">🔒 Yes</span></td>
+                 </tr>
+         <tr>
+      <td>MONGO_CONNECTION_STRING</td>
+            <td>mongodb://user:pass@host:27017/NewsDb?authSource=admin</td>
+         <td><span class="secret-badge">🔒 Yes</span></td>
+       </tr>
+          <tr>
+      <td>MONGO_DATABASE_NAME</td>
+         <td>NewsDb</td>
+   <td>No</td>
+               </tr>
+       <tr>
+       <td>MINIO_ENDPOINT</td>
+         <td>minio.yourdomain.com:9000</td>
+         <td>No</td>
+     </tr>
+          <tr>
+          <td>MINIO_ACCESS_KEY</td>
+      <td>minioadmin</td>
+             <td><span class="secret-badge">🔒 Yes</span></td>
+     </tr>
+           <tr>
+      <td>MINIO_SECRET_KEY</td>
+        <td>minioadmin123</td>
+ <td><span class="secret-badge">🔒 Yes</span></td>
+        </tr>
+        <tr>
+        <td>MINIO_BUCKET_NAME</td>
+          <td>news-images</td>
+      <td>No</td>
+     </tr>
+              </tbody>
+     </table>
+
+         <h3>Group 2: newsapi-prod-secrets</h3>
+      <p>Yukarıdaki tüm değişkenler + ek olarak:</p>
+          <table class="variable-table">
+             <thead>
+  <tr>
+      <th>Variable Name</th>
+    <th>Örnek Value</th>
+   <th>Secret</th>
+     </tr>
+         </thead>
+       <tbody>
+       <tr>
+         <td>JWT_ISSUER</td>
+      <td>https://api.yourdomain.com</td>
+         <td>No</td>
+   </tr>
+       <tr>
+ <td>JWT_AUDIENCE</td>
+            <td>https://yourdomain.com</td>
+                 <td>No</td>
+    </tr>
+         </tbody>
+    </table>
+
+ <div class="info">
+    <strong>ℹ️ MongoDB Connection String Örnekleri:</strong>
+     <ul>
+         <li>Local: <code>mongodb://admin:password@host.docker.internal:27017/NewsDb?authSource=admin</code></li>
+    <li>Remote: <code>mongodb://user:pass@mongodb.example.com:27017/NewsDb?authSource=admin</code></li>
+        <li>Atlas: <code>mongodb+srv://user:pass@cluster.mongodb.net/NewsDb?retryWrites=true</code></li>
+     </ul>
+  </div>
+
+            <div class="checkbox">
+                <input type="checkbox" id="step7a"> <label for="step7a">newsapi-dev-secrets oluşturuldu</label>
+  </div>
+    <div class="checkbox">
+                <input type="checkbox" id="step7b"> <label for="step7b">newsapi-prod-secrets oluşturuldu</label>
+            </div>
+        </div>
+
+      <div class="step">
+            <div class="step-title">
+           <span class="step-number">8</span>
+    Environments Oluştur
+         </div>
+
+            <p><strong>Pipelines</strong> → <strong>Environments</strong> → <strong>New environment</strong></p>
+
+            <ol>
+             <li>Name: <code>development</code>, Resource: <strong>None</strong></li>
+   <li>Name: <code>production</code>, Resource: <strong>None</strong>
+           <ul>
+  <li>Production için: ⚙️ → <strong>Approvals and checks</strong> → <strong>Approvals</strong> ekleyebilirsiniz</li>
+   </ul>
+  </li>
+            </ol>
+
+            <div class="checkbox">
+      <input type="checkbox" id="step8"> <label for="step8">Environments oluşturuldu</label>
+       </div>
+      </div>
+
+        <div class="step">
+          <div class="step-title">
+                <span class="step-number">9</span>
+   Pipeline Oluştur ve Çalıştır
+            </div>
+
+            <ol>
+        <li><strong>Pipelines</strong> → <strong>New pipeline</strong></li>
+          <li><strong>Azure Repos Git</strong> seçin</li>
+   <li>Repository seçin (newsapi veya newsportal)</li>
+       <li><strong>Existing Azure Pipelines YAML file</strong></li>
+            <li>Path: <code>/azure-pipelines.yml</code> seçin</li>
+          <li><strong>Continue</strong> → <strong>Run</strong></li>
+       </ol>
+
+   <div class="success">
+ <strong>✅ İlk build başladı!</strong> Pipeline logs'u izleyin. İlk deployment 8-12 dakika sürebilir.
+            </div>
+
+      <div class="checkbox">
+  <input type="checkbox" id="step9"> <label for="step9">Pipeline oluşturuldu ve çalıştırıldı</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+   <h2>🚀 Deployment</h2>
+
+ <div class="step">
+            <div class="step-title">
+    <span class="step-number">10</span>
+      Development'a Deploy
+         </div>
+
+      <div class="code-block">
+git checkout develop<br>
+git push azuredevops develop
+         </div>
+
+       <p>Pipeline otomatik olarak:</p>
+<ul>
+     <li>✅ Docker image build eder</li>
+    <li>✅ ACR'ye push eder</li>
+     <li>✅ Dev environment'a deploy eder</li>
+     <li>✅ Health check yapar</li>
+          </ul>
+
+        <div class="checkbox">
+  <input type="checkbox" id="step10"> <label for="step10">Development'a deploy edildi</label>
+            </div>
+  </div>
+
+        <div class="step">
+         <div class="step-title">
+         <span class="step-number">11</span>
+  Production'a Deploy
+      </div>
+
+            <div class="code-block">
+git checkout master<br>
+git merge develop<br>
+git push azuredevops master
+   </div>
+
+            <p>Pipeline otomatik olarak:</p>
+            <ul>
+      <li>✅ Docker image build eder</li>
+       <li>✅ ACR'ye push eder</li>
+         <li>⏸️ Approval bekler (eğer eklediyseniz)</li>
+             <li>✅ Production'a deploy eder</li>
+         <li>✅ Health check yapar</li>
+    </ul>
+
+  <div class="checkbox">
+              <input type="checkbox" id="step11"> <label for="step11">Production'a deploy edildi</label>
+        </div>
+   </div>
+    </div>
+
+    <div class="section">
+        <h2>✅ Test</h2>
+
+        <p>Pipeline başarıyla tamamlandıktan sonra:</p>
+
+        <div class="code-block">
+# Application URL (pipeline output'tan alın)<br>
+https://newsapi-dev-app.eastus.azurecontainerapps.io<br>
+<br>
+# Health check<br>
+curl https://newsapi-dev-app.eastus.azurecontainerapps.io/health<br>
+<br>
+# Swagger UI<br>
+https://newsapi-dev-app.eastus.azurecontainerapps.io/swagger
+        </div>
+
+     <a href="#" class="btn">🔗 Swagger UI'ı Aç</a>
+        <a href="#" class="btn">📊 Azure Portal</a>
+        <a href="#" class="btn">🔍 Pipeline Logs</a>
+    </div>
+
+    <div class="section">
+        <h2>🎉 Tebrikler!</h2>
+        <p>News API başarıyla Azure'a deploy edildi! 🚀</p>
+        
+        <div class="success">
+     <strong>Bundan sonra:</strong>
+            <ul>
+                <li>Her <code>develop</code> push'u → Otomatik dev deployment</li>
+<li>Her <code>master</code> push'u → Otomatik production deployment</li>
+      <li>Monitoring: Azure Portal → Application Insights</li>
+        <li>Logs: Azure Portal → Container App → Logs</li>
+    </ul>
+        </div>
+    </div>
+
+    <script>
+        // Save checkbox states to localStorage
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+localStorage.setItem(this.id, this.checked);
+        });
+    
+          // Load saved state
+          if (localStorage.getItem(checkbox.id) === 'true') {
+         checkbox.checked = true;
+   }
+        });
+    </script>
+</body>
+</html>

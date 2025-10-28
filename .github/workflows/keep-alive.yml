@@ -1,0 +1,48 @@
+name: Keep Backend Alive
+
+on:
+  schedule:
+    # Hafta içi: Her 12 dakikada bir (08:00-22:00 TR saati)
+    # Weekend: Sadece gündüz (10:00-20:00 TR saati)
+    # Render 15 dk timeout - 12 dk yeterli, kredi tasarrufu
+    - cron: '5,17,29,41,53 5-19 * * 1-5'  # Weekdays 08:00-22:00 TR
+    - cron: '5,17,29,41,53 7-17 * * 0,6'  # Weekends 10:00-20:00 TR
+  
+  workflow_dispatch: # Manuel çalıştırma için
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    
+    steps:
+      - name: 🏓 Ping backend health endpoint
+        run: |
+          echo "Pinging backend at $(date -u)"
+          
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://newsportal-backend.onrender.com/health)
+          
+          if [ "$RESPONSE" -eq 200 ]; then
+            echo "✅ Backend is healthy (HTTP $RESPONSE)"
+          else
+            echo "⚠️ Backend returned HTTP $RESPONSE"
+            exit 1
+          fi
+      
+      - name: 📊 Check API endpoint
+        run: |
+          echo "Checking API endpoint..."
+          
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://newsportal-backend.onrender.com/api/NewsArticle)
+          
+          if [ "$RESPONSE" -eq 200 ] || [ "$RESPONSE" -eq 401 ]; then
+            echo "✅ API is responding (HTTP $RESPONSE)"
+          else
+            echo "⚠️ API returned HTTP $RESPONSE"
+          fi
+
+# Bu workflow her 10 dakikada bir backend'i ping atar
+# Render'ın free tier'ında 15 dakika inaktiviteden sonra sleep modu var
+# Bu workflow sayesinde backend her zaman aktif kalır
+#
+# Not: Public repository'de çalışır, private'da GitHub Actions dakikası tüketir

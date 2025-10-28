@@ -41,6 +41,13 @@ builder.Services.AddSwaggerGen(options =>
 // Add custom application services
 builder.Services.AddApplicationServices(builder.Configuration);
 
+// Add response caching for optimization
+builder.Services.AddResponseCaching();
+builder.Services.AddOutputCache(options =>
+{
+    options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromMinutes(5)));
+});
+
 // Add JWT authentication
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
@@ -73,6 +80,10 @@ app.UseMiddleware<SecurityHeadersMiddleware>();
 
 // CORS (before authentication)
 app.UseCors("AllowSpecificOrigins");
+
+// Response caching
+app.UseResponseCaching();
+app.UseOutputCache();
 
 // Authentication & Authorization
 app.UseAuthentication();

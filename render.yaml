@@ -7,7 +7,7 @@ services:
     dockerContext: .
     region: frankfurt  # EU region (Türkiye'ye yakın)
     plan: free
-    branch: main
+    branch: master
     healthCheckPath: /health
     autoDeploy: true
     
@@ -20,9 +20,11 @@ services:
       
       # MongoDB
       - key: MongoDbSettings__ConnectionString
-        sync: false  # Render dashboard'dan manuel eklenecek
+        value: mongodb+srv://bkalafat:dbuserpassword123@cluster0.xwbfl1o.mongodb.net/NewsDb?retryWrites=true&w=majority
       - key: MongoDbSettings__DatabaseName
         value: NewsDb
+      - key: MongoDbSettings__NewsCollectionName
+        value: News
       
       # JWT
       - key: JwtSettings__SecretKey
@@ -35,16 +37,16 @@ services:
         value: 60
       
       # Cloudflare R2 (MinIO yerine)
-      - key: R2Settings__Endpoint
+      - key: MinioSettings__Endpoint
+        value: 7ac015923324a4d426c1f7782c3f41e1.r2.cloudflarestorage.com
+      - key: MinioSettings__AccessKey
+        value: cc61a30e775100a198836d97dbce0d79
+      - key: MinioSettings__SecretKey
         sync: false  # Render dashboard'dan eklenecek
-      - key: R2Settings__AccessKey
-        sync: false
-      - key: R2Settings__SecretKey
-        sync: false
-      - key: R2Settings__BucketName
+      - key: MinioSettings__BucketName
         value: news-images
-      - key: R2Settings__Region
-        value: auto
+      - key: MinioSettings__UseSSL
+        value: "true"
       
       # CORS
       - key: AllowedOrigins
