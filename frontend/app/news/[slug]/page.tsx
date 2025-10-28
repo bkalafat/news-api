@@ -14,6 +14,30 @@ import { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 
+// ISR: Revalidate every 6 hours for news detail pages
+// Static generation with periodic revalidation
+export const revalidate = 21600; // 6 hours
+
+// Generate static params for top news articles at build time
+export async function generateStaticParams() {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${apiUrl}/api/NewsArticle?pageSize=100`, {
+      next: { revalidate: 86400 } // Cache for 24 hours
+    });
+    
+    if (!response.ok) return [];
+    
+    const news: News[] = await response.json();
+    return news.slice(0, 50).map((item) => ({
+      slug: item.slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return [];
+  }
+}
+
 interface News {
   id: string;
   category: string;

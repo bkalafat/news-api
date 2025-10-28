@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   description: 'Tüm haber kategorilerine göz atın',
 };
 
+// ISR: Revalidate every 24 hours (static content, no frequent changes)
+export const revalidate = 86400; // 24 hours
+
 const categories = [
   {
     id: 'technology',

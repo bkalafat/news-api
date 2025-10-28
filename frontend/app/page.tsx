@@ -4,6 +4,10 @@ import { HeroSection } from "@/components/home/hero-section";
 import { LatestNews } from "@/components/home/latest-news";
 import { CategoriesSection } from "@/components/home/categories-section";
 
+// ISR: Revalidate every 12 hours (43200 seconds)
+// Reduces backend API calls significantly
+export const revalidate = 43200; // 12 hours
+
 export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">

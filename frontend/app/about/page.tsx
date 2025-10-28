@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   description: 'Modern teknoloji haberleri platformu hakkında bilgi edinin',
 };
 
+// ISR: Revalidate every 7 days (static content, rarely changes)
+export const revalidate = 604800; // 7 days
+
 export default function AboutPage() {
   const techStack = [
     'Next.js 16',

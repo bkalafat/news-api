@@ -40,6 +40,44 @@ const nextConfig: NextConfig = {
     // Enable Turbopack filesystem caching for faster dev restarts
     turbopackFileSystemCacheForDev: true,
   },
+
+  /* Aggressive caching for minimum backend load */
+  // Cache static pages for 1 week
+  // Revalidate every 12 hours to get new content
+  staticPageGenerationTimeout: 120,
+  
+  /* Headers for CDN and browser caching */
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=300, stale-while-revalidate=600',
+          },
+        ],
+      },
+      {
+        source: '/_next/image',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);
