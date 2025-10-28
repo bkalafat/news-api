@@ -1,0 +1,77 @@
+# Fly.io deployment configuration for NewsPortal API
+# Free tier: 3 shared-cpu VMs, 3GB total storage
+# Docs: https://fly.io/docs/
+
+app = "newsportal-api"
+primary_region = "fra" # Frankfurt - closest to Turkey
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  ASPNETCORE_ENVIRONMENT = "Production"
+  ASPNETCORE_URLS = "http://+:8080"
+  MongoDbSettings__DatabaseName = "NewsDb"
+  MongoDbSettings__NewsCollectionName = "News"
+  JwtSettings__Issuer = "NewsApi"
+  JwtSettings__Audience = "NewsApiClients"
+  JwtSettings__ExpirationMinutes = "1440"
+  MinioSettings__BucketName = "news-images"
+  MinioSettings__UseSSL = "true"
+  MinioSettings__MaxFileSizeBytes = "10485760"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"  # Free tier: auto-stop when idle
+  auto_start_machines = true
+  min_machines_running = 0     # Save free credits
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "5s"
+
+  [[services.http_checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
+    method = "get"
+    path = "/health"
+    protocol = "http"
+
+[mounts]
+  source = "newsportal_data"
+  destination = "/app/data"
+
+# Secrets (add via: flyctl secrets set KEY=value)
+# MongoDbSettings__ConnectionString
+# JwtSettings__SecretKey
+# MinioSettings__Endpoint
+# MinioSettings__AccessKey
+# MinioSettings__SecretKey
+# AllowedOrigins

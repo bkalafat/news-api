@@ -1,0 +1,30 @@
+{
+"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "dev"
+    },
+    "appName": {
+      "value": "newsapi"
+    },
+    "containerImage": {
+      "value": "newsapi:latest"
+    },
+    "jwtSecretKey": {
+   "value": "REPLACE_WITH_SECURE_KEY_MIN_32_CHARS"
+    },
+    "mongoAdminUsername": {
+      "value": "newsapiadmin"
+ },
+    "mongoAdminPassword": {
+"value": "REPLACE_WITH_SECURE_PASSWORD"
+    },
+    "minReplicas": {
+      "value": 1
+    },
+    "maxReplicas": {
+      "value": 3
+    }
+  }
+}

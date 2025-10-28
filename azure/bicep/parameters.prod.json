@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+"environmentName": {
+      "value": "prod"
+    },
+    "appName": {
+      "value": "newsapi"
+ },
+    "containerImage": {
+      "value": "newsapi:latest"
+    },
+    "jwtSecretKey": {
+      "reference": {
+        "keyVault": {
+      "id": "/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.KeyVault/vaults/{vault-name}"
+        },
+        "secretName": "jwt-secret-key"
+      }
+    },
+    "mongoAdminUsername": {
+    "value": "newsapiadmin"
+ },
+    "mongoAdminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.KeyVault/vaults/{vault-name}"
+ },
+        "secretName": "mongo-admin-password"
+      }
+    },
+    "minReplicas": {
+      "value": 2
+    },
+    "maxReplicas": {
+      "value": 10
+    }
+  }
+}
