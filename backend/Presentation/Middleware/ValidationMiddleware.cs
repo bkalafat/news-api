@@ -36,8 +36,8 @@ public class ValidationMiddleware
         response.StatusCode = (int)HttpStatusCode.BadRequest;
 
         var errors = exception
-            .Errors.GroupBy(x => x.PropertyName)
-            .ToDictionary(g => g.Key, g => g.Select(x => x.ErrorMessage).ToArray());
+            .Errors.GroupBy(error => error.PropertyName)
+            .ToDictionary(errorGroup => errorGroup.Key, errorGroup => errorGroup.Select(error => error.ErrorMessage).ToArray());
 
         var validationResponse = new ValidationErrorResponse { Message = "Validation failed", Errors = errors };
 

@@ -35,7 +35,7 @@ public class NewsArticleControllerTests
             NewsBuilder.Create().WithCategory("Politics").Build(),
         };
 
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(newsList);
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(newsList);
 
         // Act
         var result = await _controller.GetAllNews();
@@ -44,7 +44,7 @@ public class NewsArticleControllerTests
         var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var returnedNews = okResult.Value.Should().BeAssignableTo<List<NewsArticle>>().Subject;
         returnedNews.Should().HaveCount(3);
-        _mockNewsArticleService.Verify(x => x.GetAllNewsAsync(), Times.Once);
+        _mockNewsArticleService.Verify(service => service.GetAllNewsAsync(), Times.Once);
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class NewsArticleControllerTests
             NewsBuilder.Create().WithCategory("Technology").Build(),
         };
 
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(newsList);
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(newsList);
 
         // Act
         var result = await _controller.GetAllNews(category: "Technology");
@@ -67,7 +67,7 @@ public class NewsArticleControllerTests
         var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var returnedNews = okResult.Value.Should().BeAssignableTo<List<NewsArticle>>().Subject;
         returnedNews.Should().HaveCount(2);
-        returnedNews.Should().OnlyContain(n => n.Category == "Technology");
+        returnedNews.Should().OnlyContain(article => article.Category == "Technology");
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public class NewsArticleControllerTests
             NewsBuilder.Create().WithType("Breaking").Build(),
         };
 
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(newsList);
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(newsList);
 
         // Act
         var result = await _controller.GetAllNews(type: "Breaking");
@@ -90,7 +90,7 @@ public class NewsArticleControllerTests
         var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var returnedNews = okResult.Value.Should().BeAssignableTo<List<NewsArticle>>().Subject;
         returnedNews.Should().HaveCount(2);
-        returnedNews.Should().OnlyContain(n => n.Type == "Breaking");
+        returnedNews.Should().OnlyContain(article => article.Type == "Breaking");
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public class NewsArticleControllerTests
             NewsBuilder.Create().WithCategory("Technology").WithType("Article").Build(),
         };
 
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(newsList);
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(newsList);
 
         // Act
         var result = await _controller.GetAllNews(category: "Technology", type: "Breaking");
@@ -121,7 +121,7 @@ public class NewsArticleControllerTests
     public async Task GetAllNews_WhenServiceThrows_ShouldReturn500()
     {
         // Arrange
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ThrowsAsync(new Exception("Database error"));
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ThrowsAsync(new Exception("Database error"));
 
         // Act
         var result = await _controller.GetAllNews();
@@ -135,7 +135,7 @@ public class NewsArticleControllerTests
     public async Task GetAllNews_WithEmptyList_ShouldReturnEmptyList()
     {
         // Arrange
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(new List<NewsArticle>());
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(new List<NewsArticle>());
 
         // Act
         var result = await _controller.GetAllNews();
@@ -157,7 +157,7 @@ public class NewsArticleControllerTests
             NewsBuilder.Create().WithCategory("Sports").Build(),
         };
 
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(newsList);
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(newsList);
 
         // Act
         var result = await _controller.GetAllNews(category: "technology");

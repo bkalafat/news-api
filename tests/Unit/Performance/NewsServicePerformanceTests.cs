@@ -27,7 +27,7 @@ public class NewsArticleServicePerformanceTests
     {
         // Arrange
         var newsList = NewsBuilder.Create().BuildMany(1000);
-        _mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(newsList);
+        _mockRepository.Setup(repo => repo.GetAllAsync()).ReturnsAsync(newsList);
 
         // First call (no cache)
         var stopwatch1 = Stopwatch.StartNew();
@@ -44,7 +44,7 @@ public class NewsArticleServicePerformanceTests
         // Assert - second call should be less than or equal to first call (cache is faster or equal)
         // Due to fast execution, we also verify the repository is only called once
         secondCallTime.Should().BeLessThanOrEqualTo(firstCallTime);
-        _mockRepository.Verify(x => x.GetAllAsync(), Times.Once);
+        _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public class NewsArticleServicePerformanceTests
     {
         // Arrange
         var largeNewsList = NewsBuilder.Create().BuildMany(10000);
-        _mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(largeNewsList);
+        _mockRepository.Setup(repo => repo.GetAllAsync()).ReturnsAsync(largeNewsList);
 
         // Act
         var stopwatch = Stopwatch.StartNew();
@@ -70,7 +70,7 @@ public class NewsArticleServicePerformanceTests
         // Arrange
         var newsId = Guid.NewGuid().ToString();
         var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
-        _mockRepository.Setup(x => x.GetByIdAsync(newsId)).ReturnsAsync(news);
+        _mockRepository.Setup(repo => repo.GetByIdAsync(newsId)).ReturnsAsync(news);
 
         // First call (no cache)
         var stopwatch1 = Stopwatch.StartNew();
@@ -87,14 +87,14 @@ public class NewsArticleServicePerformanceTests
         // Assert - second call should be less than or equal to first call (cache is faster or equal)
         // Due to fast execution, we also verify the repository is only called once
         secondCallTime.Should().BeLessThanOrEqualTo(firstCallTime);
-        _mockRepository.Verify(x => x.GetByIdAsync(newsId), Times.Once);
+        _mockRepository.Verify(repo => repo.GetByIdAsync(newsId), Times.Once);
     }
 
     [Fact]
     public async Task CreateNewsAsync_MultipleConcurrentCalls_ShouldHandleCorrectly()
     {
         // Arrange
-        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<NewsArticle>())).ReturnsAsync((NewsArticle n) => n);
+        _mockRepository.Setup(repo => repo.CreateAsync(It.IsAny<NewsArticle>())).ReturnsAsync((NewsArticle article) => article);
 
         var tasks = new List<Task<NewsArticle>>();
 
@@ -120,7 +120,7 @@ public class NewsArticleServicePerformanceTests
     {
         // Arrange
         var newsList = NewsBuilder.Create().BuildMany(100);
-        _mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(newsList);
+        _mockRepository.Setup(repo => repo.GetAllAsync()).ReturnsAsync(newsList);
 
         // Act - Make 100 calls
         var stopwatch = Stopwatch.StartNew();
@@ -219,7 +219,7 @@ public class NewsArticleServicePerformanceTests
     {
         // Arrange
         var newsList = NewsBuilder.Create().BuildMany(1000);
-        _mockRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(newsList);
+        _mockRepository.Setup(repo => repo.GetAllAsync()).ReturnsAsync(newsList);
 
         var initialMemory = GC.GetTotalMemory(true);
 

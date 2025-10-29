@@ -253,7 +253,7 @@ public class MinioImageStorageService : IImageStorageService
         using var image = Image.Load(imageBytes);
 
         // Resize image maintaining aspect ratio
-        image.Mutate(x => x.Resize(new ResizeOptions { Size = new Size(width, height), Mode = ResizeMode.Max }));
+        image.Mutate(transform => transform.Resize(new ResizeOptions { Size = new Size(width, height), Mode = ResizeMode.Max }));
 
         // Save to memory stream
         using var outputStream = new MemoryStream();

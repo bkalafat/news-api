@@ -44,13 +44,13 @@ public sealed class NewsArticleController(INewsArticleService newsService, IImag
             // Apply filtering if parameters provided
             if (!string.IsNullOrEmpty(category))
             {
-                news = news.FindAll(n => n.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
+                news = news.FindAll(article => article.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
                 Console.WriteLine($"After category filter: {news.Count} items");
             }
 
             if (!string.IsNullOrEmpty(type))
             {
-                news = news.FindAll(n => n.Type.Equals(type, StringComparison.OrdinalIgnoreCase));
+                news = news.FindAll(article => article.Type.Equals(type, StringComparison.OrdinalIgnoreCase));
                 Console.WriteLine($"After type filter: {news.Count} items");
             }
 

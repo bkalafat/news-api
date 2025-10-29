@@ -17,8 +17,8 @@ public sealed class NewsArticleRepository(MongoDbContext context) : INewsArticle
 
     public async Task<List<NewsArticle>> GetAllAsync() =>
         await _newsCollection
-            .Find(news => news.IsActive)
-            .SortByDescending(news => news.ExpressDate)
+            .Find(article => article.IsActive)
+            .SortByDescending(article => article.ExpressDate)
             .ToListAsync()
             .ConfigureAwait(false);
 
@@ -32,7 +32,7 @@ public sealed class NewsArticleRepository(MongoDbContext context) : INewsArticle
         try
         {
             return await _newsCollection
-                .Find(news => news.Id == id && news.IsActive)
+                .Find(article => article.Id == id && article.IsActive)
                 .FirstOrDefaultAsync()
                 .ConfigureAwait(false);
         }
@@ -46,7 +46,7 @@ public sealed class NewsArticleRepository(MongoDbContext context) : INewsArticle
 
     public async Task<NewsArticle?> GetBySlugAsync(string slug) =>
         await _newsCollection
-            .Find(news => news.Slug == slug && news.IsActive)
+            .Find(article => article.Slug == slug && article.IsActive)
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
 
@@ -57,8 +57,8 @@ public sealed class NewsArticleRepository(MongoDbContext context) : INewsArticle
     }
 
     public async Task UpdateAsync(string id, NewsArticle newsArticle) =>
-        await _newsCollection.ReplaceOneAsync(filter: n => n.Id == id, replacement: newsArticle).ConfigureAwait(false);
+        await _newsCollection.ReplaceOneAsync(filter: article => article.Id == id, replacement: newsArticle).ConfigureAwait(false);
 
     public async Task DeleteAsync(string id) =>
-        await _newsCollection.DeleteOneAsync(news => news.Id == id).ConfigureAwait(false);
+        await _newsCollection.DeleteOneAsync(article => article.Id == id).ConfigureAwait(false);
 }
