@@ -112,7 +112,7 @@ public class NewsArticleServicePerformanceTests
         // Assert
         results.Should().HaveCount(100);
         stopwatch.ElapsedMilliseconds.Should().BeLessThan(5000); // Should complete within 5 seconds
-        _mockRepository.Verify(x => x.CreateAsync(It.IsAny<NewsArticle>()), Times.Exactly(100));
+        _mockRepository.Verify(repo => repo.CreateAsync(It.IsAny<NewsArticle>()), Times.Exactly(100));
     }
 
     [Fact]
@@ -132,7 +132,7 @@ public class NewsArticleServicePerformanceTests
 
         // Assert
         stopwatch.ElapsedMilliseconds.Should().BeLessThan(1000); // All 100 calls should complete within 1 second
-        _mockRepository.Verify(x => x.GetAllAsync(), Times.Once); // Repository should only be called once
+        _mockRepository.Verify(repo => repo.GetAllAsync(), Times.Once); // Repository should only be called once
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class NewsArticleServicePerformanceTests
         // Arrange
         var largeContent = new string('a', 1000000); // 1MB of content
         var news = NewsBuilder.Create().WithContent(largeContent).Build();
-        _mockRepository.Setup(x => x.CreateAsync(It.IsAny<NewsArticle>())).ReturnsAsync(news);
+        _mockRepository.Setup(repo => repo.CreateAsync(It.IsAny<NewsArticle>())).ReturnsAsync(news);
 
         // Act
         var stopwatch = Stopwatch.StartNew();
@@ -199,7 +199,7 @@ public class NewsArticleServicePerformanceTests
         // Arrange
         var newsId = Guid.NewGuid().ToString();
         var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
-        _mockRepository.Setup(x => x.GetByIdAsync(newsId)).ReturnsAsync(news);
+        _mockRepository.Setup(repo => repo.GetByIdAsync(newsId)).ReturnsAsync(news);
 
         // Act
         var tasks = Enumerable.Range(0, 50).Select(_ => _NewsArticleService.GetNewsByIdAsync(newsId)).ToList();
