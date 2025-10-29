@@ -19,7 +19,7 @@ public class UpdateNewsArticleDtoValidatorTests
     {
         var dto = UpdateNewsArticleDtoBuilder.Create().WithCategory(new string('a', 101)).Build();
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Category);
+        result.ShouldHaveValidationErrorFor(dto => dto.Category);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class UpdateNewsArticleDtoValidatorTests
     {
         var dto = UpdateNewsArticleDtoBuilder.Create().WithCategory("Technology").Build();
         var result = _validator.TestValidate(dto);
-        result.ShouldNotHaveValidationErrorFor(x => x.Category);
+        result.ShouldNotHaveValidationErrorFor(dto => dto.Category);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public class UpdateNewsArticleDtoValidatorTests
     {
         var dto = new UpdateNewsArticleDto { Category = null };
         var result = _validator.TestValidate(dto);
-        result.ShouldNotHaveValidationErrorFor(x => x.Category);
+        result.ShouldNotHaveValidationErrorFor(dto => dto.Category);
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class UpdateNewsArticleDtoValidatorTests
     {
         var dto = UpdateNewsArticleDtoBuilder.Create().WithSummary(new string('a', 2001)).Build();
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Summary);
+        result.ShouldHaveValidationErrorFor(dto => dto.Summary);
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class UpdateNewsArticleDtoValidatorTests
     {
         var dto = UpdateNewsArticleDtoBuilder.Create().WithCaption(new string('a', 501)).Build();
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Caption);
+        result.ShouldHaveValidationErrorFor(dto => dto.Caption);
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public class UpdateNewsArticleDtoValidatorTests
     {
         var dto = new UpdateNewsArticleDto { Priority = 101 };
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Priority);
+        result.ShouldHaveValidationErrorFor(dto => dto.Priority);
     }
 
     [Theory]
@@ -70,7 +70,7 @@ public class UpdateNewsArticleDtoValidatorTests
     {
         var dto = new UpdateNewsArticleDto { Priority = priority };
         var result = _validator.TestValidate(dto);
-        result.ShouldNotHaveValidationErrorFor(x => x.Priority);
+        result.ShouldNotHaveValidationErrorFor(dto => dto.Priority);
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class UpdateNewsArticleDtoValidatorTests
     {
         var dto = new UpdateNewsArticleDto { Priority = null };
         var result = _validator.TestValidate(dto);
-        result.ShouldNotHaveValidationErrorFor(x => x.Priority);
+        result.ShouldNotHaveValidationErrorFor(dto => dto.Priority);
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class UpdateNewsArticleDtoValidatorTests
     {
         var dto = new UpdateNewsArticleDto { ExpressDate = DateTime.MinValue };
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.ExpressDate);
+        result.ShouldHaveValidationErrorFor(dto => dto.ExpressDate);
     }
 
     [Fact]
@@ -94,7 +94,7 @@ public class UpdateNewsArticleDtoValidatorTests
     {
         var dto = new UpdateNewsArticleDto { ExpressDate = DateTime.UtcNow };
         var result = _validator.TestValidate(dto);
-        result.ShouldNotHaveValidationErrorFor(x => x.ExpressDate);
+        result.ShouldNotHaveValidationErrorFor(dto => dto.ExpressDate);
     }
 
     [Fact]
