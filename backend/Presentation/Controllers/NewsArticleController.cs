@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using NewsApi.Application.DTOs;
 using NewsApi.Application.Services;
 using NewsApi.Common;
+using NewsApi.Common.Mappers;
 using NewsApi.Domain.Entities;
 using NewsApi.Domain.Interfaces;
 
@@ -146,28 +147,8 @@ public sealed class NewsArticleController(INewsArticleService newsService, IImag
     {
         try
         {
-            // Map DTO to entity
-            var news = new NewsArticle
-            {
-                Category = createNewsArticleDto.Category,
-                Type = createNewsArticleDto.Type,
-                Caption = createNewsArticleDto.Caption,
-                Slug = SlugHelper.GenerateSlug(createNewsArticleDto.Caption),
-                Keywords = createNewsArticleDto.Keywords,
-                SocialTags = createNewsArticleDto.SocialTags,
-                Summary = createNewsArticleDto.Summary,
-                ImgPath = createNewsArticleDto.ImgPath,
-                ImgAlt = createNewsArticleDto.ImgAlt,
-                ImageUrl = createNewsArticleDto.ImageUrl,
-                ThumbnailUrl = createNewsArticleDto.ThumbnailUrl,
-                Content = createNewsArticleDto.Content,
-                Subjects = createNewsArticleDto.Subjects,
-                Authors = createNewsArticleDto.Authors,
-                ExpressDate = createNewsArticleDto.ExpressDate,
-                Priority = createNewsArticleDto.Priority,
-                IsActive = createNewsArticleDto.IsActive,
-                IsSecondPageNews = createNewsArticleDto.IsSecondPageNews,
-            };
+            // Map DTO to entity using mapper
+            var news = NewsArticleMapper.ToEntity(createNewsArticleDto);
 
             var createdNews = await newsService.CreateNewsAsync(news);
             return CreatedAtAction(nameof(GetNewsById), new { id = createdNews.Id }, createdNews);
@@ -200,45 +181,8 @@ public sealed class NewsArticleController(INewsArticleService newsService, IImag
                 return NotFound(new { message = "News article not found" });
             }
 
-            // Update only provided fields
-            if (updateNewsArticleDto.Category != null)
-                existingNews.Category = updateNewsArticleDto.Category;
-            if (updateNewsArticleDto.Type != null)
-                existingNews.Type = updateNewsArticleDto.Type;
-            if (updateNewsArticleDto.Caption != null)
-            {
-                existingNews.Caption = updateNewsArticleDto.Caption;
-                existingNews.Slug = SlugHelper.GenerateSlug(updateNewsArticleDto.Caption);
-            }
-
-            if (updateNewsArticleDto.Keywords != null)
-                existingNews.Keywords = updateNewsArticleDto.Keywords;
-            if (updateNewsArticleDto.SocialTags != null)
-                existingNews.SocialTags = updateNewsArticleDto.SocialTags;
-            if (updateNewsArticleDto.Summary != null)
-                existingNews.Summary = updateNewsArticleDto.Summary;
-            if (updateNewsArticleDto.ImgPath != null)
-                existingNews.ImgPath = updateNewsArticleDto.ImgPath;
-            if (updateNewsArticleDto.ImgAlt != null)
-                existingNews.ImgAlt = updateNewsArticleDto.ImgAlt;
-            if (updateNewsArticleDto.Content != null)
-                existingNews.Content = updateNewsArticleDto.Content;
-            if (updateNewsArticleDto.Subjects != null)
-                existingNews.Subjects = updateNewsArticleDto.Subjects;
-            if (updateNewsArticleDto.Authors != null)
-                existingNews.Authors = updateNewsArticleDto.Authors;
-            if (updateNewsArticleDto.ExpressDate.HasValue)
-                existingNews.ExpressDate = updateNewsArticleDto.ExpressDate.Value;
-            if (updateNewsArticleDto.Priority.HasValue)
-                existingNews.Priority = updateNewsArticleDto.Priority.Value;
-            if (updateNewsArticleDto.IsActive.HasValue)
-                existingNews.IsActive = updateNewsArticleDto.IsActive.Value;
-            if (updateNewsArticleDto.IsSecondPageNews.HasValue)
-                existingNews.IsSecondPageNews = updateNewsArticleDto.IsSecondPageNews.Value;
-            if (updateNewsArticleDto.ImageUrl != null)
-                existingNews.ImageUrl = updateNewsArticleDto.ImageUrl;
-            if (updateNewsArticleDto.ThumbnailUrl != null)
-                existingNews.ThumbnailUrl = updateNewsArticleDto.ThumbnailUrl;
+            // Update using mapper
+            NewsArticleMapper.UpdateFromDto(existingNews, updateNewsArticleDto);
 
             await newsService.UpdateNewsAsync(id, existingNews);
             return NoContent();
@@ -322,8 +266,8 @@ public sealed class NewsArticleController(INewsArticleService newsService, IImag
             );
 
             // Update news article with image URLs
-            existingNews.ImageUrl = GetImageUrl(imageMetadata.MinioObjectKey);
-            existingNews.ThumbnailUrl = GetThumbnailUrl(id, Path.GetExtension(imageMetadata.FileName));
+            existingNews.ImageUrl = imageStorageService.GetImageUrl(imageMetadata.MinioObjectKey);
+            existingNews.ThumbnailUrl = imageStorageService.GetThumbnailUrl(id, Path.GetExtension(imageMetadata.FileName));
             existingNews.ImageMetadata = imageMetadata;
             existingNews.ImgAlt = imageUpload.AltText ?? imageMetadata.AltText;
 
@@ -426,7 +370,7 @@ public sealed class NewsArticleController(INewsArticleService newsService, IImag
                 altText: altText ?? file.FileName
             );
 
-            var imageUrl = GetImageUrl(imageMetadata.MinioObjectKey);
+            var imageUrl = imageStorageService.GetImageUrl(imageMetadata.MinioObjectKey);
 
             return Ok(
                 new
@@ -448,17 +392,5 @@ public sealed class NewsArticleController(INewsArticleService newsService, IImag
             Console.WriteLine($"Error in UploadContentImage: {ex}");
             return StatusCode(500, new { message = "An error occurred while uploading the image", error = ex.Message });
         }
-    }
-
-    private string GetImageUrl(string objectKey)
-    {
-        // In production, this should be a CDN URL
-        return $"http://localhost:9000/news-images/{objectKey}";
-    }
-
-    private string GetThumbnailUrl(string newsId, string extension)
-    {
-        // In production, this should be a CDN URL
-        return $"http://localhost:9000/news-images/{newsId}-thumb{extension}";
     }
 }
