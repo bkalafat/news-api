@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
     <UserSecretsId>63b90c45-207e-4876-9627-7c6c4d9989ee</UserSecretsId>
@@ -21,7 +21,7 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
     <PackageReference
       Include="Microsoft.AspNetCore.Authentication.JwtBearer"
-      Version="10.0.0-rc.2.25502.107"
+      Version="9.0.0"
     />
     <PackageReference Include="Roslynator.Analyzers" Version="4.14.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
