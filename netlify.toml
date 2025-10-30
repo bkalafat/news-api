@@ -5,8 +5,8 @@
   # Base directory for the build
   base = "frontend"
   
-  # Build command
-  command = "npm run build"
+  # Build command (using --legacy-peer-deps to bypass Next.js 16 peer dependency issues)
+  command = "npm install --legacy-peer-deps && npm run build"
   
   # Output directory
   publish = ".next"
