@@ -21,6 +21,6 @@
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\backend\newsApi.csproj" />
+    <ProjectReference Include="..\apps\api\newsApi.csproj" />
   </ItemGroup>
 </Project>
