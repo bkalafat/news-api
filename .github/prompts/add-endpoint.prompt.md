@@ -335,7 +335,7 @@ public async Task<ActionResult<IEnumerable<News>>> Search([FromBody] SearchNewsD
 
 ## 📚 Additional Resources
 
-- See `NEWS_API_DOCUMENTATION.md` for API conventions
-- See `csharp.instructions.md` for coding standards
-- See `testing.instructions.md` for testing guidelines
+- See [ARCHITECTURE.md](../../docs/ARCHITECTURE.md) for API architecture
+- See [csharp.instructions.md](../instructions/csharp.instructions.md) for coding standards
+- See [testing.instructions.md](../instructions/testing.instructions.md) for testing guidelines
 
