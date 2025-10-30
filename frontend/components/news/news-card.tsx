@@ -26,7 +26,7 @@ export function NewsCard({ news }: NewsCardProps) {
         <div className="relative h-48 w-full overflow-hidden bg-muted">
           <Image
             src={news.imageUrl}
-            alt={news.title}
+            alt={news.title || 'News image'}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -43,7 +43,7 @@ export function NewsCard({ news }: NewsCardProps) {
             </Badge>
           )}
           <ShareButtons 
-            title={news.title} 
+            title={news.title || 'News article'} 
             url={`${typeof window !== 'undefined' ? window.location.origin : ''}${localNewsUrl}`}
           />
         </div>
