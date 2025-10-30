@@ -28,724 +28,898 @@ public static class SeedNewsData
         var now = DateTime.UtcNow;
         var newsArticles = new List<NewsArticle>
         {
-            // Technology & GitHub News
+            // GitHub News - Real from Reddit (Top rated)
             new NewsArticle
             {
                 Category = "github",
                 Type = "news",
-                Caption = "Yapay Zeka Çağında Yeni Gelişmeler",
-                Slug = SlugHelper.GenerateSlug("Yapay Zeka Çağında Yeni Gelişmeler"),
-                Keywords = "yapay zeka, AI, GPT-5, OpenAI, teknoloji",
-                SocialTags = "#YapayZeka #AI #GPT5 #Teknoloji",
-                Summary =
-                    "OpenAI'nin yeni GPT-5 modeli, yapay zeka dünyasında devrim yaratmaya hazırlanıyor. Model, daha gelişmiş anlama ve üretim yetenekleriyle dikkat çekiyor.",
-                ImgPath = "http://localhost:9000/news-images/technology/ai-development.jpg",
-                ImgAlt = "Yapay Zeka Görseli",
-                Content =
-                    @"<p>OpenAI, yapay zeka alanındaki en son hamlesiyle <strong>GPT-5 modelini</strong> tanıttı. Yeni model, önceki versiyonlara göre <strong>%300 daha hızlı</strong> ve daha doğru sonuçlar üretiyor.</p>
+                Caption = "GitHub Enterprise Cloud Çift Ücretlendirme Sorunu",
+                Slug = SlugHelper.GenerateSlug("GitHub Enterprise Cloud Çift Ücretlendirme Sorunu"),
+                Keywords = "github, enterprise, billing, support, cloud",
+                SocialTags = "#GitHub #Enterprise #Billing",
+                Summary = "Bir geliştirici, GitHub Enterprise Cloud hesabında $168 yerine $84 faturalaşma sorunu yaşıyor ve 3 haftadır destekten yanıt alamıyor.",
+                ImgPath = "https://images.unsplash.com/photo-1618044733300-9472054094ee?w=1200&q=80",
+                ImgAlt = "GitHub Enterprise Cloud",
+                ImageUrl = "https://images.unsplash.com/photo-1618044733300-9472054094ee?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1618044733300-9472054094ee?w=400&q=80",
+                Content = @"<p>Reddit kullanıcısı stepanokdev, <strong>GitHub Enterprise Cloud</strong> hesabında yaşadığı faturalama sorununu paylaştı. Normalde 4 aktif kullanıcı için aylık $84 ödeyen şirket, Ekim ayı faturasında $168 ücretlendirilmiş.</p>
 
-<img src=""https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80"" alt=""GPT-5 Model Mimarisi"" style=""width:100%;max-width:800px;margin:20px 0;border-radius:8px"" />
+<h2>Destek Ekibi Yanıt Vermiyor</h2>
+<p>Kullanıcı, 3 hafta önce açtığı destek talebine hala yanıt alamadığını belirtiyor. Enterprise hesapların 24 saat içinde yanıt alması beklenirken, bu durum hayal kırıklığı yarattı.</p>
 
-<h2>Yeni Nesil Dil İşleme</h2>
-<p>GPT-5, dil işleme konusunda çığır açan yeteneklere sahip. Model:</p>
+<blockquote>""Enterprise hesapların 24 saat içinde yanıt alması gerekmiyor mu? Neredeyse bir aydır bekliyorum.""</blockquote>
+
+<h2>Detaylar</h2>
 <ul>
-<li>128 farklı dili anlıyor ve çevirebiliyor</li>
-<li>Bağlam penceresini 1 milyon token'a çıkardı</li>
-<li>Kod üretme performansını %450 artırdı</li>
-<li>Matematiksel problem çözümünde %98 doğruluk oranına ulaştı</li>
+<li>Fatura No: INV102226125</li>
+<li>Beklenen Ücret: ~$84</li>
+<li>Çekilen Ücret: $168</li>
+<li>GitHub Actions: $0 (tamamen indirimli)</li>
+<li>Copilot: Devre dışı</li>
 </ul>
 
-<blockquote style=""border-left:4px solid #0066cc;padding-left:16px;margin:20px 0;font-style:italic"">
-""GPT-5, yapay zekanın geleceğini şekillendiren en önemli teknolojik atılım"" - Sam Altman, OpenAI CEO
-</blockquote>
-
-<h2>Çok Modlu Öğrenme Devrimi</h2>
-<p>En dikkat çekici özelliklerden biri, GPT-5'in görüntü, ses ve metni aynı anda işleyebilme yeteneği. Bu özellik sayesinde:</p>
-
-<img src=""https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&q=80"" alt=""Multimodal AI Visualization"" style=""width:100%;max-width:800px;margin:20px 0;border-radius:8px"" />
-
-<ul>
-<li>Video analizi ve içerik üretimi</li>
-<li>Gerçek zamanlı görsel soru cevaplama</li>
-<li>Ses tanıma ve sentezleme</li>
-<li>3D model oluşturma</li>
-</ul>
-
-<h2>Etik ve Güvenlik Önlemleri</h2>
-<p>OpenAI, GPT-5'i geliştirirken etik kullanıma büyük önem verdi. Model, zararlı içerik üretimini engelleyen gelişmiş filtrelerle donatıldı. Ayrıca, yanıltıcı bilgi (misinformation) tespiti için özel algoritmalar entegre edildi.</p>
-
-<p><strong>Ticari Kullanıma Açılış:</strong> GPT-5, Şubat 2025'te seçili kurumsal müşterilere, Mart 2025'te ise genel kullanıcılara açılacak. Aylık abonelik ücreti 50 dolardan başlıyor.</p>",
-                Subjects = new[] { "Yapay Zeka", "Teknoloji", "İnovasyon" },
-                Authors = new[] { "Ahmet Yılmaz" },
-                ExpressDate = now.AddHours(-2),
-                CreateDate = now.AddHours(-2),
-                UpdateDate = now.AddHours(-2),
-                Priority = 1,
-                IsActive = true,
-                ViewCount = 1250,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "reddit",
-                Type = "news",
-                Caption = "Quantum Bilgisayarlar Gerçek Oluyor",
-                Keywords = "quantum, bilgisayar, Google, Willow, teknoloji",
-                SocialTags = "#Quantum #QuantumComputing #Google #Teknoloji",
-                Summary =
-                    "Google'ın yeni quantum işlemcisi, klasik bilgisayarların yıllarca sürdüreceği hesaplamaları dakikalar içinde tamamlıyor.",
-                ImgPath = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1200&q=80",
-                ImgAlt = "Quantum Bilgisayar",
-                Content =
-                    @"<p>Google, <strong>Willow</strong> adlı yeni quantum işlemcisini duyurdu. Bu işlemci, <em>quantum supremacy</em>'yi kanıtlayan önemli bir adım olarak değerlendiriliyor.</p>
-
-<h2>Quantum Supremacy Kanıtlandı</h2>
-<p>100 qubit'lik sistemle gerçekleştirilen testler, klasik süper bilgisayarların <strong>10,000 yıl</strong> süreceği hesaplamaları yalnızca <strong>200 saniye</strong>de tamamladı.</p>
-
-<img src=""https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&q=80"" alt=""Google Willow Quantum Processor"" style=""width:100%;max-width:800px;margin:20px 0;border-radius:8px"" />
-
-<h3>Teknik Özellikler</h3>
-<ul>
-<li><strong>100 qubit</strong> işlem gücü</li>
-<li>Hata düzeltme oranı: %99.7</li>
-<li>Kriojenik soğutma: -273.14°C (mutlak sıfıra yakın)</li>
-<li>Kuantum tutarlılık süresi: 100 mikrosaniye</li>
-</ul>
-
-<h2>Uygulama Alanları</h2>
-<p>Quantum bilgisayarlar, birçok alanda devrim yaratma potansiyeline sahip:</p>
-
-<table style=""width:100%;border-collapse:collapse;margin:20px 0"">
-<tr style=""background:#f0f0f0"">
-<th style=""border:1px solid #ddd;padding:12px;text-align:left"">Alan</th>
-<th style=""border:1px solid #ddd;padding:12px;text-align:left"">Uygulama</th>
-</tr>
-<tr>
-<td style=""border:1px solid #ddd;padding:8px"">İlaç Geliştirme</td>
-<td style=""border:1px solid #ddd;padding:8px"">Moleküler simülasyon ve yeni ilaç keşfi</td>
-</tr>
-<tr>
-<td style=""border:1px solid #ddd;padding:8px"">Kriptografi</td>
-<td style=""border:1px solid #ddd;padding:8px"">Kuantum şifreleme ve güvenlik protokolleri</td>
-</tr>
-<tr>
-<td style=""border:1px solid #ddd;padding:8px"">Finans</td>
-<td style=""border:1px solid #ddd;padding:8px"">Risk analizi ve portföy optimizasyonu</td>
-</tr>
-<tr>
-<td style=""border:1px solid #ddd;padding:8px"">Yapay Zeka</td>
-<td style=""border:1px solid #ddd;padding:8px"">Makine öğrenmesi algoritmalarının hızlandırılması</td>
-</tr>
-</table>
-
-<blockquote style=""border-left:4px solid #0066cc;padding-left:16px;margin:20px 0"">
-""Willow, quantum computing'i teoriden pratiğe taşıyan kilometre taşı"" - Sundar Pichai, Google CEO
-</blockquote>",
-                Subjects = new[] { "Quantum Computing", "Teknoloji", "Bilim" },
-                Authors = new[] { "Zeynep Kaya" },
-                ExpressDate = now.AddHours(-5),
-                CreateDate = now.AddHours(-5),
-                UpdateDate = now.AddHours(-5),
-                Priority = 1,
-                IsActive = true,
-                ViewCount = 980,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "twitter",
-                Type = "news",
-                Caption = "5G Teknolojisi Türkiye'de Hızla Yayılıyor",
-                Keywords = "5G, Türkiye, Türk Telekom, Turkcell, mobil internet",
-                SocialTags = "#5G #Türkiye #MobilInternet #Teknoloji",
-                Summary =
-                    "Türk Telekom ve Turkcell, 5G altyapısını 81 ile yaymayı hedefliyor. 2025 sonuna kadar tüm büyük şehirlerde 5G erişimi sağlanacak.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "5G Baz İstasyonu",
-                Content =
-                    "Türkiye'de 5G teknolojisi hızla yaygınlaşıyor. Operatörler, yeni nesil mobil internet altyapısını genişletmek için büyük yatırımlar yapıyor. 5G ile birlikte indirme hızları 20 Gbps'ye, gecikme süreleri ise 1 milisaniyenin altına inecek. Akıllı şehir uygulamaları, otonom araçlar ve IoT cihazları için kritik altyapı sağlanacak.",
-                Subjects = new[] { "5G", "Telekomünikasyon", "Altyapı" },
-                Authors = new[] { "Mehmet Demir" },
-                ExpressDate = now.AddHours(-8),
-                CreateDate = now.AddHours(-8),
-                UpdateDate = now.AddHours(-8),
-                Priority = 2,
-                IsActive = true,
-                ViewCount = 750,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "youtube",
-                Type = "news",
-                Caption = "Elektrikli Araç Satışları Rekor Kırdı",
-                Keywords = "elektrikli araç, Tesla, BYD, otomotiv, yeşil enerji",
-                SocialTags = "#ElektrikliAraç #Tesla #SürdürülebilirUlaşım",
-                Summary =
-                    "2024 yılında dünya genelinde 14 milyon elektrikli araç satıldı. Tesla ve BYD pazarda lider konumda.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Elektrikli Araç Şarj İstasyonu",
-                Content =
-                    "Elektrikli araç pazarı 2024'te rekor kırdı. Dünya genelinde 14 milyon EV satışı gerçekleşti, bu bir önceki yıla göre %35 artışı temsil ediyor. Tesla Model Y en çok satan model olurken, Çinli BYD üretim hacmi ile liderliği ele geçirdi. Batarya teknolojisindeki ilerlemeler, menzil kaygısını ortadan kaldırıyor ve şarj süreleri 15 dakikaya kadar indi.",
-                Subjects = new[] { "Otomotiv", "Elektrikli Araçlar", "Sürdürülebilirlik" },
-                Authors = new[] { "Can Aydın" },
-                ExpressDate = now.AddHours(-12),
-                CreateDate = now.AddHours(-12),
-                UpdateDate = now.AddHours(-12),
-                Priority = 2,
-                IsActive = true,
-                ViewCount = 620,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "tiktok",
-                Type = "news",
-                Caption = "Metaverse Yatırımları Artıyor",
-                Keywords = "metaverse, sanal gerçeklik, VR, AR, Meta, Apple Vision Pro",
-                SocialTags = "#Metaverse #VR #AR #AppleVisionPro",
-                Summary =
-                    "Meta, Apple ve Microsoft gibi teknoloji devleri, metaverse teknolojilerine milyarlarca dolar yatırım yapıyor.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Sanal Gerçeklik Gözlüğü",
-                Content =
-                    "Metaverse teknolojileri, Apple Vision Pro'nun piyasaya sürülmesiyle yeni bir ivme kazandı. Şirketler, sanal ofisler, toplantılar ve etkinlikler için metaverse platformlarına yatırım yapıyor. Eğitim, sağlık ve perakende sektörleri de VR/AR teknolojilerini hızla benimsiyor. Analistler, metaverse pazarının 2030'da 800 milyar dolara ulaşacağını öngörüyor.",
-                Subjects = new[] { "Metaverse", "Sanal Gerçeklik", "Teknoloji Trendleri" },
-                Authors = new[] { "Elif Özkan" },
-                ExpressDate = now.AddDays(-1),
-                CreateDate = now.AddDays(-1),
-                UpdateDate = now.AddDays(-1),
-                Priority = 3,
-                IsActive = true,
-                ViewCount = 450,
-                IsSecondPageNews = false,
-            },
-            // LinkedIn News
-            new NewsArticle
-            {
-                Category = "linkedin",
-                Type = "news",
-                Caption = "İklim Zirvesi'nde Tarihi Anlaşma",
-                Keywords = "iklim değişikliği, COP29, Paris Anlaşması, sürdürülebilirlik",
-                SocialTags = "#İklimDeğişikliği #COP29 #Sürdürülebilirlik",
-                Summary =
-                    "Dubai'deki COP29 zirvesinde 195 ülke, karbon emisyonlarını 2030'a kadar %50 azaltma taahhüdünde bulundu.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "İklim Zirvesi",
-                Content =
-                    "Dubai'de düzenlenen COP29 İklim Zirvesi tarihi bir anlaşmayla sonuçlandı. 195 ülke, karbon emisyonlarını 2030'a kadar %50 oranında azaltmayı taahhüt etti. Gelişmiş ülkeler, gelişmekte olan ülkelere yıllık 100 milyar dolar iklim finansmanı sağlayacak. Fosil yakıt kullanımından çıkış için net bir yol haritası belirlendi.",
-                Subjects = new[] { "İklim Değişikliği", "Çevre", "Uluslararası İşbirliği" },
-                Authors = new[] { "Ayşe Yılmaz", "John Smith" },
-                ExpressDate = now.AddDays(-1).AddHours(-6),
-                CreateDate = now.AddDays(-1).AddHours(-6),
-                UpdateDate = now.AddDays(-1).AddHours(-6),
-                Priority = 1,
-                IsActive = true,
-                ViewCount = 2100,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "facebook",
-                Type = "news",
-                Caption = "AB'den Göç Politikası Reformu",
-                Keywords = "Avrupa Birliği, göç, mülteci, sınır güvenliği",
-                SocialTags = "#AB #Göç #Mülteci #AvrupaBirliği",
-                Summary = "Avrupa Birliği, ortak göç ve iltica politikası için kapsamlı bir reform paketini onayladı.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Avrupa Birliği Bayrağı",
-                Content =
-                    "AB liderleri, uzun süren müzakerelerden sonra ortak göç politikası konusunda anlaşmaya vardı. Yeni sistem, sınır kontrollerini güçlendirirken, üye ülkeler arasında dayanışma mekanizması kuruyor. Mülteci başvurularının daha hızlı işlenmesi ve entegrasyon programlarının iyileştirilmesi öngörülüyor.",
-                Subjects = new[] { "Avrupa Birliği", "Göç", "Uluslararası Politika" },
-                Authors = new[] { "Maria Schmidt" },
+<p>Kullanıcı, şirketin yalnızca doğru miktarı geri ödeyeceğini ve çift ücretlendirmeyi ödeyemeyeceğini belirtiyor. GitHub Enterprise ekibinden bir açıklama bekleniyor.</p>",
+                Subjects = new[] { "GitHub", "Enterprise", "Billing" },
+                Authors = new[] { "Reddit Community" },
                 ExpressDate = now.AddDays(-2),
                 CreateDate = now.AddDays(-2),
                 UpdateDate = now.AddDays(-2),
-                Priority = 2,
+                Priority = 1,
                 IsActive = true,
-                ViewCount = 1650,
+                ViewCount = 2500,
                 IsSecondPageNews = false,
             },
             new NewsArticle
             {
-                Category = "instagram",
+                Category = "github",
                 Type = "news",
-                Caption = "Uzay Turizmi Yeni Döneme Giriyor",
-                Keywords = "uzay turizmi, SpaceX, Blue Origin, Virgin Galactic",
-                SocialTags = "#UzayTurizmi #SpaceX #UzayYolculuğu",
-                Summary =
-                    "SpaceX'in Starship aracı, ilk ticari uzay turizmini başlattı. 4 turistik yolcu, Ay'ın çevresinde 6 günlük yolculuğa çıktı.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Starship Uzay Aracı",
-                Content =
-                    "SpaceX'in Starship uzay aracı, tarihi ilk ticari ay turunu başarıyla tamamladı. 4 sivil yolcu, 6 gün boyunca Ay'ın etrafında dönme imkanı buldu. Bilet fiyatları 200 milyon dolar civarında. Blue Origin ve Virgin Galactic de sub-orbital uçuşlarını yoğunlaştırıyor. Uzay turizmi endüstrisi 2030'da 3 milyar dolara ulaşacak.",
-                Subjects = new[] { "Uzay", "Turizm", "Teknoloji" },
-                Authors = new[] { "Dr. Kemal Yıldız" },
+                Caption = "GitHub Ana Sayfasında Activity Bölümü Kayboldu",
+                Slug = SlugHelper.GenerateSlug("GitHub Ana Sayfasında Activity Bölümü Kayboldu"),
+                Keywords = "github, activity, sidebar, bug, SSO",
+                SocialTags = "#GitHub #Bug #Activity",
+                Summary = "Kullanıcılar GitHub ana sayfasındaki 'Activity' bölümünün kaybolduğunu bildiriyor. Sorun şirket SSO eklendiğinde başlamış olabilir.",
+                ImgPath = "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=1200&q=80",
+                ImgAlt = "GitHub Dashboard",
+                ImageUrl = "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=400&q=80",
+                Content = @"<p>Reddit kullanıcısı superl2, GitHub ana sayfasının sidebar'ında bulunan <strong>Activity</strong> bölümünün ortadan kaybolduğunu paylaştı.</p>
+
+<h2>Sorunun Detayları</h2>
+<p>Activity bölümü normalde kullanıcının son issue'ları ve pull request'lerini gösteriyor. Kullanıcı, sorununun şirket SSO login'i ekledikten sonra başladığını düşünüyor ancak bunun tesadüf olabileceğini belirtiyor.</p>
+
+<h2>Topluluk Tepkileri</h2>
+<p>Benzer sorunları yaşayan kullanıcılar, GitHub'ın son UI güncellemelerinden sonra çeşitli hataların ortaya çıktığını belirtiyor. Özellikle SSO entegrasyonundan sonra bazı özelliklerin kaybolması bilinen bir sorun.</p>
+
+<p><strong>Geçici Çözüm:</strong> Kullanıcılar cache temizleme ve farklı tarayıcı kullanmayı öneriyorlar.</p>",
+                Subjects = new[] { "GitHub", "Bug", "UI" },
+                Authors = new[] { "Reddit Community" },
                 ExpressDate = now.AddDays(-3),
                 CreateDate = now.AddDays(-3),
                 UpdateDate = now.AddDays(-3),
                 Priority = 2,
                 IsActive = true,
-                ViewCount = 3200,
+                ViewCount = 1000,
                 IsSecondPageNews = false,
             },
-            // Technology News
             new NewsArticle
             {
-                Category = "technology",
+                Category = "github",
                 Type = "news",
-                Caption = "Türkiye Ekonomisi İlk Çeyrekte %5.2 Büyüdü",
-                Keywords = "Türkiye ekonomisi, büyüme, GSYH, ekonomi",
-                SocialTags = "#TürkiyeEkonomisi #Büyüme #Ekonomi",
-                Summary =
-                    "Türkiye ekonomisi 2025 ilk çeyreğinde %5.2 büyüme kaydetti. İmalat sanayi ve ihracat büyümenin lokomotifi oldu.",
+                Caption = "GitHub Copilot Actions PR'larda Çöktü mü?",
+                Slug = SlugHelper.GenerateSlug("GitHub Copilot Actions PR'larda Çöktü mü"),
+                Keywords = "github, copilot, actions, billing, error",
+                SocialTags = "#GitHubCopilot #Actions #Bug",
+                Summary = "Kullanıcılar PR'larda @copilot etiketlendiğinde 'billing error' hatası alıyorlar. Hesaplar güncel ve limitler aşılmamış durumda.",
                 ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Türkiye Ekonomi Grafiği",
-                Content =
-                    "TÜİK verilerine göre, Türkiye ekonomisi 2025'in ilk çeyreğinde %5.2 büyüme kaydetti. İmalat sanayi %7.1, hizmetler sektörü %4.8 büyüdü. İhracat rekor seviyede arttı ve 70 milyar dolara ulaştı. Enflasyonla mücadele devam ederken, yatırımcı güveni artıyor. Ekonomistler yıl sonu büyüme tahminlerini %4.5'e yükseltti.",
-                Subjects = new[] { "Ekonomi", "Türkiye", "Büyüme" },
-                Authors = new[] { "Ekonomi Editörlüğü" },
-                ExpressDate = now.AddDays(-1).AddHours(-3),
-                CreateDate = now.AddDays(-1).AddHours(-3),
-                UpdateDate = now.AddDays(-1).AddHours(-3),
+                ImgAlt = "GitHub Copilot Error",
+                ImageUrl = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&q=80",
+                Content = @"<p>Reddit kullanıcısı SoCalChrisW, Pull Request'lerde <strong>@copilot</strong> etiketlendiğinde hata aldığını bildirdi.</p>
+
+<h2>Hata Mesajı</h2>
+<blockquote>""Copilot has encountered an error. See logs for additional details.""</blockquote>
+
+<p>Action log'larında ise şu hata görülüyor:</p>
+
+<blockquote>""The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings""</blockquote>
+
+<h2>Gerçek Durum</h2>
+<ul>
+<li>Kullanım limitlerin çok altında</li>
+<li>Hesap güncel</li>
+<li>Son ödeme denemesi yok</li>
+<li>Billing cycle ortasında</li>
+</ul>
+
+<p>Birçok kullanıcı aynı hatayı alıyor. GitHub'ın Copilot Actions altyapısında genel bir sorun olduğu tahmin ediliyor.</p>",
+                Subjects = new[] { "GitHub", "Copilot", "Actions" },
+                Authors = new[] { "Reddit Community" },
+                ExpressDate = now.AddDays(-1),
+                CreateDate = now.AddDays(-1),
+                UpdateDate = now.AddDays(-1),
                 Priority = 1,
                 IsActive = true,
-                ViewCount = 2800,
+                ViewCount = 750,
+                IsSecondPageNews = false,
+            },
+            
+            // Reddit News - Web Development
+            new NewsArticle
+            {
+                Category = "reddit",
+                Type = "discussion",
+                Caption = "Copilot'u Kapattıktan Sonra Kodlamanın Ne Kadar Stresli Olduğunu Fark Ettim",
+                Slug = SlugHelper.GenerateSlug("Copilot'u Kapattıktan Sonra Kodlamanın Ne Kadar Stresli Olduğunu Fark Ettim"),
+                Keywords = "copilot, AI, coding, stress, productivity",
+                SocialTags = "#Copilot #AI #Coding #WebDev",
+                Summary = "6 yıllık bir geliştirici, Copilot'u kapattıktan sonra kodlamanın ne kadar rahatladığını paylaşıyor. AI'nın sürekli öneri yapması dikkat dağıtıcı olabiliyor.",
+                ImgPath = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80",
+                ImgAlt = "Coding without AI",
+                ImageUrl = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80",
+                Content = @"<p>Reddit kullanıcısı xSypRo, 6 yıldır yazılım geliştirdiğini ve AI'nın son 3 yıldır hayatının bir parçası olduğunu belirtiyor. Ancak Copilot'u kapattıktan sonra şaşırtıcı bir keşif yaptı.</p>
+
+<h2>AI ile Kodlama Stresi</h2>
+<blockquote>""Copilot'u daha iyi bir IntelliSense gibi kullanıyordum. Ne yazmak istediğimi biliyordum ama bazen çok fazla yazı gerekliydi ve Copilot kısayol sağlıyordu. Ama bazen 'SUS!!! Düzenlemeyi bırak, odağımı dağıtıyorsun!!' diye düşünüyordum.""</blockquote>
+
+<h2>TikTok/Reels Benzeri Davranış</h2>
+<p>Kullanıcı, Copilot'un davranışını sosyal medya algoritmalarına benzetiyor:</p>
+<ul>
+<li>Sürekli ekranda değişiklikler</li>
+<li>Yanıp sönen öneriler</li>
+<li>Dikkat dağıtıcı görseller</li>
+<li>Odaklanmayı zorlaştıran sürekli hareket</li>
+</ul>
+
+<blockquote>""Bu sadece bir text editör, bu şekilde davranmamalı.""</blockquote>
+
+<h2>Yeni Yaklaşım</h2>
+<p>Geliştirici şimdi varsayılan olarak kapalı tutup sadece template kod veya uzun yazı işlerinde açmayı deniyor. Topluluktan 222 upvote alan post, birçok geliştiricinin benzer hissettiğini gösteriyor.</p>
+
+<p><strong>Sonuç:</strong> AI araçları üretkenliği artırabilir ama her zaman daha iyi değil. Kişisel tercih ve çalışma tarzı önemli.</p>",
+                Subjects = new[] { "Web Development", "AI Tools", "Productivity" },
+                Authors = new[] { "xSypRo" },
+                ExpressDate = now.AddHours(-12),
+                CreateDate = now.AddHours(-12),
+                UpdateDate = now.AddHours(-12),
+                Priority = 1,
+                IsActive = true,
+                ViewCount = 3200,
                 IsSecondPageNews = false,
             },
             new NewsArticle
             {
                 Category = "reddit",
-                Type = "news",
-                Caption = "Kripto Para Piyasasında Yükseliş",
-                Keywords = "Bitcoin, Ethereum, kripto para, blockchain",
-                SocialTags = "#Bitcoin #Kripto #Blockchain",
-                Summary =
-                    "Bitcoin 75,000 dolar seviyesini aştı. Ethereum ve diğer altcoinler de güçlü yükseliş gösteriyor.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Bitcoin Grafiği",
-                Content =
-                    "Kripto para piyasalarında güçlü yükseliş devam ediyor. Bitcoin, tarihinde ilk kez 75,000 doları aştı. Ethereum 4,500 dolar seviyesinde işlem görüyor. Kurumsal yatırımcıların artan ilgisi ve Bitcoin ETF'lerinin başarısı, rallinin arkasındaki temel faktörler. Analistler yıl sonuna kadar Bitcoin'in 100,000 dolara ulaşabileceğini öngörüyor.",
-                Subjects = new[] { "Kripto Para", "Finans", "Yatırım" },
-                Authors = new[] { "Finans Masası" },
-                ExpressDate = now.AddDays(-2).AddHours(-8),
-                CreateDate = now.AddDays(-2).AddHours(-8),
-                UpdateDate = now.AddDays(-2).AddHours(-8),
-                Priority = 2,
-                IsActive = true,
-                ViewCount = 1900,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "linkedin",
-                Type = "news",
-                Caption = "Türk Startupları 2 Milyar Dolar Yatırım Aldı",
-                Keywords = "startup, girişim, yatırım, teknoloji, Türkiye",
-                SocialTags = "#Startup #Girişim #YatırımHaberleri",
-                Summary =
-                    "2024 yılında Türk startupları toplam 2 milyar dolar yatırım aldı. E-ticaret ve fintech sektörleri öne çıktı.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Startup Ofisi",
-                Content =
-                    "Türkiye'nin girişim ekosistemi 2024'te rekor yatırım aldı. E-ticaret platformu Trendyol'un değerlemesi 20 milyar dolara ulaştı. Fintech girişimi Papara unicorn statüsü kazandı. Oyun, yapay zeka ve yeşil teknoloji alanlarındaki startuplar da önemli yatırımlar çekti. Türkiye, Avrupa'nın en hızlı büyüyen startup ekosistemlerinden biri haline geldi.",
-                Subjects = new[] { "Startup", "Girişimcilik", "Yatırım" },
-                Authors = new[] { "İş Dünyası Editörlüğü" },
-                ExpressDate = now.AddDays(-3).AddHours(-5),
-                CreateDate = now.AddDays(-3).AddHours(-5),
-                UpdateDate = now.AddDays(-3).AddHours(-5),
-                Priority = 2,
-                IsActive = true,
-                ViewCount = 1450,
-                IsSecondPageNews = false,
-            },
-            // GitHub & Science News
-            new NewsArticle
-            {
-                Category = "github",
-                Type = "news",
-                Caption = "Mars'ta Su Keşfi: Yaşam İzleri Bulundu",
-                Slug = SlugHelper.GenerateSlug("Mars'ta Su Keşfi: Yaşam İzleri Bulundu"),
-                Keywords = "Mars, NASA, su, yaşam, uzay keşfi",
-                SocialTags = "#Mars #NASA #UzayKeşfi #Bilim",
-                Summary =
-                    "NASA'nın Perseverance rover'ı, Mars'ın yüzeyinin altında sıvı su izleri ve olası mikrobiyal yaşam belirtileri tespit etti.",
-                ImgPath = "http://localhost:9000/news-images/science/mars-discovery.jpg",
-                ImgAlt = "Mars Yüzeyi",
-                Content =
-                    @"<p>NASA'nın <strong>Perseverance uzay aracı</strong>, Mars'ta devrim niteliğinde bir keşif yaptı. Jezero Krateri'nin altında sıvı su rezervleri tespit edildi. Daha da önemlisi, su örneklerinde organik moleküller ve olası mikrobiyal yaşam izleri bulundu.</p>
+                Type = "discussion",
+                Caption = "Kişisel vs Kurumsal GitHub Hesapları Güvenlik Sorunu",
+                Slug = SlugHelper.GenerateSlug("Kişisel vs Kurumsal GitHub Hesapları Güvenlik Sorunu"),
+                Keywords = "github, security, DLP, enterprise, personal account",
+                SocialTags = "#GitHub #Security #Enterprise",
+                Summary = "Güvenlik ekipleri, geliştiricilerin kişisel GitHub hesaplarını iş için kullanmasını risk olarak işaretliyor. DLP politikaları atlanabilir.",
+                ImgPath = "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&q=80",
+                ImgAlt = "GitHub Security",
+                ImageUrl = "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&q=80",
+                Content = @"<p>Reddit kullanıcısı hashkent, şirketindeki güvenlik ekibinin tespit ettiği riski paylaştı: Geliştiriciler kişisel GitHub hesaplarıyla çalışırken şirket kodunu kendi hesaplarına push edebilir ve DLP politikalarını atlayabilir.</p>
 
-<img src=""https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=800&q=80"" alt=""Mars Perseverance Rover"" style=""width:100%;max-width:800px;margin:20px 0;border-radius:8px"" />
+<h2>Denenen Çözüm</h2>
+<p>Kullanıcı iş için ayrı bir GitHub hesabı oluşturmaya çalışmış ancak GitHub'ın <strong>one-account-per-user</strong> politikası nedeniyle hesap suspend edilmiş.</p>
 
-<h2>Keşfin Detayları</h2>
-<p>Perseverance'ın yeraltı radarı (RIMFAX), yüzeyin 200 metre altında <strong>sıvı halde su</strong> tespit etti. Bu bulgu, Mars'ın yaşanabilir olabileceğine dair en güçlü kanıt.</p>
-
-<h3>Bulunan Organik Moleküller</h3>
+<h2>Şirket Durumu</h2>
 <ul>
-<li><strong>Amino asitler</strong> - Yaşamın yapı taşları</li>
-<li><strong>Lipit benzeri yapılar</strong> - Hücre zarları için gerekli</li>
-<li><strong>Karbon zincirleri</strong> - Biyolojik aktivite göstergesi</li>
-<li><strong>Metil grubu</strong> - Metabolizma belirtisi</li>
+<li>Primarily GitLab shop</li>
+<li>~120 mühendis için GitHub Copilot Enterprise SSO</li>
+<li>Sadece 3 mobile developer GitHub'da kod tutuyor</li>
+<li>Çoğu geliştirici katkı grafiği umursamıyor (kod GitLab'da)</li>
 </ul>
 
-<img src=""https://images.unsplash.com/photo-1532-galaxy-mars-surface?w=800&q=80"" alt=""Mars Sample Analysis"" style=""width:100%;max-width:800px;margin:20px 0;border-radius:8px"" />
+<h2>Tartışma Noktası</h2>
+<blockquote>""Özel iş hesabıyla bile, geliştiriciler 'john-acme' gibi kişisel repo'lara push edebilir ve ayrılmadan önce gerçek kişisel hesaplarına transfer edebilir. Bu biraz anlamsız bir sorun.""</blockquote>
 
-<h2>Bilim İnsanlarından Yorumlar</h2>
-<blockquote style=""border-left:4px solid #dc4437;padding-left:16px;margin:20px 0;background:#fff3f2;padding:16px"">
-<strong>Dr. Sarah Johnson, NASA Astrobiyoloji Uzmanı:</strong><br>
-""Bu keşif, Mars'ta yaşam olduğuna dair en güçlü kanıtları sunuyor. Mikrobiyal yaşam formlarının bugün bile var olabileceğini düşünüyoruz.""
-</blockquote>
-
-<h2>Mars Misyonlarının Geleceği</h2>
-<p>Bu keşif, gelecekteki Mars misyonlarının yönünü değiştirecek:</p>
-<ol>
-<li><strong>Mars Sample Return (2028)</strong> - Su örneklerinin Dünya'ya getirilmesi</li>
-<li><strong>İnsanlı Mars Misyonu (2035)</strong> - Su kaynakları koloni için kritik</li>
-<li><strong>Yeraltı Araştırması</strong> - Derin sondaj ekipmanları gönderilecek</li>
-</ol>
-
-<p style=""background:#e8f5e9;padding:16px;border-radius:8px;margin:20px 0"">
-<strong>📊 İstatistikler:</strong><br>
-🔴 Su rezervi derinliği: 200m<br>
-💧 Tahmini su miktarı: 10 milyon litre<br>
-🦠 Organik molekül çeşidi: 12+<br>
-📅 Keşif tarihi: 15 Ekim 2025
-</p>",
-                Subjects = new[] { "Uzay Bilimi", "Astrobiyoloji", "Mars" },
-                Authors = new[] { "Dr. Sarah Johnson", "Prof. Ali Toprak" },
-                ExpressDate = now.AddDays(-1).AddHours(-10),
-                CreateDate = now.AddDays(-1).AddHours(-10),
-                UpdateDate = now.AddDays(-1).AddHours(-10),
-                Priority = 1,
-                IsActive = true,
-                ViewCount = 4500,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "twitter",
-                Type = "news",
-                Caption = "Kanser Tedavisinde Çığır Açan Gelişme",
-                Keywords = "kanser, tedavi, mRNA, aşı, tıp",
-                SocialTags = "#Kanser #Tedavi #Bilim #Sağlık",
-                Summary =
-                    "mRNA teknolojisi kullanılarak geliştirilen kişiselleştirilmiş kanser aşıları, klinik deneylerde %90 başarı oranı gösterdi.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Kanser Hücreleri Mikroskopta",
-                Content =
-                    "BioNTech ve Moderna'nın ortaklaşa geliştirdiği mRNA bazlı kanser aşısı, Faz 3 denemelerinde çığır açan sonuçlar verdi. Hastanın kendi tümör hücrelerinden üretilen kişiselleştirilmiş aşı, %90 başarı oranı gösterdi. Melanom, akciğer ve pankreas kanseri hastalarında tümör küçülmesi gözlendi. FDA onayının 2026'da beklenmesi, milyonlarca hasta için umut ışığı.",
-                Subjects = new[] { "Tıp", "Kanser", "Biyoteknoloji" },
-                Authors = new[] { "Dr. Mehmet Öztürk" },
-                ExpressDate = now.AddDays(-2).AddHours(-3),
-                CreateDate = now.AddDays(-2).AddHours(-3),
-                UpdateDate = now.AddDays(-2).AddHours(-3),
-                Priority = 1,
-                IsActive = true,
-                ViewCount = 5200,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "facebook",
-                Type = "news",
-                Caption = "Biyoçeşitlilik Krizi: 1 Milyon Tür Tehlikede",
-                Keywords = "biyoçeşitlilik, nesli tükenen türler, çevre, ekosistem",
-                SocialTags = "#Biyoçeşitlilik #Çevre #DoğaKoruma",
-                Summary =
-                    "BM raporuna göre, 1 milyon hayvan ve bitki türü nesli tükenme tehlikesiyle karşı karşıya. İklim değişikliği ve habitat kaybı ana faktörler.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Tropikal Orman",
-                Content =
-                    "Birleşmiş Milletler'in Biyoçeşitlilik Raporu, doğa için alarm zili çalıyor. 1 milyon tür, önümüzdeki on yıllarda yok olma riski taşıyor. İklim değişikliği, habitat kaybı, aşırı avlanma ve kirlilik başlıca tehditler. Bilim insanları, acil eylem çağrısı yapıyor. Koruma alanlarının genişletilmesi, sürdürülebilir tarım ve fosil yakıt kullanımının azaltılması kritik önlemler.",
-                Subjects = new[] { "Çevre Bilimi", "Ekoloji", "Koruma" },
-                Authors = new[] { "Prof. Dr. Canan Yılmaz" },
+<p>Topluluk, benzer kurulumda diğer şirketlerin nasıl yönettiğini tartışıyor.</p>",
+                Subjects = new[] { "Security", "GitHub", "Enterprise" },
+                Authors = new[] { "hashkent" },
                 ExpressDate = now.AddDays(-4),
                 CreateDate = now.AddDays(-4),
                 UpdateDate = now.AddDays(-4),
                 Priority = 2,
                 IsActive = true,
+                ViewCount = 900,
+                IsSecondPageNews = false,
+            },
+            new NewsArticle
+            {
+                Category = "reddit",
+                Type = "question",
+                Caption = "GitHub Copilot Pro Ücretsiz Erişimi Kaybedilebilir mi?",
+                Slug = SlugHelper.GenerateSlug("GitHub Copilot Pro Ücretsiz Erişimi Kaybedilebilir mi"),
+                Keywords = "copilot, pro, free, open source, eligibility",
+                SocialTags = "#Copilot #OpenSource #Free",
+                Summary = "Açık kaynak projelere katkı yapanlara verilen ücretsiz Copilot Pro erişimi aylık kontrol ediliyor. Kullanıcılar erişimi kaybedip kaybetmeyeceklerini merak ediyor.",
+                ImgPath = "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80",
+                ImgAlt = "GitHub Copilot Pro",
+                ImageUrl = "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&q=80",
+                Content = @"<p>Reddit kullanıcısı a-curious-goose, açık kaynak projesine katkı sağladığı için ücretsiz <strong>GitHub Copilot Pro</strong> erişimi aldığını paylaştı.</p>
+
+<h2>Aylık Kontrol</h2>
+<p>Her ay şu mesajı alıyor:</p>
+<blockquote>""Thank you for renewing your free access to GitHub Copilot... GitHub Copilot checks eligibility monthly per our policy.""</blockquote>
+
+<h2>Belirsiz Kriterler</h2>
+<p>Uygunluk kriterleri belirsiz:</p>
+<ul>
+<li>Hangi aktiviteler sayılıyor?</li>
+<li>Ne kadar contribution gerekli?</li>
+<li>Hangi projeler geçerli?</li>
+<li>Aylık minimum var mı?</li>
+</ul>
+
+<h2>Soru</h2>
+<blockquote>""Erişimi kaybeden birini biliyor musunuz? Copilot Pro'ya gelecekte ne kadar güvenebileceğimi bilmek istiyorum.""</blockquote>
+
+<p>Topluluktan henüz net bir yanıt gelmemiş. GitHub'ın resmi açıklaması bekleniyor.</p>",
+                Subjects = new[] { "GitHub", "Copilot", "Open Source" },
+                Authors = new[] { "a-curious-goose" },
+                ExpressDate = now.AddDays(-3),
+                CreateDate = now.AddDays(-3),
+                UpdateDate = now.AddDays(-3),
+                Priority = 2,
+                IsActive = true,
+                ViewCount = 450,
+                IsSecondPageNews = false,
+            },
+
+            // Technology News
+            new NewsArticle
+            {
+                Category = "technology",
+                Type = "news",
+                Caption = "Yapay Zeka Kodlama Araçları: Copilot vs Cursor vs Cline",
+                Slug = SlugHelper.GenerateSlug("Yapay Zeka Kodlama Araçları Copilot vs Cursor vs Cline"),
+                Keywords = "AI, coding, copilot, cursor, cline, development tools",
+                SocialTags = "#AI #Coding #DevTools",
+                Summary = "2025 yılında geliştiricilerin en çok kullandığı AI kodlama araçları karşılaştırılıyor. Her birinin güçlü ve zayıf yönleri neler?",
+                ImgPath = "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1200&q=80",
+                ImgAlt = "AI Coding Tools",
+                ImageUrl = "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&q=80",
+                Content = @"<p>2025'te geliştiriciler için AI kodlama araçları vazgeçilmez hale geldi. Ancak hangi araç hangi iş için en uygun?</p>
+
+<h2>GitHub Copilot</h2>
+<h3>Güçlü Yönleri:</h3>
+<ul>
+<li>VS Code'a native entegrasyon</li>
+<li>Geniş dil desteği</li>
+<li>Güçlü code completion</li>
+<li>Enterprise SSO desteği</li>
+</ul>
+
+<h3>Zayıf Yönleri:</h3>
+<ul>
+<li>Bazen dikkat dağıtıcı</li>
+<li>Context window sınırlı</li>
+<li>Multi-file refactoring zayıf</li>
+</ul>
+
+<h2>Cursor</h2>
+<h3>Güçlü Yönleri:</h3>
+<ul>
+<li>Mükemmel chat interface</li>
+<li>Codebase-wide understanding</li>
+<li>Multi-file editing</li>
+<li>Custom prompts</li>
+</ul>
+
+<h3>Zayıf Yönleri:</h3>
+<ul>
+<li>Ayrı IDE gerekiyor</li>
+<li>VS Code extension'larıyla uyumsuzluk</li>
+<li>Ücretli model daha pahalı</li>
+</ul>
+
+<h2>Cline (eski Claude Dev)</h2>
+<h3>Güçlü Yönleri:</h3>
+<ul>
+<li>Terminal komutlarını çalıştırabilir</li>
+<li>Dosya sistemiyle etkileşim</li>
+<li>Claude 3.5 Sonnet gücü</li>
+<li>VS Code extension</li>
+</ul>
+
+<h3>Zayıf Yönleri:</h3>
+<ul>
+<li>Manuel onay gerektirir</li>
+<li>API key maliyeti yüksek olabilir</li>
+<li>Bazen fazla agresif</li>
+</ul>
+
+<h2>Sonuç</h2>
+<p><strong>Yeni başlayanlar için:</strong> GitHub Copilot<br>
+<strong>Büyük refactoring için:</strong> Cursor<br>
+<strong>Automation için:</strong> Cline</p>",
+                Subjects = new[] { "Technology", "AI", "Development Tools" },
+                Authors = new[] { "Tech Review Team" },
+                ExpressDate = now.AddHours(-6),
+                CreateDate = now.AddHours(-6),
+                UpdateDate = now.AddHours(-6),
+                Priority = 1,
+                IsActive = true,
                 ViewCount = 1800,
                 IsSecondPageNews = false,
             },
-            // Instagram & Health News
+
+            // Twitter/X News
             new NewsArticle
             {
-                Category = "instagram",
+                Category = "twitter",
                 Type = "news",
-                Caption = "DSÖ Yeni Beslenme Kılavuzu Yayınladı",
-                Keywords = "DSÖ, beslenme, sağlık, diyet, WHO",
-                SocialTags = "#Sağlık #Beslenme #DSÖ",
-                Summary =
-                    "Dünya Sağlık Örgütü, güncellenen beslenme kılavuzunda bitkisel protein kaynaklarını öneriyor ve işlenmiş et tüketiminin azaltılmasını tavsiye ediyor.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Sağlıklı Yiyecekler",
-                Content =
-                    "DSÖ'nün yeni beslenme kılavuzu, bitkisel protein kaynaklarını (baklagiller, soya, fındık) öne çıkarıyor. İşlenmiş et ve kırmızı et tüketiminin haftada 2 porsiyon ile sınırlandırılması öneriliyor. Omega-3 açısından zengin balık, meyve ve sebze tüketiminin artırılması gerektiği vurgulanıyor. Yeni rehber, kalp hastalıkları, diyabet ve kanser riskini azaltmayı hedefliyor.",
-                Subjects = new[] { "Sağlık", "Beslenme", "Önleyici Tıp" },
-                Authors = new[] { "Sağlık Editörlüğü" },
-                ExpressDate = now.AddDays(-2).AddHours(-12),
-                CreateDate = now.AddDays(-2).AddHours(-12),
-                UpdateDate = now.AddDays(-2).AddHours(-12),
-                Priority = 2,
+                Caption = "X (Twitter) Yeni Algoritma Güncellemesi: Uzun İçerikler Ön Planda",
+                Slug = SlugHelper.GenerateSlug("X Twitter Yeni Algoritma Güncellemesi Uzun İçerikler Ön Planda"),
+                Keywords = "twitter, X, algorithm, long form, content",
+                SocialTags = "#Twitter #X #Algorithm",
+                Summary = "X platformu, algoritmasını güncelledi. Artık uzun formlu içerikler ve thread'ler daha fazla görünürlük kazanacak.",
+                ImgPath = "https://images.unsplash.com/photo-1611605698335-8b1569810432?w=1200&q=80",
+                ImgAlt = "X Platform Algorithm",
+                ImageUrl = "https://images.unsplash.com/photo-1611605698335-8b1569810432?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1611605698335-8b1569810432?w=400&q=80",
+                Content = @"<p>X (eski Twitter), içerik algoritmasında önemli değişiklikler yaptı. Yeni güncellemede <strong>uzun formlu içerikler</strong> ve detaylı thread'ler daha fazla boost alacak.</p>
+
+<h2>Değişiklikler</h2>
+<ul>
+<li>280+ karakter içerikler artı puan</li>
+<li>Thread'ler tek tweet'e göre 3x daha fazla reach</li>
+<li>Dış link'ler artık cezalandırılmıyor</li>
+<li>Video içerikler eskisi gibi öncelikli</li>
+</ul>
+
+<h2>Premium Aboneler</h2>
+<p>X Premium (mavi tik) aboneleri için ek avantajlar:</p>
+<ul>
+<li>4000 karakter limiti</li>
+<li>Algoritma puanında %40 boost</li>
+<li>Reply'lerde öncelik</li>
+<li>Edit özelliği</li>
+</ul>
+
+<h2>İçerik Üreticileri İçin Öneriler</h2>
+<ol>
+<li>Thread formatını kullanın</li>
+<li>İlk tweet'i dikkat çekici yapın</li>
+<li>Her thread'de en az 5 tweet olsun</li>
+<li>Görsel/video ekleyin</li>
+<li>Engagement için soru sorun</li>
+</ol>
+
+<p>Elon Musk, değişikliğin 'X'i gerçek bir tartışma platformu' haline getirmek için yapıldığını belirtti.</p>",
+                Subjects = new[] { "Social Media", "Twitter", "Algorithm" },
+                Authors = new[] { "Social Media News" },
+                ExpressDate = now.AddHours(-8),
+                CreateDate = now.AddHours(-8),
+                UpdateDate = now.AddHours(-8),
+                Priority = 1,
                 IsActive = true,
                 ViewCount = 2100,
                 IsSecondPageNews = false,
             },
             new NewsArticle
             {
-                Category = "tiktok",
-                Type = "news",
-                Caption = "Yapay Zeka Erken Teşhiste Doktorları Geçti",
-                Keywords = "yapay zeka, erken teşhis, radyoloji, AI, sağlık teknolojisi",
-                SocialTags = "#YapayZeka #Sağlık #Teşhis #AIteknoloji",
-                Summary =
-                    "Stanford Üniversitesi araştırması, AI sistemlerinin radyoloji görüntülerinden hastalık tespitinde %95 doğrulukla insan doktorları geçtiğini gösterdi.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Tıbbi Görüntüleme ve Yapay Zeka",
-                Content =
-                    "Stanford Tıp Fakültesi'nden araştırmacılar, derin öğrenme algoritmaları kullanarak geliştirdikleri AI sisteminin, röntgen, MR ve CT görüntülerinden hastalık tespitinde %95 doğruluk oranına ulaştığını açıkladı. Sistem, akciğer kanseri, pnömoni ve kemik kırıklarını erken evrede tespit edebiliyor. Radyologların iş yükünü azaltırken, tanı sürecini hızlandırıyor.",
-                Subjects = new[] { "Tıbbi Teknoloji", "Radyoloji", "Yapay Zeka" },
-                Authors = new[] { "Dr. Emily Chen" },
-                ExpressDate = now.AddDays(-3).AddHours(-8),
-                CreateDate = now.AddDays(-3).AddHours(-8),
-                UpdateDate = now.AddDays(-3).AddHours(-8),
-                Priority = 2,
-                IsActive = true,
-                ViewCount = 1750,
-                IsSecondPageNews = false,
-            },
-            // YouTube & Entertainment News
-            new NewsArticle
-            {
-                Category = "youtube",
-                Type = "news",
-                Caption = "2025 Oscar Ödülleri Sahiplerini Buldu",
-                Keywords = "Oscar, akademi ödülleri, sinema, Hollywood",
-                SocialTags = "#Oscar2025 #Oscarlar #Sinema",
-                Summary =
-                    "97. Akademi Ödülleri töreni Los Angeles'ta gerçekleştirildi. 'Oppenheimer' en iyi film ödülünü kazandı.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Oscar Heykeli",
-                Content =
-                    "97. Akademi Ödülleri töreni Dolby Theatre'da büyük bir coşkuyla gerçekleştirildi. Christopher Nolan'ın 'Oppenheimer' filmi, En İyi Film dahil 7 dalda Oscar kazandı. Cillian Murphy En İyi Erkek Oyuncu, Emma Stone En İyi Kadın Oyuncu ödülünün sahibi oldu. Törende yapay zekanın sinema endüstrisindeki geleceği konusu tartışıldı.",
-                Subjects = new[] { "Sinema", "Oscar", "Ödüller" },
-                Authors = new[] { "Magazin Masası" },
-                ExpressDate = now.AddDays(-5),
-                CreateDate = now.AddDays(-5),
-                UpdateDate = now.AddDays(-5),
-                Priority = 2,
-                IsActive = true,
-                ViewCount = 3500,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "tiktok",
-                Type = "news",
-                Caption = "Netflix'in Türk Dizisi Dünya Listelerinde Birinci",
-                Keywords = "Netflix, Türk dizisi, streaming, dizi",
-                SocialTags = "#Netflix #TürkDizisi #DizilerDünyası",
-                Summary =
-                    "'Gölge Oyunları' adlı Türk yapımı dizi, Netflix küresel izlenme listesinde birinci sıraya yükseldi.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Netflix Logosu",
-                Content =
-                    "Netflix'in Türk yapımı dizisi 'Gölge Oyunları', platformun küresel izlenme listesinde birinci sıraya yükseldi. 190'dan fazla ülkede yayınlanan dizi, ilk haftasında 50 milyon saatten fazla izlendi. Gerilim ve aksiyon dolu hikayesi ile uluslararası izleyiciyi büyüledi. Bu başarı, Türk dizilerinin global platformlardaki yükselişini gösteriyor.",
-                Subjects = new[] { "Dizi", "Streaming", "Türk Yapımı" },
-                Authors = new[] { "Kültür Sanat Editörlüğü" },
-                ExpressDate = now.AddDays(-4).AddHours(-6),
-                CreateDate = now.AddDays(-4).AddHours(-6),
-                UpdateDate = now.AddDays(-4).AddHours(-6),
-                Priority = 2,
-                IsActive = true,
-                ViewCount = 2900,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "youtube",
-                Type = "news",
-                Caption = "Yapay Zeka ile Üretilen Müzik Grammy Aldı",
-                Keywords = "Grammy, yapay zeka, müzik, AI müzik",
-                SocialTags = "#Grammy #YapayZeka #Müzik",
-                Summary =
-                    "AI destekli müzik prodüksiyonu ile üretilen albüm, Grammy Ödüllerinde 'En İyi Elektronik Müzik Albümü' kategorisinde ödül kazandı.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Grammy Ödül Töreni",
-                Content =
-                    "Müzik endüstrisinde tarihi bir an yaşandı. Yapay zeka araçları kullanılarak üretilen 'Digital Dreams' albümü, Grammy Ödüllerinde 'En İyi Elektronik Müzik Albümü' kategorisinde ödül kazandı. Sanatçı ve yapay zeka arasındaki işbirliği, müziğin geleceği hakkında tartışmalar başlattı. Eleştirmenler yaratıcılığı sorgularken, destekçiler yeni bir sanat formunun doğduğunu söylüyor.",
-                Subjects = new[] { "Müzik", "Yapay Zeka", "Grammy" },
-                Authors = new[] { "Müzik Editörlüğü" },
-                ExpressDate = now.AddDays(-6),
-                CreateDate = now.AddDays(-6),
-                UpdateDate = now.AddDays(-6),
-                Priority = 3,
-                IsActive = true,
-                ViewCount = 1250,
-                IsSecondPageNews = false,
-            },
-            // Twitter & Sports News
-
-            new NewsArticle
-            {
                 Category = "twitter",
                 Type = "news",
-                Caption = "Trabzonspor Altyapı Müjdeli Haberler",
-                Slug = SlugHelper.GenerateSlug("Trabzonspor Altyapı Müjdeli Haberler"),
-                Keywords = "Trabzonspor, altyapı, genç futbolcular, Süper Lig",
-                SocialTags = "#Trabzonspor #Altyapı #GençYetenek",
-                Summary =
-                    "Trabzonspor'un genç yetenekleri, altyapı sisteminde göz dolduran performanslar sergiliyor. A takıma yükselme hazırlığındalar.",
-                ImgPath = "http://localhost:9000/news-images/sports/trabzonspor-academy.jpg",
-                ImgAlt = "Trabzonspor Altyapı Antrenmanı",
-                Content =
-                    "Trabzonspor'un altyapı sistemi, Türk futbolunun en başarılı örneklerinden biri olmaya devam ediyor. U19 takımı, Elit Lig'de liderliğini sürdürürken, U17 ve U15 takımları da kategorilerinde zirvede yer alıyor. Teknik direktör Abdullah Avcı, genç yetenekleri yakından takip ediyor ve A takıma entegrasyon planları yapıyor. Özellikle 17 yaşındaki orta saha oyuncusu Emre Öztürk ve 16 yaşındaki golcü Burak Yılmaz, dikkat çekiyor.",
-                Subjects = new[] { "Futbol", "Trabzonspor", "Altyapı" },
-                Authors = new[] { "Spor Editörlüğü" },
-                ExpressDate = now.AddHours(-1),
-                CreateDate = now.AddHours(-1),
-                UpdateDate = now.AddHours(-1),
-                Priority = 1,
-                IsActive = true,
-                ViewCount = 850,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "facebook",
-                Type = "news",
-                Caption = "TFF Önemli Karar: Liga Değişiklik Geliyor",
-                Keywords = "TFF, Süper Lig, lig format değişikliği, Türk futbolu",
-                SocialTags = "#TFF #SüperLig #TürkFutbolu",
-                Summary =
-                    "Türkiye Futbol Federasyonu, Süper Lig formatında önemli değişikliklere gidiyor. 2026-2027 sezonundan itibaren yeni sistem uygulanacak.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "TFF Logosu",
-                Content =
-                    "Türkiye Futbol Federasyonu Yönetim Kurulu, Süper Lig formatında radikal değişikliklere gidilmesine karar verdi. 2026-2027 sezonundan itibaren lig 20 takıma çıkarılacak. Playoff sisteminin getirilmesi, yabancı futbolcu kuralının revizyonu ve VAR sisteminin geliştirilmesi planlanıyor. Kulüpler ve futbol kamuoyu, değişiklikler hakkında görüşlerini bildiriyor.",
-                Subjects = new[] { "Futbol", "TFF", "Lig Sistemi" },
-                Authors = new[] { "Futbol Muhabirleri" },
-                ExpressDate = now.AddHours(-3),
-                CreateDate = now.AddHours(-3),
-                UpdateDate = now.AddHours(-3),
-                Priority = 1,
-                IsActive = true,
-                ViewCount = 1650,
-                IsSecondPageNews = false,
-            },
-            new NewsArticle
-            {
-                Category = "reddit",
-                Type = "news",
-                Caption = "Galatasaray Avrupa'da Tarih Yazdı",
-                Slug = SlugHelper.GenerateSlug("Galatasaray Avrupa'da Tarih Yazdı"),
-                Keywords = "Galatasaray, Şampiyonlar Ligi, Avrupa, futbol",
-                SocialTags = "#Galatasaray #ŞampiyonlarLigi #Avrupa",
-                Summary =
-                    "Galatasaray, Şampiyonlar Ligi'nde çeyrek finale yükselen ilk Türk takımı oldu. Manchester City'yi eleyerek tarihi başarıya imza attı.",
-                ImgPath = "http://localhost:9000/news-images/sports/galatasaray-champions.jpg",
-                ImgAlt = "Galatasaray Taraftarları Kutlama",
-                Content =
-                    @"<p>Galatasaray, Manchester City'yi penaltılarla 5-4 yenerek <strong>Şampiyonlar Ligi çeyrek finaline</strong> yükseldi. Türk futbol tarihinde bir ilke imza atan sarı-kırmızılılar, Avrupa'nın en büyük kulüplerinden birini eleyerek dev bir başarı elde etti.</p>
+                Caption = "Twitter Spaces'te Yeni Özellik: Kayıt ve Tekrar İzleme",
+                Slug = SlugHelper.GenerateSlug("Twitter Spaces'te Yeni Özellik Kayıt ve Tekrar İzleme"),
+                Keywords = "twitter, spaces, recording, replay, audio",
+                SocialTags = "#TwitterSpaces #Audio #SocialMedia",
+                Summary = "X Spaces artık otomatik kaydedilebiliyor ve 30 gün boyunca tekrar dinlenebiliyor. Podcast alternatifi olma yolunda.",
+                ImgPath = "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=1200&q=80",
+                ImgAlt = "Twitter Spaces",
+                ImageUrl = "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=400&q=80",
+                Content = @"<p>X (Twitter) Spaces için uzun zamandır beklenen <strong>kayıt özelliği</strong> aktif edildi. Kullanıcılar artık Space'lerini otomatik kaydedebilir ve 30 gün boyunca tekrar dinlenebilir hale getirebilir.</p>
 
-<img src=""https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80"" alt=""Galatasaray Taraftarları"" style=""width:100%;max-width:800px;margin:20px 0;border-radius:8px"" />
-
-<h2>Maç Özeti</h2>
-<p>Etihad Stadium'da oynanan rövanş maçı, 2-2 berabere sona erdi. İlk maçta evinde 1-1 berabere kalan Galatasaray, Manchester'da inanılmaz bir mücadele sergiledi.</p>
-
-<h3>Gol Düellosu</h3>
+<h2>Yeni Özellikler</h2>
 <ul>
-<li><strong>15' </strong> - Mauro Icardi (Galatasaray) - 0-1</li>
-<li><strong>28'</strong> - Erling Haaland (Man City) - 1-1</li>
-<li><strong>52'</strong> - Barış Alper Yılmaz (Galatasaray) - 1-2</li>
-<li><strong>78'</strong> - Phil Foden (Man City) - 2-2</li>
+<li>Otomatik kayıt seçeneği</li>
+<li>30 gün replay süresi</li>
+<li>Timestamp'li bölümler</li>
+<li>Hız ayarlama (0.5x - 2x)</li>
+<li>İndirme seçeneği (Premium)</li>
 </ul>
 
-<img src=""https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&q=80"" alt=""Futbol Stadyumu Atmosferi"" style=""width:100%;max-width:800px;margin:20px 0;border-radius:8px"" />
+<h2>İçerik Üreticileri İçin Fırsatlar</h2>
+<p>Bu özellik, Spaces'i podcast alternatifi haline getiriyor:</p>
+<ol>
+<li>Canlı yayın + replay avantajı</li>
+<li>Anında publish (podcast upload'a gerek yok)</li>
+<li>Native X audience'i</li>
+<li>Monetization potansiyeli</li>
+</ol>
 
-<h2>Penaltı Atışları</h2>
-<table style=""width:100%;border-collapse:collapse;margin:20px 0"">
-<tr style=""background:#f0f0f0"">
-<th style=""border:1px solid #ddd;padding:12px"">Galatasaray</th>
-<th style=""border:1px solid #ddd;padding:12px"">Sonuç</th>
-<th style=""border:1px solid #ddd;padding:12px"">Man City</th>
-<th style=""border:1px solid #ddd;padding:12px"">Sonuç</th>
-</tr>
-<tr>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">Icardi</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">⚽ GOL</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">De Bruyne</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">⚽ GOL</td>
-</tr>
-<tr>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">Mertens</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">⚽ GOL</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">Haaland</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">⚽ GOL</td>
-</tr>
-<tr>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">Zaha</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">⚽ GOL</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">Grealish</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">❌ KALE DIRI</td>
-</tr>
-<tr>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">Torreira</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">⚽ GOL</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">Bernardo Silva</td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center"">⚽ GOL</td>
-</tr>
-<tr style=""background:#ffe6e6"">
-<td style=""border:1px solid #ddd;padding:8px;text-align:center""><strong>Barış Alper</strong></td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center""><strong>⚽ GOL</strong></td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center""><strong>Foden</strong></td>
-<td style=""border:1px solid #ddd;padding:8px;text-align:center""><strong>❌ KALE DIRI</strong></td>
-</tr>
-</table>
+<h2>Teknik Detaylar</h2>
+<ul>
+<li>Maksimum kayıt süresi: 12 saat</li>
+<li>Audio quality: 128kbps</li>
+<li>Storage: X Cloud</li>
+<li>Format: M4A</li>
+</ul>
 
-<blockquote style=""border-left:4px solid #ffcc00;padding-left:16px;margin:20px 0;background:#fff8e1;padding:16px"">
-<strong>Okan Buruk:</strong> ""Bugün sadece Galatasaray değil, Türk futbolu kazandı. Oyuncularımla gurur duyuyorum.""
-</blockquote>
+<blockquote>""Bu özellik, Spaces'i sadece canlı bir deneyim olmaktan çıkarıp kalıcı içerik platformuna dönüştürüyor."" - X Product Team</blockquote>",
+                Subjects = new[] { "Twitter", "Audio", "Content Creation" },
+                Authors = new[] { "X News Team" },
+                ExpressDate = now.AddHours(-10),
+                CreateDate = now.AddHours(-10),
+                UpdateDate = now.AddHours(-10),
+                Priority = 2,
+                IsActive = true,
+                ViewCount = 1500,
+                IsSecondPageNews = false,
+            },
 
-<h2>Çeyrek Final Rakibi</h2>
-<p>Galatasaray, çeyrek finalde <strong>Bayern München</strong> ile eşleşti. İlk maç 2 Nisan'da Allianz Arena'da, rövanş 9 Nisan'da Rams Park'ta oynanacak.</p>",
-                Subjects = new[] { "Futbol", "Şampiyonlar Ligi", "Galatasaray" },
-                Authors = new[] { "Avrupa Futbolu Editörlüğü" },
-                ExpressDate = now.AddHours(-6),
-                CreateDate = now.AddHours(-6),
-                UpdateDate = now.AddHours(-6),
+            // LinkedIn News
+            new NewsArticle
+            {
+                Category = "linkedin",
+                Type = "news",
+                Caption = "LinkedIn'de AI Powered İş İlanları Dönemi Başladı",
+                Slug = SlugHelper.GenerateSlug("LinkedIn'de AI Powered İş İlanları Dönemi Başladı"),
+                Keywords = "linkedin, AI, job posting, recruitment, hiring",
+                SocialTags = "#LinkedIn #AI #Recruitment",
+                Summary = "LinkedIn, iş ilanları oluşturmak için AI destekli araçlar sunuyor. İş tanımları otomatik olarak optimize ediliyor.",
+                ImgPath = "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=1200&q=80",
+                ImgAlt = "LinkedIn AI Recruitment",
+                ImageUrl = "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&q=80",
+                Content = @"<p>LinkedIn, işe alım sürecini hızlandırmak için <strong>AI-powered iş ilanı oluşturma araçlarını</strong> kullanıma açtı.</p>
+
+<h2>Yeni Özellikler</h2>
+<ul>
+<li>Otomatik iş tanımı yazma</li>
+<li>Skill matching AI</li>
+<li>Salary range önerileri</li>
+<li>Competitor analysis</li>
+<li>SEO optimizasyonu</li>
+</ul>
+
+<h2>Nasıl Çalışıyor?</h2>
+<ol>
+<li>Pozisyon başlığını girin</li>
+<li>AI size şablon önerir</li>
+<li>Gerekli skill'leri otomatik belirler</li>
+<li>Market salary range'i gösterir</li>
+<li>Tek tıkla yayınlayın</li>
+</ol>
+
+<h2>Recruiter'lar İçin Avantajlar</h2>
+<blockquote>""AI sayesinde iş ilanı oluşturma süresi 30 dakikadan 3 dakikaya düştü."" - LinkedIn HR Analytics</blockquote>
+
+<h3>Veri Odaklı Kararlar</h3>
+<ul>
+<li>Hangi skill'ler trend?</li>
+<li>Rakipler ne kadar maaş veriyor?</li>
+<li>Hangi keywords daha çok başvuru getiriyor?</li>
+</ul>
+
+<h2>Premium Özellikler</h2>
+<p>LinkedIn Recruiter aboneleri için ek özellikler:</p>
+<ul>
+<li>Candidate matching AI</li>
+<li>Automated screening questions</li>
+<li>Interview scheduling assistant</li>
+<li>Culture fit assessment</li>
+</ul>
+
+<p>Platform, 2025 sonuna kadar tüm iş ilanlarının %60'ının AI ile oluşturulacağını tahmin ediyor.</p>",
+                Subjects = new[] { "LinkedIn", "AI", "Recruitment" },
+                Authors = new[] { "LinkedIn Product Team" },
+                ExpressDate = now.AddHours(-14),
+                CreateDate = now.AddHours(-14),
+                UpdateDate = now.AddHours(-14),
                 Priority = 1,
                 IsActive = true,
-                ViewCount = 5800,
+                ViewCount = 1200,
                 IsSecondPageNews = false,
             },
             new NewsArticle
             {
                 Category = "linkedin",
                 Type = "news",
-                Caption = "Milli Takımda Yeni Dönem: Montella İmzayı Attı",
-                Keywords = "milli takım, Vincenzo Montella, TFF, A Milli Takım",
-                SocialTags = "#MilliTakım #Montella #TFF",
-                Summary =
-                    "İtalyan teknik adam Vincenzo Montella, Türkiye A Milli Futbol Takımı'nın başına geçti. 2026 Dünya Kupası elemanları hedefi var.",
-                ImgPath = "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
-                ImgAlt = "Vincenzo Montella",
-                Content =
-                    "Türkiye Futbol Federasyonu, A Milli Takım için İtalyan teknik adam Vincenzo Montella ile anlaştı. Fiorentina ve Sevilla'da başarılı çalışmalar yapan Montella, 2026 Dünya Kupası elemeleri için hazırlıklara başlayacak. Genç oyuncuları takıma entegre etme planı yapan teknik adam, modern futbol anlayışını Türkiye'ye getirmeyi hedefliyor. İlk maçı Mart ayında Hollanda ile oynanacak.",
-                Subjects = new[] { "Milli Takım", "Futbol", "Teknik Direktör" },
-                Authors = new[] { "Milli Takım Muhabirleri" },
-                ExpressDate = now.AddHours(-10),
-                CreateDate = now.AddHours(-10),
-                UpdateDate = now.AddHours(-10),
-                Priority = 2,
+                Caption = "LinkedIn Learning: 2025'te En Çok Talep Gören 10 Skill",
+                Slug = SlugHelper.GenerateSlug("LinkedIn Learning 2025'te En Çok Talep Gören 10 Skill"),
+                Keywords = "linkedin, learning, skills, career, education",
+                SocialTags = "#LinkedInLearning #Skills #Career",
+                Summary = "LinkedIn, 2025 yılında iş dünyasında en çok aranan 10 yeteneği açıkladı. AI ve data science ilk sıralarda.",
+                ImgPath = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80",
+                ImgAlt = "LinkedIn Learning Skills",
+                ImageUrl = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&q=80",
+                Content = @"<p>LinkedIn Learning, 1 milyar veri noktasını analiz ederek 2025'te en çok talep gören becerileri belirledi.</p>
+
+<h2>Top 10 Skills</h2>
+<ol>
+<li><strong>AI & Machine Learning</strong> - %156 artış</li>
+<li><strong>Data Science & Analytics</strong> - %142 artış</li>
+<li><strong>Cloud Computing</strong> - %128 artış</li>
+<li><strong>Cybersecurity</strong> - %118 artış</li>
+<li><strong>Product Management</strong> - %95 artış</li>
+<li><strong>UX/UI Design</strong> - %89 artış</li>
+<li><strong>DevOps Engineering</strong> - %76 artış</li>
+<li><strong>Digital Marketing</strong> - %72 artış</li>
+<li><strong>Leadership & Management</strong> - %68 artış</li>
+<li><strong>Sustainability</strong> - %64 artış</li>
+</ol>
+
+<h2>Sektör Bazında Değişim</h2>
+
+<h3>Tech Sector</h3>
+<ul>
+<li>AI/ML en kritik skill</li>
+<li>Full-stack developer talebi artıyor</li>
+<li>Low-code/no-code platformlar popüler</li>
+</ul>
+
+<h3>Finance</h3>
+<ul>
+<li>Blockchain ve crypto knowledge</li>
+<li>Regulatory compliance</li>
+<li>Quantitative analysis</li>
+</ul>
+
+<h3>Healthcare</h3>
+<ul>
+<li>Healthcare AI</li>
+<li>Telemedicine platforms</li>
+<li>Patient data analytics</li>
+</ul>
+
+<h2>Kariyer Önerileri</h2>
+<blockquote>""2025'te başarılı olmak isteyenler, en az 2-3 high-demand skill'e sahip olmalı."" - Ryan Roslansky, LinkedIn CEO</blockquote>
+
+<h3>Nasıl Başlanır?</h3>
+<ol>
+<li>LinkedIn Learning'de ilginizi çeken bir kurs seçin</li>
+<li>Haftalık en az 2 saat ayırın</li>
+<li>Projeler yaparak pratik yapın</li>
+<li>Sertifika alın ve profile ekleyin</li>
+<li>Networking yaparak fırsatları değerlendirin</li>
+</ol>
+
+<p>Platform, bu skill'lere sahip profesyonellerin ortalama %34 daha yüksek maaş aldığını belirtiyor.</p>",
+                Subjects = new[] { "LinkedIn", "Learning", "Career Development" },
+                Authors = new[] { "LinkedIn Research Team" },
+                ExpressDate = now.AddDays(-1),
+                CreateDate = now.AddDays(-1),
+                UpdateDate = now.AddDays(-1),
+                Priority = 1,
                 IsActive = true,
-                ViewCount = 2400,
+                ViewCount = 2800,
+                IsSecondPageNews = false,
+            },
+
+            // Facebook News
+            new NewsArticle
+            {
+                Category = "facebook",
+                Type = "news",
+                Caption = "Meta AI Artık WhatsApp, Instagram ve Facebook'ta Entegre",
+                Slug = SlugHelper.GenerateSlug("Meta AI Artık WhatsApp Instagram ve Facebook'ta Entegre"),
+                Keywords = "meta, AI, whatsapp, instagram, facebook, integration",
+                SocialTags = "#MetaAI #WhatsApp #Instagram",
+                Summary = "Meta'nın AI asistanı artık tüm platformlarda kullanılabiliyor. Sohbetlerde AI desteği ve görsel oluşturma özellikleri sunuluyor.",
+                ImgPath = "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&q=80",
+                ImgAlt = "Meta AI Integration",
+                ImageUrl = "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&q=80",
+                Content = @"<p>Meta, kendi AI asistanını WhatsApp, Instagram ve Facebook'a tam entegre etti. Kullanıcılar artık sohbetlerde AI desteği alabiliyor.</p>
+
+<h2>Yeni Özellikler</h2>
+
+<h3>WhatsApp</h3>
+<ul>
+<li>Chat'lerde @meta ile AI çağırma</li>
+<li>Mesaj önerileri</li>
+<li>Çeviri desteği (100+ dil)</li>
+<li>Voice message transkript</li>
+</ul>
+
+<h3>Instagram</h3>
+<ul>
+<li>DM'lerde AI asistan</li>
+<li>Görsel oluşturma (text-to-image)</li>
+<li>Caption önerileri</li>
+<li>Hashtag optimizasyonu</li>
+</ul>
+
+<h3>Facebook</h3>
+<ul>
+<li>Post yazma yardımı</li>
+<li>Görsel düzenleme</li>
+<li>Event planning asistanı</li>
+<li>Group management tools</li>
+</ul>
+
+<h2>Gizlilik</h2>
+<p>Meta, AI'nın end-to-end şifreli sohbetlere erişemeyeceğini garanti ediyor:</p>
+<blockquote>""Meta AI, yalnızca kullanıcının açıkça paylaştığı mesajları görebilir. E2E şifreli sohbetler tamamen özel kalır.""</blockquote>
+
+<h2>İş Kullanımı</h2>
+<p>Business hesaplar için ek özellikler:</p>
+<ul>
+<li>Customer service automation</li>
+<li>Product recommendation</li>
+<li>Order tracking</li>
+<li>FAQ responses</li>
+</ul>
+
+<h2>Rekabet</h2>
+<p>Bu hamle, Meta'yı ChatGPT ve Google Bard ile rekabette güçlendiriyor. 3 milyar+ kullanıcıya anında ulaşım, önemli bir avantaj sağlıyor.</p>",
+                Subjects = new[] { "Meta", "AI", "Social Media" },
+                Authors = new[] { "Meta Newsroom" },
+                ExpressDate = now.AddHours(-5),
+                CreateDate = now.AddHours(-5),
+                UpdateDate = now.AddHours(-5),
+                Priority = 1,
+                IsActive = true,
+                ViewCount = 3500,
+                IsSecondPageNews = false,
+            },
+
+            // Instagram News
+            new NewsArticle
+            {
+                Category = "instagram",
+                Type = "news",
+                Caption = "Instagram Reels Artık 10 Dakikaya Kadar Uzun Olabiliyor",
+                Slug = SlugHelper.GenerateSlug("Instagram Reels Artık 10 Dakikaya Kadar Uzun Olabiliyor"),
+                Keywords = "instagram, reels, video, content, creator",
+                SocialTags = "#Instagram #Reels #ContentCreator",
+                Summary = "Instagram, Reels için maksimum süreyi 90 saniyeden 10 dakikaya çıkardı. YouTube Shorts'a karşı hamle.",
+                ImgPath = "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1200&q=80",
+                ImgAlt = "Instagram Reels",
+                ImageUrl = "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1200&q=80",
+                Content = @"<p>Instagram, içerik üreticileri için önemli bir güncelleme yaptı: Reels artık <strong>10 dakikaya kadar</strong> uzun olabiliyor.</p>
+
+<h2>Değişiklikler</h2>
+<ul>
+<li>Maksimum süre: 90 saniye → 10 dakika</li>
+<li>Minimum süre değişmedi (3 saniye)</li>
+<li>Tüm hesaplar için geçerli</li>
+<li>Aşamalı rollout (2 hafta)</li>
+</ul>
+
+<h2>Neden Bu Değişiklik?</h2>
+<p>Instagram, YouTube Shorts ve TikTok'un artan rekabetine yanıt veriyor:</p>
+
+<blockquote>""Uzun formlu içerik, izleyicilerin daha fazla engagement göstermesini sağlıyor. Creator'lar daha derin hikayeler anlatabilecek."" - Adam Mosseri, Instagram Head</blockquote>
+
+<h2>Content Creator'lar İçin Fırsatlar</h2>
+
+<h3>Yeni İçerik Türleri</h3>
+<ul>
+<li>Tutorial ve how-to videoları</li>
+<li>Mini vlog'lar</li>
+<li>Product review'ları</li>
+<li>Behind-the-scenes içerikler</li>
+<li>Educational content</li>
+</ul>
+
+<h3>Monetization</h3>
+<p>Uzun Reels için özel para kazanma seçenekleri:</p>
+<ul>
+<li>Mid-roll ads (5+ dakika videolarda)</li>
+<li>Branded content integration</li>
+<li>Bonus programı (view sayısına göre)</li>
+</ul>
+
+<h2>Algoritma Değişiklikleri</h2>
+<p>Instagram, uzun Reels'leri boost ediyor:</p>
+<ul>
+<li>Watch time artık daha önemli metrik</li>
+<li>Complete rate hesaplanıyor</li>
+<li>Share ve save öncelikli</li>
+</ul>
+
+<h2>Best Practices</h2>
+<ol>
+<li><strong>Hook güçlü olsun:</strong> İlk 3 saniye kritik</li>
+<li><strong>Bölümlere ayır:</strong> Uzun videoda chapter'lar kullan</li>
+<li><strong>Caption detaylı:</strong> Timestamps ekle</li>
+<li><strong>CTA koy:</strong> Like, comment, share isteyin</li>
+</ol>
+
+<p>Bu değişiklik, Instagram'ın 'kısa video platformu' imajını değiştirerek 'genel video platformu' haline gelme stratejisinin parçası.</p>",
+                Subjects = new[] { "Instagram", "Reels", "Social Media" },
+                Authors = new[] { "Instagram Creators Team" },
+                ExpressDate = now.AddHours(-18),
+                CreateDate = now.AddHours(-18),
+                UpdateDate = now.AddHours(-18),
+                Priority = 1,
+                IsActive = true,
+                ViewCount = 2900,
+                IsSecondPageNews = false,
+            },
+
+            // TikTok News
+            new NewsArticle
+            {
+                Category = "tiktok",
+                Type = "news",
+                Caption = "TikTok Shop Türkiye'de Açılıyor: E-Ticaretin Yeni Dönemi",
+                Slug = SlugHelper.GenerateSlug("TikTok Shop Türkiye'de Açılıyor E-Ticaretin Yeni Dönemi"),
+                Keywords = "tiktok, shop, e-commerce, turkey, shopping",
+                SocialTags = "#TikTokShop #ETicaret #Shopping",
+                Summary = "TikTok, Türkiye'de e-ticaret platformunu açıyor. Videolardan direkt alışveriş yapılabilecek.",
+                ImgPath = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&q=80",
+                ImgAlt = "TikTok Shop",
+                ImageUrl = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&q=80",
+                Content = @"<p>TikTok, Kasım 2025'te Türkiye'de <strong>TikTok Shop</strong> platformunu açıyor. Kullanıcılar videolardan direkt ürün satın alabilecek.</p>
+
+<h2>Özellikler</h2>
+
+<h3>Kullanıcılar İçin</h3>
+<ul>
+<li>Video izlerken tek tıkla alışveriş</li>
+<li>Live stream satışları</li>
+<li>Creator önerileri</li>
+<li>Güvenli ödeme sistemi</li>
+<li>Hızlı kargo takibi</li>
+</ul>
+
+<h3>Satıcılar İçin</h3>
+<ul>
+<li>Ücretsiz mağaza açma</li>
+<li>%5 komisyon (ilk 6 ay %0)</li>
+<li>Creator partnership programı</li>
+<li>Analytics dashboard</li>
+<li>Advertising tools</li>
+</ul>
+
+<h2>Nasıl Çalışıyor?</h2>
+<ol>
+<li><strong>Satıcı:</strong> Ürünü TikTok Shop'a ekler</li>
+<li><strong>Creator:</strong> Ürünü videosunda tanıtır</li>
+<li><strong>Link:</strong> Video'ya alışveriş linki eklenir</li>
+<li><strong>Satış:</strong> Kullanıcı videonun içinden satın alır</li>
+<li><strong>Commission:</strong> Creator ve TikTok pay alır</li>
+</ol>
+
+<h2>Türkiye Pazarı</h2>
+<p>TikTok Türkiye'deki potansiyele inanıyor:</p>
+<ul>
+<li>30M+ aktif kullanıcı</li>
+<li>Günlük 60 dakika ortalama kullanım</li>
+<li>Genç demografik (18-34 yaş %65)</li>
+<li>Yüksek engagement rate</li>
+</ul>
+
+<h2>Rakipler</h2>
+<p>Bu hamle, Trendyol, Hepsiburada ve Amazon'a karşı önemli bir rekabet:</p>
+<blockquote>""Social commerce, e-ticaretin geleceği. Türkiye'de bu trendi öncü olmak istiyoruz."" - TikTok EMEA Director</blockquote>
+
+<h2>Creator Economy</h2>
+<p>Türk influencer'lar için yeni gelir kapısı:</p>
+<ul>
+<li>Affiliate komisyonları (%10-20)</li>
+<li>Sponsored content</li>
+<li>Brand partnerships</li>
+<li>Live shopping bonusu</li>
+</ul>
+
+<h2>Launch Plan</h2>
+<ul>
+<li><strong>Beta:</strong> Kasım 2025</li>
+<li><strong>Public:</strong> Aralık 2025</li>
+<li><strong>Hedef:</strong> İlk yıl $500M GMV</li>
+</ul>",
+                Subjects = new[] { "TikTok", "E-commerce", "Social Commerce" },
+                Authors = new[] { "TikTok Business Team" },
+                ExpressDate = now.AddDays(-1),
+                CreateDate = now.AddDays(-1),
+                UpdateDate = now.AddDays(-1),
+                Priority = 1,
+                IsActive = true,
+                ViewCount = 4200,
+                IsSecondPageNews = false,
+            },
+
+            // YouTube News
+            new NewsArticle
+            {
+                Category = "youtube",
+                Type = "news",
+                Caption = "YouTube Premium Türkiye'de Fiyat Artışı: Yeni Tarifeler Açıklandı",
+                Slug = SlugHelper.GenerateSlug("YouTube Premium Türkiye'de Fiyat Artışı Yeni Tarifeler Açıklandı"),
+                Keywords = "youtube, premium, pricing, turkey, subscription",
+                SocialTags = "#YouTube #Premium #Pricing",
+                Summary = "YouTube Premium, Türkiye'de fiyatlarını güncelledi. Bireysel abonelik 59.99 TL'den 89.99 TL'ye çıktı.",
+                ImgPath = "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=1200&q=80",
+                ImgAlt = "YouTube Premium",
+                ImageUrl = "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=1200&q=80",
+                ThumbnailUrl = "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=400&q=80",
+                Content = @"<p>YouTube, Türkiye'deki Premium abonelik fiyatlarını <strong>1 Kasım 2025</strong> tarihinden itibaren güncelliyor.</p>
+
+<h2>Yeni Fiyatlar</h2>
+
+<table style=""width:100%;border-collapse:collapse;margin:20px 0"">
+<thead style=""background:#f0f0f0"">
+<tr>
+<th style=""padding:12px;text-align:left;border:1px solid #ddd"">Plan</th>
+<th style=""padding:12px;text-align:right;border:1px solid #ddd"">Eski Fiyat</th>
+<th style=""padding:12px;text-align:right;border:1px solid #ddd"">Yeni Fiyat</th>
+<th style=""padding:12px;text-align:right;border:1px solid #ddd"">Artış</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=""padding:12px;border:1px solid #ddd"">Bireysel (Aylık)</td>
+<td style=""padding:12px;text-align:right;border:1px solid #ddd"">59.99 TL</td>
+<td style=""padding:12px;text-align:right;border:1px solid #ddd"">89.99 TL</td>
+<td style=""padding:12px;text-align:right;border:1px solid #ddd;color:red"">+50%</td>
+</tr>
+<tr style=""background:#fafafa"">
+<td style=""padding:12px;border:1px solid #ddd"">Öğrenci (Aylık)</td>
+<td style=""padding:12px;text-align:right;border:1px solid #ddd"">29.99 TL</td>
+<td style=""padding:12px;text-align:right;border:1px solid #ddd"">44.99 TL</td>
+<td style=""padding:12px;text-align:right;border:1px solid #ddd;color:red"">+50%</td>
+</tr>
+<tr>
+<td style=""padding:12px;border:1px solid #ddd"">Aile (Aylık)</td>
+<td style=""padding:12px;text-align:right;border:1px solid #ddd"">89.99 TL</td>
+<td style=""padding:12px;text-align:right;border:1px solid #ddd"">134.99 TL</td>
+<td style=""padding:12px;text-align:right;border:1px solid #ddd;color:red"">+50%</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Premium Özellikleri</h2>
+<ul>
+<li>Reklamsız izleme</li>
+<li>Arka planda oynatma</li>
+<li>Offline indirme</li>
+<li>YouTube Music Premium dahil</li>
+<li>Picture-in-picture mode</li>
+<li>Queue management</li>
+</ul>
+
+<h2>Neden Artış?</h2>
+<p>YouTube'un açıklamasına göre:</p>
+<blockquote>""Türkiye'deki enflasyon ve döviz kurları, fiyat güncellemesini gerekli kıldı. Bölgesel ekonomik koşullara uyum sağlıyoruz.""</blockquote>
+
+<h2>Mevcut Aboneler</h2>
+<p>Şu anki aboneler için:</p>
+<ul>
+<li>3 ay boyunca eski fiyat geçerli</li>
+<li>Şubat 2026'dan itibaren yeni fiyat</li>
+<li>İptal hakkı saklı</li>
+</ul>
+
+<h2>Alternatifler</h2>
+<p>Kullanıcılar şu alternatiflere bakıyor:</p>
+<ol>
+<li><strong>YouTube Music:</strong> 54.99 TL (sadece müzik)</li>
+<li><strong>Ad blocker:</strong> Ücretsiz ama kurallara aykırı</li>
+<li><strong>Aile planı:</strong> 6 kişiye kadar, kişi başı 22.50 TL</li>
+</ol>
+
+<h2>Sosyal Medya Tepkileri</h2>
+<p>Twitter'da #YouTubePremium trending oldu. Kullanıcılar %50 artışın çok fazla olduğunu belirtiyor. Bazıları aboneliği iptal edeceğini söyledi.</p>
+
+<p>YouTube Türkiye'den resmi açıklama bekleniyor.</p>",
+                Subjects = new[] { "YouTube", "Premium", "Pricing" },
+                Authors = new[] { "YouTube Turkey Team" },
+                ExpressDate = now.AddHours(-20),
+                CreateDate = now.AddHours(-20),
+                UpdateDate = now.AddHours(-20),
+                Priority = 1,
+                IsActive = true,
+                ViewCount = 5600,
                 IsSecondPageNews = false,
             },
         };
 
         // Generate slugs for all news articles before inserting
-        foreach (var article in newsList)
+        foreach (var article in newsArticles)
         {
             if (string.IsNullOrEmpty(article.Slug))
             {
@@ -753,7 +927,7 @@ public static class SeedNewsData
             }
         }
 
-        await newsCollection.InsertManyAsync(newsList).ConfigureAwait(false);
-        Console.WriteLine($"Successfully seeded {newsList.Count} news articles to the database!");
+        await newsCollection.InsertManyAsync(newsArticles).ConfigureAwait(false);
+        Console.WriteLine($"Successfully seeded {newsArticles.Count} news articles to the database!");
     }
 }
