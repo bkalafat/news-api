@@ -59,6 +59,7 @@ builder.Services.AddCustomHealthChecks();
 
 // Add background services
 builder.Services.AddHostedService<NewsApi.Infrastructure.BackgroundJobs.SocialMediaFetcherService>();
+builder.Services.AddHostedService<NewsApi.Infrastructure.BackgroundJobs.DailyNewsSeedService>();
 
 var app = builder.Build();
 

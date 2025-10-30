@@ -56,6 +56,12 @@ public static class ServiceCollectionExtensions
         // Social Media Services
         services.AddHttpClient<RedditService>();
 
+        // NewsAPI.org Settings and Services
+        var newsApiSettings = new NewsApiSettings();
+        configuration.GetSection("NewsApiSettings").Bind(newsApiSettings);
+        services.AddSingleton(newsApiSettings);
+        services.AddHttpClient<INewsDataFetcherService, NewsDataFetcherService>();
+
         return services;
     }
 
