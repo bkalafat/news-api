@@ -356,4 +356,4 @@ Sorun yaşarsanız:
 
 **Last Updated:** January 2025  
 **Version:** 1.0  
-**Compatibility:** .NET 10, Azure Container Apps
+**Compatibility:** .NET 9, Azure Container Apps

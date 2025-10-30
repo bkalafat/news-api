@@ -3,13 +3,13 @@
 ## Project Overview
 
 Full-stack Turkish tech news platform:
-- **Backend**: .NET 10 Web API with Clean Architecture, MongoDB, JWT auth
+- **Backend**: .NET 9 Web API with Clean Architecture, MongoDB, JWT auth
 - **Frontend**: Next.js 16 with TypeScript, TailwindCSS v4, React Query, Turkish i18n
 
 ## General Rules
 
 1. **Always use Context7 MCP** for up-to-date documentation
-   - Next.js 16, React Query, TailwindCSS v4, .NET 10, MongoDB
+   - Next.js 16, React Query, TailwindCSS v4, .NET 9, MongoDB
    - Add "use context7" to prompts automatically when working with these technologies
 
 2. **Follow project architecture**
@@ -156,7 +156,7 @@ Always use Context7 for:
 - React Query patterns (useQuery, useMutation, cache management)
 - TailwindCSS v4 utilities and configuration
 - Shadcn/ui component usage
-- .NET 10 features (C# 12, ASP.NET Core, minimal APIs)
+- .NET 9 features (C# 12, ASP.NET Core, minimal APIs)
 - MongoDB .NET Driver methods
 - FluentValidation rules
 - Authentication patterns (JWT)

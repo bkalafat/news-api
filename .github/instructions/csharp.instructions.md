@@ -9,7 +9,7 @@ These instructions apply to all C# files in the News API project.
 ## 🧠 Language Context
 
 - **Language**: C# 12+
-- **Framework**: .NET 10.0
+- **Framework**: .NET 9.0
 - **Runtime**: ASP.NET Core
 - **Architecture**: Clean Architecture
 

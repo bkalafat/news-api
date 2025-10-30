@@ -19,7 +19,7 @@ This mode helps you:
 
 When in this mode, I will:
 - Always consider Clean Architecture layer separation
-- Follow the project's coding standards (C# 12+, .NET 10)
+- Follow the project's coding standards (C# 12+, .NET 9)
 - Implement proper validation with FluentValidation
 - Write tests alongside code (AAA pattern)
 - Add XML documentation comments
