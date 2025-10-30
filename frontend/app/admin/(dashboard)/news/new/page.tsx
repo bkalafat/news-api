@@ -33,13 +33,15 @@ interface NewsFormData {
 }
 
 const categories = [
+  'reddit',
+  'github',
+  'twitter',
+  'linkedin',
+  'facebook',
+  'instagram',
+  'tiktok',
+  'youtube',
   'technology',
-  'sports',
-  'world',
-  'business',
-  'science',
-  'health',
-  'entertainment',
 ];
 
 export default function NewsEditorPage() {

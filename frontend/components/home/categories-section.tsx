@@ -6,21 +6,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
+  MessageSquare,
+  Github,
+  Twitter,
+  Linkedin,
+  Facebook,
+  Instagram,
+  Music,
+  Youtube,
   Cpu,
-  Globe,
-  Briefcase,
-  FlaskConical,
-  HeartPulse,
-  Film,
 } from "lucide-react";
 
 const categoryIcons = {
+  [NewsCategory.Reddit]: MessageSquare,
+  [NewsCategory.GitHub]: Github,
+  [NewsCategory.Twitter]: Twitter,
+  [NewsCategory.LinkedIn]: Linkedin,
+  [NewsCategory.Facebook]: Facebook,
+  [NewsCategory.Instagram]: Instagram,
+  [NewsCategory.TikTok]: Music,
+  [NewsCategory.YouTube]: Youtube,
   [NewsCategory.Technology]: Cpu,
-  [NewsCategory.World]: Globe,
-  [NewsCategory.Business]: Briefcase,
-  [NewsCategory.Science]: FlaskConical,
-  [NewsCategory.Health]: HeartPulse,
-  [NewsCategory.Entertainment]: Film,
 };
 
 export function CategoriesSection() {

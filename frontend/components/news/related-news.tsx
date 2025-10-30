@@ -82,13 +82,15 @@ export function RelatedNews({ category, currentNewsId, limit = 5 }: RelatedNewsP
   }
 
   const categoryNames: Record<string, string> = {
+    reddit: "Reddit",
+    github: "GitHub",
+    twitter: "X/Twitter",
+    linkedin: "LinkedIn",
+    facebook: "Facebook",
+    instagram: "Instagram",
+    tiktok: "TikTok",
+    youtube: "YouTube",
     technology: "Teknoloji",
-    world: "Dünya",
-    business: "Ekonomi",
-    science: "Bilim",
-    health: "Sağlık",
-    entertainment: "Eğlence",
-    sports: "Spor",
   };
 
   return (

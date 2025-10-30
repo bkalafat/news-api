@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using FluentValidation;
 using NewsApi.Application.DTOs;
 

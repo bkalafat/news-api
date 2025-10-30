@@ -29,23 +29,27 @@ export function NewsDetailHero({ news }: NewsDetailHeroProps) {
   const altText = news.imageMetadata?.altText || news.imgAlt || news.caption;
 
   const categoryColors: Record<string, string> = {
-    technology: "bg-blue-500",
-    world: "bg-green-500",
-    business: "bg-purple-500",
-    science: "bg-cyan-500",
-    health: "bg-red-500",
-    entertainment: "bg-pink-500",
-    sports: "bg-orange-500",
+    reddit: "bg-orange-600",
+    github: "bg-gray-900",
+    twitter: "bg-blue-400",
+    linkedin: "bg-blue-700",
+    facebook: "bg-blue-600",
+    instagram: "bg-pink-600",
+    tiktok: "bg-black",
+    youtube: "bg-red-600",
+    technology: "bg-purple-600",
   };
 
   const categoryNames: Record<string, string> = {
+    reddit: "Reddit",
+    github: "GitHub",
+    twitter: "X/Twitter",
+    linkedin: "LinkedIn",
+    facebook: "Facebook",
+    instagram: "Instagram",
+    tiktok: "TikTok",
+    youtube: "YouTube",
     technology: "Teknoloji",
-    world: "Dünya",
-    business: "Ekonomi",
-    science: "Bilim",
-    health: "Sağlık",
-    entertainment: "Eğlence",
-    sports: "Spor",
   };
 
   return (

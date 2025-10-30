@@ -87,46 +87,67 @@ export function Header() {
                   <h3 className="font-semibold mb-3">{t('navigation.categories')}</h3>
                   <div className="flex flex-col space-y-2">
                     <Link
+                      href="/category/reddit"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-sm transition-colors hover:text-primary"
+                    >
+                      {t('categories.reddit')}
+                    </Link>
+                    <Link
+                      href="/category/github"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-sm transition-colors hover:text-primary"
+                    >
+                      {t('categories.github')}
+                    </Link>
+                    <Link
+                      href="/category/twitter"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-sm transition-colors hover:text-primary"
+                    >
+                      {t('categories.twitter')}
+                    </Link>
+                    <Link
+                      href="/category/linkedin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-sm transition-colors hover:text-primary"
+                    >
+                      {t('categories.linkedin')}
+                    </Link>
+                    <Link
+                      href="/category/facebook"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-sm transition-colors hover:text-primary"
+                    >
+                      {t('categories.facebook')}
+                    </Link>
+                    <Link
+                      href="/category/instagram"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-sm transition-colors hover:text-primary"
+                    >
+                      {t('categories.instagram')}
+                    </Link>
+                    <Link
+                      href="/category/tiktok"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-sm transition-colors hover:text-primary"
+                    >
+                      {t('categories.tiktok')}
+                    </Link>
+                    <Link
+                      href="/category/youtube"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-sm transition-colors hover:text-primary"
+                    >
+                      {t('categories.youtube')}
+                    </Link>
+                    <Link
                       href="/category/technology"
                       onClick={() => setMobileMenuOpen(false)}
                       className="text-sm transition-colors hover:text-primary"
                     >
                       {t('categories.technology')}
-                    </Link>
-                    <Link
-                      href="/category/world"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
-                    >
-                      {t('categories.world')}
-                    </Link>
-                    <Link
-                      href="/category/business"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
-                    >
-                      {t('categories.business')}
-                    </Link>
-                    <Link
-                      href="/category/science"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
-                    >
-                      {t('categories.science')}
-                    </Link>
-                    <Link
-                      href="/category/health"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
-                    >
-                      {t('categories.health')}
-                    </Link>
-                    <Link
-                      href="/category/entertainment"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
-                    >
-                      {t('categories.entertainment')}
                     </Link>
                   </div>
                 </div>
