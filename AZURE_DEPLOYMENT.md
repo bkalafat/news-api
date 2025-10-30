@@ -241,7 +241,23 @@ A GitHub Action workflow is automatically created for the frontend. To set up ba
    az ad sp create-for-rbac --name "newsportal-github" --role contributor --scopes /subscriptions/19acb272-bb61-400b-acc4-8b7a2f7aa0cc/resourceGroups/newsportal-rg --sdk-auth
    ```
 
-2. The workflow in `.github/workflows/azure-backend-deploy.yml` will automatically deploy on push to master
+   This command generates a JSON output with the following structure:
+   ```json
+   {
+     "clientId": "<GUID>",
+     "clientSecret": "<STRING>",
+     "subscriptionId": "<GUID>",
+     "tenantId": "<GUID>"
+   }
+   ```
+
+2. Copy the entire JSON output and add it as a repository secret named `AZURE_CREDENTIALS`:
+   - Go to GitHub repository → Settings → Secrets and variables → Actions
+   - Click "New repository secret"
+   - Name: `AZURE_CREDENTIALS`
+   - Value: Paste the entire JSON output
+
+3. The workflow in `.github/workflows/azure-backend-deploy.yml` will automatically deploy on push to master
 
 ## 📚 Additional Resources
 

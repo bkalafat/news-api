@@ -23,7 +23,10 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
+          tenant-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
+          subscription-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}
+          client-secret: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
 
       - name: Build and push Docker image
         run: |
