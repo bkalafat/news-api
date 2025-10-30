@@ -745,11 +745,11 @@ public static class SeedNewsData
         };
 
         // Generate slugs for all news articles before inserting
-        foreach (var news in newsList)
+        foreach (var article in newsList)
         {
-            if (string.IsNullOrEmpty(news.Slug))
+            if (string.IsNullOrEmpty(article.Slug))
             {
-                news.Slug = SlugHelper.GenerateSlug(news.Caption);
+                article.Slug = SlugHelper.GenerateSlug(article.Caption);
             }
         }
 

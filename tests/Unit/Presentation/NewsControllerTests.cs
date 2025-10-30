@@ -35,7 +35,7 @@ public class NewsArticleControllerTests
             NewsBuilder.Create().WithCategory("Politics").Build(),
         };
 
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(newsList);
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(newsList);
 
         // Act
         var result = await _controller.GetAllNews();
@@ -44,7 +44,7 @@ public class NewsArticleControllerTests
         var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var returnedNews = okResult.Value.Should().BeAssignableTo<List<NewsArticle>>().Subject;
         returnedNews.Should().HaveCount(3);
-        _mockNewsArticleService.Verify(x => x.GetAllNewsAsync(), Times.Once);
+        _mockNewsArticleService.Verify(service => service.GetAllNewsAsync(), Times.Once);
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class NewsArticleControllerTests
             NewsBuilder.Create().WithCategory("Technology").Build(),
         };
 
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(newsList);
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(newsList);
 
         // Act
         var result = await _controller.GetAllNews(category: "Technology");
@@ -67,7 +67,7 @@ public class NewsArticleControllerTests
         var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var returnedNews = okResult.Value.Should().BeAssignableTo<List<NewsArticle>>().Subject;
         returnedNews.Should().HaveCount(2);
-        returnedNews.Should().OnlyContain(n => n.Category == "Technology");
+        returnedNews.Should().OnlyContain(article => article.Category == "Technology");
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public class NewsArticleControllerTests
             NewsBuilder.Create().WithType("Breaking").Build(),
         };
 
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(newsList);
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(newsList);
 
         // Act
         var result = await _controller.GetAllNews(type: "Breaking");
@@ -90,7 +90,7 @@ public class NewsArticleControllerTests
         var okResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var returnedNews = okResult.Value.Should().BeAssignableTo<List<NewsArticle>>().Subject;
         returnedNews.Should().HaveCount(2);
-        returnedNews.Should().OnlyContain(n => n.Type == "Breaking");
+        returnedNews.Should().OnlyContain(article => article.Type == "Breaking");
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public class NewsArticleControllerTests
             NewsBuilder.Create().WithCategory("Technology").WithType("Article").Build(),
         };
 
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(newsList);
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(newsList);
 
         // Act
         var result = await _controller.GetAllNews(category: "Technology", type: "Breaking");
@@ -121,7 +121,7 @@ public class NewsArticleControllerTests
     public async Task GetAllNews_WhenServiceThrows_ShouldReturn500()
     {
         // Arrange
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ThrowsAsync(new Exception("Database error"));
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ThrowsAsync(new Exception("Database error"));
 
         // Act
         var result = await _controller.GetAllNews();
@@ -135,7 +135,7 @@ public class NewsArticleControllerTests
     public async Task GetAllNews_WithEmptyList_ShouldReturnEmptyList()
     {
         // Arrange
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(new List<NewsArticle>());
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(new List<NewsArticle>());
 
         // Act
         var result = await _controller.GetAllNews();
@@ -157,7 +157,7 @@ public class NewsArticleControllerTests
             NewsBuilder.Create().WithCategory("Sports").Build(),
         };
 
-        _mockNewsArticleService.Setup(x => x.GetAllNewsAsync()).ReturnsAsync(newsList);
+        _mockNewsArticleService.Setup(service => service.GetAllNewsAsync()).ReturnsAsync(newsList);
 
         // Act
         var result = await _controller.GetAllNews(category: "technology");
@@ -179,7 +179,7 @@ public class NewsArticleControllerTests
         var newsId = Guid.NewGuid().ToString();
         var news = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
 
-        _mockNewsArticleService.Setup(x => x.GetNewsByIdAsync(newsId)).ReturnsAsync(news);
+        _mockNewsArticleService.Setup(service => service.GetNewsByIdAsync(newsId)).ReturnsAsync(news);
 
         // Act
         var result = await _controller.GetNewsById(newsId);
@@ -195,7 +195,7 @@ public class NewsArticleControllerTests
     {
         // Arrange
         var newsId = Guid.NewGuid().ToString();
-        _mockNewsArticleService.Setup(x => x.GetNewsByIdAsync(newsId)).ReturnsAsync((NewsArticle?)null);
+        _mockNewsArticleService.Setup(service => service.GetNewsByIdAsync(newsId)).ReturnsAsync((NewsArticle?)null);
 
         // Act
         var result = await _controller.GetNewsById(newsId);
@@ -209,7 +209,7 @@ public class NewsArticleControllerTests
     {
         // Arrange
         var newsId = Guid.NewGuid().ToString();
-        _mockNewsArticleService.Setup(x => x.GetNewsByIdAsync(newsId)).ThrowsAsync(new Exception("Database error"));
+        _mockNewsArticleService.Setup(service => service.GetNewsByIdAsync(newsId)).ThrowsAsync(new Exception("Database error"));
 
         // Act
         var result = await _controller.GetNewsById(newsId);
@@ -230,7 +230,7 @@ public class NewsArticleControllerTests
         var createDto = CreateNewsArticleDtoBuilder.Create().AsValidTechnologyNews().Build();
         var createdNews = NewsBuilder.Create().WithCaption(createDto.Caption).Build();
 
-        _mockNewsArticleService.Setup(x => x.CreateNewsAsync(It.IsAny<NewsArticle>())).ReturnsAsync(createdNews);
+        _mockNewsArticleService.Setup(service => service.CreateNewsAsync(It.IsAny<NewsArticle>())).ReturnsAsync(createdNews);
 
         // Act
         var result = await _controller.CreateNews(createDto);
@@ -248,7 +248,7 @@ public class NewsArticleControllerTests
         // Arrange
         var createDto = CreateNewsArticleDtoBuilder.Create().AsValidTechnologyNews().Build();
         _mockNewsArticleService
-            .Setup(x => x.CreateNewsAsync(It.IsAny<NewsArticle>()))
+            .Setup(service => service.CreateNewsAsync(It.IsAny<NewsArticle>()))
             .ThrowsAsync(new Exception("Database error"));
 
         // Act
@@ -271,9 +271,9 @@ public class NewsArticleControllerTests
         var existingNews = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
         var updateDto = UpdateNewsArticleDtoBuilder.Create().Build();
 
-        _mockNewsArticleService.Setup(x => x.GetNewsByIdAsync(newsId)).ReturnsAsync(existingNews);
+        _mockNewsArticleService.Setup(service => service.GetNewsByIdAsync(newsId)).ReturnsAsync(existingNews);
         _mockNewsArticleService
-            .Setup(x => x.UpdateNewsAsync(newsId, It.IsAny<NewsArticle>()))
+            .Setup(service => service.UpdateNewsAsync(newsId, It.IsAny<NewsArticle>()))
             .Returns(Task.CompletedTask);
 
         // Act
@@ -290,7 +290,7 @@ public class NewsArticleControllerTests
         var newsId = Guid.NewGuid().ToString();
         var updateDto = UpdateNewsArticleDtoBuilder.Create().Build();
 
-        _mockNewsArticleService.Setup(x => x.GetNewsByIdAsync(newsId)).ReturnsAsync((NewsArticle?)null);
+        _mockNewsArticleService.Setup(service => service.GetNewsByIdAsync(newsId)).ReturnsAsync((NewsArticle?)null);
 
         // Act
         var result = await _controller.UpdateNews(newsId, updateDto);
@@ -307,9 +307,9 @@ public class NewsArticleControllerTests
         var existingNews = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
         var updateDto = UpdateNewsArticleDtoBuilder.Create().Build();
 
-        _mockNewsArticleService.Setup(x => x.GetNewsByIdAsync(newsId)).ReturnsAsync(existingNews);
+        _mockNewsArticleService.Setup(service => service.GetNewsByIdAsync(newsId)).ReturnsAsync(existingNews);
         _mockNewsArticleService
-            .Setup(x => x.UpdateNewsAsync(newsId, It.IsAny<NewsArticle>()))
+            .Setup(service => service.UpdateNewsAsync(newsId, It.IsAny<NewsArticle>()))
             .ThrowsAsync(new Exception("Database error"));
 
         // Act
@@ -331,8 +331,8 @@ public class NewsArticleControllerTests
         var newsId = Guid.NewGuid().ToString();
         var existingNews = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
 
-        _mockNewsArticleService.Setup(x => x.GetNewsByIdAsync(newsId)).ReturnsAsync(existingNews);
-        _mockNewsArticleService.Setup(x => x.DeleteNewsAsync(newsId)).Returns(Task.CompletedTask);
+        _mockNewsArticleService.Setup(service => service.GetNewsByIdAsync(newsId)).ReturnsAsync(existingNews);
+        _mockNewsArticleService.Setup(service => service.DeleteNewsAsync(newsId)).Returns(Task.CompletedTask);
 
         // Act
         var result = await _controller.DeleteNews(newsId);
@@ -347,7 +347,7 @@ public class NewsArticleControllerTests
         // Arrange
         var newsId = Guid.NewGuid().ToString();
 
-        _mockNewsArticleService.Setup(x => x.GetNewsByIdAsync(newsId)).ReturnsAsync((NewsArticle?)null);
+        _mockNewsArticleService.Setup(service => service.GetNewsByIdAsync(newsId)).ReturnsAsync((NewsArticle?)null);
 
         // Act
         var result = await _controller.DeleteNews(newsId);
@@ -363,8 +363,8 @@ public class NewsArticleControllerTests
         var newsId = Guid.NewGuid().ToString();
         var existingNews = NewsBuilder.Create().WithId(Guid.Parse(newsId)).Build();
 
-        _mockNewsArticleService.Setup(x => x.GetNewsByIdAsync(newsId)).ReturnsAsync(existingNews);
-        _mockNewsArticleService.Setup(x => x.DeleteNewsAsync(newsId)).ThrowsAsync(new Exception("Database error"));
+        _mockNewsArticleService.Setup(service => service.GetNewsByIdAsync(newsId)).ReturnsAsync(existingNews);
+        _mockNewsArticleService.Setup(service => service.DeleteNewsAsync(newsId)).ThrowsAsync(new Exception("Database error"));
 
         // Act
         var result = await _controller.DeleteNews(newsId);

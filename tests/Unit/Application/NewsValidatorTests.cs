@@ -21,7 +21,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Category).WithErrorMessage("Category is required");
+        result.ShouldHaveValidationErrorFor(dto => dto.Category).WithErrorMessage("Category is required");
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Category);
+        result.ShouldHaveValidationErrorFor(dto => dto.Category);
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class NewsValidatorTests
         // Act & Assert
         var result = _validator.TestValidate(dto);
         result
-            .ShouldHaveValidationErrorFor(x => x.Category)
+            .ShouldHaveValidationErrorFor(dto => dto.Category)
             .WithErrorMessage("Category must not exceed 100 characters");
     }
 
@@ -56,7 +56,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldNotHaveValidationErrorFor(x => x.Category);
+        result.ShouldNotHaveValidationErrorFor(dto => dto.Category);
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Type).WithErrorMessage("Type is required");
+        result.ShouldHaveValidationErrorFor(dto => dto.Type).WithErrorMessage("Type is required");
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Type).WithErrorMessage("Type must not exceed 50 characters");
+        result.ShouldHaveValidationErrorFor(dto => dto.Type).WithErrorMessage("Type must not exceed 50 characters");
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Caption).WithErrorMessage("Caption is required");
+        result.ShouldHaveValidationErrorFor(dto => dto.Caption).WithErrorMessage("Caption is required");
     }
 
     [Fact]
@@ -100,7 +100,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Caption).WithErrorMessage("Caption must not exceed 500 characters");
+        result.ShouldHaveValidationErrorFor(dto => dto.Caption).WithErrorMessage("Caption must not exceed 500 characters");
     }
 
     [Fact]
@@ -112,7 +112,7 @@ public class NewsValidatorTests
         // Act & Assert
         var result = _validator.TestValidate(dto);
         result
-            .ShouldHaveValidationErrorFor(x => x.Keywords)
+            .ShouldHaveValidationErrorFor(dto => dto.Keywords)
             .WithErrorMessage("Keywords must not exceed 1000 characters");
     }
 
@@ -124,7 +124,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldNotHaveValidationErrorFor(x => x.Keywords);
+        result.ShouldNotHaveValidationErrorFor(dto => dto.Keywords);
     }
 
     [Fact]
@@ -136,7 +136,7 @@ public class NewsValidatorTests
         // Act & Assert
         var result = _validator.TestValidate(dto);
         result
-            .ShouldHaveValidationErrorFor(x => x.SocialTags)
+            .ShouldHaveValidationErrorFor(dto => dto.SocialTags)
             .WithErrorMessage("Social tags must not exceed 500 characters");
     }
 
@@ -148,7 +148,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Summary).WithErrorMessage("Summary is required");
+        result.ShouldHaveValidationErrorFor(dto => dto.Summary).WithErrorMessage("Summary is required");
     }
 
     [Fact]
@@ -159,7 +159,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Summary).WithErrorMessage("Summary must not exceed 2000 characters");
+        result.ShouldHaveValidationErrorFor(dto => dto.Summary).WithErrorMessage("Summary must not exceed 2000 characters");
     }
 
     [Fact]
@@ -171,7 +171,7 @@ public class NewsValidatorTests
         // Act & Assert
         var result = _validator.TestValidate(dto);
         result
-            .ShouldHaveValidationErrorFor(x => x.ImgPath)
+            .ShouldHaveValidationErrorFor(dto => dto.ImgPath)
             .WithErrorMessage("Image path must not exceed 500 characters");
     }
 
@@ -184,7 +184,7 @@ public class NewsValidatorTests
         // Act & Assert
         var result = _validator.TestValidate(dto);
         result
-            .ShouldHaveValidationErrorFor(x => x.ImgAlt)
+            .ShouldHaveValidationErrorFor(dto => dto.ImgAlt)
             .WithErrorMessage("Image alt text must not exceed 200 characters");
     }
 
@@ -196,7 +196,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Content).WithErrorMessage("Content is required");
+        result.ShouldHaveValidationErrorFor(dto => dto.Content).WithErrorMessage("Content is required");
     }
 
     [Fact]
@@ -207,7 +207,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.ExpressDate);
+        result.ShouldHaveValidationErrorFor(dto => dto.ExpressDate);
     }
 
     [Fact]
@@ -218,7 +218,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldNotHaveValidationErrorFor(x => x.ExpressDate);
+        result.ShouldNotHaveValidationErrorFor(dto => dto.ExpressDate);
     }
 
     [Theory]
@@ -231,7 +231,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldHaveValidationErrorFor(x => x.Priority).WithErrorMessage("Priority must be between 1 and 100");
+        result.ShouldHaveValidationErrorFor(dto => dto.Priority).WithErrorMessage("Priority must be between 1 and 100");
     }
 
     [Theory]
@@ -245,7 +245,7 @@ public class NewsValidatorTests
 
         // Act & Assert
         var result = _validator.TestValidate(dto);
-        result.ShouldNotHaveValidationErrorFor(x => x.Priority);
+        result.ShouldNotHaveValidationErrorFor(dto => dto.Priority);
     }
 
     [Fact]
