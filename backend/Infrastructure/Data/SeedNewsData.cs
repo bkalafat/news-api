@@ -28,10 +28,10 @@ public static class SeedNewsData
         var now = DateTime.UtcNow;
         var newsList = new List<NewsArticle>
         {
-            // Technology News
+            // Technology & GitHub News
             new NewsArticle
             {
-                Category = "technology",
+                Category = "github",
                 Type = "news",
                 Caption = "Yapay Zeka Çağında Yeni Gelişmeler",
                 Slug = SlugHelper.GenerateSlug("Yapay Zeka Çağında Yeni Gelişmeler"),
@@ -87,7 +87,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "technology",
+                Category = "reddit",
                 Type = "news",
                 Caption = "Quantum Bilgisayarlar Gerçek Oluyor",
                 Keywords = "quantum, bilgisayar, Google, Willow, teknoloji",
@@ -153,7 +153,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "technology",
+                Category = "twitter",
                 Type = "news",
                 Caption = "5G Teknolojisi Türkiye'de Hızla Yayılıyor",
                 Keywords = "5G, Türkiye, Türk Telekom, Turkcell, mobil internet",
@@ -176,7 +176,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "technology",
+                Category = "youtube",
                 Type = "news",
                 Caption = "Elektrikli Araç Satışları Rekor Kırdı",
                 Keywords = "elektrikli araç, Tesla, BYD, otomotiv, yeşil enerji",
@@ -199,7 +199,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "technology",
+                Category = "tiktok",
                 Type = "news",
                 Caption = "Metaverse Yatırımları Artıyor",
                 Keywords = "metaverse, sanal gerçeklik, VR, AR, Meta, Apple Vision Pro",
@@ -220,10 +220,10 @@ public static class SeedNewsData
                 ViewCount = 450,
                 IsSecondPageNews = false,
             },
-            // World News
+            // LinkedIn News
             new NewsArticle
             {
-                Category = "world",
+                Category = "linkedin",
                 Type = "news",
                 Caption = "İklim Zirvesi'nde Tarihi Anlaşma",
                 Keywords = "iklim değişikliği, COP29, Paris Anlaşması, sürdürülebilirlik",
@@ -246,7 +246,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "world",
+                Category = "facebook",
                 Type = "news",
                 Caption = "AB'den Göç Politikası Reformu",
                 Keywords = "Avrupa Birliği, göç, mülteci, sınır güvenliği",
@@ -268,7 +268,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "world",
+                Category = "instagram",
                 Type = "news",
                 Caption = "Uzay Turizmi Yeni Döneme Giriyor",
                 Keywords = "uzay turizmi, SpaceX, Blue Origin, Virgin Galactic",
@@ -289,10 +289,10 @@ public static class SeedNewsData
                 ViewCount = 3200,
                 IsSecondPageNews = false,
             },
-            // Business News
+            // Technology News
             new NewsArticle
             {
-                Category = "business",
+                Category = "technology",
                 Type = "news",
                 Caption = "Türkiye Ekonomisi İlk Çeyrekte %5.2 Büyüdü",
                 Keywords = "Türkiye ekonomisi, büyüme, GSYH, ekonomi",
@@ -315,7 +315,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "business",
+                Category = "reddit",
                 Type = "news",
                 Caption = "Kripto Para Piyasasında Yükseliş",
                 Keywords = "Bitcoin, Ethereum, kripto para, blockchain",
@@ -338,7 +338,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "business",
+                Category = "linkedin",
                 Type = "news",
                 Caption = "Türk Startupları 2 Milyar Dolar Yatırım Aldı",
                 Keywords = "startup, girişim, yatırım, teknoloji, Türkiye",
@@ -359,10 +359,10 @@ public static class SeedNewsData
                 ViewCount = 1450,
                 IsSecondPageNews = false,
             },
-            // Science News
+            // GitHub & Science News
             new NewsArticle
             {
-                Category = "science",
+                Category = "github",
                 Type = "news",
                 Caption = "Mars'ta Su Keşfi: Yaşam İzleri Bulundu",
                 Slug = SlugHelper.GenerateSlug("Mars'ta Su Keşfi: Yaşam İzleri Bulundu"),
@@ -423,7 +423,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "science",
+                Category = "twitter",
                 Type = "news",
                 Caption = "Kanser Tedavisinde Çığır Açan Gelişme",
                 Keywords = "kanser, tedavi, mRNA, aşı, tıp",
@@ -446,7 +446,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "science",
+                Category = "facebook",
                 Type = "news",
                 Caption = "Biyoçeşitlilik Krizi: 1 Milyon Tür Tehlikede",
                 Keywords = "biyoçeşitlilik, nesli tükenen türler, çevre, ekosistem",
@@ -467,10 +467,10 @@ public static class SeedNewsData
                 ViewCount = 1800,
                 IsSecondPageNews = false,
             },
-            // Health News
+            // Instagram & Health News
             new NewsArticle
             {
-                Category = "health",
+                Category = "instagram",
                 Type = "news",
                 Caption = "DSÖ Yeni Beslenme Kılavuzu Yayınladı",
                 Keywords = "DSÖ, beslenme, sağlık, diyet, WHO",
@@ -493,7 +493,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "health",
+                Category = "tiktok",
                 Type = "news",
                 Caption = "Yapay Zeka Erken Teşhiste Doktorları Geçti",
                 Keywords = "yapay zeka, erken teşhis, radyoloji, AI, sağlık teknolojisi",
@@ -514,10 +514,10 @@ public static class SeedNewsData
                 ViewCount = 1750,
                 IsSecondPageNews = false,
             },
-            // Entertainment News
+            // YouTube & Entertainment News
             new NewsArticle
             {
-                Category = "entertainment",
+                Category = "youtube",
                 Type = "news",
                 Caption = "2025 Oscar Ödülleri Sahiplerini Buldu",
                 Keywords = "Oscar, akademi ödülleri, sinema, Hollywood",
@@ -540,7 +540,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "entertainment",
+                Category = "tiktok",
                 Type = "news",
                 Caption = "Netflix'in Türk Dizisi Dünya Listelerinde Birinci",
                 Keywords = "Netflix, Türk dizisi, streaming, dizi",
@@ -563,7 +563,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "entertainment",
+                Category = "youtube",
                 Type = "news",
                 Caption = "Yapay Zeka ile Üretilen Müzik Grammy Aldı",
                 Keywords = "Grammy, yapay zeka, müzik, AI müzik",
@@ -584,11 +584,11 @@ public static class SeedNewsData
                 ViewCount = 1250,
                 IsSecondPageNews = false,
             },
-            // Sports News (Turkish Focus)
+            // Twitter & Sports News
 
             new NewsArticle
             {
-                Category = "sports",
+                Category = "twitter",
                 Type = "news",
                 Caption = "Trabzonspor Altyapı Müjdeli Haberler",
                 Slug = SlugHelper.GenerateSlug("Trabzonspor Altyapı Müjdeli Haberler"),
@@ -612,7 +612,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "sports",
+                Category = "facebook",
                 Type = "news",
                 Caption = "TFF Önemli Karar: Liga Değişiklik Geliyor",
                 Keywords = "TFF, Süper Lig, lig format değişikliği, Türk futbolu",
@@ -635,7 +635,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "sports",
+                Category = "reddit",
                 Type = "news",
                 Caption = "Galatasaray Avrupa'da Tarih Yazdı",
                 Slug = SlugHelper.GenerateSlug("Galatasaray Avrupa'da Tarih Yazdı"),
@@ -721,7 +721,7 @@ public static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "sports",
+                Category = "linkedin",
                 Type = "news",
                 Caption = "Milli Takımda Yeni Dönem: Montella İmzayı Attı",
                 Keywords = "milli takım, Vincenzo Montella, TFF, A Milli Takım",
