@@ -24,7 +24,7 @@ When implementing a new endpoint, ensure all these steps are completed:
 
 ### 1. Define the DTO
 
-**Location**: `backend/Application/DTOs/`
+**Location**: `apps/api/Application/DTOs/`
 
 ```csharp
 /// <summary>
@@ -43,7 +43,7 @@ public class YourDto
 
 ### 2. Create Validator
 
-**Location**: `backend/Application/Validators/`
+**Location**: `apps/api/Application/Validators/`
 
 ```csharp
 using FluentValidation;
@@ -63,7 +63,7 @@ public class YourDtoValidator : AbstractValidator<YourDto>
 
 ### 3. Add Service Interface Method
 
-**Location**: `backend/Application/Services/INewsService.cs`
+**Location**: `apps/api/Application/Services/INewsService.cs`
 
 ```csharp
 /// <summary>
@@ -76,7 +76,7 @@ Task<Result> YourMethodAsync(YourDto dto);
 
 ### 4. Implement Service Method
 
-**Location**: `backend/Application/Services/NewsService.cs`
+**Location**: `apps/api/Application/Services/NewsService.cs`
 
 ```csharp
 public async Task<Result> YourMethodAsync(YourDto dto)
@@ -103,7 +103,7 @@ public async Task<Result> YourMethodAsync(YourDto dto)
 
 ### 5. Add Controller Action
 
-**Location**: `backend/Presentation/Controllers/NewsController.cs`
+**Location**: `apps/api/Presentation/Controllers/NewsController.cs`
 
 ```csharp
 /// <summary>

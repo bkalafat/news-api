@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'backend/**'
+      - 'apps/api/**'
       - '.github/workflows/azure-backend-deploy.yml'
   workflow_dispatch:
 

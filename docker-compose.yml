@@ -15,7 +15,7 @@ services:
       MINIO_BROWSER_REDIRECT_URL: http://localhost:9001
     volumes:
       - minio_data:/data
-      - ./docker/minio/init:/docker-entrypoint-initdb.d
+      - ./tools/docker/minio/init:/docker-entrypoint-initdb.d
     command: server /data --console-address ":9001"
     networks:
       - newsportal-network
@@ -65,7 +65,7 @@ services:
     volumes:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
-      - ./docker/mongodb/init:/docker-entrypoint-initdb.d
+      - ./tools/docker/mongodb/init:/docker-entrypoint-initdb.d
     networks:
       - newsportal-network
     healthcheck:

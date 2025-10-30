@@ -254,7 +254,7 @@ az containerapp show \
 Backend'de CORS'u frontend domain'iniz için açın:
 
 ```csharp
-// backend/Presentation/Extensions/ServiceCollectionExtensions.cs
+// apps/api/Presentation/Extensions/ServiceCollectionExtensions.cs
 builder.WithOrigins(
     "https://your-frontend.com",
     "https://newsapi-dev-app.eastus.azurecontainerapps.io"

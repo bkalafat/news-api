@@ -190,7 +190,7 @@ indent_size = 2
 
 ### `.csharpierrc.json` (Optional - CSharpier config)
 
-Create in `backend/` folder:
+Create in `apps/api/` folder:
 
 ```json
 {

@@ -42,7 +42,7 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
         run: |
-          cd scripts
+          cd tools/scripts
           
           # Update API_BASE_URL in script (alternative to env vars)
           sed -i "s|API_BASE_URL = \"http://localhost:5000/api\"|API_BASE_URL = \"$API_BASE_URL\"|g" news_aggregator.py
@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: aggregation-logs-${{ github.run_number }}
-          path: scripts/news_aggregator.log
+          path: tools/scripts/news_aggregator.log
           retention-days: 30
       
       - name: 📧 Notify on failure
@@ -83,7 +83,7 @@ jobs:
             Time: ${{ github.event.head_commit.timestamp }}
             
             Check logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          attachments: scripts/news_aggregator.log
+          attachments: tools/scripts/news_aggregator.log
 
 # Secrets to add in GitHub (Settings → Secrets → Actions):
 # 

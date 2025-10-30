@@ -54,7 +54,7 @@ git clone https://github.com/bkalafat/newsportal.git
 cd newsportal
 
 # Configure secrets
-cd backend
+cd apps/api
 dotnet user-secrets set "DatabaseSettings:ConnectionString" "mongodb://localhost:27017"
 dotnet user-secrets set "DatabaseSettings:DatabaseName" "NewsDb"
 dotnet user-secrets set "JwtSettings:SecretKey" "your-secret-key-min-32-chars"
@@ -79,16 +79,23 @@ See [API Documentation](NEWS_API_DOCUMENTATION.md) for detailed specs.
 
 ## Project Structure
 
+Modern monorepo structure following industry best practices:
+
 ```
 newsportal/
-├── backend/              # .NET 9 API
-│   ├── Domain/          # Business entities
-│   ├── Application/     # Use cases & DTOs
-│   ├── Infrastructure/  # Data access & services
-│   └── Presentation/    # Controllers & middleware
-├── frontend/            # Next.js 16 app
-├── tests/               # Test suite
-└── docker/              # Docker configurations
+├── apps/                    # Deployable applications
+│   ├── api/                # .NET 9 Backend API
+│   │   ├── Domain/         # Business entities (no dependencies)
+│   │   ├── Application/    # Use cases & DTOs
+│   │   ├── Infrastructure/ # Data access & external services
+│   │   └── Presentation/   # Controllers & HTTP layer
+│   └── web/                # Next.js 16 Frontend
+├── tests/                   # Test suite (unit, integration)
+├── tools/                   # Development & deployment tools
+│   ├── docker/             # Docker configurations
+│   ├── scripts/            # Automation scripts
+│   └── azure/              # Azure deployment configs
+└── .github/                 # CI/CD workflows & docs
 ```
 
 ## Development
@@ -101,10 +108,10 @@ dotnet test
 dotnet test --filter "FullyQualifiedName~Unit"
 
 # Build Docker image
-docker build -f docker/Dockerfile.backend -t newsportal:latest .
+docker build -t newsportal:latest .
 
 # Frontend development
-cd frontend
+cd apps/web
 npm install
 npm run dev
 ```
@@ -130,7 +137,7 @@ Key configuration options (use environment variables or User Secrets):
 
 - [API Documentation](NEWS_API_DOCUMENTATION.md)
 - [Swagger Testing Guide](SWAGGER_TESTING_GUIDE.md)
-- [Frontend Documentation](frontend/README.md)
+- [Frontend Documentation](apps/web/README.md)
 - [Architecture Specs](specs/002-modernize-net-core/)
 
 ## Deployment
@@ -139,7 +146,7 @@ Key configuration options (use environment variables or User Secrets):
 
 **Netlify**: Frontend deployed automatically from `master` branch
 
-See [Azure Deployment Guide](AZURE_DEPLOYMENT.md) for details.
+See `tools/azure/` for deployment scripts and configurations.
 
 ## Contributing
 

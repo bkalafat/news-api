@@ -184,7 +184,7 @@ echo "Swagger UI: $APP_URL/swagger"
 
 ### 1. Configure CORS for Frontend
 
-Update the CORS configuration in `backend/Presentation/Extensions/ServiceCollectionExtensions.cs`:
+Update the CORS configuration in `apps/api/Presentation/Extensions/ServiceCollectionExtensions.cs`:
 
 ```csharp
 services.AddCors(options =>

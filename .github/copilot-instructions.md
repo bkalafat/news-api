@@ -189,7 +189,7 @@ ASPNETCORE_ENVIRONMENT=Production
 ### Development Workflow
 
 **DO THIS:**
-✅ Make code changes in `backend/` directory
+✅ Make code changes in `apps/api/` directory
 ✅ Run `docker-compose up -d --build newsapi` to apply changes
 ✅ Test API via `http://localhost:5000`
 ✅ Check logs with `docker-compose logs -f newsapi`
@@ -248,7 +248,7 @@ docker-compose up -d
 
 When making changes to the backend code:
 
-1. **Edit files** in `backend/` directory
+1. **Edit files** in `apps/api/` directory
 2. **Rebuild container**: `docker-compose up -d --build newsapi`
 3. **Check logs**: `docker-compose logs -f newsapi`
 4. **Test endpoint**: Use Swagger or curl/Postman
@@ -260,7 +260,7 @@ When making changes to the backend code:
 
 ```
 newsportal/
-├── backend/                          # Main API project
+├── apps/api/                          # Main API project
 │   ├── Domain/                       # Core business entities (no external dependencies)
 │   │   ├── Entities/                # News entity models
 │   │   └── Interfaces/              # Repository contracts (INewsRepository)
@@ -286,7 +286,7 @@ newsportal/
 │   ├── Integration/                 # Controller & repository integration tests
 │   ├── Performance/                 # Performance benchmarks
 │   └── Helpers/                     # Test utilities (TestDataBuilders, TestMemoryCache)
-├── frontend/                        # Next.js 16 frontend
+├── apps/web/                        # Next.js 16 frontend
 ├── docker/                          # Docker configurations
 ├── scripts/                         # Development scripts
 │   └── database/                    # Data migration scripts
@@ -447,7 +447,7 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
   - Username: `admin`
   - Password: `admin123`
 - **MongoDB Shell**: `docker exec -it newsportal-mongodb mongosh -u admin -p password123`
-- **Data Migration**: See `backend/Migration/data-migration.md`
+- **Data Migration**: See `apps/api/Migration/data-migration.md`
 
 ### Configuration Management
 
@@ -516,7 +516,7 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
 
 **For local debugging with IDE:**
 1. Stop Docker backend: `docker-compose stop newsapi`
-2. Run locally: `dotnet run --project backend/newsApi.csproj`
+2. Run locally: `dotnet run --project apps/api/newsApi.csproj`
 3. Set breakpoints in Visual Studio/VS Code/Rider
 4. Remember to restart Docker when done: `docker-compose start newsapi`
 
