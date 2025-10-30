@@ -20,7 +20,7 @@ Modern, performanslı ve SEO-dostu Türk teknoloji haberleri web sitesi. Next.js
 
 - Node.js 18+ (recommended: 20+)
 - npm or yarn or pnpm
-- News API backend running (see [../newsApi/README.md](../newsApi/README.md))
+- News API backend running (see [../README.md](../README.md))
 
 ## 🚀 Quick Start
 
@@ -56,7 +56,7 @@ NEXT_PUBLIC_SITE_NAME=Teknoloji Haberleri
 Make sure the News API backend is running on `http://localhost:5000`:
 
 ```bash
-cd ../newsApi
+cd ../backend
 dotnet run
 ```
 

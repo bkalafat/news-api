@@ -376,9 +376,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Built with [.NET 9](https://dotnet.microsoft.com/)
-- MongoDB data persistence
-- Swagger documentation via [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+- Built with [.NET 9](https://dotnet.microsoft.com/) and [Next.js 16](https://nextjs.org/)
+- [MongoDB](https://www.mongodb.com/) for flexible data persistence
+- [Swagger/OpenAPI](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) for API documentation
+- [Docker](https://www.docker.com/) for containerization
 
 ## 📧 Contact & Support
 
