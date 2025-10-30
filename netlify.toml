@@ -1,0 +1,57 @@
+# Netlify Configuration for News Portal Frontend
+# Deploy Next.js application with full SSR/ISR support
+
+[build]
+  # Base directory for the build
+  base = "frontend"
+  
+  # Build command
+  command = "npm run build"
+  
+  # Output directory
+  publish = ".next"
+
+[build.environment]
+  # Node.js version
+  NODE_VERSION = "20"
+  
+  # Next.js specific
+  NEXT_TELEMETRY_DISABLED = "1"
+
+# Environment variables for production
+[context.production.environment]
+  NEXT_PUBLIC_API_URL = "https://newsportal-backend.happyglacier-db0dd319.westeurope.azurecontainerapps.io"
+  NEXT_PUBLIC_SITE_URL = "https://newsportal.netlify.app"
+  NEXT_PUBLIC_UNSPLASH_ACCESS_KEY = "ATK1ZDXPJKfdlYpm10AY1QNTvjzN4GymqQdH3JRP3qdU"
+
+# Environment variables for deploy previews
+[context.deploy-preview.environment]
+  NEXT_PUBLIC_API_URL = "https://newsportal-backend.happyglacier-db0dd319.westeurope.azurecontainerapps.io"
+  NEXT_PUBLIC_SITE_URL = "https://deploy-preview-{{REVIEW_ID}}--newsportal.netlify.app"
+  NEXT_PUBLIC_UNSPLASH_ACCESS_KEY = "ATK1ZDXPJKfdlYpm10AY1QNTvjzN4GymqQdH3JRP3qdU"
+
+# Redirects and headers
+[[redirects]]
+  from = "/api/*"
+  to = "https://newsportal-backend.happyglacier-db0dd319.westeurope.azurecontainerapps.io/:splat"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Enable Next.js features
+[functions]
+  node_bundler = "esbuild"
+  
+# Deploy settings
+[dev]
+  command = "npm run dev"
+  port = 3000
+  targetPort = 3000
+  autoLaunch = false
