@@ -10,7 +10,7 @@ Before starting, ensure you have:
 - **Azure CLI** installed ([Installation guide](https://learn.microsoft.com/cli/azure/install-azure-cli))
 - **Docker** installed and running
 - **GitHub account** (for CI/CD with GitHub Actions)
-- **.NET 10 SDK** installed
+- **.NET 9 SDK** installed
 
 ## 🏗️ Azure Architecture
 

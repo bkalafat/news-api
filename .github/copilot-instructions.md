@@ -13,7 +13,7 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 
 ## 📋 Project Overview
 
-**News API** is a modern news management system built with .NET 10 that provides a RESTful API for managing news articles with features including JWT authentication, MongoDB persistence, and comprehensive caching.
+**News API** is a modern news management system built with .NET 9 that provides a RESTful API for managing news articles with features including JWT authentication, MongoDB persistence, and comprehensive caching.
 
 **Target Audience**: 
 - Frontend developers building news consumption applications
@@ -32,7 +32,7 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 ## 🛠️ Tech Stack
 
 ### Backend Framework
-- **.NET 10.0** - Latest LTS version with C# 12+ features
+- **.NET 9.0** - Latest version with C# 12+ features
 - **ASP.NET Core** - Web API framework with minimal APIs support
 - **Clean Architecture** - Domain, Application, Infrastructure, Presentation layers
 
@@ -68,7 +68,7 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 
 The entire backend infrastructure runs in Docker containers orchestrated by `docker-compose.yml`:
 
-1. **newsportal-backend** (.NET 10 API)
+1. **newsportal-backend** (.NET 9 API)
    - Port: `5000:8080` (host:container)
    - URL: `http://localhost:5000`
    - Health Check: `http://localhost:5000/health`
@@ -546,7 +546,7 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
 ## 📚 Additional References
 
 ### Official Documentation
-- [.NET 10 Documentation](https://learn.microsoft.com/en-us/dotnet/)
+- [.NET 9 Documentation](https://learn.microsoft.com/en-us/dotnet/)
 - [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/)
 - [MongoDB .NET Driver](https://www.mongodb.com/docs/drivers/csharp/current/)
 - [FluentValidation](https://docs.fluentvalidation.net/)

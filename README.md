@@ -1,16 +1,16 @@
 # 📰 News API - Full-Stack News Platform
 
-[![.NET Version](https://img.shields.io/badge/.NET-10.0-blue)](https://dotnet.microsoft.com/)
-[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Latest-green)](https://www.mongodb.com/)
+[![.NET Version](https://img.shields.io/badge/.NET-9.0-blue)](https://dotnet.microsoft.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-3.2-green)](https://www.mongodb.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A modern, full-stack Turkish technology news platform. Features a production-ready .NET 10 backend API with Clean Architecture and a performant Next.js 16 frontend optimized for SEO and user experience.
+A modern, full-stack Turkish technology news platform. Features a production-ready .NET 9 backend API with Clean Architecture and a performant Next.js 16 frontend optimized for SEO and user experience.
 
 ## 🌟 Platform Components
 
 ### Backend API (backend/)
-Modern news management API built with .NET 10, following Clean Architecture principles. Features JWT authentication, comprehensive caching, and MongoDB persistence.
+Modern news management API built with .NET 9, following Clean Architecture principles. Features JWT authentication, comprehensive caching, and MongoDB persistence.
 
 ### Frontend Web (frontend/)
 Modern, SEO-optimized Turkish tech news website built with Next.js 16, TypeScript, TailwindCSS, and Shadcn/ui. Features responsive design, React Query data management, and Turkish localization.
@@ -34,7 +34,7 @@ Modern, SEO-optimized Turkish tech news website built with Next.js 16, TypeScrip
 
 - **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux) - [Download](https://www.docker.com/products/docker-desktop/)
 - **OR** Manual setup:
-  - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later
+  - [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) or later
   - [MongoDB](https://www.mongodb.com/try/download/community) (local or cloud instance)
 
 ### 🐳 Docker Setup (Recommended)
@@ -196,7 +196,7 @@ This project follows modern **monorepo architecture** with clean separation:
 
 ```
 newsportal/                   # Root monorepo
-├── backend/                  # Backend (.NET 10 API)
+├── backend/                  # Backend (.NET 9 API)
 │   ├── Domain/              # Core business logic & entities
 │   ├── Application/         # Business rules & use cases
 │   ├── Infrastructure/      # External dependencies
@@ -221,8 +221,6 @@ newsportal/                   # Root monorepo
 │   ├── instructions/       # Copilot guidelines
 │   └── prompts/            # Development prompts
 └── README.md               # This file
-```
-└── Performance/             # Performance benchmarks
 ```
 
 ### Key Design Patterns
@@ -378,9 +376,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Built with [.NET 10](https://dotnet.microsoft.com/)
-- MongoDB data persistence
-- Swagger documentation via [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+- Built with [.NET 9](https://dotnet.microsoft.com/) and [Next.js 16](https://nextjs.org/)
+- [MongoDB](https://www.mongodb.com/) for flexible data persistence
+- [Swagger/OpenAPI](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) for API documentation
+- [Docker](https://www.docker.com/) for containerization
 
 ## 📧 Contact & Support
 
