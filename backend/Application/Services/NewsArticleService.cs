@@ -56,7 +56,7 @@ public sealed class NewsArticleService(INewsArticleRepository newsArticleReposit
         var createdNews = await newsArticleRepository.CreateAsync(newsArticle).ConfigureAwait(false);
 
         // Invalidate cache
-        memoryCache.Remove(CacheKeys.NewsList);
+        InvalidateNewsCache(newsArticle.Id);
 
         return createdNews;
     }
@@ -67,8 +67,7 @@ public sealed class NewsArticleService(INewsArticleRepository newsArticleReposit
         await newsArticleRepository.UpdateAsync(id, newsArticle).ConfigureAwait(false);
 
         // Invalidate cache
-        memoryCache.Remove(CacheKeys.NewsList);
-        memoryCache.Remove(id);
+        InvalidateNewsCache(id);
     }
 
     public async Task DeleteNewsAsync(string id)
@@ -76,7 +75,19 @@ public sealed class NewsArticleService(INewsArticleRepository newsArticleReposit
         await newsArticleRepository.DeleteAsync(id).ConfigureAwait(false);
 
         // Invalidate cache
+        InvalidateNewsCache(id);
+    }
+
+    /// <summary>
+    /// Invalidates all news-related cache entries.
+    /// </summary>
+    /// <param name="newsId">The ID of the specific news article to invalidate (optional).</param>
+    private void InvalidateNewsCache(string? newsId = null)
+    {
         memoryCache.Remove(CacheKeys.NewsList);
-        memoryCache.Remove(id);
+        if (!string.IsNullOrEmpty(newsId))
+        {
+            memoryCache.Remove(newsId);
+        }
     }
 }

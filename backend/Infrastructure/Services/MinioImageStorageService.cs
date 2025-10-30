@@ -182,10 +182,19 @@ public class MinioImageStorageService : IImageStorageService
     /// <summary>
     /// Build the public URL for an object
     /// </summary>
-    public string GetPublicUrl(string objectKey)
+    public string GetImageUrl(string objectKey)
     {
         var protocol = _settings.UseSSL ? "https" : "http";
         return $"{protocol}://{_settings.Endpoint}/{_settings.BucketName}/{objectKey}";
+    }
+
+    /// <summary>
+    /// Get the public URL for a thumbnail image
+    /// </summary>
+    public string GetThumbnailUrl(string newsId, string extension)
+    {
+        var thumbnailKey = $"{newsId}-thumb{extension}";
+        return GetImageUrl(thumbnailKey);
     }
 
     /// <summary>

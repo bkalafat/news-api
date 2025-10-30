@@ -50,4 +50,19 @@ public interface IImageStorageService
     /// <param name="objectKey">The MinIO object key</param>
     /// <returns>True if image exists</returns>
     Task<bool> ImageExistsAsync(string objectKey);
+
+    /// <summary>
+    /// Get the public URL for an image
+    /// </summary>
+    /// <param name="objectKey">The MinIO object key</param>
+    /// <returns>Public URL for the image</returns>
+    string GetImageUrl(string objectKey);
+
+    /// <summary>
+    /// Get the public URL for a thumbnail image
+    /// </summary>
+    /// <param name="newsId">The news article ID</param>
+    /// <param name="extension">File extension (e.g., ".jpg")</param>
+    /// <returns>Public URL for the thumbnail</returns>
+    string GetThumbnailUrl(string newsId, string extension);
 }
