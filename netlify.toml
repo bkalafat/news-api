@@ -1,15 +1,22 @@
 # Netlify Configuration for News Portal Frontend
 # Deploy Next.js application with full SSR/ISR support
 
+# Essential Next.js plugin
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 [build]
   # Base directory for the build
   base = "frontend"
   
-  # Build command
-  command = "npm install && npm run build"
+  # Build command with legacy peer deps for Next.js 16 compatibility
+  command = "npm install --legacy-peer-deps && npm run build"
   
-  # Output directory
+  # Output directory for Next.js standalone build
   publish = ".next"
+  
+  # Functions directory for Next.js API routes
+  functions = ".netlify/functions"
 
 [build.environment]
   # Node.js version
