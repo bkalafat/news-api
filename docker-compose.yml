@@ -81,7 +81,7 @@ services:
   # ============================================
   # News API Backend (.NET 10)
   # ============================================
-  newsapi:
+  newsportal-backend:
     build:
       context: .
       dockerfile: Dockerfile
@@ -102,8 +102,8 @@ services:
       - MinioSettings__BucketName=news-images
       - MinioSettings__UseSSL=false
       - JwtSettings__SecretKey=${JWT_SECRET_KEY:-your-super-secret-jwt-key-that-is-at-least-32-characters-long}
-      - JwtSettings__Issuer=NewsApi
-      - JwtSettings__Audience=NewsApiClients
+      - JwtSettings__Issuer=NewsPortal
+      - JwtSettings__Audience=NewsPortalClients
     depends_on:
       mongodb:
         condition: service_healthy

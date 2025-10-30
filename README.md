@@ -34,7 +34,7 @@ A modern full-stack news platform built with .NET 9 and Next.js 16. Features Cle
 docker-compose up -d
 
 # View logs
-docker-compose logs -f newsapi
+docker-compose logs -f newsportal-backend
 
 # Stop services
 docker-compose down

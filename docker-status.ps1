@@ -62,5 +62,5 @@ Write-Host ""
 
 # Volume info
 Write-Host "Volumes:" -ForegroundColor Yellow
-docker volume ls --filter "name=newsapi" --format "table {{.Name}}\t{{.Driver}}\t{{.Size}}"
+docker volume ls --filter "name=newsportal" --format "table {{.Name}}\t{{.Driver}}\t{{.Size}}"
 Write-Host ""

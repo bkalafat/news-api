@@ -57,6 +57,9 @@ builder.Services.AddCorsPolicy();
 // Add health checks
 builder.Services.AddCustomHealthChecks();
 
+// Add background services
+builder.Services.AddHostedService<NewsApi.Infrastructure.BackgroundJobs.SocialMediaFetcherService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline

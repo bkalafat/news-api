@@ -15,4 +15,6 @@ public class MongoDbContext
     }
 
     public IMongoCollection<NewsArticle> News => _database.GetCollection<NewsArticle>("News");
+
+    public IMongoCollection<SocialMediaPost> SocialMediaPosts => _database.GetCollection<SocialMediaPost>("SocialMediaPosts");
 }

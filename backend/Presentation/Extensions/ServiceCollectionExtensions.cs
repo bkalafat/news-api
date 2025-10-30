@@ -35,6 +35,8 @@ public static class ServiceCollectionExtensions
         // Repository Pattern
         services.AddScoped<INewsArticleRepository, NewsArticleRepository>();
         services.AddScoped<INewsArticleService, NewsArticleService>();
+        services.AddScoped<ISocialMediaPostRepository, SocialMediaPostRepository>();
+        services.AddScoped<ISocialMediaPostService, SocialMediaPostService>();
 
         // Caching
         services.AddMemoryCache();
@@ -50,6 +52,9 @@ public static class ServiceCollectionExtensions
         configuration.GetSection("MinioSettings").Bind(minioSettings);
         services.AddSingleton(minioSettings);
         services.AddSingleton<IImageStorageService, MinioImageStorageService>();
+
+        // Social Media Services
+        services.AddHttpClient<RedditService>();
 
         return services;
     }
@@ -69,8 +74,8 @@ public static class ServiceCollectionExtensions
             secretKey = "default-test-secret-key-for-development-only-32-chars-minimum";
         }
 
-        var issuer = jwtSettings["Issuer"] ?? "NewsApi";
-        var audience = jwtSettings["Audience"] ?? "NewsApiClients";
+        var issuer = jwtSettings["Issuer"] ?? "NewsPortal";
+        var audience = jwtSettings["Audience"] ?? "NewsPortalClients";
 
         // Detect testing environment to relax some validation rules for integration tests
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? string.Empty;

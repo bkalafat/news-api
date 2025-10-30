@@ -201,8 +201,8 @@ public void Validator_InvalidCaption_FailsValidation()
 ```bash
 # Ensure JWT settings are configured
 dotnet user-secrets set "JwtSettings:SecretKey" "your-secret-key-must-be-at-least-32-characters-long"
-dotnet user-secrets set "JwtSettings:Issuer" "NewsApi"
-dotnet user-secrets set "JwtSettings:Audience" "NewsApiUsers"
+dotnet user-secrets set "JwtSettings:Issuer" "NewsPortal"
+dotnet user-secrets set "JwtSettings:Audience" "NewsPortalUsers"
 dotnet user-secrets set "JwtSettings:ExpirationMinutes" "60"
 ```
 

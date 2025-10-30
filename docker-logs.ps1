@@ -14,7 +14,7 @@ Write-Host "======================================" -ForegroundColor Cyan
 Write-Host ""
 
 # Available services
-$services = @("newsapi", "mongodb", "minio", "mongo-express", "redis")
+$services = @("newsportal-backend", "mongodb", "minio", "mongo-express", "redis")
 
 if ($Service -eq "") {
     Write-Host "Available services:" -ForegroundColor Yellow
@@ -23,9 +23,9 @@ if ($Service -eq "") {
     }
     Write-Host ""
     Write-Host "Usage examples:" -ForegroundColor Cyan
-    Write-Host "  .\docker-logs.ps1 newsapi          # View last 100 lines" -ForegroundColor White
-    Write-Host "  .\docker-logs.ps1 newsapi -Follow  # Stream logs in real-time" -ForegroundColor White
-    Write-Host "  .\docker-logs.ps1 newsapi -Tail 50 # View last 50 lines" -ForegroundColor White
+    Write-Host "  .\docker-logs.ps1 newsportal-backend          # View last 100 lines" -ForegroundColor White
+    Write-Host "  .\docker-logs.ps1 newsportal-backend -Follow  # Stream logs in real-time" -ForegroundColor White
+    Write-Host "  .\docker-logs.ps1 newsportal-backend -Tail 50 # View last 50 lines" -ForegroundColor White
     Write-Host "  .\docker-logs.ps1                  # View all service logs" -ForegroundColor White
     Write-Host ""
     

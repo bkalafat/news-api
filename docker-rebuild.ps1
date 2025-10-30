@@ -61,7 +61,7 @@ docker-compose -f docker-compose.yml -f $envFile up -d
 if ($LASTEXITCODE -eq 0) {
     Write-Host "✓ Services started successfully" -ForegroundColor Green
     Write-Host ""
-    Write-Host "Run '.\docker-logs.ps1 newsapi -Follow' to view logs" -ForegroundColor Cyan
+    Write-Host "Run '.\docker-logs.ps1 newsportal-backend -Follow' to view logs" -ForegroundColor Cyan
 } else {
     Write-Host ""
     Write-Host "ERROR: Failed to start services!" -ForegroundColor Red
