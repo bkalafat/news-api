@@ -11,12 +11,6 @@
   
   # Build command with legacy peer deps for Next.js 16 compatibility
   command = "npm install --legacy-peer-deps && npm run build"
-  
-  # Output directory for Next.js standalone build
-  publish = ".next"
-  
-  # Functions directory for Next.js API routes
-  functions = ".netlify/functions"
 
 [build.environment]
   # Node.js version
