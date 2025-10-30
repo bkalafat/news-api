@@ -9,7 +9,9 @@ class NewsApiClient {
   private client: AxiosInstance;
 
   constructor() {
-    const baseURL = `${process.env.NEXT_PUBLIC_API_URL}${process.env.NEXT_PUBLIC_API_BASE_PATH}`;
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    const basePath = process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/NewsArticle';
+    const baseURL = `${apiUrl}${basePath}`;
     
     this.client = axios.create({
       baseURL,

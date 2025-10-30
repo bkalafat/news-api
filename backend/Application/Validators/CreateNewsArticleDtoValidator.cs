@@ -10,7 +10,7 @@ public class CreateNewsArticleDtoValidator : AbstractValidator<CreateNewsArticle
     public CreateNewsArticleDtoValidator()
     {
         var allowedCategories = new[] { "reddit", "github", "twitter", "linkedin", "facebook", "instagram", "tiktok", "youtube", "technology" };
-        
+
         RuleFor(dto => dto.Category)
             .NotEmpty()
             .WithMessage("Category is required")
@@ -62,7 +62,7 @@ public class UpdateNewsArticleDtoValidator : AbstractValidator<UpdateNewsArticle
     public UpdateNewsArticleDtoValidator()
     {
         var allowedCategories = new[] { "reddit", "github", "twitter", "linkedin", "facebook", "instagram", "tiktok", "youtube", "technology" };
-        
+
         RuleFor(dto => dto.Category)
             .MaximumLength(100)
             .WithMessage("Category must not exceed 100 characters")

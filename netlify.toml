@@ -28,13 +28,15 @@
 # Environment variables for production
 [context.production.environment]
   NEXT_PUBLIC_API_URL = "https://newsportal-backend.happyglacier-db0dd319.westeurope.azurecontainerapps.io"
-  NEXT_PUBLIC_SITE_URL = "https://newsportal.netlify.app"
+  NEXT_PUBLIC_API_BASE_PATH = "/api/NewsArticle"
+  NEXT_PUBLIC_SITE_URL = "https://clever-speculoos-aacb3a.netlify.app"
   NEXT_PUBLIC_UNSPLASH_ACCESS_KEY = "ATK1ZDXPJKfdlYpm10AY1QNTvjzN4GymqQdH3JRP3qdU"
 
 # Environment variables for deploy previews
 [context.deploy-preview.environment]
   NEXT_PUBLIC_API_URL = "https://newsportal-backend.happyglacier-db0dd319.westeurope.azurecontainerapps.io"
-  NEXT_PUBLIC_SITE_URL = "https://deploy-preview-{{REVIEW_ID}}--newsportal.netlify.app"
+  NEXT_PUBLIC_API_BASE_PATH = "/api/NewsArticle"
+  NEXT_PUBLIC_SITE_URL = "https://deploy-preview-{{REVIEW_ID}}--clever-speculoos-aacb3a.netlify.app"
   NEXT_PUBLIC_UNSPLASH_ACCESS_KEY = "ATK1ZDXPJKfdlYpm10AY1QNTvjzN4GymqQdH3JRP3qdU"
 
 # Redirects and headers
