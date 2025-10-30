@@ -6,10 +6,10 @@
       "value": "dev"
     },
     "appName": {
-      "value": "newsapi"
+      "value": "newsportal"
     },
     "containerImage": {
-      "value": "newsapi:latest"
+      "value": "newsportal-backend:latest"
     },
     "jwtSecretKey": {
       "value": "REPLACE_WITH_YOUR_JWT_SECRET_KEY_MIN_32_CHARS"

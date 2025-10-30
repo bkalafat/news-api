@@ -1,5 +1,0 @@
-build:
-  docker:
-    web: docker/Dockerfile.backend
-run:
-  web: dotnet newsApi.dll

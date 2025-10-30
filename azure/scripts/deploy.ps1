@@ -15,8 +15,8 @@ if ([string]::IsNullOrWhiteSpace($Environment)) { $Environment = "dev" }
 $Location = Read-Host "Enter Azure region [eastus]"
 if ([string]::IsNullOrWhiteSpace($Location)) { $Location = "eastus" }
 
-$AppName = Read-Host "Enter app name [newsapi]"
-if ([string]::IsNullOrWhiteSpace($AppName)) { $AppName = "newsapi" }
+$AppName = Read-Host "Enter app name [newsportal]"
+if ([string]::IsNullOrWhiteSpace($AppName)) { $AppName = "newsportal" }
 
 $AcrName = Read-Host "Enter Azure Container Registry name (lowercase, no hyphens)"
 if ([string]::IsNullOrWhiteSpace($AcrName)) {

@@ -21,10 +21,10 @@ param environmentName string = 'dev'
 param location string = resourceGroup().location
 
 @description('Name of the application')
-param appName string = 'newsapi'
+param appName string = 'newsportal'
 
 @description('Container image and tag')
-param containerImage string = 'newsapi:latest'
+param containerImage string = 'newsportal-backend:latest'
 
 @description('JWT Secret Key for authentication')
 @secure()

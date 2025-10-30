@@ -122,14 +122,14 @@ To allow the frontend to communicate with the backend:
 az acr login --name newsportal
 
 # Build and push
-docker build -t newsportal.azurecr.io/newsapi:latest -f Dockerfile .
-docker push newsportal.azurecr.io/newsapi:latest
+docker build -t newsportal.azurecr.io/newsportal-backend:latest -f Dockerfile .
+docker push newsportal.azurecr.io/newsportal-backend:latest
 
 # Update container app
 az containerapp update `
     --name newsportal-backend `
     --resource-group newsportal-rg `
-    --image newsportal.azurecr.io/newsapi:latest
+    --image newsportal.azurecr.io/newsportal-backend:latest
 ```
 
 ## 🔧 Troubleshooting
