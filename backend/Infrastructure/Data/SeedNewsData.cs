@@ -26,7 +26,7 @@ public static class SeedNewsData
         }
 
         var now = DateTime.UtcNow;
-        var newsList = new List<NewsArticle>
+        var newsArticles = new List<NewsArticle>
         {
             // Technology & GitHub News
             new NewsArticle

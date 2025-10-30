@@ -11,6 +11,14 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 - Avoid creating summary files, completion reports, or quick reference guides
 - Update existing documentation when relevant, but don't create new MD files for every change
 
+**Key Architecture Facts:**
+- Backend runs on **.NET 10.0** with C# 13+ features
+- All backend services run in **Docker containers** - never use `dotnet run` for development
+- **MinIO** is used for image storage with automatic bucket initialization
+- **Turkish language support** via `SlugHelper` for URL-friendly slugs
+- Four main controllers: **NewsArticle**, **Auth**, **Seed**, **SocialMedia**
+- **Azure Container Apps** for production deployment with auto-scaling
+
 ## 📋 Project Overview
 
 **News API** is a modern news management system built with .NET 9 that provides a RESTful API for managing news articles with features including JWT authentication, MongoDB persistence, and comprehensive caching.
@@ -32,7 +40,7 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 ## 🛠️ Tech Stack
 
 ### Backend Framework
-- **.NET 9.0** - Latest version with C# 12+ features
+- **.NET 10.0** - Latest version with C# 13+ features
 - **ASP.NET Core** - Web API framework with minimal APIs support
 - **Clean Architecture** - Domain, Application, Infrastructure, Presentation layers
 
@@ -40,6 +48,11 @@ This file provides comprehensive context for GitHub Copilot to assist effectivel
 - **MongoDB 2.30+** - Primary data store with MongoDB.Driver
 - **IMemoryCache** - Built-in ASP.NET Core memory caching
 - **Separate databases** - Dev, staging, and production environments
+
+### Object Storage
+- **MinIO** - S3-compatible object storage for images
+- **ImageSharp** - Image processing and thumbnail generation
+- **Bucket**: `news-images` with category-based folder structure
 
 ### Authentication & Security
 - **JWT Bearer Tokens** - OAuth2/OpenID Connect compliant authentication
@@ -77,14 +90,21 @@ The entire backend infrastructure runs in Docker containers orchestrated by `doc
 
 2. **newsportal-mongodb** (MongoDB 7.0)
    - Port: `27017:27017`
-   - Admin UI: Mongo Express on `http://localhost:8081`
-   - Credentials: admin/password123 (default)
-   - Database: NewsDb
-   - Persistent volume: `newsportal_mongodb_data`
-
 3. **newsportal-minio** (S3-compatible Object Storage)
    - API Port: `9000:9000`
    - Console UI: `http://localhost:9001`
+   - Credentials: minioadmin/minioadmin123 (default)
+   - Bucket: `news-images` (auto-created with public read access)
+4. **minio-init** (MinIO Setup Container)
+   - One-time initialization container
+   - Creates `news-images` bucket automatically
+   - Sets public download policy
+   - Exits after successful setup
+
+5. **newsportal-mongo-express** (MongoDB Admin UI)
+   - Port: `8081:8081`
+   - URL: `http://localhost:8081`
+   - Basic Auth: admin/admin123 (default)
    - Credentials: minioadmin/minioadmin123 (default)
    - Bucket: `news-images` (auto-created)
    - Persistent volume: `newsportal_minio_data`
@@ -250,20 +270,14 @@ When making changes to the backend code:
 
 1. **Edit files** in `backend/` directory
 2. **Rebuild container**: `docker-compose up -d --build newsapi`
-3. **Check logs**: `docker-compose logs -f newsapi`
-4. **Test endpoint**: Use Swagger or curl/Postman
-5. **View database**: Open Mongo Express at http://localhost:8081
-
-**Note:** Hot reload is NOT enabled in Docker. You must rebuild after code changes.
-
 ## 📁 Project Structure
 
 ```
 newsportal/
 ├── backend/                          # Main API project
 │   ├── Domain/                       # Core business entities (no external dependencies)
-│   │   ├── Entities/                # News entity models
-│   │   └── Interfaces/              # Repository contracts (INewsRepository)
+│   │   ├── Entities/                # News entity models, ImageMetadata
+│   │   └── Interfaces/              # Repository contracts (INewsRepository, IImageStorageService)
 │   ├── Application/                 # Business logic & use cases
 │   │   ├── DTOs/                    # Data Transfer Objects (CreateNewsDto, UpdateNewsDto)
 │   │   ├── Services/                # Business services (NewsService, INewsService)
@@ -272,9 +286,17 @@ newsportal/
 │   │   ├── Data/                    # MongoDB context, repositories, models, mappers
 │   │   ├── Caching/                 # Memory cache service
 │   │   ├── Security/                # JWT token service
-│   │   ├── Services/                # External service integrations
-│   │   └── HealthChecks/            # MongoDB health check
+│   │   ├── Services/                # MinIO image storage, external service integrations
+│   │   ├── HealthChecks/            # MongoDB health check
+│   │   └── BackgroundJobs/          # SocialMediaFetcherService
 │   ├── Presentation/                # API layer & HTTP concerns
+│   │   ├── Controllers/             # API endpoints (NewsArticleController, AuthController, SeedController, SocialMediaController)
+│   │   ├── Middleware/              # Security & validation middleware
+│   │   └── Extensions/              # Service collection extensions
+│   ├── Common/                      # Shared utilities (CacheKeys, SlugHelper, Mappers)
+│   ├── Properties/                  # Launch settings and publish profiles
+│   ├── ADMIN_IMAGE_UPLOAD_STRATEGY.md # Image upload architecture documentation
+│   └── Program.cs                   # Application entry pointns
 │   │   ├── Controllers/             # API endpoints (NewsController)
 │   │   ├── Middleware/              # Security & validation middleware
 │   │   └── Extensions/              # Service collection extensions
@@ -290,12 +312,13 @@ newsportal/
 ├── docker/                          # Docker configurations
 ├── scripts/                         # Development scripts
 │   └── database/                    # Data migration scripts
-├── .github/                         # GitHub configuration
-│   ├── instructions/                # Copilot instruction files
-│   ├── prompts/                     # Reusable prompt files
-│   └── cursor-rules.md              # Cursor IDE rules
-└── README.md                        # Project documentation
-
+**Important Folders**:
+- `Domain/` - Pure business logic, no framework dependencies (Entities, Interfaces)
+- `Application/` - Use cases and business rules (Services, DTOs, Validators)
+- `Infrastructure/` - Data access, caching, external services (MongoDB, MinIO, JWT)
+- `Presentation/` - Controllers, middleware, API contracts
+- `Common/` - Shared utilities (SlugHelper for Turkish character conversion, CacheKeys, Mappers)
+- `tests/` - Comprehensive test coverage
 ```
 
 **Important Folders**:
@@ -332,13 +355,22 @@ newsportal/
 - **Status codes** - 200 OK, 201 Created, 204 No Content, 400 Bad Request, 401 Unauthorized, 404 Not Found, 500 Internal Server Error
 - **Problem Details** - Use RFC 7807 format for errors
 - **Versioning ready** - Structure supports future API versioning
+### Database & Data Access
+- **Repository Pattern** - All data access through INewsRepository
+- **No EF Core** - MongoDB with official driver only
+- **Async queries** - All database operations asynchronous
+- **Connection strings** - Never hardcode, use User Secrets or Key Vault
+- **Projections** - Only query fields you need
+- **Indexes** - Ensure proper MongoDB indexes for performance
 
-### Validation Rules
-- **Use FluentValidation** - All DTOs must have validators
-- **Server-side validation** - Never trust client input
-- **Required fields** - Explicitly validate required fields
-- **Max lengths** - Enforce string length constraints
-- **Format validation** - URLs, emails, dates must be validated
+### Image Storage & Processing
+- **MinIO Integration** - All image operations through IImageStorageService
+- **Thumbnail Generation** - Automatic thumbnail creation with ImageSharp
+- **Image Validation** - File size (5MB max), format (jpg, png, webp, gif), dimensions
+- **Folder Structure** - Organized by category: `news-images/{category}/{filename}`
+- **Public Access** - Read-only public access, write requires authentication
+- **URL Generation** - GetImageUrl() and GetThumbnailUrl() helper methods
+- **Metadata Tracking** - ImageMetadata entity stores file info, dimensions, upload dateed
 - **Business rules** - Validate in service layer, not controllers
 
 ### Database & Data Access
@@ -458,17 +490,10 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
 
 ### Health Checks
 
-- **Backend Health**: `GET http://localhost:5000/health`
-- **MongoDB Health**: `docker-compose ps mongodb` (should show "healthy")
-- **MinIO Health**: `docker-compose ps minio` (should show "healthy")
-- **All Services**: `docker-compose ps` (check all statuses)
-
-### Swagger/OpenAPI
-
-- **URL**: `http://localhost:5000/swagger`
-- **Authentication**: Click "Authorize" button, enter `Bearer {token}`
-- **Try It Out**: Enabled by default for testing
-- **Token Source**: Login via `/api/Auth/login` with admin/admin123
+- **Backend Health**: `http://localhost:5000/health`
+- **MinIO Health**: `http://localhost:9000/minio/health/live`
+- **MongoDB Health**: Integrated into backend health check
+- **All containers**: Health checks configured in `docker-compose.yml`
 
 ### Admin UI Access
 
@@ -481,11 +506,39 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
 ### Adding a New API Endpoint
 1. Define DTO in `Application/DTOs/`
 2. Add validation in `Application/Validators/`
-3. Implement service method in `Application/Services/NewsService.cs`
-4. Add controller action in `Presentation/Controllers/NewsController.cs`
+3. Implement service method in `Application/Services/NewsArticleService.cs`
+4. Add controller action in `Presentation/Controllers/NewsArticleController.cs`
 5. Add XML documentation comments
 6. Write unit tests in `tests/Unit/`
 7. Write integration tests in `tests/Integration/`
+
+### Adding a New Entity
+1. Create entity in `Domain/Entities/`
+2. Define repository interface in `Domain/Interfaces/`
+3. Create MongoDB model in `Infrastructure/Data/Models/`
+4. Create mapper in `Infrastructure/Data/Mappers/` or `Common/Mappers/`
+5. Implement repository in `Infrastructure/Data/Repositories/`
+6. Register in DI container in `Presentation/Extensions/ServiceCollectionExtensions.cs`
+
+### Adding Turkish Text Support
+1. **Use SlugHelper** - For URL-friendly slugs from Turkish text
+2. **Example**: `SlugHelper.GenerateSlug("Yapay Zeka Çağında")` → `"yapay-zeka-caginda"`
+3. **Location**: `Common/SlugHelper.cs`
+4. **Features**: Converts Turkish characters (ı→i, ğ→g, ü→u, ş→s, ö→o, ç→c), removes special chars, max 100 chars
+
+### Testing Protected Endpoints
+1. **Login**: POST to `/api/Auth/login` with `{ "username": "admin", "password": "admin123" }`
+2. **Get Token**: Copy JWT token from response
+3. **Swagger Auth**: Click "Authorize" button in Swagger UI, enter `Bearer <your-token>`
+4. **Curl/Postman**: Add header `Authorization: Bearer <your-token>`
+
+### MinIO Image Storage Settings
+- **Endpoint**: `minio:9000` (Docker) or `localhost:9000` (external)
+- **Bucket**: `news-images` (auto-created with public read access)
+- **Max File Size**: 5MB per image
+- **Allowed Formats**: jpg, jpeg, png, webp, gif
+- **Thumbnail Size**: 400x300px (auto-generated)
+- **Public URLs**: `http://localhost:9000/news-images/{objectKey}`
 
 ### Adding a New Entity
 1. Create entity in `Domain/Entities/`
@@ -529,7 +582,9 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
 - **Don't install MongoDB locally** - MongoDB is in Docker container
 - **Don't install MinIO locally** - MinIO is in Docker container
 - **Don't hardcode localhost URLs** - Use service names in Docker (mongodb, minio)
-- **Don't forget to rebuild after code changes** - `docker-compose up -d --build newsapi`
+- **Don't forget to rebuild after code changes** - `docker-compose up -d --build newsportal-backend`
+- **Don't skip Docker health checks** - All services have health checks configured
+- **Don't ignore container dependencies** - Backend depends on MongoDB and MinIO being healthy
 
 ### Code Quality
 - **Don't use static state** - Except for constants
@@ -555,6 +610,8 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
 ### Project Documentation
 - `NEWS_API_DOCUMENTATION.md` - Complete API reference
 - `SWAGGER_TESTING_GUIDE.md` - Interactive testing guide
+- `AZURE_DEPLOYMENT.md` - Azure Container Apps deployment guide
+- `backend/ADMIN_IMAGE_UPLOAD_STRATEGY.md` - Image upload architecture and future plans
 - `specs/002-modernize-net-core/spec.md` - Architecture specifications
 - `scripts/database/data-migration.md` - Data migration guide
 - `tests/TEST_COVERAGE_REPORT.md` - Test coverage details
@@ -563,15 +620,100 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
 - [Clean Architecture by Jason Taylor](https://github.com/jasontaylordev/CleanArchitecture)
 - [Microsoft Architecture Guides](https://learn.microsoft.com/en-us/dotnet/architecture/)
 
+## 🎯 Current API Controllers
+
+### NewsArticleController (`/api/NewsArticle`)
+**Purpose**: Main CRUD operations for news articles
+
+**Public Endpoints** (No Auth):
+- `GET /api/NewsArticle` - Get all news with optional category/type filters
+- `GET /api/NewsArticle/{id}` - Get specific news by ID
+- `GET /api/NewsArticle/slug/{slug}` - Get news by slug (Turkish-friendly URLs)
+- `GET /api/NewsArticle/category/{category}` - Get news by category
+- `GET /api/NewsArticle/trending` - Get trending news
+
+**Protected Endpoints** (Requires JWT):
+- `POST /api/NewsArticle` - Create new article (Admin only)
+- `PUT /api/NewsArticle/{id}` - Update article (Admin only)
+- `DELETE /api/NewsArticle/{id}` - Delete article (Admin only)
+- `POST /api/NewsArticle/{id}/upload-image` - Upload article image (Admin only)
+
+**Key Features**:
+- Response caching for all GET endpoints (30 min)
+- Turkish slug support via SlugHelper
+- MinIO image integration for uploads
+- Automatic thumbnail generation
+
+### AuthController (`/api/Auth`)
+**Purpose**: JWT-based authentication
+
+**Endpoints**:
+- `POST /api/Auth/login` - Login and get JWT token
+  - Default credentials: `admin` / `admin123`
+  - Returns: JWT token with 24h expiration
+
+### SeedController (`/api/Seed`)
+**Purpose**: Database initialization with sample data
+
+**Endpoints**:
+- `POST /api/Seed/seed-database` - Populate DB with 50+ news articles
+- Categories: Technology, Sports, World, Business, Science, Health, Entertainment
+- Mix of Unsplash images and MinIO-hosted images
+
+### SocialMediaController (`/api/SocialMedia`)
+**Purpose**: Social media integrations
+
+**Endpoints**:
+- `GET /api/SocialMedia/twitter` - Get Twitter posts
+- Background service fetches social media content automatically
+
+## 🚀 Azure Deployment
+
+### Current Infrastructure
+- **Resource Group**: `newsportal-rg` (East US)
+- **Container Registry**: `newsportal.azurecr.io` (ACR Basic)
+- **Backend**: Azure Container Apps (newsportal-backend)
+- **Database**: MongoDB Atlas (M0 Free Tier)
+- **Storage**: Cloudflare R2 (S3-compatible, 10GB free)
+- **Frontend**: Azure Static Web Apps (Free tier)
+
+### Deployment Scripts
+- `deploy-to-azure.ps1` - Deploy backend to Container Apps
+- `docker-rebuild.ps1` - Rebuild and restart local containers
+- `docker-start.ps1` - Start all Docker services
+- `docker-stop.ps1` - Stop all Docker services
+- `docker-status.ps1` - Check service status
+- `docker-logs.ps1` - View container logs
+
+### Environment Configuration
+**Development** (Docker Compose):
+- MongoDB: `mongodb://admin:password123@mongodb:27017/NewsDb`
+- MinIO: `minio:9000` (internal), `localhost:9000` (external)
+- JWT: Development secret key
+
+**Production** (Azure):
+- MongoDB: MongoDB Atlas connection string
+- Storage: Cloudflare R2 endpoint
+- JWT: Secure secret via Container App secrets
+- HTTPS: Automatic SSL via Azure
+
+### Key Azure Features
+- **Health Checks**: `/health` endpoint with MongoDB ping
+- **Auto-scaling**: Scale to 0 when idle (cost savings)
+- **Environment Variables**: Managed via Container App configuration
+- **Logging**: Azure Monitor integration
+- **Secrets**: Stored securely in Container App secrets
+
 ## 💡 Tips for Effective Copilot Usage
 
 1. **Provide context** - Include entity names, layer names, and purpose in prompts
 2. **Be specific** - "Add a validator for CreateNewsDto with max length 500 for Caption"
-3. **Reference existing patterns** - "Following the pattern in NewsService, add a new method..."
-4. **Specify layer** - "In the Application layer, create..." or "Add to NewsController..."
+3. **Reference existing patterns** - "Following the pattern in NewsArticleService, add a new method..."
+4. **Specify layer** - "In the Application layer, create..." or "Add to NewsArticleController..."
 5. **Include validation** - Always ask for validation rules when creating DTOs
 6. **Request tests** - "...and write unit tests for the new method"
-7. **Iterate** - Review generated code and refine with follow-up prompts
+7. **Mention Turkish support** - "Generate slug using SlugHelper for Turkish characters"
+8. **Iterate** - Review generated code and refine with follow-up prompts
 
 ## 🔄 Iteration & Review
 

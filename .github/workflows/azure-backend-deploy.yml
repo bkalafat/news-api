@@ -57,7 +57,30 @@ jobs:
           
           echo "Backend URL: https://$URL"
           
-          # Health check
-          curl -f https://$URL/health || exit 1
+          # Wait for deployment to stabilize
+          echo "Waiting 60 seconds for container to start..."
+          sleep 60
           
-          echo "✅ Deployment successful!"
+          # Health check with retries
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            echo "Health check attempt $((RETRY_COUNT + 1))/$MAX_RETRIES..."
+            if curl -f -m 30 -s https://$URL/health > /dev/null 2>&1; then
+              echo "✅ Deployment successful!"
+              echo "Health endpoint: https://$URL/health"
+              echo "Swagger UI: https://$URL/swagger"
+              exit 0
+            fi
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+              echo "Health check failed, retrying in 20 seconds..."
+              sleep 20
+            fi
+          done
+          
+          echo "⚠️ Health check failed after $MAX_RETRIES attempts"
+          echo "The application may still be starting or there may be configuration issues."
+          echo "Please check the logs: az containerapp logs show --name ${{ env.CONTAINER_APP_NAME }} --resource-group ${{ env.RESOURCE_GROUP }}"
+          exit 1
