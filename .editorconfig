@@ -188,6 +188,10 @@ csharp_new_line_before_finally = true
 dotnet_diagnostic.IDE0055.severity = none
 
 # XML project files
+
+# CA1515: Consider making public types internal
+dotnet_diagnostic.CA1515.severity = none
+
 [*.{csproj,props,targets}]
 indent_size = 2
 

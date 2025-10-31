@@ -32,7 +32,7 @@ internal static class SeedNewsData
             // GitHub News - Real from Reddit (Top rated)
             new NewsArticle
             {
-                Category = "github",
+                Category = "Technology",
                 Type = "news",
                 Caption = "GitHub Enterprise Cloud Çift Ücretlendirme Sorunu",
                 Slug = SlugHelper.GenerateSlug("GitHub Enterprise Cloud Çift Ücretlendirme Sorunu"),
@@ -72,7 +72,7 @@ internal static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "github",
+                Category = "Technology",
                 Type = "news",
                 Caption = "GitHub Ana Sayfasında Activity Bölümü Kayboldu",
                 Slug = SlugHelper.GenerateSlug("GitHub Ana Sayfasında Activity Bölümü Kayboldu"),
@@ -104,7 +104,7 @@ internal static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "github",
+                Category = "Technology",
                 Type = "news",
                 Caption = "GitHub Copilot Actions PR'larda Çöktü mü?",
                 Slug = SlugHelper.GenerateSlug("GitHub Copilot Actions PR'larda Çöktü mü"),
@@ -147,7 +147,7 @@ internal static class SeedNewsData
             // Reddit News - Web Development
             new NewsArticle
             {
-                Category = "reddit",
+                Category = "Technology",
                 Type = "discussion",
                 Caption = "Copilot'u Kapattıktan Sonra Kodlamanın Ne Kadar Stresli Olduğunu Fark Ettim",
                 Slug = SlugHelper.GenerateSlug("Copilot'u Kapattıktan Sonra Kodlamanın Ne Kadar Stresli Olduğunu Fark Ettim"),
@@ -190,7 +190,7 @@ internal static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "reddit",
+                Category = "Technology",
                 Type = "discussion",
                 Caption = "Kişisel vs Kurumsal GitHub Hesapları Güvenlik Sorunu",
                 Slug = SlugHelper.GenerateSlug("Kişisel vs Kurumsal GitHub Hesapları Güvenlik Sorunu"),
@@ -230,7 +230,7 @@ internal static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "reddit",
+                Category = "Technology",
                 Type = "question",
                 Caption = "GitHub Copilot Pro Ücretsiz Erişimi Kaybedilebilir mi?",
                 Slug = SlugHelper.GenerateSlug("GitHub Copilot Pro Ücretsiz Erişimi Kaybedilebilir mi"),
@@ -274,7 +274,7 @@ internal static class SeedNewsData
             // Technology News
             new NewsArticle
             {
-                Category = "technology",
+                Category = "Technology",
                 Type = "news",
                 Caption = "Yapay Zeka Kodlama Araçları: Copilot vs Cursor vs Cline",
                 Slug = SlugHelper.GenerateSlug("Yapay Zeka Kodlama Araçları Copilot vs Cursor vs Cline"),
@@ -353,7 +353,7 @@ internal static class SeedNewsData
             // Twitter/X News
             new NewsArticle
             {
-                Category = "twitter",
+                Category = "Entertainment",
                 Type = "news",
                 Caption = "X (Twitter) Yeni Algoritma Güncellemesi: Uzun İçerikler Ön Planda",
                 Slug = SlugHelper.GenerateSlug("X Twitter Yeni Algoritma Güncellemesi Uzun İçerikler Ön Planda"),
@@ -405,7 +405,7 @@ internal static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "twitter",
+                Category = "Entertainment",
                 Type = "news",
                 Caption = "Twitter Spaces'te Yeni Özellik: Kayıt ve Tekrar İzleme",
                 Slug = SlugHelper.GenerateSlug("Twitter Spaces'te Yeni Özellik Kayıt ve Tekrar İzleme"),
@@ -459,7 +459,7 @@ internal static class SeedNewsData
             // LinkedIn News
             new NewsArticle
             {
-                Category = "linkedin",
+                Category = "Business",
                 Type = "news",
                 Caption = "LinkedIn'de AI Powered İş İlanları Dönemi Başladı",
                 Slug = SlugHelper.GenerateSlug("LinkedIn'de AI Powered İş İlanları Dönemi Başladı"),
@@ -522,7 +522,7 @@ internal static class SeedNewsData
             },
             new NewsArticle
             {
-                Category = "linkedin",
+                Category = "Business",
                 Type = "news",
                 Caption = "LinkedIn Learning: 2025'te En Çok Talep Gören 10 Skill",
                 Slug = SlugHelper.GenerateSlug("LinkedIn Learning 2025'te En Çok Talep Gören 10 Skill"),
@@ -599,7 +599,7 @@ internal static class SeedNewsData
             // Facebook News
             new NewsArticle
             {
-                Category = "facebook",
+                Category = "Entertainment",
                 Type = "news",
                 Caption = "Meta AI Artık WhatsApp, Instagram ve Facebook'ta Entegre",
                 Slug = SlugHelper.GenerateSlug("Meta AI Artık WhatsApp Instagram ve Facebook'ta Entegre"),
@@ -667,7 +667,7 @@ internal static class SeedNewsData
             // Instagram News
             new NewsArticle
             {
-                Category = "instagram",
+                Category = "Entertainment",
                 Type = "news",
                 Caption = "Instagram Reels Artık 10 Dakikaya Kadar Uzun Olabiliyor",
                 Slug = SlugHelper.GenerateSlug("Instagram Reels Artık 10 Dakikaya Kadar Uzun Olabiliyor"),
@@ -743,7 +743,7 @@ internal static class SeedNewsData
             // TikTok News
             new NewsArticle
             {
-                Category = "tiktok",
+                Category = "Entertainment",
                 Type = "news",
                 Caption = "TikTok Shop Türkiye'de Açılıyor: E-Ticaretin Yeni Dönemi",
                 Slug = SlugHelper.GenerateSlug("TikTok Shop Türkiye'de Açılıyor E-Ticaretin Yeni Dönemi"),
@@ -827,7 +827,7 @@ internal static class SeedNewsData
             // YouTube News
             new NewsArticle
             {
-                Category = "youtube",
+                Category = "Entertainment",
                 Type = "news",
                 Caption = "YouTube Premium Türkiye'de Fiyat Artışı: Yeni Tarifeler Açıklandı",
                 Slug = SlugHelper.GenerateSlug("YouTube Premium Türkiye'de Fiyat Artışı Yeni Tarifeler Açıklandı"),
