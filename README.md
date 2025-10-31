@@ -4,156 +4,201 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-7.0-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Tests](https://img.shields.io/badge/Tests-178%20Passing-success)](tests/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A modern full-stack news platform built with .NET 9 and Next.js 16. Features Clean Architecture, JWT authentication, MongoDB persistence, and comprehensive caching for high performance.
+> A professional full-stack news platform with Clean Architecture, JWT authentication, and modern web technologies.
 
-## Features
-
-- **Clean Architecture** - Domain-driven design with clear separation of concerns
-- **RESTful API** - Built with ASP.NET Core 9 and Minimal APIs
-- **JWT Authentication** - Secure token-based authentication
-- **MongoDB** - NoSQL database with optimized queries
-- **Memory Caching** - High-performance caching layer
-- **Docker Ready** - Full containerization with Docker Compose
-- **Modern Frontend** - Next.js 16 with TypeScript and Tailwind CSS
-- **API Documentation** - Interactive Swagger/OpenAPI documentation
-- **Comprehensive Tests** - Unit, integration, and performance tests
-
-## Quick Start
-
-### Prerequisites
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (recommended)
-- OR [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) + [MongoDB](https://www.mongodb.com/try/download/community)
-
-### Using Docker (Recommended)
-
-```powershell
-# Start all services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f newsportal-backend
-
-# Stop services
-docker-compose down
-```
-
-Access the application:
-- **API**: http://localhost:5000
-- **Swagger**: http://localhost:5000/swagger
-- **MongoDB UI**: http://localhost:8081 (admin/admin123)
-- **MinIO Console**: http://localhost:9001 (minioadmin/minioadmin123)
-
-### Manual Setup
+## 🚀 Quick Start
 
 ```bash
-# Clone repository
+# 1. Clone and setup
 git clone https://github.com/bkalafat/newsportal.git
 cd newsportal
+cp .env.example .env
 
-# Configure secrets
-cd backend
-dotnet user-secrets set "DatabaseSettings:ConnectionString" "mongodb://localhost:27017"
-dotnet user-secrets set "DatabaseSettings:DatabaseName" "NewsDb"
-dotnet user-secrets set "JwtSettings:SecretKey" "your-secret-key-min-32-chars"
+# 2. Start with Docker (recommended)
+docker compose up -d
 
-# Run application
-dotnet run --project newsApi.csproj
+# 3. Access services
+# API: http://localhost:5000
+# Swagger: http://localhost:5000/swagger
+# MongoDB UI: http://localhost:8081 (admin/admin123)
+# MinIO Console: http://localhost:9001 (minioadmin/minioadmin123)
 ```
 
-## API Endpoints
+## ✨ Key Features
+
+- **Clean Architecture** - Domain-driven design with SOLID principles
+- **RESTful API** - ASP.NET Core 9 with comprehensive validation
+- **JWT Authentication** - Secure token-based authorization
+- **MongoDB** - Flexible NoSQL storage with optimized indexes
+- **MinIO Storage** - S3-compatible object storage for images
+- **Memory Caching** - High-performance in-memory caching
+- **Modern Frontend** - Next.js 16, TypeScript, TailwindCSS
+- **Auto-Scaling** - Production deployment on Azure Container Apps
+- **178+ Tests** - Comprehensive unit and integration test coverage
+
+## 📁 Project Structure
+
+```
+newsportal/
+├── backend/                 # .NET 9 Backend API
+│   ├── Domain/             # Core business entities (News, ImageMetadata)
+│   ├── Application/        # Business logic, services, DTOs, validators
+│   ├── Infrastructure/     # MongoDB, MinIO, JWT, caching
+│   ├── Presentation/       # Controllers, middleware, extensions
+│   └── Common/             # Shared utilities (SlugHelper for Turkish)
+├── frontend/               # Next.js 16 Frontend
+│   ├── app/               # App Router pages
+│   ├── components/        # React components (Shadcn/ui)
+│   └── lib/               # API client, utilities, hooks
+├── tests/                 # Test suite (178+ tests)
+│   ├── Unit/             # Service, validator, DTO tests
+│   └── Integration/      # Controller, repository tests
+├── docs/                 # Documentation
+│   ├── BUILD.md         # Build instructions
+│   ├── RUN.md           # Running locally & development
+│   ├── DEPLOY.md        # Production deployment guide
+│   └── ARCHITECTURE.md  # Architecture & design patterns
+├── .github/              # GitHub Actions workflows
+└── docker-compose.yml   # Docker orchestration
+```
+
+## 📖 Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[BUILD.md](docs/BUILD.md)** | How to build the project (Docker & local) |
+| **[RUN.md](docs/RUN.md)** | Running & development guide |
+| **[DEPLOY.md](docs/DEPLOY.md)** | Production deployment instructions |
+| **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** | System architecture & design patterns |
+| **[Frontend README](frontend/README.md)** | Next.js frontend documentation |
+| **[Azure README](azure/README.md)** | Azure deployment details |
+
+## 🔧 Development
+
+### Run Tests
+
+```bash
+# All tests (178+)
+dotnet test newsApi.sln
+
+# Unit tests only
+dotnet test --filter "FullyQualifiedName~Unit"
+
+# Integration tests only
+dotnet test --filter "FullyQualifiedName~Integration"
+```
+
+### Docker Helper Scripts (Windows)
+
+```powershell
+.\docker-start.ps1     # Start all services
+.\docker-stop.ps1      # Stop all services
+.\docker-logs.ps1      # View logs
+.\docker-status.ps1    # Check container status
+.\docker-rebuild.ps1   # Rebuild and restart
+```
+
+### Hot Reload Development
+
+```bash
+# Backend (watches for code changes)
+cd backend
+dotnet watch run
+
+# Frontend (Next.js dev server)
+cd frontend
+npm run dev
+```
+
+## 🌐 API Endpoints
 
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
 | GET | `/api/news` | List all news articles | No |
 | GET | `/api/news/{id}` | Get article by ID | No |
 | GET | `/api/news/by-url?url={slug}` | Get article by slug | No |
-| POST | `/api/news` | Create new article | Yes |
-| PUT | `/api/news/{id}` | Update article | Yes |
-| DELETE | `/api/news/{id}` | Delete article | Yes |
+| POST | `/api/news` | Create new article | ✅ JWT |
+| PUT | `/api/news/{id}` | Update article | ✅ JWT |
+| DELETE | `/api/news/{id}` | Delete article | ✅ JWT |
+| POST | `/api/news/upload-image` | Upload image | ✅ JWT |
+| POST | `/api/auth/login` | Get JWT token | No |
 | GET | `/health` | Health check | No |
 
-See [API Documentation](NEWS_API_DOCUMENTATION.md) for detailed specs.
+**Interactive API docs**: http://localhost:5000/swagger
 
-## Project Structure
+## 🚢 Deployment
 
-```
-newsportal/
-├── backend/              # .NET 9 API
-│   ├── Domain/          # Business entities
-│   ├── Application/     # Use cases & DTOs
-│   ├── Infrastructure/  # Data access & services
-│   └── Presentation/    # Controllers & middleware
-├── frontend/            # Next.js 16 app
-├── tests/               # Test suite
-└── docker/              # Docker configurations
-```
+### Production Stack
 
-## Development
+- **Backend**: Azure Container Apps (auto-scaling, 0-10 replicas)
+- **Frontend**: Vercel / Azure Static Web Apps
+- **Database**: MongoDB Atlas (M0 free tier)
+- **Storage**: MinIO / Cloudflare R2
+- **CI/CD**: GitHub Actions (auto-deploy on push to master)
 
-```bash
-# Run tests
-dotnet test
+### Production URLs
 
-# Run specific test category
-dotnet test --filter "FullyQualifiedName~Unit"
+- **Backend API**: `https://newsportal-backend.*.azurecontainerapps.io`
+- **Swagger**: `https://newsportal-backend.*.azurecontainerapps.io/swagger`
+- **Frontend**: Deployed via Vercel
 
-# Build Docker image
-docker build -f docker/Dockerfile.backend -t newsportal:latest .
+See **[DEPLOY.md](docs/DEPLOY.md)** for complete deployment guide.
 
-# Frontend development
-cd frontend
-npm install
-npm run dev
-```
+## 🛠️ Tech Stack
 
-## Configuration
+### Backend
+- **.NET 9** - Latest C# 13 with minimal APIs
+- **MongoDB 7.0** - Flexible NoSQL document database
+- **MinIO** - S3-compatible object storage
+- **JWT Bearer** - Token-based authentication
+- **FluentValidation** - Request validation
+- **xUnit + Moq** - Comprehensive testing
 
-Key configuration options (use environment variables or User Secrets):
+### Frontend
+- **Next.js 16** - React framework with App Router
+- **TypeScript 5** - Type-safe development
+- **TailwindCSS 4** - Modern utility-first CSS
+- **Shadcn/ui** - Beautiful accessible components
+- **React Query** - Powerful data fetching
+- **next-intl** - Turkish localization
 
-```json
-{
-  "DatabaseSettings": {
-    "ConnectionString": "mongodb://localhost:27017",
-    "DatabaseName": "NewsDb"
-  },
-  "JwtSettings": {
-    "SecretKey": "your-secret-key-minimum-32-characters",
-    "ExpirationMinutes": 60
-  }
-}
-```
+### Infrastructure
+- **Docker Compose** - Local development environment
+- **Azure Container Apps** - Production backend hosting
+- **Vercel** - Frontend CDN deployment
+- **GitHub Actions** - CI/CD automation
 
-## Documentation
+## 📋 Prerequisites
 
-- [API Documentation](NEWS_API_DOCUMENTATION.md)
-- [Swagger Testing Guide](SWAGGER_TESTING_GUIDE.md)
-- [Frontend Documentation](frontend/README.md)
-- [Architecture Specs](specs/002-modernize-net-core/)
+- **Docker Desktop** (recommended) OR
+- **.NET 9 SDK** + **MongoDB** + **Node.js 18+**
 
-## Deployment
-
-**Azure Container Apps**: Deployed at [newsportal-backend.agreeableglacier-cfb21c4c.eastus.azurecontainerapps.io](https://newsportal-backend.agreeableglacier-cfb21c4c.eastus.azurecontainerapps.io)
-
-**Netlify**: Frontend deployed automatically from `master` branch
-
-See [Azure Deployment Guide](AZURE_DEPLOYMENT.md) for details.
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
+Please ensure:
+- All tests pass (`dotnet test`)
+- Code follows existing patterns
+- Documentation is updated
+
+## 📄 License
 
 This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 
-## Contact
+## 📞 Support
 
-- Repository: [github.com/bkalafat/newsportal](https://github.com/bkalafat/newsportal)
-- Issues: [github.com/bkalafat/newsportal/issues](https://github.com/bkalafat/newsportal/issues)
+- **Issues**: [GitHub Issues](https://github.com/bkalafat/newsportal/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/bkalafat/newsportal/discussions)
+- **Repository**: [github.com/bkalafat/newsportal](https://github.com/bkalafat/newsportal)
+
+---
+
+**Built with ❤️ using Clean Architecture principles**

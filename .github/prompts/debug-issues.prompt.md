@@ -467,7 +467,9 @@ curl http://localhost:5000/health
 
 ## 📚 Additional Resources
 
-- Check `NEWS_API_DOCUMENTATION.md` for API reference
-- Review `csharp.instructions.md` for coding patterns
-- See `testing.instructions.md` for test debugging
-- Examine recent git commits for changes: `git log --oneline -10`
+- **[ARCHITECTURE.md](../../docs/ARCHITECTURE.md)** - System architecture and design patterns
+- **[BUILD.md](../../docs/BUILD.md)** - Build and test instructions
+- **[RUN.md](../../docs/RUN.md)** - Development and debugging guide
+- **[.github/instructions/csharp.instructions.md](../instructions/csharp.instructions.md)** - C# coding patterns
+- **[.github/instructions/testing.instructions.md](../instructions/testing.instructions.md)** - Test debugging
+- Recent commits: `git log --oneline -10`
