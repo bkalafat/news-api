@@ -105,7 +105,7 @@ export default async function Image() {
             textAlign: "center",
           }}
         >
-          BBC ve güvenilir kaynaklardan güncel haberler
+          Türkiye'nin Teknoloji Gazetesi
         </div>
 
         {/* Badge */}

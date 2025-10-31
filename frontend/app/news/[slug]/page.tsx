@@ -109,33 +109,63 @@ export async function generateMetadata({
   }
 
   const imageUrl = news.imageUrl || news.imgPath || "/placeholder-news.jpg";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const canonicalUrl = `${siteUrl}/news/${slug}`;
 
   return {
-    title: `${news.caption} | Teknoloji Haberleri`,
+    title: `${news.caption}`,
     description: news.summary,
     keywords: news.keywords.split(",").map((k) => k.trim()),
+    authors: news.authors.map((author) => ({ name: author })),
+    category: news.category,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: news.caption,
       description: news.summary,
       type: "article",
+      url: canonicalUrl,
+      siteName: "Teknoloji Haberleri",
+      locale: "tr_TR",
       publishedTime: news.expressDate,
       modifiedTime: news.updateDate,
       authors: news.authors,
       tags: news.subjects,
+      section: news.category,
       images: [
         {
           url: imageUrl,
-          width: 1200,
-          height: 630,
+          width: news.imageMetadata?.width || 1200,
+          height: news.imageMetadata?.height || 630,
           alt: news.imgAlt || news.caption,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
+      site: "@teknoloji_haber",
+      creator: "@teknoloji_haber",
       title: news.caption,
       description: news.summary,
-      images: [imageUrl],
+      images: [
+        {
+          url: imageUrl,
+          alt: news.imgAlt || news.caption,
+        },
+      ],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: false,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
   };
 }
@@ -158,8 +188,85 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
     sports: "Spor",
   };
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const imageUrl = news.imageUrl || news.imgPath || "/placeholder-news.jpg";
+
+  // JSON-LD structured data for NewsArticle
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: news.caption,
+    description: news.summary,
+    image: {
+      "@type": "ImageObject",
+      url: imageUrl,
+      width: news.imageMetadata?.width || 1200,
+      height: news.imageMetadata?.height || 630,
+      caption: news.imgAlt || news.caption,
+    },
+    datePublished: news.expressDate,
+    dateModified: news.updateDate || news.expressDate,
+    author: news.authors.map((author) => ({
+      "@type": "Person",
+      name: author,
+    })),
+    publisher: {
+      "@type": "Organization",
+      name: "Teknoloji Haberleri",
+      url: siteUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${siteUrl}/news/${slug}`,
+    },
+    articleSection: categoryNames[news.category] || news.category,
+    keywords: news.keywords,
+    inLanguage: "tr-TR",
+    articleBody: news.content,
+  };
+
+  // JSON-LD structured data for BreadcrumbList
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Ana Sayfa",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: categoryNames[news.category] || news.category,
+        item: `${siteUrl}/category/${news.category}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: news.caption,
+        item: `${siteUrl}/news/${slug}`,
+      },
+    ],
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <Header />
       <main className="bg-background flex-1">
         {/* Breadcrumb Navigation */}
