@@ -19,7 +19,33 @@ import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "Kategoriler - Teknoloji Haberleri",
-  description: "Tüm haber kategorilerine göz atın",
+  description:
+    "Teknoloji, bilim, iş dünyası, sosyal medya ve daha fazlası. Tüm haber kategorilerine göz atın ve ilgi alanınıza göre haberleri keşfedin.",
+  keywords: [
+    "teknoloji kategorileri",
+    "haber kategorileri",
+    "reddit haberleri",
+    "github haberleri",
+    "twitter haberleri",
+    "teknoloji",
+    "bilim",
+    "iş dünyası",
+  ],
+  alternates: {
+    canonical: "/categories",
+  },
+  openGraph: {
+    title: "Kategoriler - Teknoloji Haberleri",
+    description:
+      "Teknoloji, bilim, iş dünyası, sosyal medya ve daha fazlası. Tüm haber kategorilerine göz atın.",
+    type: "website",
+    url: "/categories",
+  },
+  twitter: {
+    card: "summary",
+    title: "Kategoriler - Teknoloji Haberleri",
+    description: "Tüm haber kategorilerine göz atın ve ilgi alanınıza göre haberleri keşfedin.",
+  },
 };
 
 // ISR: Revalidate every 24 hours (static content, no frequent changes)

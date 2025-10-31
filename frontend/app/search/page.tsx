@@ -1,12 +1,27 @@
 import { Suspense } from "react";
+import { Metadata } from "next";
 import { SearchResults } from "@/components/search/search-results";
 import { NewsCardSkeleton } from "@/components/news/news-card-skeleton";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 
-export const metadata = {
-  title: "Arama Sonuçları - Türk Haber",
-  description: "Haber arama sonuçları",
+export const metadata: Metadata = {
+  title: "Arama - Teknoloji Haberleri",
+  description:
+    "Teknoloji haberleri arasında arama yapın. Anahtar kelimeler, kategoriler ve tarih aralığına göre haberleri filtreleyin.",
+  alternates: {
+    canonical: "/search",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: "Arama - Teknoloji Haberleri",
+    description: "Teknoloji haberleri arasında arama yapın.",
+    type: "website",
+    url: "/search",
+  },
 };
 
 export default function SearchPage() {

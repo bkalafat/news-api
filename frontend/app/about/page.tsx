@@ -7,7 +7,24 @@ import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "Hakkımızda - Teknoloji Haberleri",
-  description: "Modern teknoloji haberleri platformu hakkında bilgi edinin",
+  description:
+    "Türkiye'nin en modern teknoloji haber platformu. Next.js, React, TypeScript ve .NET teknolojileri ile geliştirilmiş, hızlı ve kullanıcı dostu haber okuma deneyimi.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "Hakkımızda - Teknoloji Haberleri",
+    description:
+      "Türkiye'nin en modern teknoloji haber platformu. Next.js, React, TypeScript ve .NET teknolojileri ile geliştirilmiş.",
+    type: "website",
+    url: "/about",
+  },
+  twitter: {
+    card: "summary",
+    title: "Hakkımızda - Teknoloji Haberleri",
+    description:
+      "Türkiye'nin en modern teknoloji haber platformu. Next.js, React, TypeScript ve .NET teknolojileri ile geliştirilmiş.",
+  },
 };
 
 // ISR: Revalidate every 7 days (static content, rarely changes)
@@ -28,8 +45,8 @@ export default function AboutPage() {
   const features = [
     {
       icon: Newspaper,
-      title: "Güvenilir Kaynaklar",
-      description: "BBC ve diğer güvenilir kaynaklardan güncel haberler",
+      title: "Güncel Haberler",
+      description: "Teknoloji dünyasından son dakika haberleri ve güncel gelişmeler",
     },
     {
       icon: Zap,
@@ -68,9 +85,9 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">
-                Teknoloji Haberleri, Türkiye&apos;deki teknoloji meraklılarına BBC ve diğer
-                güvenilir kaynaklardan gelen en güncel teknoloji haberlerini sunmak için
-                oluşturulmuş modern bir platformdur.
+                Teknoloji Haberleri, Türkiye&apos;deki teknoloji meraklılarına en güncel teknoloji
+                haberlerini, analizleri ve gelişmeleri sunmak için oluşturulmuş modern bir
+                platformdur.
               </p>
               <p className="text-muted-foreground">
                 Amacımız, en son web teknolojilerini kullanarak hızlı, güvenli ve kullanıcı dostu
