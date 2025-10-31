@@ -26,23 +26,23 @@ export function Footer() {
             <h3 className="font-semibold">{t("navigation.categories")}</h3>
             <ul className="text-muted-foreground space-y-2 text-sm">
               <li>
-                <Link href="/category/reddit" className="hover:text-primary transition-colors">
-                  {t("categories.reddit")}
+                <Link href="/category/technology" className="hover:text-primary transition-colors">
+                  {t("categories.technology")}
                 </Link>
               </li>
               <li>
-                <Link href="/category/github" className="hover:text-primary transition-colors">
-                  {t("categories.github")}
+                <Link href="/category/business" className="hover:text-primary transition-colors">
+                  {t("categories.business")}
                 </Link>
               </li>
               <li>
-                <Link href="/category/twitter" className="hover:text-primary transition-colors">
-                  {t("categories.twitter")}
+                <Link href="/category/entertainment" className="hover:text-primary transition-colors">
+                  {t("categories.entertainment")}
                 </Link>
               </li>
               <li>
-                <Link href="/category/linkedin" className="hover:text-primary transition-colors">
-                  {t("categories.linkedin")}
+                <Link href="/category/science" className="hover:text-primary transition-colors">
+                  {t("categories.science")}
                 </Link>
               </li>
             </ul>
