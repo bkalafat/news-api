@@ -9,27 +9,39 @@ export function HeroSection() {
   const t = useTranslations("home.hero");
 
   return (
-    <section className="from-primary/10 via-background to-background relative bg-gradient-to-br">
-      <div className="container mx-auto px-4 py-24 md:py-32">
-        <div className="mx-auto max-w-3xl space-y-8 text-center">
-          <h1 className="text-4xl font-bold tracking-tight md:text-6xl">{t("title")}</h1>
-          <p className="text-muted-foreground text-xl md:text-2xl">{t("subtitle")}</p>
-          <div className="flex justify-center">
-            <Button asChild size="lg" className="group">
+    <section className="relative overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/10 to-background" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse [animation-delay:1s]" />
+      </div>
+
+      <div className="container mx-auto px-4 py-32 md:py-40">
+        <div className="mx-auto max-w-4xl space-y-8 text-center">
+          <h1 className="gradient-text text-5xl font-extrabold tracking-tight md:text-7xl lg:text-8xl">
+            {t("title")}
+          </h1>
+          <p className="text-muted-foreground text-xl md:text-2xl lg:text-3xl max-w-2xl mx-auto font-light">
+            {t("subtitle")}
+          </p>
+          <div className="flex justify-center pt-4">
+            <Button 
+              asChild 
+              size="lg" 
+              className="group bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/25 text-lg px-8 py-6 rounded-xl"
+            >
               <Link href="#latest">
                 {t("cta")}
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Decorative elements */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="from-primary/5 absolute -top-1/2 -right-1/2 h-full w-full rounded-full bg-gradient-to-br to-transparent blur-3xl" />
-        <div className="from-primary/5 absolute -bottom-1/2 -left-1/2 h-full w-full rounded-full bg-gradient-to-tr to-transparent blur-3xl" />
-      </div>
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-background to-transparent" />
     </section>
   );
 }

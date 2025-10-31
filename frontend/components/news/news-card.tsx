@@ -20,7 +20,7 @@ export function NewsCard({ news }: NewsCardProps) {
   const localNewsUrl = `/news/${slug}`;
 
   return (
-    <Card className="group overflow-hidden transition-shadow duration-300 hover:shadow-lg">
+    <Card className="group overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1 border-border/50 bg-card/80 backdrop-blur">
       {/* Image */}
       {news.imageUrl && (
         <div className="bg-muted relative h-48 w-full overflow-hidden">
@@ -28,9 +28,11 @@ export function NewsCard({ news }: NewsCardProps) {
             src={news.imageUrl}
             alt={news.title || "News image"}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
+          {/* Gradient overlay on hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
       )}
 
@@ -38,7 +40,10 @@ export function NewsCard({ news }: NewsCardProps) {
         {/* Category Badge & Share Button */}
         <div className="flex items-center justify-between">
           {news.category && (
-            <Badge variant="secondary" className="w-fit">
+            <Badge 
+              variant="secondary" 
+              className="w-fit bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 font-semibold"
+            >
               {news.category}
             </Badge>
           )}
@@ -49,8 +54,11 @@ export function NewsCard({ news }: NewsCardProps) {
         </div>
 
         {/* Title */}
-        <CardTitle className="line-clamp-2 leading-tight">
-          <Link href={localNewsUrl} className="hover:text-primary transition-colors">
+        <CardTitle className="line-clamp-2 leading-tight text-lg">
+          <Link 
+            href={localNewsUrl} 
+            className="hover:text-primary transition-colors duration-300 bg-gradient-to-r from-foreground to-foreground hover:from-primary hover:to-primary/70 bg-clip-text hover:text-transparent"
+          >
             {news.title}
           </Link>
         </CardTitle>
@@ -82,10 +90,10 @@ export function NewsCard({ news }: NewsCardProps) {
         {/* Read More Link */}
         <Link
           href={localNewsUrl}
-          className="text-primary mt-4 inline-flex items-center gap-1 text-sm font-medium hover:underline"
+          className="text-primary mt-4 inline-flex items-center gap-2 text-sm font-semibold hover:gap-3 transition-all duration-300 group/link"
         >
           Haberi Oku
-          <ExternalLink className="h-3 w-3" />
+          <ExternalLink className="h-4 w-4 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
         </Link>
       </CardContent>
     </Card>

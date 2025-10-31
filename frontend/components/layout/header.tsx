@@ -14,13 +14,13 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
+    <header className="glass sticky top-0 z-50 w-full border-b border-border/50 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <Newspaper className="h-6 w-6" />
-            <span className="hidden text-xl font-bold sm:inline-block">{t("app.title")}</span>
+          <Link href="/" className="flex items-center space-x-2 group">
+            <Newspaper className="h-6 w-6 text-primary transition-transform group-hover:scale-110" />
+            <span className="hidden text-xl font-bold sm:inline-block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">{t("app.title")}</span>
           </Link>
 
           {/* Desktop Navigation */}
