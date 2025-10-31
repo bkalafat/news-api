@@ -117,14 +117,32 @@ $fetchUrl = "https://newsportal-backend.happyglacier-db0dd319.westeurope.azureco
 Invoke-RestMethod -Uri $fetchUrl -Method Post -Headers @{Authorization="Bearer $token"}
 ```
 
+## 📋 Subreddits & Categories
+
+The following Reddit subreddits are monitored with their corresponding category mappings:
+
+| Subreddit | Category | Reddit URL | Posts/Fetch |
+|-----------|----------|------------|-------------|
+| **popular** | popular | https://reddit.com/r/popular | 10 |
+| **ArtificialIntelligence** | artificialintelligence | https://reddit.com/r/ArtificialIntelligence | 15 |
+| **GithubCopilot** | githubcopilot | https://reddit.com/r/GithubCopilot | 15 |
+| **mcp** | mcp | https://reddit.com/r/mcp | 15 |
+| **OpenAI** | openai | https://reddit.com/r/OpenAI | 15 |
+| **robotics** | robotics | https://reddit.com/r/robotics | 15 |
+| **DeepSeek** | deepseek | https://reddit.com/r/DeepSeek | 15 |
+| **dotnet** | dotnet | https://reddit.com/r/dotnet | 15 |
+| **ClaudeAI** | claudeai | https://reddit.com/r/ClaudeAI | 15 |
+
+**Total**: 9 subreddits, ~125 posts per fetch
+
 ## 📋 Expected Results
 
 Successful response:
 ```json
 {
   "message": "Reddit news aggregation completed successfully!",
-  "fetched": 120,
-  "saved": 95,
+  "fetched": 115,
+  "saved": 89,
   "subreddits": [
     "popular",
     "ArtificialIntelligence",
