@@ -396,6 +396,109 @@ public sealed class SeedController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Manually triggers Reddit news aggregation from configured subreddits
+    /// Fetches from 9 AI/Tech subreddits and converts to Turkish news articles
+    /// </summary>
+    /// <returns>Result of Reddit aggregation operation</returns>
+    [HttpPost("fetch-reddit-news")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> FetchRedditNews()
+    {
+        try
+        {
+            _logger.LogInformation("Manually triggering Reddit news aggregation...");
+
+            // Trigger the background job manually by calling its logic
+            // Since we can't directly call the background job, we'll recreate its logic here
+            var redditService = HttpContext.RequestServices.GetRequiredService<RedditService>();
+            var newsRepository = HttpContext.RequestServices.GetRequiredService<NewsApi.Domain.Interfaces.INewsArticleRepository>();
+
+            var subreddits = new Dictionary<string, string>
+            {
+                ["popular"] = "popular",
+                ["ArtificialIntelligence"] = "artificialintelligence",
+                ["GithubCopilot"] = "githubcopilot",
+                ["mcp"] = "mcp",
+                ["OpenAI"] = "openai",
+                ["robotics"] = "robotics",
+                ["DeepSeek"] = "deepseek",
+                ["dotnet"] = "dotnet",
+                ["ClaudeAI"] = "claudeai",
+            };
+
+            int totalFetched = 0;
+            int totalSaved = 0;
+
+            foreach (var (subreddit, category) in subreddits)
+            {
+                try
+                {
+                    var posts = await redditService.GetTopPostsAsync(
+                        subreddit,
+                        timeframe: "week",
+                        limit: subreddit == "popular" ? 10 : 15
+                    );
+
+                    totalFetched += posts.Count;
+
+                    foreach (var post in posts)
+                    {
+                        var slug = SlugHelper.GenerateSlug($"{subreddit}: {post.Title}");
+                        var existing = await newsRepository.GetBySlugAsync(slug);
+
+                        if (existing == null)
+                        {
+                            var article = new NewsArticle
+                            {
+                                Category = category,
+                                Type = "reddit",
+                                Caption = $"{subreddit}: {post.Title}",
+                                Slug = slug,
+                                Summary = post.Content?.Length > 200 ? post.Content[..200] + "..." : post.Content ?? post.Title,
+                                Content = post.Content ?? post.Title,
+                                ImgPath = post.ImageUrls?.FirstOrDefault() ?? string.Empty,
+                                ImgAlt = post.Title,
+                                ExpressDate = post.PostedAt,
+                                CreateDate = DateTime.UtcNow,
+                                UpdateDate = DateTime.UtcNow,
+                                Priority = Math.Min(post.Upvotes / 10, 100),
+                                IsActive = true,
+                                ViewCount = 0,
+                            };
+
+                            await newsRepository.CreateAsync(article);
+                            totalSaved++;
+                        }
+                    }
+
+                    _logger.LogInformation("Processed {Count} posts from r/{Subreddit}", posts.Count, subreddit);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error fetching from r/{Subreddit}", subreddit);
+                }
+            }
+
+            // Clear caches
+            ClearAllCaches();
+
+            return Ok(new
+            {
+                message = "Reddit news aggregation completed successfully!",
+                fetched = totalFetched,
+                saved = totalSaved,
+                subreddits = subreddits.Keys.ToArray(),
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while fetching Reddit news");
+            return StatusCode(500, new { message = "Error fetching Reddit news", error = ex.Message });
+        }
+    }
+
     private void ClearAllCaches()
     {
         try
@@ -404,15 +507,22 @@ public sealed class SeedController : ControllerBase
             _cache.Remove(CacheKeys.NewsList);
             _cache.Remove(CacheKeys.AllNews);
 
-            // Clear category caches
-            var categories = new[] { "Technology", "Science", "Business", "Sports", "Entertainment", "Health", "World" };
-            foreach (var category in categories)
+            // Clear old category caches
+            var oldCategories = new[] { "Technology", "Science", "Business", "Sports", "Entertainment", "Health", "World" };
+            foreach (var category in oldCategories)
+            {
+                _cache.Remove(CacheKeys.GetNewsByCategory(category));
+            }
+
+            // Clear Reddit category caches
+            var redditCategories = new[] { "popular", "artificialintelligence", "githubcopilot", "mcp", "openai", "robotics", "deepseek", "dotnet", "claudeai" };
+            foreach (var category in redditCategories)
             {
                 _cache.Remove(CacheKeys.GetNewsByCategory(category));
             }
 
             // Clear type caches
-            var types = new[] { "article", "breaking", "analysis" };
+            var types = new[] { "article", "breaking", "analysis", "reddit" };
             foreach (var type in types)
             {
                 _cache.Remove(CacheKeys.GetNewsByType(type));
