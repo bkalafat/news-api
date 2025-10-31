@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
@@ -28,6 +30,7 @@ public sealed class SeedController : ControllerBase
     private readonly NewsAggregatorService _newsAggregator;
     private readonly TranslationService _translationService;
     private readonly IMemoryCache _cache;
+    private readonly IConfiguration _configuration;
 
     public SeedController(
         MongoDbContext context,
@@ -36,7 +39,8 @@ public sealed class SeedController : ControllerBase
         INewsArticleService newsService,
         NewsAggregatorService newsAggregator,
         TranslationService translationService,
-        IMemoryCache cache)
+        IMemoryCache cache,
+        IConfiguration configuration)
     {
         _context = context;
         _logger = logger;
@@ -513,6 +517,9 @@ public sealed class SeedController : ControllerBase
             // Clear caches
             ClearAllCaches();
 
+            // Trigger ISR revalidation on Netlify
+            await TriggerNetlifyRevalidationAsync();
+
             return Ok(new
             {
                 message = "Reddit news aggregation completed successfully with Turkish translation!",
@@ -525,6 +532,38 @@ public sealed class SeedController : ControllerBase
         {
             _logger.LogError(ex, "Error occurred while fetching Reddit news");
             return StatusCode(500, new { message = "Error fetching Reddit news", error = ex.Message });
+        }
+    }
+
+    private async Task TriggerNetlifyRevalidationAsync()
+    {
+        try
+        {
+            var webhookUrl = _configuration["NetlifySettings:RevalidateWebhookUrl"];
+            var isEnabled = _configuration.GetValue<bool>("NetlifySettings:EnableAutoRevalidation", true);
+
+            if (string.IsNullOrEmpty(webhookUrl) || !isEnabled || webhookUrl.Contains("YOUR_BUILD_HOOK_ID"))
+            {
+                _logger.LogInformation("Netlify revalidation webhook not configured or disabled");
+                return;
+            }
+
+            using var httpClient = new HttpClient();
+            httpClient.Timeout = TimeSpan.FromSeconds(10);
+
+            var response = await httpClient.PostAsync(webhookUrl, null);
+            if (response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation("✅ Netlify ISR revalidation triggered successfully");
+            }
+            else
+            {
+                _logger.LogWarning("⚠️ Netlify revalidation failed with status: {Status}", response.StatusCode);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to trigger Netlify revalidation (non-critical)");
         }
     }
 

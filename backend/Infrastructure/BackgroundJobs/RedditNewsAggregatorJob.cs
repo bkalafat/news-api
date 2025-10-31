@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -145,6 +146,44 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
             totalFetched,
             totalSaved
         );
+
+        // Trigger ISR revalidation on Netlify after news update
+        await TriggerNetlifyRevalidationAsync(scope.ServiceProvider);
+    }
+
+    private async Task TriggerNetlifyRevalidationAsync(IServiceProvider serviceProvider)
+    {
+        try
+        {
+            var configuration = serviceProvider.GetRequiredService<Microsoft.Extensions.Configuration.IConfiguration>();
+            var webhookUrl = configuration["NetlifySettings:RevalidateWebhookUrl"];
+            var isEnabledStr = configuration["NetlifySettings:EnableAutoRevalidation"];
+            var isEnabled = string.IsNullOrEmpty(isEnabledStr) || bool.Parse(isEnabledStr);
+
+            if (string.IsNullOrEmpty(webhookUrl) || !isEnabled || webhookUrl.Contains("YOUR_BUILD_HOOK_ID"))
+            {
+                _logger.LogInformation("Netlify revalidation webhook not configured or disabled");
+                return;
+            }
+
+            var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+            using var httpClient = httpClientFactory.CreateClient();
+            httpClient.Timeout = TimeSpan.FromSeconds(10);
+
+            var response = await httpClient.PostAsync(webhookUrl, null);
+            if (response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation("✅ Netlify ISR revalidation triggered successfully after scheduled job");
+            }
+            else
+            {
+                _logger.LogWarning("⚠️ Netlify revalidation failed with status: {Status}", response.StatusCode);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to trigger Netlify revalidation (non-critical)");
+        }
     }
 
     private static async Task<NewsArticle> ConvertRedditPostToNewsAsync(
