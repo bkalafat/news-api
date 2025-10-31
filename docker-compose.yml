@@ -104,6 +104,10 @@ services:
       - JwtSettings__SecretKey=${JWT_SECRET_KEY:-your-super-secret-jwt-key-that-is-at-least-32-characters-long}
       - JwtSettings__Issuer=NewsPortal
       - JwtSettings__Audience=NewsPortalClients
+      - RedditSettings__ClientId=${REDDIT_CLIENT_ID:-}
+      - RedditSettings__ClientSecret=${REDDIT_CLIENT_SECRET:-}
+      - RedditSettings__Username=${REDDIT_USERNAME:-}
+      - RedditSettings__Password=${REDDIT_PASSWORD:-}
     depends_on:
       mongodb:
         condition: service_healthy
