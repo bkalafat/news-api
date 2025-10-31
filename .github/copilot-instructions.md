@@ -1,41 +1,36 @@
-# News API - GitHub Copilot Instructions
+# News Portal - GitHub Copilot Instructions
 
-This file provides comprehensive context for GitHub Copilot to assist effectively with the News API project.
+> Professional instructions for GitHub Copilot to effectively assist with the News Portal project.
 
-## ⚠️ Important Guidelines
+## ⚠️ Critical Guidelines
 
-**Do not create explainer documents or other documentation unless specifically asked to.**
+**Do not create unnecessary documentation.**
+- Focus on code and completing tasks
+- Only create files when explicitly requested
+- Update existing documentation rather than creating new files
+- No summary documents, completion reports, or explainer files
 
-- Focus on completing tasks, not documenting them
-- Only create essential files needed to fulfill the user's request
-- Avoid creating summary files, completion reports, or quick reference guides
-- Update existing documentation when relevant, but don't create new MD files for every change
+## 🎯 Quick Reference
 
-**Key Architecture Facts:**
-- Backend runs on **.NET 10.0** with C# 13+ features
-- All backend services run in **Docker containers** - never use `dotnet run` for development
-- **MinIO** is used for image storage with automatic bucket initialization
-- **Turkish language support** via `SlugHelper` for URL-friendly slugs
-- Four main controllers: **NewsArticle**, **Auth**, **Seed**, **SocialMedia**
-- **Azure Container Apps** for production deployment with auto-scaling
+### Architecture
+- **Backend**: .NET 9, Clean Architecture, MongoDB, MinIO, JWT
+- **Frontend**: Next.js 16, TypeScript, TailwindCSS, React Query
+- **Development**: Docker Compose (all services containerized)
+- **Production**: Azure Container Apps (auto-scaling 0-10 replicas)
+- **Tests**: 178+ passing tests (xUnit, Moq)
 
-## 📋 Project Overview
+### Key Points
+- **NEVER** use `dotnet run` for development - use Docker Compose
+- **Turkish support**: SlugHelper converts Turkish characters in URLs
+- **Four main controllers**: NewsArticle, Auth, Seed, SocialMedia
+- **Image storage**: MinIO (S3-compatible) with auto-bucket creation
+- **Caching**: IMemoryCache (30-60 min TTL)
 
-**News API** is a modern news management system built with .NET 9 that provides a RESTful API for managing news articles with features including JWT authentication, MongoDB persistence, and comprehensive caching.
-
-**Target Audience**: 
-- Frontend developers building news consumption applications
-- Backend developers maintaining and extending the API
-- DevOps engineers deploying and monitoring the service
-
-**Key Features**:
-- JWT-based authentication for protected endpoints
-- Clean Architecture with clear separation of concerns
-- MongoDB for flexible NoSQL storage
-- Memory caching for high-performance read operations
-- Comprehensive input validation with FluentValidation
-- OWASP Top 10 security protections
-- Health monitoring and Swagger documentation
+### Project Documentation
+- **[BUILD.md](../docs/BUILD.md)** - Build instructions (Docker & local)
+- **[RUN.md](../docs/RUN.md)** - Running & development guide
+- **[DEPLOY.md](../docs/DEPLOY.md)** - Production deployment
+- **[ARCHITECTURE.md](../docs/ARCHITECTURE.md)** - System architecture
 
 ## 🛠️ Tech Stack
 

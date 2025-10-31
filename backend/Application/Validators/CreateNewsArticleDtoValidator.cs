@@ -16,7 +16,7 @@ public class CreateNewsArticleDtoValidator : AbstractValidator<CreateNewsArticle
             .WithMessage("Category is required")
             .MaximumLength(100)
             .WithMessage("Category must not exceed 100 characters")
-            .Must(c => allowedCategories.Contains(c.ToLower()))
+            .Must(c => !string.IsNullOrEmpty(c) && allowedCategories.Contains(c.ToLower()))
             .WithMessage($"Category must be one of: {string.Join(", ", allowedCategories)}");
 
         RuleFor(dto => dto.Type)
@@ -66,7 +66,7 @@ public class UpdateNewsArticleDtoValidator : AbstractValidator<UpdateNewsArticle
         RuleFor(dto => dto.Category)
             .MaximumLength(100)
             .WithMessage("Category must not exceed 100 characters")
-            .Must(c => allowedCategories.Contains(c.ToLower()))
+            .Must(c => !string.IsNullOrEmpty(c) && allowedCategories.Contains(c.ToLower()))
             .WithMessage($"Category must be one of: {string.Join(", ", allowedCategories)}")
             .When(dto => !string.IsNullOrEmpty(dto.Category));
 

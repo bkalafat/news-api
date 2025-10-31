@@ -221,17 +221,16 @@ Reference these files to ensure:
 ## 📚 Additional Documentation
 
 ### Project Documentation
-- `README.md` - Project overview, setup, features
-- `NEWS_API_DOCUMENTATION.md` - Complete API reference
-- `SWAGGER_TESTING_GUIDE.md` - Interactive testing guide
-- `CONTRIBUTING.md` - Contribution guidelines
+- **[README.md](../README.md)** - Project overview and quick start
+- **[BUILD.md](../docs/BUILD.md)** - Build instructions (Docker & local)
+- **[RUN.md](../docs/RUN.md)** - Running and development guide
+- **[DEPLOY.md](../docs/DEPLOY.md)** - Production deployment guide
+- **[ARCHITECTURE.md](../docs/ARCHITECTURE.md)** - System architecture and design
 
-### Architecture Documentation
-- `specs/002-modernize-net-core/spec.md` - Architecture specifications
-- `specs/002-modernize-net-core/plan.md` - Implementation plan
-
-### Test Documentation
-- `tests/TEST_COVERAGE_REPORT.md` - Test coverage details
+### Component Documentation
+- **[Frontend README](../frontend/README.md)** - Next.js frontend documentation
+- **[Azure README](../azure/README.md)** - Azure deployment details
+- **[Backend Image Strategy](../backend/ADMIN_IMAGE_UPLOAD_STRATEGY.md)** - Image upload architecture
 
 ## 🔄 Keeping Documentation Updated
 
