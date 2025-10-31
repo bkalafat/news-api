@@ -1,10 +1,9 @@
 using FluentAssertions;
-using NewsApi.Domain.Entities;
 using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Unit.Domain;
 
-internal class NewsEntityAdvancedTests
+public class NewsEntityAdvancedTests
 {
     [Fact]
     public void News_WithLongContent_ShouldAcceptLargeContent()

@@ -1,14 +1,10 @@
 using FluentAssertions;
 using Moq;
-using NewsApi.Application.Services;
-using NewsApi.Common;
-using NewsApi.Domain.Entities;
-using NewsApi.Domain.Interfaces;
 using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Unit.Application;
 
-internal class NewsArticleServiceTests
+public class NewsArticleServiceTests
 {
     private readonly Mock<INewsArticleRepository> _mockRepository;
     private readonly TestMemoryCache _cache;

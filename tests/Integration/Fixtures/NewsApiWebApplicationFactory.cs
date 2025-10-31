@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MongoDB.Driver;
-using NewsApi.Infrastructure.Data;
-using NewsApi.Infrastructure.Data.Configurations;
 using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Integration.Fixtures;

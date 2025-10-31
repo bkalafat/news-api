@@ -1,9 +1,8 @@
 using FluentAssertions;
-using NewsApi.Application.DTOs;
 
 namespace NewsApi.Tests.Unit.DTOs;
 
-internal class UpdateNewsArticleDtoTests
+public class UpdateNewsArticleDtoTests
 {
     [Fact]
     public void UpdateNewsArticleDto_WithAllProperties_ShouldAllowPartialUpdates()

@@ -146,7 +146,7 @@ internal sealed class NewsDataFetcherService : INewsDataFetcherService
         return articles;
     }
 
-    private CreateNewsArticleDto? MapToCreateDto(NewsApiArticle article, string category)
+    private static CreateNewsArticleDto? MapToCreateDto(NewsApiArticle article, string category)
     {
         // Skip articles without title or content
         if (string.IsNullOrWhiteSpace(article.Title) ||

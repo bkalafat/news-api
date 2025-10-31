@@ -102,7 +102,7 @@ internal sealed class SeedController : ControllerBase
             int totalErrors = 0;
 
             // Fetch news from external API
-            var newsArticles = await _newsDataFetcher.FetchLatestNewsAsync();
+            var newsArticles = await _newsDataFetcher.FetchLatestNewsAsync(app.Lifetime.ApplicationStarted);
             totalFetched = newsArticles.Count;
 
             _logger.LogInformation("Fetched {Count} news articles from external sources", totalFetched);
@@ -128,7 +128,7 @@ internal sealed class SeedController : ControllerBase
                     var existingArticles = await _newsService.GetAllNewsAsync();
 
                     var isDuplicate = existingArticles
-                        .Where(e => e.Category == article.Category)
+                        .Where(e => string.Equals(e.Category, article.Category, StringComparison.Ordinal))
                         .Any(existing => existing.Caption.Equals(article.Caption, StringComparison.OrdinalIgnoreCase));
 
                     if (isDuplicate)
@@ -157,7 +157,7 @@ internal sealed class SeedController : ControllerBase
                         ExpressDate = article.ExpressDate,
                         Priority = article.Priority,
                         IsActive = article.IsActive,
-                        IsSecondPageNews = article.IsSecondPageNews
+                        IsSecondPageNews = article.IsSecondPageNews,
                     };
                     await _newsService.CreateNewsAsync(newsEntity);
                     totalCreated++;

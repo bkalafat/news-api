@@ -1,9 +1,8 @@
 using FluentAssertions;
-using NewsApi.Domain.Entities;
 
 namespace NewsApi.Tests.Unit.Domain;
 
-internal class NewsEntityTests
+public class NewsEntityTests
 {
     [Fact]
     public void News_WhenCreated_ShouldHaveDefaultValues()

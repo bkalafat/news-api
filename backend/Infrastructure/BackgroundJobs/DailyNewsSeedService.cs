@@ -131,7 +131,7 @@ internal sealed class DailyNewsSeedService : BackgroundService
                     var existingArticles = await newsService.GetAllNewsAsync();
 
                     var isDuplicate = existingArticles
-                        .Where(e => e.Category == article.Category)
+                        .Where(e => string.Equals(e.Category, article.Category, StringComparison.Ordinal))
                         .Any(existing => existing.Caption.Equals(article.Caption, StringComparison.OrdinalIgnoreCase));
 
                     if (isDuplicate)
@@ -161,7 +161,7 @@ internal sealed class DailyNewsSeedService : BackgroundService
                         ExpressDate = article.ExpressDate,
                         Priority = article.Priority,
                         IsActive = article.IsActive,
-                        IsSecondPageNews = article.IsSecondPageNews
+                        IsSecondPageNews = article.IsSecondPageNews,
                     };
                     await newsService.CreateNewsAsync(newsEntity);
                     totalCreated++;
@@ -197,15 +197,6 @@ internal sealed class DailyNewsSeedService : BackgroundService
         {
             _logger.LogError(ex, "Critical error during daily news seed operation");
         }
-    }
-
-    private static bool IsSimilarCaption(string caption1, string caption2)
-    {
-        // Simple similarity check: compare first 50 characters
-        var sample1 = caption1.Length > 50 ? caption1.Substring(0, 50) : caption1;
-        var sample2 = caption2.Length > 50 ? caption2.Substring(0, 50) : caption2;
-
-        return sample1.Equals(sample2, StringComparison.OrdinalIgnoreCase);
     }
 
     public override Task StopAsync(CancellationToken cancellationToken)

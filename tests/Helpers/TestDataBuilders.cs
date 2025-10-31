@@ -1,6 +1,3 @@
-using NewsApi.Application.DTOs;
-using NewsApi.Domain.Entities;
-
 namespace NewsApi.Tests.Helpers;
 
 /// <summary>

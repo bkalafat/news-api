@@ -926,7 +926,7 @@ internal static class SeedNewsData
             }
         }
 
-        await newsCollection.InsertManyAsync(newsArticles).ConfigureAwait(false);
+        await newsCollection.InsertManyAsync(newsArticles, cancellationToken: app.Lifetime.ApplicationStarted).ConfigureAwait(false);
         Console.WriteLine($"Successfully seeded {newsArticles.Count} news articles to the database!");
     }
 }

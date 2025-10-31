@@ -1,15 +1,11 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using NewsApi.Application.Services;
-using NewsApi.Domain.Entities;
-using NewsApi.Domain.Interfaces;
-using NewsApi.Presentation.Controllers;
 using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Unit.Presentation;
 
-internal class NewsArticleControllerTests
+public class NewsArticleControllerTests
 {
     private readonly Mock<INewsArticleService> _mockNewsArticleService;
     private readonly Mock<IImageStorageService> _mockImageStorageService;

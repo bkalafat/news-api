@@ -349,11 +349,11 @@ internal sealed class SocialMediaController : ControllerBase
     [Authorize]
     [ProducesResponseType(typeof(ImportResultDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<ImportResultDto>> ImportGitHubCopilotPosts(
+    public Task<ActionResult<ImportResultDto>> ImportGitHubCopilotPosts(
         [FromQuery] string timeframe = "month",
         [FromQuery] int limit = 25)
     {
-        return await ImportRedditPosts("github", "copilot", timeframe, limit);
+        return ImportRedditPosts("github", "copilot", timeframe, limit);
     }
 }
 

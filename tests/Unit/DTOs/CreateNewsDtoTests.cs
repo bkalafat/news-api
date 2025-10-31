@@ -1,10 +1,8 @@
 using FluentAssertions;
-using NewsApi.Application.DTOs;
-using NewsApi.Domain.Entities;
 
 namespace NewsApi.Tests.Unit.DTOs;
 
-internal class CreateNewsArticleDtoTests
+public class CreateNewsArticleDtoTests
 {
     [Fact]
     public void CreateNewsArticleDto_WithAllProperties_ShouldMapToNewsEntity()

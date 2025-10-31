@@ -65,8 +65,7 @@ internal sealed class SocialMediaPostRepository : ISocialMediaPostRepository
         {
             return await _collection
                 .Find(post => post.Id == id && post.IsActive)
-                .FirstOrDefaultAsync()
-                .ConfigureAwait(false);
+                .FirstOrDefaultAsync(cancellationToken: app.Lifetime.ApplicationStarted).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -78,23 +77,21 @@ internal sealed class SocialMediaPostRepository : ISocialMediaPostRepository
     public Task<SocialMediaPost?> GetByExternalIdAsync(string externalId, string platform) =>
         _collection
             .Find(post => post.ExternalId == externalId && post.Platform == platform)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken: app.Lifetime.ApplicationStarted);
 
     public async Task<SocialMediaPost> CreateAsync(SocialMediaPost post)
     {
-        await _collection.InsertOneAsync(post).ConfigureAwait(false);
+        await _collection.InsertOneAsync(post, cancellationToken: app.Lifetime.ApplicationStarted).ConfigureAwait(false);
         return post;
     }
 
     public async Task UpdateAsync(string id, SocialMediaPost post) =>
         await _collection
-            .ReplaceOneAsync(filter: p => p.Id == id, replacement: post)
-            .ConfigureAwait(false);
+            .ReplaceOneAsync(filter: p => p.Id == id, replacement: post, cancellationToken: app.Lifetime.ApplicationStarted).ConfigureAwait(false);
 
     public async Task DeleteAsync(string id) =>
         await _collection
-            .DeleteOneAsync(post => post.Id == id)
-            .ConfigureAwait(false);
+            .DeleteOneAsync(post => post.Id == id, cancellationToken: app.Lifetime.ApplicationStarted).ConfigureAwait(false);
 
     public async Task UpdateMetricsAsync(string id, int upvotes, int downvotes, int commentCount, int shareCount)
     {
@@ -106,7 +103,6 @@ internal sealed class SocialMediaPostRepository : ISocialMediaPostRepository
             .Set(post => post.LastUpdated, DateTime.UtcNow);
 
         await _collection
-            .UpdateOneAsync(post => post.Id == id, update)
-            .ConfigureAwait(false);
+            .UpdateOneAsync(post => post.Id == id, update, cancellationToken: app.Lifetime.ApplicationStarted).ConfigureAwait(false);
     }
 }

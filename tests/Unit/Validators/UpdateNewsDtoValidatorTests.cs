@@ -1,11 +1,9 @@
 using FluentValidation.TestHelper;
-using NewsApi.Application.DTOs;
-using NewsApi.Application.Validators;
 using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Unit.Validators;
 
-internal class UpdateNewsArticleDtoValidatorTests
+public class UpdateNewsArticleDtoValidatorTests
 {
     private readonly UpdateNewsArticleDtoValidator _validator;
 
