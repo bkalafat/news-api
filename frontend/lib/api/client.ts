@@ -83,7 +83,10 @@ class NewsApiClient {
    * Get news by category
    */
   async getNewsByCategory(category: string): Promise<News[]> {
-    const response = await this.client.get<News[]>(`/?category=${category}`);
+    // Capitalize first letter to match backend's case-sensitive categories
+    // (Technology, Business, Entertainment, Science, Health, Sports, World)
+    const capitalizedCategory = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+    const response = await this.client.get<News[]>(`/?category=${capitalizedCategory}`);
     // Backend returns array directly
     const data = Array.isArray(response.data) ? response.data : [];
     return data.map(this.parseNewsDate);

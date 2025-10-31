@@ -1,40 +1,23 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Deploy frontend to Vercel
+    Build frontend for Netlify deployment
 
 .DESCRIPTION
-    Simple deployment script for Next.js frontend to Vercel.
-    Vercel CLI will be installed if not present.
-
-.PARAMETER Production
-    Deploy to production (default: preview deployment)
+    Build Next.js frontend. Deploy happens automatically via Git push to master.
+    Netlify is configured to auto-deploy from the master branch.
 
 .EXAMPLE
     .\deploy-frontend.ps1
-    Deploy to preview environment
-
-.EXAMPLE
-    .\deploy-frontend.ps1 -Production
-    Deploy to production environment
+    Build frontend and show deployment instructions
 #>
 
-param(
-    [switch]$Production
-)
-
-Write-Host "🚀 Frontend Deployment to Vercel" -ForegroundColor Cyan
-Write-Host "=================================" -ForegroundColor Cyan
+Write-Host "🚀 Frontend Build for Netlify" -ForegroundColor Cyan
+Write-Host "=============================" -ForegroundColor Cyan
 Write-Host ""
 
 # Change to frontend directory
 Set-Location -Path "$PSScriptRoot\frontend"
-
-# Check if Vercel CLI is installed
-if (-not (Get-Command vercel -ErrorAction SilentlyContinue)) {
-    Write-Host "📦 Installing Vercel CLI..." -ForegroundColor Yellow
-    npm install -g vercel
-}
 
 # Build the project
 Write-Host "🔨 Building Next.js application..." -ForegroundColor Yellow
@@ -45,35 +28,14 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Host "✅ Build completed successfully" -ForegroundColor Green
 Write-Host ""
-
-# Deploy to Vercel
-Write-Host "☁️  Deploying to Vercel..." -ForegroundColor Yellow
-
-if ($Production) {
-    Write-Host "🎯 Production deployment" -ForegroundColor Magenta
-    vercel --prod
-} else {
-    Write-Host "🔍 Preview deployment" -ForegroundColor Magenta
-    vercel
-}
-
-if ($LASTEXITCODE -eq 0) {
-    Write-Host ""
-    Write-Host "✅ Deployment completed successfully!" -ForegroundColor Green
-    Write-Host ""
-    Write-Host "📝 Next steps:" -ForegroundColor Cyan
-    Write-Host "   - Check deployment URL in the output above"
-    Write-Host "   - Verify frontend is working correctly"
-    Write-Host "   - Test API connectivity"
-    Write-Host ""
-    Write-Host "💡 Tips:" -ForegroundColor Yellow
-    Write-Host "   - For production: .\deploy-frontend.ps1 -Production"
-    Write-Host "   - View deployments: vercel ls"
-    Write-Host "   - View logs: vercel logs"
-} else {
-    Write-Host ""
-    Write-Host "❌ Deployment failed!" -ForegroundColor Red
-    exit 1
-}
+Write-Host "✅ Build completed successfully!" -ForegroundColor Green
+Write-Host ""
+Write-Host "📝 Deployment Instructions:" -ForegroundColor Cyan
+Write-Host "   1. Commit your changes: git add . && git commit -m 'Update frontend'" -ForegroundColor White
+Write-Host "   2. Push to master: git push origin master" -ForegroundColor White
+Write-Host "   3. Netlify will auto-deploy (usually takes 2-3 minutes)" -ForegroundColor White
+Write-Host ""
+Write-Host "🌐 Live Site: https://clever-speculoos-aacb3a.netlify.app" -ForegroundColor Green
+Write-Host "📊 Netlify Dashboard: https://app.netlify.com" -ForegroundColor Cyan
+Write-Host ""

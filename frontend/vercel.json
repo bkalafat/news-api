@@ -1,15 +1,5 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "env": {
-    "NEXT_PUBLIC_API_URL": "https://newsportal-backend.onrender.com/api",
-    "NEXT_PUBLIC_SITE_URL": "https://newsportal.vercel.app"
-  },
-  "regions": ["fra1"],
-  "framework": "nextjs"
+  "comment": "This project is deployed on Netlify, not Vercel",
+  "message": "Deployment URL: https://clever-speculoos-aacb3a.netlify.app",
+  "note": "This file can be deleted. Kept for reference only."
 }
