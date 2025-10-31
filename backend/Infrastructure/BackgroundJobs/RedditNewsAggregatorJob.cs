@@ -92,9 +92,10 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
         var repository = scope.ServiceProvider.GetRequiredService<INewsArticleRepository>();
         var httpClientFactory = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>();
         var redditLogger = scope.ServiceProvider.GetRequiredService<ILogger<RedditService>>();
+        var redditSettings = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<Infrastructure.Configuration.RedditSettings>>();
 
         var httpClient = httpClientFactory.CreateClient("Reddit");
-        var redditService = new RedditService(httpClient, redditLogger);
+        var redditService = new RedditService(httpClient, redditLogger, redditSettings);
         var totalFetched = 0;
         var totalSaved = 0;
 

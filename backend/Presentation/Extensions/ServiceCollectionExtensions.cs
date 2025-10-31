@@ -53,6 +53,11 @@ internal static class ServiceCollectionExtensions
         services.AddSingleton(minioSettings);
         services.AddSingleton<IImageStorageService, MinioImageStorageService>();
 
+        // Reddit OAuth Settings
+        services.Configure<Infrastructure.Configuration.RedditSettings>(
+            configuration.GetSection("RedditSettings")
+        );
+
         // Social Media Services
         services.AddHttpClient<RedditService>();
 
