@@ -1,282 +1,324 @@
-# GitHub Copilot Documentation Index
-
-Welcome! This directory contains comprehensive GitHub Copilot instructions, prompts, and chatmodes to help you work effectively with the News API project.
-
-## 📂 Directory Structure
-
-```
-.github/
-├── copilot-instructions.md    # Main project instructions (always loaded)
-├── instructions/               # Context-specific instruction files
-│   ├── csharp.instructions.md
-│   ├── testing.instructions.md
-│   └── api-controllers.instructions.md
-├── prompts/                    # Reusable task prompts
-│   ├── add-endpoint.prompt.md
-│   ├── add-tests.prompt.md
-│   └── debug-issues.prompt.md
-└── chatmodes/                  # Specialized chat modes
-    └── development.chatmode.md
-```
-
-## 📖 Quick Start
-
-### For New Contributors
-1. Read `copilot-instructions.md` - Overall project context
-2. Review `CONTRIBUTING.md` - Contribution guidelines
-3. Check `README.md` - Project setup and features
-
-### For Development
-1. Activate `development.chatmode.md` - Development workflow mode
-2. Use prompts in `prompts/` for common tasks
-3. Reference instructions in `instructions/` for specific guidance
-
-## 📋 Main Instructions File
-
-### [copilot-instructions.md](copilot-instructions.md)
-**Loaded automatically for every Copilot interaction**
-
-Contains:
-- 📋 Project overview and features
-- 🛠️ Complete tech stack
-- 📁 Project structure guide
-- 🎯 Coding guidelines and standards
-- 🔧 Available scripts and resources
-- 🧩 Common development tasks
-- 🚫 Anti-patterns to avoid
-- 📚 Reference documentation
-
-**When to reference**: Always! This is your primary context.
-
-## 🎯 Instruction Files
-
-Instruction files provide specialized guidance for specific file types or contexts.
-
-### [instructions/csharp.instructions.md](instructions/csharp.instructions.md)
-**Applies to**: All `*.cs` files
-
-Contains:
-- 🧠 C# 12+ language features
-- 🔧 Naming conventions
-- 📝 Code organization patterns
-- 🔄 Async/await best practices
-- 📊 LINQ guidelines
-- 🎨 Dependency injection patterns
-- 🧶 Repository and service patterns
-- ✅ Do's and ❌ Don'ts
-
-**Use when**: Writing or reviewing any C# code.
-
-### [instructions/testing.instructions.md](instructions/testing.instructions.md)
-**Applies to**: All files in `**/Tests/**/*.cs`
-
-Contains:
-- 🧪 xUnit testing framework usage
-- 🎭 Moq mocking patterns
-- 📝 AAA pattern (Arrange-Act-Assert)
-- 🔧 Test data builders
-- 🌐 Integration testing with WebApplicationFactory
-- ✅ Test coverage requirements
-- 📊 What to test and what not to test
-
-**Use when**: Writing or debugging tests.
-
-### [instructions/api-controllers.instructions.md](instructions/api-controllers.instructions.md)
-**Applies to**: All files in `**/Controllers/**/*.cs`
-
-Contains:
-- 🎯 Controller design principles
-- 📝 HTTP method patterns (GET, POST, PUT, DELETE)
-- 🔒 Authorization patterns
-- 📊 Parameter binding (route, query, body)
-- ✅ Best practices
-- 📚 RESTful API conventions
-- 📖 Documentation requirements
-
-**Use when**: Working with API controllers.
-
-## 🎬 Prompt Files
-
-Prompt files guide you through specific development tasks.
-
-### [prompts/add-endpoint.prompt.md](prompts/add-endpoint.prompt.md)
-**Use when**: Adding a new API endpoint
-
-Guides you through:
-1. Creating DTOs
-2. Adding validators
-3. Implementing service methods
-4. Adding controller actions
-5. Writing comprehensive tests
-6. Testing via Swagger
-
-**Example usage**: 
-```
-"Following the add-endpoint prompt, help me create a search endpoint"
-```
-
-### [prompts/add-tests.prompt.md](prompts/add-tests.prompt.md)
-**Use when**: Adding tests for existing code
-
-Provides:
-- Test templates for services, validators, controllers
-- Test data builder patterns
-- Coverage analysis guidance
-- Test scenario checklists
-
-**Example usage**:
-```
-"Using the add-tests prompt, help me add tests for NewsService"
-```
-
-### [prompts/debug-issues.prompt.md](prompts/debug-issues.prompt.md)
-**Use when**: Debugging problems
-
-Covers:
-- Systematic debugging workflow
-- Common issues and solutions
-- Debugging techniques
-- Tool usage (logs, Swagger, MongoDB)
-
-**Example usage**:
-```
-"Following the debug-issues prompt, help me fix the null reference error"
-```
-
-## 🎭 Chat Modes
-
-Chat modes set specialized behavior for Copilot interactions.
-
-### [chatmodes/development.chatmode.md](chatmodes/development.chatmode.md)
-**Use when**: Actively developing features
-
-Optimizes Copilot for:
-- Clean Architecture adherence
-- Following project conventions
-- Implementing features systematically
-- Writing tests alongside code
-- Maintaining quality standards
-
-**Activation**: This mode is applied when actively working on code.
-
-## 💡 How to Use These Files
-
-### In VS Code Chat
-
-**Reference a prompt**:
-```
-@workspace /help I want to add a new endpoint, use the add-endpoint prompt
-```
-
-**Reference instructions**:
-```
-@workspace Following the C# instructions, help me refactor this service
-```
-
-**Ask about guidelines**:
-```
-@workspace What are the testing requirements from testing.instructions.md?
-```
-
-### In Code Comments
-
-Copilot automatically considers:
-- `copilot-instructions.md` (always)
-- Instruction files matching your current file pattern
-- Context from open files
-
-### During Code Review
-
-Reference these files to ensure:
-- Code follows project standards
-- Tests are comprehensive
-- Documentation is complete
-- Architecture principles are maintained
-
-## 🎯 Common Workflows
-
-### Adding a New Feature
-1. Read `copilot-instructions.md` for context
-2. Use `prompts/add-endpoint.prompt.md` as a guide
-3. Follow `instructions/csharp.instructions.md` for code style
-4. Use `instructions/testing.instructions.md` for tests
-5. Reference `instructions/api-controllers.instructions.md` for controllers
-
-### Debugging an Issue
-1. Use `prompts/debug-issues.prompt.md` for systematic approach
-2. Check `copilot-instructions.md` for common patterns
-3. Review relevant instruction files for code standards
-
-### Writing Tests
-1. Use `prompts/add-tests.prompt.md` as a template
-2. Follow `instructions/testing.instructions.md` for patterns
-3. Reference `copilot-instructions.md` for project structure
-
-### Code Review
-1. Check against `copilot-instructions.md` standards
-2. Verify C# code follows `instructions/csharp.instructions.md`
-3. Ensure tests follow `instructions/testing.instructions.md`
-4. Confirm API follows `instructions/api-controllers.instructions.md`
-
-## 📚 Additional Documentation
-
-### Project Documentation
-- **[README.md](../README.md)** - Project overview and quick start
-- **[BUILD.md](../docs/BUILD.md)** - Build instructions (Docker & local)
-- **[RUN.md](../docs/RUN.md)** - Running and development guide
-- **[DEPLOY.md](../docs/DEPLOY.md)** - Production deployment guide
-- **[ARCHITECTURE.md](../docs/ARCHITECTURE.md)** - System architecture and design
-
-### Component Documentation
-- **[Frontend README](../frontend/README.md)** - Next.js frontend documentation
-- **[Azure README](../azure/README.md)** - Azure deployment details
-- **[Backend Image Strategy](../backend/ADMIN_IMAGE_UPLOAD_STRATEGY.md)** - Image upload architecture
-
-## 🔄 Keeping Documentation Updated
-
-These files are living documents that evolve with the project:
-
-- Update `copilot-instructions.md` when project structure changes
-- Update instruction files when coding patterns change
-- Update prompts when workflows improve
-- Create new instruction files for new contexts
-- Create new prompts for common new tasks
-
-## ❓ Getting Help
-
-**Can't find what you need?**
-1. Check the main `copilot-instructions.md`
-2. Search across all instruction files
-3. Review the prompt files for similar tasks
-4. Ask Copilot: "@workspace where is the documentation for [topic]?"
-
-**Found an issue with documentation?**
-1. Open an issue on GitHub
-2. Submit a PR with improvements
-3. Follow the CONTRIBUTING.md guidelines
-
-## 🎓 Best Practices
-
-1. **Always reference copilot-instructions.md** - It's your foundation
-2. **Use prompts as templates** - They provide proven workflows
-3. **Follow instruction files strictly** - They ensure consistency
-4. **Update docs when making changes** - Keep them accurate
-5. **Share improvements** - Contribute better patterns back
-
-## 🚀 Quick Reference
-
-| Task | Primary File | Supporting Files |
-|------|-------------|------------------|
-| Add Endpoint | add-endpoint.prompt.md | csharp.instructions.md, api-controllers.instructions.md |
-| Write Tests | add-tests.prompt.md | testing.instructions.md |
-| Debug Issue | debug-issues.prompt.md | copilot-instructions.md |
-| Review Code | copilot-instructions.md | All instruction files |
-| Understand Architecture | copilot-instructions.md | specs/002-modernize-net-core/spec.md |
+<p align="center">
+  <h1 align="center">📰 News Portal</h1>
+</p>
+
+<p align="center">
+  <strong>Modern full-stack news platform built with Clean Architecture</strong>
+</p>
+
+<p align="center">
+  <a href="https://dotnet.microsoft.com/"><img alt=".NET 9" src="https://img.shields.io/badge/.NET-9.0-512BD4?style=flat-square&logo=dotnet" /></a>
+  <a href="https://nextjs.org/"><img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" /></a>
+  <a href="https://www.mongodb.com/"><img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-7.0-47A248?style=flat-square&logo=mongodb&logoColor=white" /></a>
+  <a href="https://www.docker.com/"><img alt="Docker" src="https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker&logoColor=white" /></a>
+  <a href="tests/"><img alt="Tests" src="https://img.shields.io/badge/Tests-178%20Passing-success?style=flat-square" /></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" /></a>
+</p>
+
+<p align="center">
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-key-features">Features</a> •
+  <a href="#-documentation">Documentation</a> •
+  <a href="#-api-endpoints">API</a> •
+  <a href="#-deployment">Deployment</a>
+</p>
 
 ---
 
-**Last Updated**: October 2025  
-**Maintained By**: News API Team
+## 🚀 Quick Start
 
-**Questions?** Reference these docs or ask in GitHub Discussions.
+> **Prerequisites**: Docker Desktop installed and running
 
+```bash
+# Clone the repository
+git clone https://github.com/bkalafat/newsportal.git
+cd newsportal
+
+# Create environment file (optional)
+cp .env.example .env
+
+# Start all services with Docker Compose
+docker compose up -d
+
+# Verify services are running
+docker compose ps
+```
+
+### 🌐 Access Your Services
+
+| Service | URL | Credentials |
+|---------|-----|-------------|
+| **🔥 Backend API** | http://localhost:5000 | - |
+| **📚 Swagger UI** | http://localhost:5000/swagger | - |
+| **🗄️ MongoDB Admin** | http://localhost:8081 | `admin` / `admin123` |
+| **📦 MinIO Console** | http://localhost:9001 | `minioadmin` / `minioadmin123` |
+| **🎨 Frontend** | http://localhost:3000 | - |
+
+**Test the API:**
+```bash
+curl http://localhost:5000/health
+# Response: {"status":"Healthy","mongodb":"Connected"}
+```
+
+## ✨ Key Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🏗️ Architecture
+- **Clean Architecture** with SOLID principles
+- **Domain-Driven Design** with clear layer separation
+- **Dependency Injection** throughout
+- **Repository Pattern** for data access
+
+### 🔒 Security & Performance
+- **JWT Authentication** with Bearer tokens
+- **FluentValidation** for all inputs
+- **Memory Caching** (30-60 min TTL)
+- **Auto-Scaling** (0-10 replicas)
+
+</td>
+<td width="50%">
+
+### 🚀 Technology
+- **ASP.NET Core 9** with C# 13+
+- **MongoDB 7.0** with optimized indexes
+- **MinIO** S3-compatible storage
+- **Next.js 16** with TypeScript
+
+### 🧪 Quality Assurance
+- **178+ Tests** (unit + integration)
+- **CI/CD** with GitHub Actions
+- **Health Checks** for all services
+- **Swagger/OpenAPI** documentation
+
+</td>
+</tr>
+</table>
+
+## 📁 Project Structure
+
+```
+newsportal/
+├── backend/                 # .NET 9 Backend API
+│   ├── Domain/             # Core business entities (News, ImageMetadata)
+│   ├── Application/        # Business logic, services, DTOs, validators
+│   ├── Infrastructure/     # MongoDB, MinIO, JWT, caching
+│   ├── Presentation/       # Controllers, middleware, extensions
+│   └── Common/             # Shared utilities (SlugHelper for Turkish)
+├── frontend/               # Next.js 16 Frontend
+│   ├── app/               # App Router pages
+│   ├── components/        # React components (Shadcn/ui)
+│   └── lib/               # API client, utilities, hooks
+├── tests/                 # Test suite (178+ tests)
+│   ├── Unit/             # Service, validator, DTO tests
+│   └── Integration/      # Controller, repository tests
+├── docs/                 # Documentation
+│   ├── BUILD.md         # Build instructions
+│   ├── RUN.md           # Running locally & development
+│   ├── DEPLOY.md        # Production deployment guide
+│   └── ARCHITECTURE.md  # Architecture & design patterns
+├── .github/              # GitHub Actions workflows
+└── docker-compose.yml   # Docker orchestration
+```
+
+## 📖 Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[BUILD.md](docs/BUILD.md)** | How to build the project (Docker & local) |
+| **[RUN.md](docs/RUN.md)** | Running & development guide |
+| **[DEPLOY.md](docs/DEPLOY.md)** | Production deployment instructions |
+| **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** | System architecture & design patterns |
+| **[Frontend README](frontend/README.md)** | Next.js frontend documentation |
+| **[Azure README](azure/README.md)** | Azure deployment details |
+
+## 🔧 Development
+
+### Run Tests
+
+```bash
+# All tests (178+)
+dotnet test newsApi.sln
+
+# Unit tests only
+dotnet test --filter "FullyQualifiedName~Unit"
+
+# Integration tests only
+dotnet test --filter "FullyQualifiedName~Integration"
+```
+
+### Docker Helper Scripts (Windows)
+
+```powershell
+.\docker-start.ps1     # Start all services
+.\docker-stop.ps1      # Stop all services
+.\docker-logs.ps1      # View logs
+.\docker-status.ps1    # Check container status
+.\docker-rebuild.ps1   # Rebuild and restart
+```
+
+### Hot Reload Development
+
+```bash
+# Backend (watches for code changes)
+cd backend
+dotnet watch run
+
+# Frontend (Next.js dev server)
+cd frontend
+npm run dev
+```
+
+## 🌐 API Endpoints
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/news` | List all news articles | No |
+| GET | `/api/news/{id}` | Get article by ID | No |
+| GET | `/api/news/by-url?url={slug}` | Get article by slug | No |
+| POST | `/api/news` | Create new article | ✅ JWT |
+| PUT | `/api/news/{id}` | Update article | ✅ JWT |
+| DELETE | `/api/news/{id}` | Delete article | ✅ JWT |
+| POST | `/api/news/upload-image` | Upload image | ✅ JWT |
+| POST | `/api/auth/login` | Get JWT token | No |
+| GET | `/health` | Health check | No |
+
+**Interactive API docs**: http://localhost:5000/swagger
+
+## 🚢 Deployment
+
+### Production Architecture
+
+```mermaid
+graph LR
+    A[GitHub Push] -->|Triggers| B[GitHub Actions]
+    B -->|Builds & Deploys| C[Azure Container Apps]
+    B -->|Deploys| D[Vercel CDN]
+    C -->|Connects to| E[MongoDB Atlas]
+    C -->|Stores Images| F[MinIO/Cloudflare R2]
+    D -->|API Calls| C
+```
+
+### Production Stack
+
+| Component | Platform | Auto-Deploy | Scaling |
+|-----------|----------|-------------|---------|
+| **Backend API** | Azure Container Apps | ✅ GitHub Actions | 0-10 replicas |
+| **Frontend** | Vercel | ✅ Git Push | Global CDN |
+| **Database** | MongoDB Atlas | Manual | M0 Free Tier |
+| **Storage** | MinIO / Cloudflare R2 | Manual | 10GB Free |
+
+### Deploy Commands
+
+```bash
+# Deploy backend to Azure
+.\deploy-to-azure.ps1
+
+# Frontend deploys automatically on push to master
+git push origin master
+```
+
+📘 **Complete Guide**: See [DEPLOY.md](docs/DEPLOY.md) for detailed deployment instructions
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+### Backend
+![.NET](https://img.shields.io/badge/.NET_9-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![C#](https://img.shields.io/badge/C%23_13-239120?style=for-the-badge&logo=csharp&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB_7.0-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![MinIO](https://img.shields.io/badge/MinIO-C72E49?style=for-the-badge&logo=minio&logoColor=white)
+
+### Frontend
+![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript_5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![React Query](https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
+
+### Infrastructure & DevOps
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+
+### Testing
+![xUnit](https://img.shields.io/badge/xUnit-512BD4?style=for-the-badge&logo=.net&logoColor=white)
+![Moq](https://img.shields.io/badge/Moq-512BD4?style=for-the-badge&logo=.net&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
+
+</div>
+
+## 📋 Prerequisites
+
+- **Docker Desktop** (recommended) OR
+- **.NET 9 SDK** + **MongoDB** + **Node.js 18+**
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+<details>
+<summary><b>Contribution Workflow</b></summary>
+
+1. **Fork** the repository
+2. **Create** your feature branch
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. **Commit** your changes
+   ```bash
+   git commit -m 'Add amazing feature'
+   ```
+4. **Push** to the branch
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+5. **Open** a Pull Request
+
+### ✅ Before Submitting
+
+- [ ] All tests pass (`dotnet test`)
+- [ ] Code follows Clean Architecture principles
+- [ ] Documentation is updated
+- [ ] No breaking changes (or clearly documented)
+
+</details>
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support & Community
+
+<p align="center">
+  <a href="https://github.com/bkalafat/newsportal/issues">
+    <img src="https://img.shields.io/github/issues/bkalafat/newsportal?style=for-the-badge" alt="Issues" />
+  </a>
+  <a href="https://github.com/bkalafat/newsportal/stargazers">
+    <img src="https://img.shields.io/github/stars/bkalafat/newsportal?style=for-the-badge" alt="Stars" />
+  </a>
+  <a href="https://github.com/bkalafat/newsportal/network/members">
+    <img src="https://img.shields.io/github/forks/bkalafat/newsportal?style=for-the-badge" alt="Forks" />
+  </a>
+</p>
+
+<p align="center">
+  <strong>Need help?</strong> Open an <a href="https://github.com/bkalafat/newsportal/issues">issue</a> or start a <a href="https://github.com/bkalafat/newsportal/discussions">discussion</a>
+</p>
+
+---
+
+<p align="center">
+  <strong>Built with ❤️ using Clean Architecture principles</strong>
+</p>
+
+<p align="center">
+  <sub>⭐ Star this repository if you find it helpful!</sub>
+</p>
