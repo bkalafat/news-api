@@ -800,4 +800,78 @@ public sealed class SeedController : ControllerBase
 
         return Math.Clamp(priority, 10, 100);
     }
+
+    /// <summary>
+    /// Fix articles with default dates (1970) by updating them to current date
+    /// </summary>
+    [HttpPost("fix-dates")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> FixDefaultDates()
+    {
+        try
+        {
+            _logger.LogInformation("Starting date fix for articles with 1970 dates...");
+
+            var allNews = await _newsService.GetAllNewsAsync();
+            int totalChecked = allNews.Count;
+            int totalFixed = 0;
+            var now = DateTime.UtcNow;
+
+            foreach (var news in allNews)
+            {
+                bool needsUpdate = false;
+
+                // Fix ExpressDate if it's default or before 2020
+                if (news.ExpressDate == default || news.ExpressDate.Year < 2020)
+                {
+                    news.ExpressDate = now;
+                    needsUpdate = true;
+                }
+
+                // Fix CreateDate if it's default or before 2020
+                if (news.CreateDate == default || news.CreateDate.Year < 2020)
+                {
+                    news.CreateDate = now;
+                    needsUpdate = true;
+                }
+
+                // Fix UpdateDate if it's default or before 2020
+                if (news.UpdateDate == default || news.UpdateDate.Year < 2020)
+                {
+                    news.UpdateDate = now;
+                    needsUpdate = true;
+                }
+
+                if (needsUpdate)
+                {
+                    await _newsService.UpdateNewsAsync(news.Id, news);
+                    totalFixed++;
+                    _logger.LogInformation(
+                        "Fixed dates for article: {Caption}",
+                        news.Caption.Length > 50 ? news.Caption[..50] + "..." : news.Caption);
+                }
+            }
+
+            // Clear all caches after fix
+            ClearAllCaches();
+
+            _logger.LogInformation(
+                "Date fix completed: {Fixed}/{Total} articles updated",
+                totalFixed,
+                totalChecked);
+
+            return Ok(new
+            {
+                message = $"Date fix completed successfully! Updated {totalFixed} articles.",
+                totalChecked,
+                totalFixed
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during date fix");
+            return StatusCode(500, new { message = "Error during date fix", error = ex.Message });
+        }
+    }
 }
