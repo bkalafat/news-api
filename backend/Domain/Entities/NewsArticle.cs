@@ -55,11 +55,11 @@ public sealed class NewsArticle
 
     public string[] Authors { get; set; } = [];
 
-    public DateTime ExpressDate { get; set; }
+    public DateTime ExpressDate { get; set; } = DateTime.UtcNow;
 
-    public DateTime CreateDate { get; set; }
+    public DateTime CreateDate { get; set; } = DateTime.UtcNow;
 
-    public DateTime UpdateDate { get; set; }
+    public DateTime UpdateDate { get; set; } = DateTime.UtcNow;
 
     public int Priority { get; set; }
 

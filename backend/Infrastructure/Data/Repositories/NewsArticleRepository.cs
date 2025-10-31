@@ -50,6 +50,23 @@ internal sealed class NewsArticleRepository(MongoDbContext context) : INewsArtic
 
     public async Task<NewsArticle> CreateAsync(NewsArticle newsArticle)
     {
+        // Ensure dates are never default (1970-01-01)
+        var now = DateTime.UtcNow;
+        if (newsArticle.ExpressDate == default || newsArticle.ExpressDate.Year < 2020)
+        {
+            newsArticle.ExpressDate = now;
+        }
+
+        if (newsArticle.CreateDate == default || newsArticle.CreateDate.Year < 2020)
+        {
+            newsArticle.CreateDate = now;
+        }
+
+        if (newsArticle.UpdateDate == default || newsArticle.UpdateDate.Year < 2020)
+        {
+            newsArticle.UpdateDate = now;
+        }
+
         await _newsCollection.InsertOneAsync(newsArticle).ConfigureAwait(false);
         return newsArticle;
     }

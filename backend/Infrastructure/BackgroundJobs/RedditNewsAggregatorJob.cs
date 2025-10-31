@@ -378,13 +378,23 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
             return false;
         }
 
-        // 4. Require engagement (upvotes OR comments)
+        // 4. Filter English-only content (must have Turkish translation)
+        // Check if title and content lack Turkish characters AND contain English patterns
+        if (!ContainsTurkishCharacters(post.Title) && !ContainsTurkishCharacters(post.Content))
+        {
+            if (IsLikelyEnglish(post.Content ?? string.Empty) || IsLikelyEnglish(post.Title))
+            {
+                return false;
+            }
+        }
+
+        // 5. Require engagement (upvotes OR comments)
         if (post.Upvotes < 50 && post.CommentCount < 5)
         {
             return false;
         }
 
-        // 5. Filter out low-effort content patterns
+        // 6. Filter out low-effort content patterns
         var lowerTitle = post.Title.ToLowerInvariant();
         var badPatterns = new[]
         {
@@ -401,7 +411,7 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
             }
         }
 
-        // 6. Prefer longer, detailed posts (1000+ chars)
+        // 7. Prefer longer, detailed posts (1000+ chars)
         // Give bonus points to comprehensive content
         if (contentLength >= 1000)
         {
@@ -434,5 +444,45 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
             >= 50 => 40,
             _ => 30,
         };
+    }
+
+    /// <summary>
+    /// Check if text contains Turkish-specific characters
+    /// </summary>
+    private static bool ContainsTurkishCharacters(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        var turkishChars = new[] { 'ı', 'ğ', 'ü', 'ş', 'ö', 'ç', 'İ', 'Ğ', 'Ü', 'Ş', 'Ö', 'Ç' };
+        return turkishChars.Any(text.Contains);
+    }
+
+    /// <summary>
+    /// Check if text is likely English based on common patterns
+    /// </summary>
+    private static bool IsLikelyEnglish(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        var lowerText = text.ToLowerInvariant();
+
+        // Common English words that are less common in Turkish
+        var englishIndicators = new[]
+        {
+            " the ", " and ", " with ", " this ", " that ",
+            " have ", " from ", " they ", " what ", " your ",
+            " which ", " their ", " would ", " there ", " could "
+        };
+
+        int englishWordCount = englishIndicators.Count(indicator => lowerText.Contains(indicator));
+
+        // If text contains 3+ common English words, it's likely English
+        return englishWordCount >= 3;
     }
 }
