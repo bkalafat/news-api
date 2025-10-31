@@ -27,6 +27,7 @@
 - **Caching**: IMemoryCache (30-60 min TTL)
 
 ### Project Documentation
+- **[DEPLOYMENT.md](.github/DEPLOYMENT.md)** - Quick deployment guide (START HERE!)
 - **[BUILD.md](../docs/BUILD.md)** - Build instructions (Docker & local)
 - **[RUN.md](../docs/RUN.md)** - Running & development guide
 - **[DEPLOY.md](../docs/DEPLOY.md)** - Production deployment
@@ -109,48 +110,45 @@ The entire backend infrastructure runs in Docker containers orchestrated by `doc
    - URL: `http://localhost:8081`
    - Basic Auth: admin/admin123 (default)
 
-### Docker Commands
+### Docker Commands (Primary Development Method)
 
-**Starting All Services:**
-```bash
-# Start all containers in detached mode
-docker-compose up -d
+**⚡ ONE-COMMAND DEPLOYMENT:**
+```powershell
+# Windows - Simplest way!
+.\deploy.ps1
 
-# View logs for all services
-docker-compose logs -f
-
-# View logs for specific service
-docker-compose logs -f newsapi
+# Linux/Mac
+docker compose up -d --build
 ```
 
-**Stopping Services:**
-```bash
-# Stop all containers (preserves data)
-docker-compose down
-
-# Stop and remove volumes (DELETES ALL DATA)
-docker-compose down -v
+**Deploy Script Options:**
+```powershell
+.\deploy.ps1           # Deploy/update services
+.\deploy.ps1 -Clean    # Clean rebuild (deletes all data)
+.\deploy.ps1 -Stop     # Stop all services
+.\deploy.ps1 -Status   # Check service status
+.\deploy.ps1 -Logs     # View logs (Ctrl+C to exit)
 ```
 
-**Rebuilding After Code Changes:**
+**Manual Docker Commands (if needed):**
 ```bash
-# Rebuild and restart only the backend API
-docker-compose up -d --build newsapi
+# Start all services
+docker compose up -d --build
 
-# Rebuild all services
-docker-compose up -d --build
-```
+# Stop (keep data)
+docker compose down
 
-**Checking Service Status:**
-```bash
-# List running containers
-docker-compose ps
+# Stop and delete data
+docker compose down -v
 
-# Check backend health
+# View logs
+docker compose logs -f newsportal-backend
+
+# Check status
+docker compose ps
+
+# Health check
 curl http://localhost:5000/health
-
-# View backend logs
-docker-compose logs --tail=50 newsapi
 ```
 
 **Accessing Container Shells:**

@@ -79,6 +79,14 @@ internal sealed class NewsArticleService(INewsArticleRepository newsArticleRepos
     }
 
     /// <summary>
+    /// Clears all cached news data.
+    /// </summary>
+    public void ClearCache()
+    {
+        memoryCache.Remove(CacheKeys.NewsList);
+    }
+
+    /// <summary>
     /// Invalidates all news-related cache entries.
     /// </summary>
     /// <param name="cache">The memory cache instance.</param>

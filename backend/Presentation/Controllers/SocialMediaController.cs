@@ -254,34 +254,43 @@ internal sealed class SocialMediaController : ControllerBase
     }
 
     /// <summary>
-    /// Fetches and imports top posts from Reddit r/github about "copilot"
+    /// Fetches and imports posts from Reddit with flexible search
     /// </summary>
+    /// <param name="subreddit">Subreddit name (without r/)</param>
+    /// <param name="query">Search query (optional, fetches top posts if empty)</param>
     /// <param name="timeframe">Time period (hour, day, week, month, year)</param>
     /// <param name="limit">Maximum posts to fetch (max 100)</param>
     /// <returns>Number of posts imported</returns>
     /// <response code="200">Returns the count of imported posts</response>
     /// <response code="401">If the user is not authenticated</response>
-    [HttpPost("import/reddit/github-copilot")]
+    [HttpPost("import/reddit")]
     [Authorize]
     [ProducesResponseType(typeof(ImportResultDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<ImportResultDto>> ImportGitHubCopilotPosts(
-        [FromQuery] string timeframe = "month",
+    public async Task<ActionResult<ImportResultDto>> ImportRedditPosts(
+        [FromQuery] string subreddit,
+        [FromQuery] string? query = null,
+        [FromQuery] string timeframe = "week",
         [FromQuery] int limit = 25)
     {
         _logger.LogInformation(
-            "Importing GitHub Copilot posts from Reddit, timeframe: {Timeframe}, limit: {Limit}",
-            timeframe, limit);
+            "Importing Reddit posts from r/{Subreddit}, query: {Query}, timeframe: {Timeframe}, limit: {Limit}",
+            subreddit, query ?? "(top posts)", timeframe, limit);
 
         try
         {
-            // Search for "copilot" posts in r/github
-            var redditPosts = await _redditService.SearchPostsAsync(
-                "github",
-                "copilot",
-                "top",
-                timeframe,
-                limit);
+            List<CreateSocialMediaPostDto> redditPosts;
+
+            if (string.IsNullOrEmpty(query))
+            {
+                // Fetch top posts
+                redditPosts = await _redditService.GetTopPostsAsync(subreddit, timeframe, limit);
+            }
+            else
+            {
+                // Search with query
+                redditPosts = await _redditService.SearchPostsAsync(subreddit, query, "top", timeframe, limit);
+            }
 
             int imported = 0;
             int skipped = 0;
@@ -326,6 +335,25 @@ internal sealed class SocialMediaController : ControllerBase
             _logger.LogError(ex, "Error during Reddit import");
             return StatusCode(500, new { error = "Failed to import posts from Reddit", details = ex.Message });
         }
+    }
+
+    /// <summary>
+    /// Fetches and imports top posts from Reddit r/github about "copilot"
+    /// </summary>
+    /// <param name="timeframe">Time period (hour, day, week, month, year)</param>
+    /// <param name="limit">Maximum posts to fetch (max 100)</param>
+    /// <returns>Number of posts imported</returns>
+    /// <response code="200">Returns the count of imported posts</response>
+    /// <response code="401">If the user is not authenticated</response>
+    [HttpPost("import/reddit/github-copilot")]
+    [Authorize]
+    [ProducesResponseType(typeof(ImportResultDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<ImportResultDto>> ImportGitHubCopilotPosts(
+        [FromQuery] string timeframe = "month",
+        [FromQuery] int limit = 25)
+    {
+        return await ImportRedditPosts("github", "copilot", timeframe, limit);
     }
 }
 

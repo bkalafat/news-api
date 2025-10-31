@@ -330,6 +330,27 @@ internal sealed class NewsArticleController(INewsArticleService newsService, IIm
     }
 
     /// <summary>
+    /// Clear news cache and force refresh (requires authentication)
+    /// </summary>
+    /// <returns>Success message</returns>
+    [HttpPost("refresh")]
+    [Authorize]
+    [ProducesResponseType(typeof(object), 200)]
+    public ActionResult RefreshCache()
+    {
+        try
+        {
+            newsService.ClearCache();
+            return Ok(new { message = "Cache cleared successfully. News will be refreshed on next request." });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in RefreshCache: {ex}");
+            return StatusCode(500, new { message = "An error occurred while refreshing cache", error = ex.Message });
+        }
+    }
+
+    /// <summary>
     /// Upload an image for use in article content (requires authentication)
     /// </summary>
     /// <param name="file">Image file</param>

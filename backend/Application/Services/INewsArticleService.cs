@@ -17,4 +17,9 @@ internal interface INewsArticleService
     Task UpdateNewsAsync(string id, NewsArticle newsArticle);
 
     Task DeleteNewsAsync(string id);
+
+    /// <summary>
+    /// Clears all cached news data.
+    /// </summary>
+    void ClearCache();
 }

@@ -1,0 +1,192 @@
+name: Daily News Aggregation
+
+on:
+  schedule:
+    # Run daily at 05:00 AM UTC (08:00 AM Turkey time UTC+3)
+    - cron: '0 5 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Number of posts to fetch per subreddit'
+        required: false
+        default: '25'
+        type: string
+      timeframe:
+        description: 'Reddit timeframe (hour, day, week, month)'
+        required: false
+        default: 'week'
+        type: choice
+        options:
+          - hour
+          - day
+          - week
+          - month
+
+jobs:
+  fetch-news:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 📰 Fetch Reddit Technology News
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: |
+          echo "🚀 Starting Reddit news aggregation"
+          echo "⏰ Current time (UTC): $(date -u)"
+          echo "🇹🇷 Turkey time (UTC+3): $(TZ='Europe/Istanbul' date)"
+          echo ""
+          
+          # Default values
+          LIMIT="${{ github.event.inputs.limit || '25' }}"
+          TIMEFRAME="${{ github.event.inputs.timeframe || 'week' }}"
+          
+          echo "📋 Configuration:"
+          echo "   API URL: $API_BASE_URL"
+          echo "   Username: $ADMIN_USERNAME"
+          echo "   Limit: $LIMIT posts per subreddit"
+          echo "   Timeframe: Last $TIMEFRAME"
+          echo ""
+          
+          # Login to get JWT token
+          echo "🔐 Authenticating..."
+          TOKEN_RESPONSE=$(curl -s -X POST "$API_BASE_URL/Auth/login" \
+            -H "Content-Type: application/json" \
+            -d "{\"username\":\"$ADMIN_USERNAME\",\"password\":\"$ADMIN_PASSWORD\"}")
+          
+          TOKEN=$(echo $TOKEN_RESPONSE | jq -r '.token // empty')
+          
+          if [ -z "$TOKEN" ]; then
+            echo "❌ Authentication failed!"
+            echo "Response: $TOKEN_RESPONSE"
+            exit 1
+          fi
+          
+          echo "✅ Authentication successful"
+          echo ""
+          
+          # Function to fetch from a subreddit and category
+          fetch_subreddit() {
+            local SUBREDDIT=$1
+            local SEARCH_QUERY=$2
+            local CATEGORY=$3
+            
+            echo "📡 Fetching from r/$SUBREDDIT (query: $SEARCH_QUERY)..."
+            
+            RESPONSE=$(curl -s -X POST "$API_BASE_URL/SocialMedia/import/reddit?subreddit=$SUBREDDIT&query=$SEARCH_QUERY&timeframe=$TIMEFRAME&limit=$LIMIT" \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "Content-Type: application/json")
+            
+            IMPORTED=$(echo $RESPONSE | jq -r '.imported // 0')
+            SKIPPED=$(echo $RESPONSE | jq -r '.skipped // 0')
+            TOTAL=$(echo $RESPONSE | jq -r '.totalFetched // 0')
+            
+            echo "   ✅ Total: $TOTAL | Imported: $IMPORTED | Skipped: $SKIPPED"
+            
+            # Log any errors
+            ERRORS=$(echo $RESPONSE | jq -r '.errors // [] | length')
+            if [ "$ERRORS" -gt 0 ]; then
+              echo "   ⚠️  Errors: $ERRORS"
+              echo $RESPONSE | jq -r '.errors[]' | head -3
+            fi
+          }
+          
+          # Technology News Sources
+          echo "🔬 Technology News:"
+          fetch_subreddit "technology" "" "technology"
+          fetch_subreddit "programming" "" "technology"
+          fetch_subreddit "coding" "" "technology"
+          fetch_subreddit "webdev" "" "technology"
+          fetch_subreddit "MachineLearning" "" "technology"
+          fetch_subreddit "artificial" "" "technology"
+          
+          echo ""
+          echo "🤖 AI & GitHub Copilot:"
+          fetch_subreddit "github" "copilot" "technology"
+          fetch_subreddit "opensource" "github" "technology"
+          fetch_subreddit "ArtificialInteligence" "copilot OR ChatGPT" "technology"
+          
+          echo ""
+          echo "💻 Developer Tools:"
+          fetch_subreddit "devops" "" "technology"
+          fetch_subreddit "docker" "" "technology"
+          fetch_subreddit "kubernetes" "" "technology"
+          
+          echo ""
+          echo "📱 Mobile & Web:"
+          fetch_subreddit "reactjs" "" "technology"
+          fetch_subreddit "nextjs" "" "technology"
+          fetch_subreddit "node" "" "technology"
+          fetch_subreddit "typescript" "" "technology"
+          
+          echo ""
+          echo "🎮 Gaming Tech:"
+          fetch_subreddit "gamedev" "" "entertainment"
+          fetch_subreddit "Unity3D" "" "entertainment"
+          
+          echo ""
+          echo "🔐 Security:"
+          fetch_subreddit "cybersecurity" "" "technology"
+          fetch_subreddit "netsec" "" "technology"
+          
+          echo ""
+          echo "✅ News aggregation completed!"
+      
+      - name: 🔄 Refresh News Cache
+        if: success()
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: |
+          echo "🔄 Clearing news cache..."
+          
+          # Login
+          TOKEN_RESPONSE=$(curl -s -X POST "$API_BASE_URL/Auth/login" \
+            -H "Content-Type: application/json" \
+            -d "{\"username\":\"$ADMIN_USERNAME\",\"password\":\"$ADMIN_PASSWORD\"}")
+          
+          TOKEN=$(echo $TOKEN_RESPONSE | jq -r '.token // empty')
+          
+          # Clear cache
+          curl -s -X POST "$API_BASE_URL/NewsArticle/refresh" \
+            -H "Authorization: Bearer $TOKEN"
+          
+          echo "✅ Cache cleared. Fresh news will be loaded on next request."
+      
+      - name: 📊 Generate Summary
+        if: always()
+        run: |
+          echo "📋 Aggregation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "=====================" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Time (UTC):** $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Time (Turkey):** $(TZ='Europe/Istanbul' date)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Sources Checked" >> $GITHUB_STEP_SUMMARY
+          echo "- Technology subreddits: r/technology, r/programming, r/coding, r/webdev" >> $GITHUB_STEP_SUMMARY
+          echo "- AI & ML: r/MachineLearning, r/artificial, r/ArtificialInteligence" >> $GITHUB_STEP_SUMMARY
+          echo "- GitHub & Copilot: r/github, r/opensource" >> $GITHUB_STEP_SUMMARY
+          echo "- Developer Tools: r/devops, r/docker, r/kubernetes" >> $GITHUB_STEP_SUMMARY
+          echo "- Web Dev: r/reactjs, r/nextjs, r/node, r/typescript" >> $GITHUB_STEP_SUMMARY
+          echo "- Security: r/cybersecurity, r/netsec" >> $GITHUB_STEP_SUMMARY
+          echo "- Gaming: r/gamedev, r/Unity3D" >> $GITHUB_STEP_SUMMARY
+      
+      - name: 📧 Notify on Failure
+        if: failure()
+        run: |
+          echo "❌ News aggregation failed!"
+          echo "Check the logs at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+# Required GitHub Secrets (Settings → Secrets → Actions):
+# - API_BASE_URL: Your backend API URL (e.g., https://newsportal-backend.azurecontainerapps.io/api)
+# - ADMIN_USERNAME: Admin username for authentication
+# - ADMIN_PASSWORD: Admin password for authentication

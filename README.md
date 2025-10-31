@@ -29,20 +29,22 @@
 
 > **Prerequisites**: Docker Desktop installed and running
 
-```bash
-# Clone the repository
-git clone https://github.com/bkalafat/newsportal.git
-cd newsportal
+```powershell
+# Windows - One command deployment!
+.\deploy.ps1
 
-# Create environment file (optional)
-cp .env.example .env
-
-# Start all services with Docker Compose
-docker compose up -d
-
-# Verify services are running
-docker compose ps
+# Linux/Mac
+docker compose up -d --build
 ```
+
+**That's it!** The script will:
+- ✅ Build .NET API
+- ✅ Start MongoDB
+- ✅ Start MinIO
+- ✅ Configure everything
+- ✅ Show service URLs
+
+📖 **Full guide**: [.github/DEPLOYMENT.md](.github/DEPLOYMENT.md)
 
 ### 🌐 Access Your Services
 
