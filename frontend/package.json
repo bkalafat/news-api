@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
+    "build:github": "cross-env NEXT_PUBLIC_BUILD_MODE=github-pages NEXT_PUBLIC_BASE_PATH=/teknohaber next build",
+    "export": "npm run build:github",
+    "deploy:github": "npm run export && touch out/.nojekyll && gh-pages -d out -t true",
     "start": "next start",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -52,9 +55,9 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.15.0",
-    "@axe-core/playwright": "^4.10.2",
     "@playwright/test": "^1.49.1",
     "@tailwindcss/postcss": "^4",
     "@tanstack/react-query-devtools": "^5.90.2",
@@ -70,6 +73,7 @@
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.1.2",
     "babel-plugin-react-compiler": "^1.0.0",
+    "cross-env": "^10.1.0",
     "eslint": "^9.15.0",
     "eslint-config-next": "^16.0.0",
     "eslint-config-prettier": "^9.1.0",
@@ -79,6 +83,7 @@
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "gh-pages": "^6.3.0",
     "happy-dom": "^15.11.7",
     "msw": "^2.6.8",
     "prettier": "^3.3.3",

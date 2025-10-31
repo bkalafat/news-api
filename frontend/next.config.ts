@@ -4,6 +4,11 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
+  /* Static export for GitHub Pages */
+  output: process.env.NEXT_PUBLIC_BUILD_MODE === "github-pages" ? "export" : undefined,
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
+  trailingSlash: true,
+
   /* Image optimization for external sources */
   images: {
     remotePatterns: [
@@ -16,7 +21,7 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
-    unoptimized: false,
+    unoptimized: process.env.NEXT_PUBLIC_BUILD_MODE === "github-pages" ? true : false,
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
