@@ -144,9 +144,13 @@ Write-Host "  Analysis Complete!" -ForegroundColor Cyan
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
 Write-Host ""
 
-# Count issues
-$totalWarnings = (dotnet build $SolutionPath --no-restore 2>&1 | Select-String -Pattern "warning").Count
-$totalErrors = (dotnet build $SolutionPath --no-restore 2>&1 | Select-String -Pattern "error").Count
+# Count issues from actual build output
+$buildOutput = dotnet build $SolutionPath --no-restore 2>&1 | Out-String
+$totalWarnings = ([regex]::Matches($buildOutput, "(\d+) Warning\(s\)") | Select-Object -Last 1).Groups[1].Value
+$totalErrors = ([regex]::Matches($buildOutput, "(\d+) Error\(s\)") | Select-Object -Last 1).Groups[1].Value
+
+if ([string]::IsNullOrEmpty($totalWarnings)) { $totalWarnings = 0 } else { $totalWarnings = [int]$totalWarnings }
+if ([string]::IsNullOrEmpty($totalErrors)) { $totalErrors = 0 } else { $totalErrors = [int]$totalErrors }
 
 Write-Host "📊 Results:" -ForegroundColor White
 Write-Host "   Errors:   $totalErrors" -ForegroundColor $(if ($totalErrors -gt 0) { "Red" } else { "Green" })
