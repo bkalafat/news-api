@@ -14,9 +14,9 @@ import { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 
-// ISR: Revalidate every 6 hours for news detail pages
+// ISR: Revalidate every 1 hour for news detail pages
 // Static generation with periodic revalidation
-export const revalidate = 21600; // 6 hours
+export const revalidate = 3600; // 1 hour
 
 // Generate static params for top 200 news articles at build time (maximize free Azure static hosting)
 export async function generateStaticParams() {
