@@ -85,12 +85,17 @@ public sealed class RedditService
             var response = await _httpClient.SendAsync(tokenRequest).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            var tokenResponse = await response.Content
-                .ReadFromJsonAsync<RedditOAuthTokenResponse>()
-                .ConfigureAwait(false);
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            _logger.LogInformation("Reddit OAuth response: {Response}", responseContent);
+
+            var tokenResponse = System.Text.Json.JsonSerializer.Deserialize<RedditOAuthTokenResponse>(
+                responseContent,
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            );
 
             if (tokenResponse?.AccessToken == null)
             {
+                _logger.LogError("Token response was null or missing access_token. Response: {Response}", responseContent);
                 throw new InvalidOperationException("Failed to obtain Reddit OAuth token");
             }
 
