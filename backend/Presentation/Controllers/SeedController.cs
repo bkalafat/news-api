@@ -662,10 +662,21 @@ public sealed class SeedController : ControllerBase
                 }
 
                 // 3. Check if content appears to be English (no Turkish characters)
-                if (!shouldDelete && !ContainsTurkishCharacters(news.Caption) && !ContainsTurkishCharacters(news.Content))
+                if (!shouldDelete)
                 {
-                    // Additional check: look for common English-only patterns
-                    if (IsLikelyEnglish(news.Content ?? string.Empty))
+                    // More aggressive English detection
+                    bool captionIsEnglish = !ContainsTurkishCharacters(news.Caption) && IsLikelyEnglish(news.Caption);
+                    bool contentIsEnglish = !ContainsTurkishCharacters(news.Content) && IsLikelyEnglish(news.Content ?? string.Empty);
+
+                    // Also check for English prefixes in caption (OpenAI:, Reddit:, etc.)
+                    bool hasEnglishPrefix = news.Caption.StartsWith("OpenAI:") ||
+                                           news.Caption.StartsWith("Reddit:") ||
+                                           news.Caption.StartsWith("popular:") ||
+                                           news.Caption.StartsWith("AI:") ||
+                                           news.Caption.Contains(": TIL ") ||
+                                           news.Caption.Contains(": AI ");
+
+                    if (captionIsEnglish || contentIsEnglish || hasEnglishPrefix)
                     {
                         shouldDelete = true;
                         reason = "NonTurkish";

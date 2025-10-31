@@ -128,15 +128,24 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
                         continue;
                     }
 
-                    var article = await ConvertRedditPostToNewsAsync(post, category, subreddit, translationService).ConfigureAwait(false);
-
-                    // Save to database (skip if already exists)
-                    var existing = await repository.GetBySlugAsync(article.Slug).ConfigureAwait(false);
-                    if (existing == null)
+                    try
                     {
-                        await repository.CreateAsync(article).ConfigureAwait(false);
-                        totalSaved++;
-                        _logger.LogDebug("Saved Turkish article: {Title}", article.Caption);
+                        var article = await ConvertRedditPostToNewsAsync(post, category, subreddit, translationService).ConfigureAwait(false);
+
+                        // Save to database (skip if already exists)
+                        var existing = await repository.GetBySlugAsync(article.Slug).ConfigureAwait(false);
+                        if (existing == null)
+                        {
+                            await repository.CreateAsync(article).ConfigureAwait(false);
+                            totalSaved++;
+                            _logger.LogDebug("Saved Turkish article: {Title}", article.Caption);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Skip articles that fail translation or validation
+                        _logger.LogDebug("Skipped article due to translation/validation failure: {Title} - {Error}", post.Title, ex.Message);
+                        continue;
                     }
                 }
 
@@ -221,12 +230,25 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
                 {
                     turkishContent = await translationService.TranslateToTurkishAsync(post.Content, sourceLanguage);
                 }
+
+                // Validate translation actually produced Turkish text
+                if (!ContainsTurkishCharacters(turkishTitle) || IsLikelyEnglish(turkishTitle))
+                {
+                    // Translation failed to produce Turkish - skip this article
+                    throw new InvalidOperationException("Translation did not produce Turkish content");
+                }
             }
             catch (Exception ex)
             {
-                // Log warning but continue with original text
-                System.Diagnostics.Debug.WriteLine($"Translation failed: {ex.Message}");
+                // Skip article if translation fails - we only want Turkish content
+                System.Diagnostics.Debug.WriteLine($"Translation failed or produced non-Turkish: {ex.Message}");
+                throw; // Re-throw to skip this article
             }
+        }
+        // If not English but also doesn't contain Turkish characters, skip it
+        else if (!ContainsTurkishCharacters(post.Title) && IsLikelyEnglish(post.Title))
+        {
+            throw new InvalidOperationException("Content is not Turkish and not translatable");
         }
 
         // Extract image URL (prefer first image, fallback to thumbnail)
