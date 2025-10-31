@@ -65,7 +65,7 @@ public sealed class NewsAggregatorService
             .ThenByDescending(n => n.PublishedDate)
             .ToList();
 
-        _logger.LogInformation("Fetched {Count} unique news items from {Sources} sources", 
+        _logger.LogInformation("Fetched {Count} unique news items from {Sources} sources",
             uniqueNews.Count, tasks.Length);
 
         return uniqueNews;
@@ -104,7 +104,7 @@ public sealed class NewsAggregatorService
                 foreach (var post in posts.EnumerateArray())
                 {
                     var data = post.GetProperty("data");
-                    
+
                     // Skip stickied posts
                     if (data.GetProperty("stickied").GetBoolean())
                     {
@@ -134,7 +134,7 @@ public sealed class NewsAggregatorService
                     });
                 }
 
-                _logger.LogInformation("Fetched {Count} posts from r/{Subreddit}", 
+                _logger.LogInformation("Fetched {Count} posts from r/{Subreddit}",
                     items.Count(i => i.Source.Contains(subreddit)), subreddit);
             }
             catch (Exception ex)

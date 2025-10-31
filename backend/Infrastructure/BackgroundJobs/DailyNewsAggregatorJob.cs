@@ -70,7 +70,7 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in daily news aggregation");
-                
+
                 // Wait 1 hour before retrying on error
                 await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
             }
@@ -133,7 +133,7 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
                     // Check if already exists (by title)
                     var slug = SlugHelper.GenerateSlug(item.Title);
                     var existing = await newsRepository.GetBySlugAsync(slug);
-                    
+
                     if (existing != null)
                     {
                         skippedCount++;
@@ -154,14 +154,14 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
                         _logger.LogInformation("Translating: {Title}", item.Title);
 
                         translatedTitle = await translationService.TranslateToTurkishAsync(item.Title, sourceLanguage);
-                        
+
                         // Create summary from content (first 200 chars)
-                        var summary = item.Content.Length > 200 
-                            ? item.Content[..200] + "..." 
+                        var summary = item.Content.Length > 200
+                            ? item.Content[..200] + "..."
                             : item.Content;
-                        
+
                         translatedSummary = await translationService.TranslateToTurkishAsync(summary, sourceLanguage);
-                        
+
                         // Only translate full content if it's not too long (to save API quota)
                         if (item.Content.Length > 0 && item.Content.Length < 2000)
                         {

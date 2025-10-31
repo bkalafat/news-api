@@ -267,7 +267,7 @@ internal sealed class SeedController : ControllerBase
                     // Check if already exists (by title slug)
                     var slug = SlugHelper.GenerateSlug(item.Title);
                     var existing = await _newsService.GetNewsBySlugAsync(slug);
-                    
+
                     if (existing != null)
                     {
                         totalSkipped++;
@@ -288,14 +288,14 @@ internal sealed class SeedController : ControllerBase
                         _logger.LogInformation("Translating: {Title}", item.Title);
 
                         translatedTitle = await _translationService.TranslateToTurkishAsync(item.Title, sourceLanguage);
-                        
+
                         // Create summary from content (first 200 chars)
-                        var summary = item.Content.Length > 200 
-                            ? item.Content[..200] + "..." 
+                        var summary = item.Content.Length > 200
+                            ? item.Content[..200] + "..."
                             : item.Content;
-                        
+
                         translatedSummary = await _translationService.TranslateToTurkishAsync(summary, sourceLanguage);
-                        
+
                         // Only translate full content if it's not too long
                         if (item.Content.Length > 0 && item.Content.Length < 2000)
                         {
@@ -377,15 +377,15 @@ internal sealed class SeedController : ControllerBase
                 created = totalCreated,
                 skipped = totalSkipped,
                 errors = totalErrors,
-                sources = new[] 
-                { 
-                    "Reddit (AI/Tech subreddits)", 
-                    "GitHub Trending", 
-                    "Hacker News", 
-                    "Dev.to", 
-                    "Medium", 
-                    "Ars Technica", 
-                    "TechCrunch" 
+                sources = new[]
+                {
+                    "Reddit (AI/Tech subreddits)",
+                    "GitHub Trending",
+                    "Hacker News",
+                    "Dev.to",
+                    "Medium",
+                    "Ars Technica",
+                    "TechCrunch"
                 },
             });
         }
