@@ -13,7 +13,7 @@ namespace NewsApi.Infrastructure.Services;
 /// <summary>
 /// Service for fetching posts from Reddit API
 /// </summary>
-internal sealed class RedditService
+public sealed class RedditService
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger<RedditService> _logger;

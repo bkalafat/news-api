@@ -11,7 +11,7 @@ namespace NewsApi.Presentation.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-internal sealed class AuthController : ControllerBase
+public sealed class AuthController : ControllerBase
 {
     private readonly JwtTokenService _jwtTokenService;
     private readonly ILogger<AuthController> _logger;
@@ -114,7 +114,7 @@ internal sealed class AuthController : ControllerBase
 /// <summary>
 /// Login request model
 /// </summary>
-internal sealed class LoginRequest
+public sealed class LoginRequest
 {
     /// <summary>
     /// Gets or sets username
@@ -130,7 +130,7 @@ internal sealed class LoginRequest
 /// <summary>
 /// Login response model
 /// </summary>
-internal sealed class LoginResponse
+public sealed class LoginResponse
 {
     /// <summary>
     /// Gets or sets jWT token
@@ -156,7 +156,7 @@ internal sealed class LoginResponse
 /// <summary>
 /// Token validation response model
 /// </summary>
-internal sealed class ValidateResponse
+public sealed class ValidateResponse
 {
     /// <summary>
     /// Gets or sets user ID

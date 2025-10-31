@@ -14,7 +14,7 @@ namespace NewsApi.Infrastructure.Services;
 /// <summary>
 /// Service for fetching news data from external NewsAPI.org
 /// </summary>
-internal interface INewsDataFetcherService
+public interface INewsDataFetcherService
 {
     /// <summary>
     /// Fetches latest news articles from NewsAPI.org

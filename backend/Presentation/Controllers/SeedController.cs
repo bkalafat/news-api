@@ -17,7 +17,7 @@ namespace NewsApi.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-internal sealed class SeedController : ControllerBase
+public sealed class SeedController : ControllerBase
 {
     private readonly MongoDbContext _context;
     private readonly ILogger<SeedController> _logger;

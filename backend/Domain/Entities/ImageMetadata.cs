@@ -5,7 +5,7 @@ namespace NewsApi.Domain.Entities;
 /// <summary>
 /// Metadata for uploaded images stored in MinIO
 /// </summary>
-internal sealed class ImageMetadata
+public sealed class ImageMetadata
 {
     /// <summary>
     /// Gets or sets original file name

@@ -63,20 +63,18 @@ builder.Services.AddHostedService<NewsApi.Infrastructure.BackgroundJobs.DailyNew
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
+// Enable Swagger in all environments for testing and documentation
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "News API v1");
-        options.RoutePrefix = "swagger";
-        options.DocumentTitle = "News API Documentation";
-        options.DisplayRequestDuration();
-        options.EnableTryItOutByDefault();
-        options.DefaultModelsExpandDepth(2);
-        options.DefaultModelExpandDepth(1);
-    });
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "News API v1");
+    options.RoutePrefix = "swagger";
+    options.DocumentTitle = "News API Documentation";
+    options.DisplayRequestDuration();
+    options.EnableTryItOutByDefault();
+    options.DefaultModelsExpandDepth(2);
+    options.DefaultModelExpandDepth(1);
+});
 
 // Security middleware (before routing)
 app.UseMiddleware<SecurityHeadersMiddleware>();

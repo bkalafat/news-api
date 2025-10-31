@@ -7,7 +7,7 @@ namespace NewsApi.Domain.Interfaces;
 /// <summary>
 /// Interface for image storage operations using MinIO/S3
 /// </summary>
-internal interface IImageStorageService
+public interface IImageStorageService
 {
     /// <summary>
     /// Upload an image to MinIO storage

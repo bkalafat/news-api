@@ -6,7 +6,7 @@ namespace NewsApi.Application.DTOs;
 /// <summary>
 /// Data transfer object for creating a new news article.
 /// </summary>
-internal sealed record CreateNewsArticleDto
+public sealed record CreateNewsArticleDto
 {
     [Required]
     [StringLength(100)]

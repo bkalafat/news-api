@@ -7,7 +7,7 @@ namespace NewsApi.Domain.Entities;
 /// <summary>
 /// Represents a social media post aggregated from various platforms
 /// </summary>
-internal sealed class SocialMediaPost
+public sealed class SocialMediaPost
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

@@ -4,7 +4,7 @@ using NewsApi.Domain.Entities;
 
 namespace NewsApi.Application.Services;
 
-internal interface INewsArticleService
+public interface INewsArticleService
 {
     Task<List<NewsArticle>> GetAllNewsAsync();
 

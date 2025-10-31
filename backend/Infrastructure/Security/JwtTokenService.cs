@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace NewsApi.Infrastructure.Security;
 
-internal sealed class JwtTokenService
+public sealed class JwtTokenService
 {
     private readonly string _secretKey;
     private readonly string _issuer;

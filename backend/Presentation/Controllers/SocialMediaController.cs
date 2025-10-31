@@ -17,7 +17,7 @@ namespace NewsApi.Presentation.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
-internal sealed class SocialMediaController : ControllerBase
+public sealed class SocialMediaController : ControllerBase
 {
     private readonly ISocialMediaPostService _service;
     private readonly ILogger<SocialMediaController> _logger;
@@ -360,7 +360,7 @@ internal sealed class SocialMediaController : ControllerBase
 /// <summary>
 /// Result of a social media import operation
 /// </summary>
-internal record ImportResultDto
+public record ImportResultDto
 {
     public int TotalFetched { get; init; }
 

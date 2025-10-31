@@ -6,7 +6,7 @@ namespace NewsApi.Application.DTOs;
 /// <summary>
 /// DTO for uploading an image to a news article
 /// </summary>
-internal sealed class ImageUploadDto
+public sealed class ImageUploadDto
 {
     /// <summary>
     /// Gets or sets the image file to upload

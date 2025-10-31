@@ -7,7 +7,7 @@ namespace NewsApi.Application.Services;
 /// <summary>
 /// Service interface for social media posts
 /// </summary>
-internal interface ISocialMediaPostService
+public interface ISocialMediaPostService
 {
     Task<List<SocialMediaPostDto>> GetAllPostsAsync();
 

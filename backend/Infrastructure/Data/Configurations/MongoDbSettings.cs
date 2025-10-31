@@ -1,6 +1,6 @@
 namespace NewsApi.Infrastructure.Data.Configurations;
 
-internal sealed class MongoDbSettings
+public sealed class MongoDbSettings
 {
     public string ConnectionString { get; set; } = string.Empty;
 

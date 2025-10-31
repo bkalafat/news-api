@@ -19,7 +19,7 @@ namespace NewsApi.Presentation.Controllers;
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
-internal sealed class NewsArticleController(INewsArticleService newsService, IImageStorageService imageStorageService)
+public sealed class NewsArticleController(INewsArticleService newsService, IImageStorageService imageStorageService)
     : ControllerBase
 {
     /// <summary>

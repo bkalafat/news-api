@@ -5,7 +5,7 @@ namespace NewsApi.Application.DTOs;
 /// <summary>
 /// DTO for creating a new social media post
 /// </summary>
-internal record CreateSocialMediaPostDto
+public record CreateSocialMediaPostDto
 {
     public string Platform { get; init; } = string.Empty;
 
@@ -49,7 +49,7 @@ internal record CreateSocialMediaPostDto
 /// <summary>
 /// DTO for updating a social media post
 /// </summary>
-internal record UpdateSocialMediaPostDto
+public record UpdateSocialMediaPostDto
 {
     public string? Title { get; init; }
 
@@ -77,7 +77,7 @@ internal record UpdateSocialMediaPostDto
 /// <summary>
 /// DTO for social media post responses
 /// </summary>
-internal record SocialMediaPostDto
+public record SocialMediaPostDto
 {
     public string Id { get; init; } = string.Empty;
 
