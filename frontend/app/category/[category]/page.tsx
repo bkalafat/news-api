@@ -56,54 +56,11 @@ const categoryMetadata: Record<string, { title: string; description: string; key
       description: "Spor dünyasından son dakika haberleri, maç sonuçları ve spor analizleri.",
       keywords: ["spor haberleri", "maç sonuçları", "futbol", "basketbol", "spor analizleri"],
     },
-    reddit: {
-      title: "Reddit Haberleri",
+    world: {
+      title: "Dünya Haberleri",
       description:
-        "Reddit'ten teknoloji ve toplum haberleri, trendler ve popüler tartışmalar.",
-      keywords: ["reddit", "reddit haberleri", "teknoloji tartışmaları", "toplum"],
-    },
-    github: {
-      title: "GitHub Haberleri",
-      description:
-        "GitHub'tan geliştirici haberleri, açık kaynak projeleri ve yazılım geliştirme trendleri.",
-      keywords: [
-        "github",
-        "github haberleri",
-        "açık kaynak",
-        "yazılım geliştirme",
-        "geliştirici",
-      ],
-    },
-    twitter: {
-      title: "X (Twitter) Haberleri",
-      description: "X/Twitter'dan sosyal medya trendleri, viral içerikler ve gündem haberleri.",
-      keywords: ["twitter", "x haberleri", "sosyal medya", "trendler", "viral içerik"],
-    },
-    linkedin: {
-      title: "LinkedIn Haberleri",
-      description: "LinkedIn'den iş dünyası, kariyer ve profesyonel gelişim haberleri.",
-      keywords: ["linkedin", "kariyer haberleri", "iş dünyası", "profesyonel gelişim"],
-    },
-    facebook: {
-      title: "Facebook Haberleri",
-      description: "Facebook'tan sosyal medya haberleri, özellikler ve gelişmeler.",
-      keywords: ["facebook", "sosyal medya haberleri", "meta", "sosyal ağ"],
-    },
-    instagram: {
-      title: "Instagram Haberleri",
-      description: "Instagram'dan görsel içerik trendleri, özellikler ve sosyal medya haberleri.",
-      keywords: ["instagram", "görsel içerik", "sosyal medya", "instagram trendleri"],
-    },
-    tiktok: {
-      title: "TikTok Haberleri",
-      description: "TikTok'tan video içerik trendleri, viral videolar ve platform haberleri.",
-      keywords: ["tiktok", "video içerik", "viral videolar", "tiktok trendleri"],
-    },
-    youtube: {
-      title: "YouTube Haberleri",
-      description:
-        "YouTube'dan video platformu haberleri, içerik üreticileri ve platform güncellemeleri.",
-      keywords: ["youtube", "video platformu", "youtuber", "içerik üreticileri"],
+        "Dünya gündeminden son dakika haberleri, uluslararası gelişmeler ve küresel olaylar.",
+      keywords: ["dünya haberleri", "uluslararası haberler", "küresel gelişmeler", "dünya gündemi"],
     },
   };
 

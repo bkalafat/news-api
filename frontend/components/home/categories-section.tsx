@@ -5,27 +5,23 @@ import { NewsCategory } from "@/lib/api/types";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import {
-  MessageSquare,
-  Github,
-  Twitter,
-  Linkedin,
-  Facebook,
-  Instagram,
-  Music,
-  Youtube,
   Cpu,
+  TrendingUp,
+  Music,
+  FlaskConical,
+  Trophy,
+  HeartPulse,
+  Globe,
 } from "lucide-react";
 
 const categoryIcons = {
-  [NewsCategory.Reddit]: MessageSquare,
-  [NewsCategory.GitHub]: Github,
-  [NewsCategory.Twitter]: Twitter,
-  [NewsCategory.LinkedIn]: Linkedin,
-  [NewsCategory.Facebook]: Facebook,
-  [NewsCategory.Instagram]: Instagram,
-  [NewsCategory.TikTok]: Music,
-  [NewsCategory.YouTube]: Youtube,
   [NewsCategory.Technology]: Cpu,
+  [NewsCategory.Business]: TrendingUp,
+  [NewsCategory.Entertainment]: Music,
+  [NewsCategory.Science]: FlaskConical,
+  [NewsCategory.Sports]: Trophy,
+  [NewsCategory.Health]: HeartPulse,
+  [NewsCategory.World]: Globe,
 };
 
 export function CategoriesSection() {

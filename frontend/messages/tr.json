@@ -12,15 +12,13 @@
   },
   "categories": {
     "all": "Tüm Haberler",
-    "reddit": "Reddit",
-    "github": "GitHub",
-    "twitter": "X/Twitter",
-    "linkedin": "LinkedIn",
-    "facebook": "Facebook",
-    "instagram": "Instagram",
-    "tiktok": "TikTok",
-    "youtube": "YouTube",
-    "technology": "Teknoloji"
+    "technology": "Teknoloji",
+    "business": "İş Dünyası",
+    "entertainment": "Eğlence",
+    "science": "Bilim",
+    "sports": "Spor",
+    "health": "Sağlık",
+    "world": "Dünya"
   },
   "article": {
     "readMore": "Devamını Oku",

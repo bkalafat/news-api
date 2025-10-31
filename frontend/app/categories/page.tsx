@@ -2,14 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  MessageSquare,
-  Github,
-  Twitter,
-  Linkedin,
-  Facebook,
-  Instagram,
   Music,
-  Youtube,
   Cpu,
   TrendingUp,
   ArrowRight,
@@ -20,16 +13,16 @@ import { Footer } from "@/components/layout/footer";
 export const metadata: Metadata = {
   title: "Kategoriler - Teknoloji Haberleri",
   description:
-    "Teknoloji, bilim, iş dünyası, sosyal medya ve daha fazlası. Tüm haber kategorilerine göz atın ve ilgi alanınıza göre haberleri keşfedin.",
+    "Teknoloji, iş dünyası, eğlence ve daha fazlası. Tüm haber kategorilerine göz atın ve ilgi alanınıza göre haberleri keşfedin.",
   keywords: [
     "teknoloji kategorileri",
     "haber kategorileri",
-    "reddit haberleri",
-    "github haberleri",
-    "twitter haberleri",
+    "teknoloji haberleri",
+    "iş dünyası haberleri",
+    "eğlence haberleri",
     "teknoloji",
-    "bilim",
-    "iş dünyası",
+    "business",
+    "entertainment",
   ],
   alternates: {
     canonical: "/categories",
@@ -37,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kategoriler - Teknoloji Haberleri",
     description:
-      "Teknoloji, bilim, iş dünyası, sosyal medya ve daha fazlası. Tüm haber kategorilerine göz atın.",
+      "Teknoloji, iş dünyası, eğlence ve daha fazlası. Tüm haber kategorilerine göz atın.",
     type: "website",
     url: "/categories",
   },
@@ -53,67 +46,25 @@ export const revalidate = 86400; // 24 hours
 
 const categories = [
   {
-    id: "reddit",
-    icon: MessageSquare,
-    color: "text-orange-600 dark:text-orange-400",
-    bgColor: "bg-orange-50 dark:bg-orange-950",
-    description: "Reddit'ten teknoloji ve toplum haberleri",
-  },
-  {
-    id: "github",
-    icon: Github,
-    color: "text-gray-900 dark:text-gray-100",
-    bgColor: "bg-gray-50 dark:bg-gray-950",
-    description: "GitHub'tan geliştirici haberleri ve açık kaynak projeleri",
-  },
-  {
-    id: "twitter",
-    icon: Twitter,
-    color: "text-blue-400 dark:text-blue-300",
-    bgColor: "bg-blue-50 dark:bg-blue-950",
-    description: "X/Twitter'dan sosyal medya trendleri ve haberler",
-  },
-  {
-    id: "linkedin",
-    icon: Linkedin,
-    color: "text-blue-700 dark:text-blue-400",
-    bgColor: "bg-blue-50 dark:bg-blue-950",
-    description: "LinkedIn'den iş dünyası ve kariyer haberleri",
-  },
-  {
-    id: "facebook",
-    icon: Facebook,
-    color: "text-blue-600 dark:text-blue-400",
-    bgColor: "bg-blue-50 dark:bg-blue-950",
-    description: "Facebook'tan sosyal medya haberleri ve gelişmeler",
-  },
-  {
-    id: "instagram",
-    icon: Instagram,
-    color: "text-pink-600 dark:text-pink-400",
-    bgColor: "bg-pink-50 dark:bg-pink-950",
-    description: "Instagram'dan görsel içerik ve trendler",
-  },
-  {
-    id: "tiktok",
-    icon: Music,
-    color: "text-gray-900 dark:text-gray-100",
-    bgColor: "bg-gray-50 dark:bg-gray-950",
-    description: "TikTok'tan video içerik ve viral trendler",
-  },
-  {
-    id: "youtube",
-    icon: Youtube,
-    color: "text-red-600 dark:text-red-400",
-    bgColor: "bg-red-50 dark:bg-red-950",
-    description: "YouTube'dan video platformu haberleri",
-  },
-  {
     id: "technology",
     icon: Cpu,
     color: "text-purple-600 dark:text-purple-400",
     bgColor: "bg-purple-50 dark:bg-purple-950",
-    description: "Genel teknoloji haberleri ve yenilikler",
+    description: "Teknoloji, yazılım, yapay zeka ve yenilikler",
+  },
+  {
+    id: "business",
+    icon: TrendingUp,
+    color: "text-blue-700 dark:text-blue-400",
+    bgColor: "bg-blue-50 dark:bg-blue-950",
+    description: "İş dünyası, ekonomi, finans ve girişimcilik",
+  },
+  {
+    id: "entertainment",
+    icon: Music,
+    color: "text-pink-600 dark:text-pink-400",
+    bgColor: "bg-pink-50 dark:bg-pink-950",
+    description: "Eğlence, film, müzik ve sosyal medya",
   },
 ];
 
@@ -130,7 +81,7 @@ export default function CategoriesPage() {
               <h1 className="text-4xl font-bold md:text-5xl">Kategoriler</h1>
             </div>
             <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-              Sosyal medya platformlarından ve teknoloji kaynaklarından haberler
+              Teknoloji, iş dünyası ve eğlence dünyasından güncel haberler
             </p>
           </div>
 
@@ -149,15 +100,9 @@ export default function CategoriesPage() {
                       </div>
                       <div className="flex items-center justify-between">
                         <CardTitle className="capitalize">
-                          {category.id === "reddit" && "Reddit"}
-                          {category.id === "github" && "GitHub"}
-                          {category.id === "twitter" && "X/Twitter"}
-                          {category.id === "linkedin" && "LinkedIn"}
-                          {category.id === "facebook" && "Facebook"}
-                          {category.id === "instagram" && "Instagram"}
-                          {category.id === "tiktok" && "TikTok"}
-                          {category.id === "youtube" && "YouTube"}
                           {category.id === "technology" && "Teknoloji"}
+                          {category.id === "business" && "İş Dünyası"}
+                          {category.id === "entertainment" && "Eğlence"}
                         </CardTitle>
                         <ArrowRight className="text-muted-foreground h-5 w-5 transition-transform group-hover:translate-x-1" />
                       </div>
@@ -177,13 +122,13 @@ export default function CategoriesPage() {
               <CardHeader>
                 <CardTitle>Her Gün Yeni Haberler</CardTitle>
                 <CardDescription>
-                  Sosyal medya ve teknoloji kaynaklarından sürekli güncellenen içerikler
+                  Teknoloji, iş dünyası ve eğlence dünyasından sürekli güncellenen içerikler
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="mt-4 grid grid-cols-3 gap-4">
                   <div className="text-center">
-                    <div className="text-primary text-3xl font-bold">9</div>
+                    <div className="text-primary text-3xl font-bold">3</div>
                     <div className="text-muted-foreground text-sm">Kategori</div>
                   </div>
                   <div className="text-center">

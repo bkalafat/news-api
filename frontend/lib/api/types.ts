@@ -80,15 +80,13 @@ export interface ApiError {
 }
 
 export enum NewsCategory {
-  Reddit = "reddit",
-  GitHub = "github",
-  Twitter = "twitter",
-  LinkedIn = "linkedin",
-  Facebook = "facebook",
-  Instagram = "instagram",
-  TikTok = "tiktok",
-  YouTube = "youtube",
   Technology = "technology",
+  Business = "business",
+  Entertainment = "entertainment",
+  Science = "science",
+  Sports = "sports",
+  Health = "health",
+  World = "world",
 }
 
 export interface NewsFilters {
