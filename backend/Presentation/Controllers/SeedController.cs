@@ -42,13 +42,14 @@ public sealed class SeedController : ControllerBase
         IMemoryCache cache,
         IConfiguration configuration)
     {
-        _context = context;
-        _logger = logger;
-        _newsDataFetcher = newsDataFetcher;
-        _newsService = newsService;
-        _newsAggregator = newsAggregator;
-        _translationService = translationService;
-        _cache = cache;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _newsDataFetcher = newsDataFetcher ?? throw new ArgumentNullException(nameof(newsDataFetcher));
+        _newsService = newsService ?? throw new ArgumentNullException(nameof(newsService));
+        _newsAggregator = newsAggregator ?? throw new ArgumentNullException(nameof(newsAggregator));
+        _translationService = translationService ?? throw new ArgumentNullException(nameof(translationService));
+        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
 
     /// <summary>
