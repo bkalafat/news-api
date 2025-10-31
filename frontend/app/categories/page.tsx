@@ -13,19 +13,15 @@ import { Footer } from "@/components/layout/footer";
 export const metadata: Metadata = {
   title: "Kategoriler - Teknoloji Haberleri",
   description:
-    "Yapay zeka, robotik, yazılım geliştirme ve daha fazlası. Reddit'ten teknoloji haberlerini kategorilere göre keşfedin.",
+    "GitHub, Reddit ve genel teknoloji haberlerini kategorilere göre keşfedin.",
   keywords: [
-    "yapay zeka",
-    "AI",
-    "OpenAI",
-    "Claude AI",
-    "GitHub Copilot",
-    "robotik",
-    ".NET",
-    "DeepSeek",
-    "MCP",
+    "github",
+    "reddit",
+    "teknoloji",
+    "yazılım geliştirme",
     "teknoloji haberleri",
-    "reddit teknoloji",
+    "github haberleri",
+    "reddit haberleri",
   ],
   alternates: {
     canonical: "/categories",
@@ -33,14 +29,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kategoriler - Teknoloji Haberleri",
     description:
-      "Yapay zeka, robotik ve yazılım geliştirme. Reddit'ten teknoloji haberlerini keşfedin.",
+      "GitHub, Reddit ve teknoloji haberlerini kategorilere göre keşfedin.",
     type: "website",
     url: "/categories",
   },
   twitter: {
     card: "summary",
     title: "Kategoriler - Teknoloji Haberleri",
-    description: "Reddit'ten yapay zeka ve teknoloji haberlerini kategorilere göre keşfedin.",
+    description: "GitHub, Reddit ve teknoloji haberlerini keşfedin.",
   },
 };
 
@@ -87,7 +83,7 @@ export default function CategoriesPage() {
               <h1 className="text-4xl font-bold md:text-5xl">Kategoriler</h1>
             </div>
             <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-              Reddit'ten yapay zeka, robotik ve yazılım geliştirme haberleri
+              GitHub, Reddit ve teknoloji haberlerini kategorilere göre keşfedin
             </p>
           </div>
 
@@ -126,7 +122,7 @@ export default function CategoriesPage() {
               <CardHeader>
                 <CardTitle>Her Gün Yeni Haberler</CardTitle>
                 <CardDescription>
-                  Reddit'ten yapay zeka, robotik ve yazılım geliştirme haberleri
+                  GitHub, Reddit ve teknoloji dünyasından güncel haberler
                 </CardDescription>
               </CardHeader>
               <CardContent>
