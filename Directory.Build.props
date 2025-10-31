@@ -38,11 +38,6 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- Include .editorconfig for all projects -->
-    <EditorConfigFiles Include="$(MSBuildThisFileDirectory).editorconfig" />
-  </ItemGroup>
-
   <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)\stylecop.json')">
     <AdditionalFiles Include="$(MSBuildProjectDirectory)\stylecop.json" />
   </ItemGroup>

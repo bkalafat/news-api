@@ -56,7 +56,7 @@ internal sealed class NewsArticleService(INewsArticleRepository newsArticleRepos
         var createdNews = await newsArticleRepository.CreateAsync(newsArticle).ConfigureAwait(false);
 
         // Invalidate cache
-        InvalidateNewsCache(newsArticle.Id);
+        InvalidateNewsCache(memoryCache, newsArticle.Id);
 
         return createdNews;
     }
@@ -67,7 +67,7 @@ internal sealed class NewsArticleService(INewsArticleRepository newsArticleRepos
         await newsArticleRepository.UpdateAsync(id, newsArticle).ConfigureAwait(false);
 
         // Invalidate cache
-        InvalidateNewsCache(id);
+        InvalidateNewsCache(memoryCache, id);
     }
 
     public async Task DeleteNewsAsync(string id)
@@ -75,19 +75,20 @@ internal sealed class NewsArticleService(INewsArticleRepository newsArticleRepos
         await newsArticleRepository.DeleteAsync(id).ConfigureAwait(false);
 
         // Invalidate cache
-        InvalidateNewsCache(id);
+        InvalidateNewsCache(memoryCache, id);
     }
 
     /// <summary>
     /// Invalidates all news-related cache entries.
     /// </summary>
+    /// <param name="cache">The memory cache instance.</param>
     /// <param name="newsId">The ID of the specific news article to invalidate (optional).</param>
-    private static void InvalidateNewsCache(string? newsId = null)
+    private static void InvalidateNewsCache(IMemoryCache cache, string? newsId = null)
     {
-        memoryCache.Remove(CacheKeys.NewsList);
+        cache.Remove(CacheKeys.NewsList);
         if (!string.IsNullOrEmpty(newsId))
         {
-            memoryCache.Remove(newsId);
+            cache.Remove(newsId);
         }
     }
 }

@@ -106,8 +106,6 @@ export default function NewsEditorPage() {
         isSecondPageNews: false,
       };
 
-      console.log("Sending news data:", newsData); // Debug için
-
       const response = await authFetch(`${API_URL}/api/NewsArticle`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

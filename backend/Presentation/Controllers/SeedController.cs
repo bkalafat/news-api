@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NewsApi.Application.Services;
+using NewsApi.Domain.Entities;
 using NewsApi.Infrastructure.Data;
 using NewsApi.Infrastructure.Services;
 
@@ -124,12 +125,11 @@ internal sealed class SeedController : ControllerBase
                 try
                 {
                     // Check if article with similar caption already exists (avoid duplicates)
-                    var existingArticles = await _newsService.GetAllNewsAsync(
-                        category: article.Category,
-                        type: null);
+                    var existingArticles = await _newsService.GetAllNewsAsync();
 
-                    var isDuplicate = existingArticles.Any(existing =>
-                        existing.Caption.Equals(article.Caption, StringComparison.OrdinalIgnoreCase));
+                    var isDuplicate = existingArticles
+                        .Where(e => e.Category == article.Category)
+                        .Any(existing => existing.Caption.Equals(article.Caption, StringComparison.OrdinalIgnoreCase));
 
                     if (isDuplicate)
                     {
@@ -138,8 +138,28 @@ internal sealed class SeedController : ControllerBase
                         continue;
                     }
 
-                    // Create the news article
-                    await _newsService.CreateNewsAsync(article);
+                    // Create the news article (convert DTO to entity)
+                    var newsEntity = new NewsArticle
+                    {
+                        Category = article.Category,
+                        Type = article.Type,
+                        Caption = article.Caption,
+                        Keywords = article.Keywords,
+                        SocialTags = article.SocialTags,
+                        Summary = article.Summary,
+                        ImgPath = article.ImgPath,
+                        ImgAlt = article.ImgAlt,
+                        ImageUrl = article.ImageUrl,
+                        ThumbnailUrl = article.ThumbnailUrl,
+                        Content = article.Content,
+                        Subjects = article.Subjects,
+                        Authors = article.Authors,
+                        ExpressDate = article.ExpressDate,
+                        Priority = article.Priority,
+                        IsActive = article.IsActive,
+                        IsSecondPageNews = article.IsSecondPageNews
+                    };
+                    await _newsService.CreateNewsAsync(newsEntity);
                     totalCreated++;
 
                     _logger.LogDebug(
