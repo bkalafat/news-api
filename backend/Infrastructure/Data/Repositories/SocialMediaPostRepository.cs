@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -77,7 +78,7 @@ internal sealed class SocialMediaPostRepository : ISocialMediaPostRepository
     public Task<SocialMediaPost?> GetByExternalIdAsync(string externalId, string platform) =>
         _collection
             .Find(post => post.ExternalId == externalId && post.Platform == platform)
-            .FirstOrDefaultAsync(cancellationToken: CancellationToken.None);
+            .FirstOrDefaultAsync(cancellationToken: CancellationToken.None)!;
 
     public async Task<SocialMediaPost> CreateAsync(SocialMediaPost post)
     {

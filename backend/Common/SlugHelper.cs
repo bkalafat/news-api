@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 
 namespace NewsApi.Common;
@@ -19,18 +20,18 @@ internal static class SlugHelper
         text = text.ToLowerInvariant();
 
         // Replace Turkish characters
-        text = text.Replace("ı", "i")
-            .Replace("ğ", "g")
-            .Replace("ü", "u")
-            .Replace("ş", "s")
-            .Replace("ö", "o")
-            .Replace("ç", "c")
-            .Replace("İ", "i")
-            .Replace("Ğ", "g")
-            .Replace("Ü", "u")
-            .Replace("Ş", "s")
-            .Replace("Ö", "o")
-            .Replace("Ç", "c");
+        text = text.Replace("ı", "i", StringComparison.Ordinal)
+            .Replace("ğ", "g", StringComparison.Ordinal)
+            .Replace("ü", "u", StringComparison.Ordinal)
+            .Replace("ş", "s", StringComparison.Ordinal)
+            .Replace("ö", "o", StringComparison.Ordinal)
+            .Replace("ç", "c", StringComparison.Ordinal)
+            .Replace("İ", "i", StringComparison.Ordinal)
+            .Replace("Ğ", "g", StringComparison.Ordinal)
+            .Replace("Ü", "u", StringComparison.Ordinal)
+            .Replace("Ş", "s", StringComparison.Ordinal)
+            .Replace("Ö", "o", StringComparison.Ordinal)
+            .Replace("Ç", "c", StringComparison.Ordinal);
 
         // Remove special characters and replace spaces with hyphens
         text = Regex.Replace(text, @"[^a-z0-9\s-]", "", RegexOptions.NonBacktracking);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NewsApi.Application.DTOs;
@@ -54,7 +55,7 @@ internal sealed class RedditService
 
             var posts = response.Data.Children
                 .Where(child => child.Data != null)
-                .Select(child => MapRedditPostToDto(child.Data, subreddit))
+                .Select(child => MapRedditPostToDto(child.Data!, subreddit))
                 .ToList();
 
             _logger.LogInformation("Successfully fetched {Count} posts from r/{Subreddit}", posts.Count, subreddit);
@@ -82,7 +83,7 @@ internal sealed class RedditService
             var url = $"{RedditApiBase}/r/{subreddit}/search.json?q={Uri.EscapeDataString(query)}&restrict_sr=1&sort={sort}&t={timeframe}&limit={limit}";
             _logger.LogInformation("Searching Reddit: {Url}", url);
 
-            var response = await _httpClient.GetFromJsonAsync<RedditResponse>(url, cancellationToken);
+            var response = await _httpClient.GetFromJsonAsync<RedditResponse>(url, CancellationToken.None);
 
             if (response?.Data?.Children == null || response.Data.Children.Count == 0)
             {
@@ -92,7 +93,7 @@ internal sealed class RedditService
 
             var posts = response.Data.Children
                 .Where(child => child.Data != null)
-                .Select(child => MapRedditPostToDto(child.Data, subreddit))
+                .Select(child => MapRedditPostToDto(child.Data!, subreddit))
                 .ToList();
 
             _logger.LogInformation("Found {Count} posts for query: {Query}", posts.Count, query);
@@ -132,18 +133,12 @@ internal sealed class RedditService
         // Preview images
         if (data.Preview?.Images != null && data.Preview.Images.Count > 0)
         {
-            foreach (var img in data.Preview.Images)
-            {
-                if (!string.IsNullOrEmpty(img.Source?.Url))
-                {
-                    // Reddit returns HTML-encoded URLs, decode them
-                    var decodedUrl = System.Net.WebUtility.HtmlDecode(img.Source.Url);
-                    if (!imageUrls.Contains(decodedUrl, StringComparer.Ordinal))
-                    {
-                        imageUrls.Add(decodedUrl);
-                    }
-                }
-            }
+            var previewUrls = data.Preview.Images
+                .Where(img => !string.IsNullOrEmpty(img.Source?.Url))
+                .Select(img => System.Net.WebUtility.HtmlDecode(img.Source!.Url)!)
+                .Where(decodedUrl => !imageUrls.Contains(decodedUrl, StringComparer.Ordinal));
+
+            imageUrls.AddRange(previewUrls);
         }
 
         return new CreateSocialMediaPostDto

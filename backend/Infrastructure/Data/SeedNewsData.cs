@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using NewsApi.Common;
@@ -918,12 +920,9 @@ internal static class SeedNewsData
         };
 
         // Generate slugs for all news articles before inserting
-        foreach (var article in newsArticles)
+        foreach (var article in newsArticles.Where(a => string.IsNullOrEmpty(a.Slug)))
         {
-            if (string.IsNullOrEmpty(article.Slug))
-            {
-                article.Slug = SlugHelper.GenerateSlug(article.Caption);
-            }
+            article.Slug = SlugHelper.GenerateSlug(article.Caption);
         }
 
         await newsCollection.InsertManyAsync(newsArticles, cancellationToken: CancellationToken.None).ConfigureAwait(false);

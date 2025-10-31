@@ -109,7 +109,7 @@ internal sealed class SocialMediaFetcherService : BackgroundService
                         totalImported++;
                         _logger.LogDebug("Imported post: {Title} from r/{Subreddit}", post.Title, subreddit);
                     }
-                    catch (InvalidOperationException ex) when (ex.Message.Contains("already exists"))
+                    catch (InvalidOperationException ex) when (ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
                     {
                         totalSkipped++;
                         _logger.LogDebug("Skipped duplicate post: {ExternalId}", post.ExternalId);

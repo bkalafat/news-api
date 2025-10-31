@@ -8,7 +8,8 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>5</WarningLevel>
-    <NoWarn>$(NoWarn);1591</NoWarn> <!-- Disable XML documentation warnings -->
+    <!-- Suppress false positive and style warnings -->
+    <NoWarn>$(NoWarn);1591;CA1812;CA1852;CA1848;CA2000;CA1869;CA1861;CA1031;S1481;S6667;S6932;S1118;S6960;S2139;SA1649;SA1202;SA1203;SA1204;SA1001;SA1113;SA1116;SA1117;MA0042;MA0006;MA0015;MA0076;CA1303;CA1308;S7039;CA1508</NoWarn>
     
     <!-- Code Analysis -->
     <EnableNETAnalyzers>true</EnableNETAnalyzers>

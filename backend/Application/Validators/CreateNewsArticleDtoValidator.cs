@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using FluentValidation;
 using NewsApi.Application.DTOs;
@@ -16,7 +17,7 @@ internal sealed class CreateNewsArticleDtoValidator : AbstractValidator<CreateNe
             .WithMessage("Category is required")
             .MaximumLength(100)
             .WithMessage("Category must not exceed 100 characters")
-            .Must(c => !string.IsNullOrEmpty(c) && allowedCategories.Contains(c.ToLower(), StringComparer.Ordinal))
+            .Must(c => !string.IsNullOrEmpty(c) && allowedCategories.Contains(c.ToLower(CultureInfo.InvariantCulture), StringComparer.Ordinal))
             .WithMessage($"Category must be one of: {string.Join(", ", allowedCategories)}");
 
         RuleFor(dto => dto.Type)
@@ -66,7 +67,7 @@ internal sealed class UpdateNewsArticleDtoValidator : AbstractValidator<UpdateNe
         RuleFor(dto => dto.Category)
             .MaximumLength(100)
             .WithMessage("Category must not exceed 100 characters")
-            .Must(c => !string.IsNullOrEmpty(c) && allowedCategories.Contains(c.ToLower(), StringComparer.Ordinal))
+            .Must(c => !string.IsNullOrEmpty(c) && allowedCategories.Contains(c.ToLower(CultureInfo.InvariantCulture), StringComparer.Ordinal))
             .WithMessage($"Category must be one of: {string.Join(", ", allowedCategories)}")
             .When(dto => !string.IsNullOrEmpty(dto.Category));
 

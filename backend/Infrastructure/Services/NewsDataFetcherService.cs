@@ -90,7 +90,7 @@ internal sealed class NewsDataFetcherService : INewsDataFetcherService
             var country = _settings.Countries.FirstOrDefault() ?? "tr";
             var url = $"{_settings.BaseUrl}/top-headlines?country={country}&category={category}&pageSize={_settings.MaxArticlesPerCategory}&apiKey={_settings.ApiKey}";
 
-            var response = await _httpClient.GetAsync(url, cancellationToken);
+            var response = await _httpClient.GetAsync(new Uri(url), cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -166,7 +166,7 @@ string.Equals(article.Title, "[Removed]", StringComparison.Ordinal))
             Caption = TruncateString(article.Title, 500),
             Keywords = string.Join(", ", ExtractKeywords(article.Title)),
             SocialTags = string.Empty,
-            Summary = TruncateString(article.Description ?? article.Title, 2000),
+            Summary = TruncateString(article.Description != null ? article.Description : article.Title, 2000),
             ImgPath = string.Empty,
             ImgAlt = TruncateString(article.Title, 200),
             ImageUrl = article.UrlToImage ?? string.Empty,

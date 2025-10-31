@@ -304,7 +304,7 @@ internal sealed class SocialMediaController : ControllerBase
                     imported++;
                     _logger.LogInformation("Imported post: {Title}", redditPost.Title);
                 }
-                catch (InvalidOperationException ex) when (ex.Message.Contains("already exists"))
+                catch (InvalidOperationException ex) when (ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
                 {
                     skipped++;
                     _logger.LogDebug("Skipped duplicate post: {ExternalId}", redditPost.ExternalId);

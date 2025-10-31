@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -69,13 +70,14 @@ internal sealed class MinioImageStorageService : IImageStorageService
             // Upload to MinIO
             using var uploadStream = new MemoryStream(imageBytes);
             await _minioClient
-                .PutObjectAsync(new PutObjectArgs()
+                .PutObjectAsync(
+                    new PutObjectArgs()
                         .WithBucket(_settings.BucketName)
                         .WithObject(objectKey)
                         .WithStreamData(uploadStream)
                         .WithObjectSize(imageBytes.Length)
-                        .WithContentType(image.ContentType)
-                        , CancellationToken.None).ConfigureAwait(false);
+                        .WithContentType(image.ContentType),
+                    CancellationToken.None).ConfigureAwait(false);
 
             _logger.LogInformation("Uploaded image {ObjectKey} to MinIO", objectKey);
 

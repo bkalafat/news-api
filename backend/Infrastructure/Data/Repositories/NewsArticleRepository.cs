@@ -34,7 +34,6 @@ internal sealed class NewsArticleRepository(MongoDbContext context) : INewsArtic
                 .Find(article => article.Id == id && article.IsActive)
                 .FirstOrDefaultAsync()
                 .ConfigureAwait(false);
-            return result;
         }
         catch (Exception ex)
         {
@@ -47,7 +46,7 @@ internal sealed class NewsArticleRepository(MongoDbContext context) : INewsArtic
     public Task<NewsArticle?> GetBySlugAsync(string slug) =>
         _newsCollection
             .Find(article => article.Slug == slug && article.IsActive)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync()!;
 
     public async Task<NewsArticle> CreateAsync(NewsArticle newsArticle)
     {
