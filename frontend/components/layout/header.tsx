@@ -82,53 +82,39 @@ export function Header() {
                   <h3 className="mb-3 font-semibold">{t("navigation.categories")}</h3>
                   <div className="flex flex-col space-y-2">
                     <Link
-                      href="/category/technology"
+                      href="/category/popular"
                       onClick={() => setMobileMenuOpen(false)}
                       className="hover:text-primary text-sm transition-colors"
                     >
-                      {t("categories.technology")}
+                      {t("categories.popular")}
                     </Link>
                     <Link
-                      href="/category/business"
+                      href="/category/artificialintelligence"
                       onClick={() => setMobileMenuOpen(false)}
                       className="hover:text-primary text-sm transition-colors"
                     >
-                      {t("categories.business")}
+                      {t("categories.artificialintelligence")}
                     </Link>
                     <Link
-                      href="/category/entertainment"
+                      href="/category/githubcopilot"
                       onClick={() => setMobileMenuOpen(false)}
                       className="hover:text-primary text-sm transition-colors"
                     >
-                      {t("categories.entertainment")}
+                      {t("categories.githubcopilot")}
                     </Link>
                     <Link
-                      href="/category/science"
+                      href="/category/openai"
                       onClick={() => setMobileMenuOpen(false)}
                       className="hover:text-primary text-sm transition-colors"
                     >
-                      {t("categories.science")}
+                      {t("categories.openai")}
                     </Link>
                     <Link
-                      href="/category/sports"
+                      href="/category/claudeai"
                       onClick={() => setMobileMenuOpen(false)}
                       className="hover:text-primary text-sm transition-colors"
                     >
-                      {t("categories.sports")}
-                    </Link>
-                    <Link
-                      href="/category/health"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="hover:text-primary text-sm transition-colors"
-                    >
-                      {t("categories.health")}
-                    </Link>
-                    <Link
-                      href="/category/world"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="hover:text-primary text-sm transition-colors"
-                    >
-                      {t("categories.world")}
+                      {t("categories.claudeai")}
                     </Link>
                   </div>
                 </div>

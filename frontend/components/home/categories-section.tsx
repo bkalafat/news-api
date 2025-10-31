@@ -7,27 +7,32 @@ import Link from "next/link";
 import {
   Cpu,
   TrendingUp,
-  Music,
-  FlaskConical,
-  Trophy,
-  HeartPulse,
-  Globe,
 } from "lucide-react";
 
 const categoryIcons = {
-  [NewsCategory.Technology]: Cpu,
-  [NewsCategory.Business]: TrendingUp,
-  [NewsCategory.Entertainment]: Music,
-  [NewsCategory.Science]: FlaskConical,
-  [NewsCategory.Sports]: Trophy,
-  [NewsCategory.Health]: HeartPulse,
-  [NewsCategory.World]: Globe,
+  [NewsCategory.Popular]: TrendingUp,
+  [NewsCategory.ArtificialIntelligence]: Cpu,
+  [NewsCategory.GithubCopilot]: Cpu,
+  [NewsCategory.MCP]: Cpu,
+  [NewsCategory.OpenAI]: Cpu,
+  [NewsCategory.Robotics]: Cpu,
+  [NewsCategory.DeepSeek]: Cpu,
+  [NewsCategory.DotNet]: Cpu,
+  [NewsCategory.ClaudeAI]: Cpu,
 };
 
 export function CategoriesSection() {
   const t = useTranslations("categories");
 
-  const categories = Object.values(NewsCategory);
+  // Show only top 6 categories on homepage
+  const categories = [
+    NewsCategory.Popular,
+    NewsCategory.ArtificialIntelligence,
+    NewsCategory.OpenAI,
+    NewsCategory.GithubCopilot,
+    NewsCategory.ClaudeAI,
+    NewsCategory.DotNet,
+  ];
 
   return (
     <section className="space-y-6">

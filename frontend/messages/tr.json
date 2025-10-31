@@ -12,13 +12,15 @@
   },
   "categories": {
     "all": "Tüm Haberler",
-    "technology": "Teknoloji",
-    "business": "İş Dünyası",
-    "entertainment": "Eğlence",
-    "science": "Bilim",
-    "sports": "Spor",
-    "health": "Sağlık",
-    "world": "Dünya"
+    "popular": "Popüler",
+    "artificialintelligence": "Yapay Zeka",
+    "githubcopilot": "GitHub Copilot",
+    "mcp": "MCP",
+    "openai": "OpenAI",
+    "robotics": "Robotik",
+    "deepseek": "DeepSeek",
+    "dotnet": ".NET",
+    "claudeai": "Claude AI"
   },
   "article": {
     "readMore": "Devamını Oku",

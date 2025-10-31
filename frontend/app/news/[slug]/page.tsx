@@ -179,13 +179,15 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
   }
 
   const categoryNames: Record<string, string> = {
-    technology: "Teknoloji",
-    world: "Dünya",
-    business: "İş Dünyası",
-    science: "Bilim",
-    health: "Sağlık",
-    entertainment: "Eğlence",
-    sports: "Spor",
+    popular: "Popüler",
+    artificialintelligence: "Yapay Zeka",
+    githubcopilot: "GitHub Copilot",
+    mcp: "MCP",
+    openai: "OpenAI",
+    robotics: "Robotik",
+    deepseek: "DeepSeek",
+    dotnet: ".NET",
+    claudeai: "Claude AI",
   };
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";

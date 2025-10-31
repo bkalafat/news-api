@@ -80,13 +80,15 @@ export interface ApiError {
 }
 
 export enum NewsCategory {
-  Technology = "technology",
-  Business = "business",
-  Entertainment = "entertainment",
-  Science = "science",
-  Sports = "sports",
-  Health = "health",
-  World = "world",
+  Popular = "popular",
+  ArtificialIntelligence = "artificialintelligence",
+  GithubCopilot = "githubcopilot",
+  MCP = "mcp",
+  OpenAI = "openai",
+  Robotics = "robotics",
+  DeepSeek = "deepseek",
+  DotNet = "dotnet",
+  ClaudeAI = "claudeai",
 }
 
 export interface NewsFilters {

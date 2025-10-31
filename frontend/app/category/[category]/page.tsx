@@ -7,60 +7,53 @@ interface CategoryPageProps {
   }>;
 }
 
-// Category metadata mapping
+// Category metadata mapping - Reddit subreddit based
 const categoryMetadata: Record<string, { title: string; description: string; keywords: string[] }> =
   {
-    technology: {
-      title: "Teknoloji Haberleri",
-      description:
-        "Son dakika teknoloji haberleri, yazılım, donanım, yapay zeka, mobil teknolojiler ve yenilikler. Teknoloji dünyasından güncel gelişmeler.",
-      keywords: [
-        "teknoloji haberleri",
-        "yazılım",
-        "donanım",
-        "yapay zeka",
-        "mobil teknoloji",
-        "yenilikler",
-      ],
+    popular: {
+      title: "Popüler Haberler",
+      description: "Reddit'ten en popüler teknoloji ve yapay zeka haberleri. Güncel trendler ve viral içerikler.",
+      keywords: ["popüler haberler", "reddit", "trending", "viral", "teknoloji"],
     },
-    science: {
-      title: "Bilim Haberleri",
-      description:
-        "Bilim dünyasından son dakika haberleri, araştırmalar, keşifler ve bilimsel gelişmeler.",
-      keywords: ["bilim haberleri", "araştırmalar", "keşifler", "bilimsel gelişmeler"],
+    artificialintelligence: {
+      title: "Yapay Zeka Haberleri",
+      description: "r/ArtificialIntelligence'dan yapay zeka, machine learning ve deep learning haberleri.",
+      keywords: ["yapay zeka", "AI", "machine learning", "deep learning", "neural networks"],
     },
-    business: {
-      title: "İş Dünyası Haberleri",
-      description:
-        "İş dünyası, ekonomi, finans ve girişimcilik haberleri. Şirket haberleri ve piyasa analizleri.",
-      keywords: [
-        "iş dünyası",
-        "ekonomi haberleri",
-        "finans",
-        "girişimcilik",
-        "şirket haberleri",
-      ],
+    githubcopilot: {
+      title: "GitHub Copilot Haberleri",
+      description: "r/GithubCopilot'tan GitHub Copilot, AI kod asistanı haberleri ve güncellemeler.",
+      keywords: ["github copilot", "AI code assistant", "copilot", "github", "coding AI"],
     },
-    health: {
-      title: "Sağlık Haberleri",
-      description: "Sağlık, tıp ve wellness alanından güncel haberler ve gelişmeler.",
-      keywords: ["sağlık haberleri", "tıp", "wellness", "sağlıklı yaşam"],
+    mcp: {
+      title: "MCP Haberleri",
+      description: "r/mcp'den Model Context Protocol haberleri ve gelişmeleri.",
+      keywords: ["MCP", "model context protocol", "AI protocols", "context management"],
     },
-    entertainment: {
-      title: "Eğlence Haberleri",
-      description: "Eğlence dünyasından haberler, film, müzik, oyun ve kültür sanat haberleri.",
-      keywords: ["eğlence haberleri", "film", "müzik", "oyun", "kültür sanat"],
+    openai: {
+      title: "OpenAI Haberleri",
+      description: "r/OpenAI'dan ChatGPT, GPT-4, DALL-E ve diğer OpenAI ürünleri hakkında haberler.",
+      keywords: ["openai", "chatgpt", "gpt-4", "dall-e", "openai api"],
     },
-    sports: {
-      title: "Spor Haberleri",
-      description: "Spor dünyasından son dakika haberleri, maç sonuçları ve spor analizleri.",
-      keywords: ["spor haberleri", "maç sonuçları", "futbol", "basketbol", "spor analizleri"],
+    robotics: {
+      title: "Robotik Haberleri",
+      description: "r/robotics'ten robotik, otomasyon ve robot teknolojileri haberleri.",
+      keywords: ["robotics", "robots", "automation", "robotik sistemler"],
     },
-    world: {
-      title: "Dünya Haberleri",
-      description:
-        "Dünya gündeminden son dakika haberleri, uluslararası gelişmeler ve küresel olaylar.",
-      keywords: ["dünya haberleri", "uluslararası haberler", "küresel gelişmeler", "dünya gündemi"],
+    deepseek: {
+      title: "DeepSeek AI Haberleri",
+      description: "r/DeepSeek'ten DeepSeek AI haberleri ve güncellemeleri.",
+      keywords: ["deepseek", "deepseek ai", "AI research", "deep learning"],
+    },
+    dotnet: {
+      title: ".NET Haberleri",
+      description: "r/dotnet'ten .NET, C#, ASP.NET Core ve Microsoft teknolojileri haberleri.",
+      keywords: [".net", "dotnet", "c#", "asp.net core", "microsoft"],
+    },
+    claudeai: {
+      title: "Claude AI Haberleri",
+      description: "r/ClaudeAI'dan Anthropic Claude AI haberleri ve güncellemeleri.",
+      keywords: ["claude ai", "anthropic", "claude", "AI assistant"],
     },
   };
 

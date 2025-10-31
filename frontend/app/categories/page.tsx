@@ -46,25 +46,76 @@ export const revalidate = 86400; // 24 hours
 
 const categories = [
   {
-    id: "technology",
+    id: "popular",
+    icon: TrendingUp,
+    color: "text-orange-600 dark:text-orange-400",
+    bgColor: "bg-orange-50 dark:bg-orange-950",
+    description: "Reddit'ten en popüler haberler",
+    subreddit: "r/popular",
+  },
+  {
+    id: "artificialintelligence",
     icon: Cpu,
     color: "text-purple-600 dark:text-purple-400",
     bgColor: "bg-purple-50 dark:bg-purple-950",
-    description: "Teknoloji, yazılım, yapay zeka ve yenilikler",
+    description: "Yapay zeka haberleri ve gelişmeleri",
+    subreddit: "r/ArtificialIntelligence",
   },
   {
-    id: "business",
-    icon: TrendingUp,
-    color: "text-blue-700 dark:text-blue-400",
+    id: "githubcopilot",
+    icon: Cpu,
+    color: "text-blue-600 dark:text-blue-400",
     bgColor: "bg-blue-50 dark:bg-blue-950",
-    description: "İş dünyası, ekonomi, finans ve girişimcilik",
+    description: "GitHub Copilot haberleri",
+    subreddit: "r/GithubCopilot",
   },
   {
-    id: "entertainment",
-    icon: Music,
-    color: "text-pink-600 dark:text-pink-400",
-    bgColor: "bg-pink-50 dark:bg-pink-950",
-    description: "Eğlence, film, müzik ve sosyal medya",
+    id: "mcp",
+    icon: Cpu,
+    color: "text-green-600 dark:text-green-400",
+    bgColor: "bg-green-50 dark:bg-green-950",
+    description: "MCP (Model Context Protocol) haberleri",
+    subreddit: "r/mcp",
+  },
+  {
+    id: "openai",
+    icon: Cpu,
+    color: "text-teal-600 dark:text-teal-400",
+    bgColor: "bg-teal-50 dark:bg-teal-950",
+    description: "OpenAI ve GPT haberleri",
+    subreddit: "r/OpenAI",
+  },
+  {
+    id: "robotics",
+    icon: Cpu,
+    color: "text-red-600 dark:text-red-400",
+    bgColor: "bg-red-50 dark:bg-red-950",
+    description: "Robotik ve otomasyon",
+    subreddit: "r/robotics",
+  },
+  {
+    id: "deepseek",
+    icon: Cpu,
+    color: "text-indigo-600 dark:text-indigo-400",
+    bgColor: "bg-indigo-50 dark:bg-indigo-950",
+    description: "DeepSeek AI haberleri",
+    subreddit: "r/DeepSeek",
+  },
+  {
+    id: "dotnet",
+    icon: Cpu,
+    color: "text-violet-600 dark:text-violet-400",
+    bgColor: "bg-violet-50 dark:bg-violet-950",
+    description: ".NET ve C# gelişmeleri",
+    subreddit: "r/dotnet",
+  },
+  {
+    id: "claudeai",
+    icon: Cpu,
+    color: "text-amber-600 dark:text-amber-400",
+    bgColor: "bg-amber-50 dark:bg-amber-950",
+    description: "Claude AI haberleri",
+    subreddit: "r/ClaudeAI",
   },
 ];
 
@@ -100,9 +151,15 @@ export default function CategoriesPage() {
                       </div>
                       <div className="flex items-center justify-between">
                         <CardTitle className="capitalize">
-                          {category.id === "technology" && "Teknoloji"}
-                          {category.id === "business" && "İş Dünyası"}
-                          {category.id === "entertainment" && "Eğlence"}
+                          {category.id === "popular" && "Popüler"}
+                          {category.id === "artificialintelligence" && "Yapay Zeka"}
+                          {category.id === "githubcopilot" && "GitHub Copilot"}
+                          {category.id === "mcp" && "MCP"}
+                          {category.id === "openai" && "OpenAI"}
+                          {category.id === "robotics" && "Robotik"}
+                          {category.id === "deepseek" && "DeepSeek"}
+                          {category.id === "dotnet" && ".NET"}
+                          {category.id === "claudeai" && "Claude AI"}
                         </CardTitle>
                         <ArrowRight className="text-muted-foreground h-5 w-5 transition-transform group-hover:translate-x-1" />
                       </div>
@@ -128,16 +185,16 @@ export default function CategoriesPage() {
               <CardContent>
                 <div className="mt-4 grid grid-cols-3 gap-4">
                   <div className="text-center">
-                    <div className="text-primary text-3xl font-bold">3</div>
-                    <div className="text-muted-foreground text-sm">Kategori</div>
+                    <div className="text-primary text-3xl font-bold">9</div>
+                    <div className="text-muted-foreground text-sm">Reddit Kategorisi</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-primary text-3xl font-bold">24/7</div>
-                    <div className="text-muted-foreground text-sm">Güncelleme</div>
+                    <div className="text-primary text-3xl font-bold">Günlük</div>
+                    <div className="text-muted-foreground text-sm">Otomatik Güncelleme</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-primary text-3xl font-bold">∞</div>
-                    <div className="text-muted-foreground text-sm">İçerik</div>
+                    <div className="text-primary text-3xl font-bold">Top</div>
+                    <div className="text-muted-foreground text-sm">Son 1 Hafta</div>
                   </div>
                 </div>
               </CardContent>
