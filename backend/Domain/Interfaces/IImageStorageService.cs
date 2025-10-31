@@ -65,4 +65,13 @@ public interface IImageStorageService
     /// <param name="extension">File extension (e.g., ".jpg")</param>
     /// <returns>Public URL for the thumbnail</returns>
     string GetThumbnailUrl(string newsId, string extension);
+
+    /// <summary>
+    /// Upload an image from a stream to MinIO storage
+    /// </summary>
+    /// <param name="objectKey">The MinIO object key</param>
+    /// <param name="stream">The image stream</param>
+    /// <param name="contentType">The content type (e.g., "image/jpeg")</param>
+    /// <param name="size">The size of the stream in bytes</param>
+    Task UploadImageStreamAsync(string objectKey, System.IO.Stream stream, string contentType, long size);
 }

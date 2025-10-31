@@ -194,6 +194,34 @@ internal sealed class MinioImageStorageService : IImageStorageService
         return GetImageUrl(thumbnailKey);
     }
 
+    /// <inheritdoc />
+    public async Task UploadImageStreamAsync(string objectKey, System.IO.Stream stream, string contentType, long size)
+    {
+        try
+        {
+            // Ensure bucket exists
+            await EnsureBucketExistsAsync().ConfigureAwait(false);
+
+            // Upload to MinIO
+            await _minioClient
+                .PutObjectAsync(
+                    new PutObjectArgs()
+                        .WithBucket(_settings.BucketName)
+                        .WithObject(objectKey)
+                        .WithStreamData(stream)
+                        .WithObjectSize(size)
+                        .WithContentType(contentType),
+                    CancellationToken.None).ConfigureAwait(false);
+
+            _logger.LogInformation("Uploaded stream to MinIO: {ObjectKey}", objectKey);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error uploading stream to MinIO: {ObjectKey}", objectKey);
+            throw;
+        }
+    }
+
     /// <summary>
     /// Validate the uploaded image
     /// </summary>

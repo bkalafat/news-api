@@ -660,6 +660,241 @@ dotnet test --filter "FullyQualifiedName~Integration" # Integration tests only
 - `GET /api/SocialMedia/twitter` - Get Twitter posts
 - Background service fetches social media content automatically
 
+## 🤖 Daily News Aggregator (Background Job)
+
+**Location**: `backend/Infrastructure/BackgroundJobs/DailyNewsAggregatorJob.cs`
+
+### Overview
+The DailyNewsAggregatorJob is a background service that automatically aggregates, translates, categorizes, and publishes tech news from multiple sources daily at 5:00 AM.
+
+### Schedule & Execution
+- **Run Time**: 5:00 AM UTC every day
+- **Duration**: 10-30 minutes (depends on news volume and translation API)
+- **Automatic Retry**: 1-hour delay if errors occur
+- **Graceful Shutdown**: Respects cancellation tokens
+
+### News Sources (7 sources)
+1. **Reddit** - r/artificial, r/MachineLearning, r/OpenAI, r/ClaudeAI, r/github, r/programming, r/technology
+2. **Hacker News** - Top 30 stories
+3. **GitHub Trending** - Daily trending repositories
+4. **Dev.to** - Articles tagged with AI, ML, ChatGPT, GitHub, Copilot
+5. **Medium** - AI and ML articles via RSS
+6. **Ars Technica** - Technology news RSS feed
+7. **TechCrunch** - Startup and tech news RSS feed
+
+### Processing Pipeline
+
+#### 1. **Fetch All News** (`NewsAggregatorService`)
+- Fetches from all 7 sources in parallel
+- Removes duplicates by title
+- Returns combined list of `AggregatedNewsItem` objects
+
+#### 2. **Filter & Prioritize**
+- Sorts by engagement score (upvotes, comments, reactions)
+- Takes top 50 most relevant items
+- Score calculation considers source quality
+
+#### 3. **Smart Category Detection** (`CategoryDetectionService`)
+- Analyzes title, content, tags, and source
+- Uses keyword matching with weighted patterns
+- Categories: Technology, Science, Business, Health, Entertainment, World
+- Boosts categories based on engagement (>1000 score = viral content)
+- Reddit subreddit influences category selection
+
+**Category Keywords**:
+- **Technology**: AI, ML, programming, code, GitHub, Python, JavaScript, React, etc.
+- **Science**: research, physics, space, NASA, quantum, astronomy, etc.
+- **Business**: startup, VC, funding, crypto, finance, stock market, etc.
+- **Health**: medical, biotech, vaccine, genetics, clinical trial, etc.
+- **Entertainment**: gaming, movies, Netflix, esports, etc.
+- **World**: politics, global, international, UN, EU, etc.
+
+#### 4. **Image Download** (`ImageDownloadService`)
+- Extracts image URL from source (Reddit, external links)
+- Downloads image via HTTP
+- Validates: size (max 5MB), format (jpg, png, webp, gif)
+- Uploads to MinIO storage
+- Generates thumbnail (400x300px, JPEG 80% quality)
+- Returns `ImageMetadata` with URLs
+
+**Image Storage**:
+- **Path**: `news-images/{newsId}.jpg`
+- **Thumbnail**: `news-images/{newsId}-thumb.jpg`
+- **Public URLs**: `http://minio:9000/news-images/{objectKey}`
+- **Fallback**: If download fails, article published without image
+
+#### 5. **Translation** (`TranslationService`)
+- Detects language (checks for Turkish characters)
+- Translates to Turkish using MyMemory API (free, 10k chars/day)
+- Translates: Title, Summary (200 chars), Content (if <2000 chars)
+- Rate limiting: 500ms delay between translations
+- Long content (>2000 chars): Original with note in Turkish
+
+#### 6. **Duplicate Check**
+- Generates slug from translated title using `SlugHelper`
+- Checks database for existing news with same slug
+- Skips if duplicate found (avoids re-publishing)
+
+#### 7. **Create News Article**
+- **Category**: Intelligently detected (not hardcoded)
+- **Caption**: Translated title
+- **Content**: Translated content
+- **Image URLs**: From MinIO if image downloaded
+- **Priority**: Score-based (10-100 scale)
+- **Keywords**: Top 10 tags from source
+- **Social Tags**: Top 5 hashtags
+- **Authors**: Original author names
+- **Active**: True (immediately visible)
+
+#### 8. **Save to Database**
+- Saves to MongoDB via `INewsArticleRepository`
+- Logs success with category, source, score, image status
+- Increments success counter
+
+#### 9. **Cache Clearing**
+- Clears all news-related caches
+- Clears category-specific caches (Technology, Science, etc.)
+- Clears type-specific caches (article, breaking, analysis)
+- Ensures fresh content visible immediately
+
+#### 10. **Statistics & Logging**
+- Logs trending categories with engagement scores
+- Reports: {Success} published, {Skipped} skipped, {Failed} failed
+- Tracks execution time
+- Logs next scheduled run time
+
+### Key Services
+
+#### `NewsAggregatorService`
+- **Purpose**: Fetch news from all sources
+- **Returns**: List of `AggregatedNewsItem`
+- **Parallel Execution**: All sources fetched simultaneously
+- **Deduplication**: Removes identical titles
+
+#### `CategoryDetectionService`
+- **Purpose**: Intelligent category detection
+- **Input**: Title, content, source, tags, score
+- **Output**: Best-match category (Technology, Science, etc.)
+- **Algorithm**: Keyword matching + engagement boost + source hints
+
+#### `ImageDownloadService`
+- **Purpose**: Download and upload images to MinIO
+- **Input**: News ID, image URL, alt text
+- **Output**: `ImageMetadata` with URLs
+- **Features**: Validation, thumbnail generation, error handling
+
+#### `TranslationService`
+- **Purpose**: Turkish translation
+- **API**: MyMemory Translation API (free tier)
+- **Limit**: 10,000 chars/day
+- **Chunking**: Splits long text into 450-char chunks
+- **Detection**: Checks for Turkish characters
+
+### Configuration
+
+**Required Settings** (`appsettings.json`):
+```json
+{
+  "MongoDbSettings": {
+    "ConnectionString": "mongodb://admin:password123@mongodb:27017",
+    "DatabaseName": "NewsDb"
+  },
+  "MinioSettings": {
+    "Endpoint": "minio:9000",
+    "AccessKey": "minioadmin",
+    "SecretKey": "minioadmin123",
+    "BucketName": "news-images",
+    "UseSSL": false,
+    "MaxFileSizeBytes": 5242880,
+    "ThumbnailWidth": 400,
+    "ThumbnailHeight": 300
+  }
+}
+```
+
+### Deployment Considerations
+
+**Development (Docker)**:
+- Runs in `newsportal-backend` container
+- Registered as hosted service in `Program.cs`
+- Auto-starts with application
+- Logs to console (visible in Docker logs)
+
+**Production (Azure)**:
+- Runs as background job in Azure Container App
+- Use Azure Monitor for log viewing
+- Consider Azure Functions for scheduled execution alternative
+- Ensure MinIO/R2 credentials configured correctly
+
+**Monitoring**:
+```bash
+# View aggregator logs in Docker
+docker compose logs -f newsportal-backend | grep "Daily News"
+
+# Check next run time
+docker compose logs newsportal-backend | grep "Next news aggregation"
+
+# View published news count
+docker compose logs newsportal-backend | grep "News aggregation complete"
+```
+
+### Troubleshooting
+
+**Problem: No images downloading**
+- Check MinIO is accessible from backend container
+- Verify `MinioSettings` in appsettings.json
+- Check image URLs are valid (HTTP 200 response)
+- View logs: `docker compose logs newsportal-backend | grep "image"`
+
+**Problem: Translation failing**
+- MyMemory API has 10k char/day limit (may hit quota)
+- Check internet connectivity from container
+- View logs: `docker compose logs newsportal-backend | grep "Translat"`
+
+**Problem: Wrong categories assigned**
+- Review keyword patterns in `CategoryDetectionService`
+- Check engagement scores affect category boost
+- View logs: `docker compose logs newsportal-backend | grep "Detected category"`
+
+**Problem: Job not running**
+- Verify hosted service registered: `grep "DailyNewsAggregatorJob" backend/Program.cs`
+- Check logs for scheduling: `docker compose logs newsportal-backend | grep "scheduled"`
+- Restart backend: `docker compose restart newsportal-backend`
+
+**Problem: Duplicate news appearing**
+- Check slug generation is consistent
+- Verify duplicate detection logic
+- View skipped count in logs
+
+### Manual Trigger (for testing)
+Since the job runs automatically, you can't trigger it via API. To test:
+
+1. **Change schedule** (temporary):
+   ```csharp
+   // In DailyNewsAggregatorJob.cs, change:
+   private static readonly TimeSpan TargetTime = new(5, 0, 0);
+   // To run in 1 minute:
+   private static readonly TimeSpan TargetTime = new(DateTime.Now.Hour, DateTime.Now.Minute + 1, 0);
+   ```
+
+2. **Rebuild and restart**:
+   ```bash
+   docker compose up -d --build newsportal-backend
+   docker compose logs -f newsportal-backend
+   ```
+
+3. **Revert changes** after testing
+
+### Future Enhancements
+- Add more news sources (Lobsters, Product Hunt, etc.)
+- Implement pagination for top news (currently top 50)
+- Add webhook notifications when job completes
+- Store aggregation statistics in database
+- Add admin endpoint to view aggregation history
+- Implement smarter translation (use AI for better quality)
+- Add image OCR for extracting text from images
+- Category fine-tuning based on user engagement
+
 ## 🚀 Azure Deployment
 
 ### Current Infrastructure
