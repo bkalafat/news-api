@@ -74,6 +74,14 @@ internal static class ServiceCollectionExtensions
             client.Timeout = TimeSpan.FromSeconds(15);
         });
 
+        // Image Download and Category Detection Services
+        services.AddHttpClient<ImageDownloadService>(client =>
+        {
+            client.DefaultRequestHeaders.Add("User-Agent", "NewsPortal/1.0");
+            client.Timeout = TimeSpan.FromSeconds(30);
+        });
+        services.AddSingleton<CategoryDetectionService>();
+
         return services;
     }
 

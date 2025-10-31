@@ -99,6 +99,9 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
         var aggregatorService = scope.ServiceProvider.GetRequiredService<NewsAggregatorService>();
         var translationService = scope.ServiceProvider.GetRequiredService<TranslationService>();
         var newsRepository = scope.ServiceProvider.GetRequiredService<INewsArticleRepository>();
+        var imageDownloadService = scope.ServiceProvider.GetRequiredService<ImageDownloadService>();
+        var categoryDetectionService = scope.ServiceProvider.GetRequiredService<CategoryDetectionService>();
+        var imageStorageService = scope.ServiceProvider.GetRequiredService<IImageStorageService>();
 
         int successCount = 0;
         int failureCount = 0;
@@ -177,21 +180,57 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
                         await Task.Delay(500, cancellationToken);
                     }
 
-                    // 4. Create news entity
+                    // 4. Detect category intelligently based on content and engagement
+                    var detectedCategory = categoryDetectionService.DetectCategory(
+                        item.Title,
+                        item.Content,
+                        item.Source,
+                        item.Tags,
+                        item.Score);
+
+                    // 5. Download and upload image to MinIO (if available)
+                    ImageMetadata? imageMetadata = null;
+                    string imageUrl = string.Empty;
+                    string thumbnailUrl = string.Empty;
+                    string imgPath = string.Empty;
+
+                    var imageSourceUrl = imageDownloadService.ExtractImageUrl(
+                        item.ExternalUrl,
+                        item.SourceUrl,
+                        item.Source);
+
+                    if (!string.IsNullOrEmpty(imageSourceUrl))
+                    {
+                        var newsId = ObjectId.GenerateNewId().ToString();
+                        imageMetadata = await imageDownloadService.DownloadAndUploadImageAsync(
+                            newsId,
+                            imageSourceUrl,
+                            $"Image from {item.Source}");
+
+                        if (imageMetadata != null)
+                        {
+                            imageUrl = imageStorageService.GetImageUrl(imageMetadata.MinioObjectKey);
+                            thumbnailUrl = imageStorageService.GetThumbnailUrl(newsId, ".jpg");
+                            imgPath = imageMetadata.MinioObjectKey;
+                            _logger.LogInformation("Downloaded and uploaded image for: {Title}", item.Title);
+                        }
+                    }
+
+                    // 6. Create news entity
                     var news = new NewsArticle
                     {
                         Id = ObjectId.GenerateNewId().ToString(),
-                        Category = item.Category,
+                        Category = detectedCategory,
                         Type = "article",
                         Caption = translatedTitle,
                         Slug = slug,
                         Keywords = string.Join(", ", item.Tags.Take(10)),
                         SocialTags = string.Join(" ", item.Tags.Select(t => $"#{t}").Take(5)),
                         Summary = translatedSummary,
-                        ImgPath = string.Empty,
+                        ImgPath = imgPath,
                         ImgAlt = $"Image from {item.Source}",
-                        ImageUrl = string.Empty,
-                        ThumbnailUrl = string.Empty,
+                        ImageUrl = imageUrl,
+                        ThumbnailUrl = thumbnailUrl,
                         Content = translatedContent,
                         ExpressDate = item.PublishedDate,
                         CreateDate = DateTime.UtcNow,
@@ -200,21 +239,22 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
                         IsActive = true,
                         ViewCount = 0,
                         IsSecondPageNews = false,
-                        ImageMetadata = null,
+                        ImageMetadata = imageMetadata,
                         Subjects = Array.Empty<string>(),
                         Authors = new[] { item.Author },
                     };
 
-                    // 5. Save to database
+                    // 7. Save to database
                     await newsRepository.CreateAsync(news);
                     successCount++;
 
                     _logger.LogInformation(
-                        "Published: [{Category}] {Title} (Source: {Source}, Score: {Score})",
+                        "Published: [{Category}] {Title} (Source: {Source}, Score: {Score}, Image: {HasImage})",
                         news.Category,
                         news.Caption,
                         item.Source,
-                        item.Score);
+                        item.Score,
+                        !string.IsNullOrEmpty(news.ImageUrl));
                 }
                 catch (Exception ex)
                 {
@@ -223,7 +263,13 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
                 }
             }
 
-            // 6. Clear all caches
+            // 8. Log trending categories
+            var trendingCategories = categoryDetectionService.GetTrendingCategories(aggregatedNews);
+            _logger.LogInformation(
+                "Trending categories: {Categories}",
+                string.Join(", ", trendingCategories.Select(x => $"{x.Key}({x.Value})")));
+
+            // 9. Clear all caches
             _logger.LogInformation("Clearing caches...");
             ClearAllCaches();
 
