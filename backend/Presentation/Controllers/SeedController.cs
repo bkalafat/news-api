@@ -400,7 +400,7 @@ public sealed class SeedController : ControllerBase
 
     /// <summary>
     /// Manually triggers Reddit news aggregation from configured subreddits
-    /// Fetches from 9 AI/Tech subreddits and converts to Turkish news articles
+    /// Fetches from 9 AI/Tech subreddits, translates to Turkish, and saves as news articles
     /// </summary>
     /// <returns>Result of Reddit aggregation operation</returns>
     [HttpPost("fetch-reddit-news")]
@@ -410,10 +410,8 @@ public sealed class SeedController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Manually triggering Reddit news aggregation...");
+            _logger.LogInformation("Manually triggering Reddit news aggregation with Turkish translation...");
 
-            // Trigger the background job manually by calling its logic
-            // Since we can't directly call the background job, we'll recreate its logic here
             var redditService = HttpContext.RequestServices.GetRequiredService<RedditService>();
             var newsRepository = HttpContext.RequestServices.GetRequiredService<NewsApi.Domain.Interfaces.INewsArticleRepository>();
 
@@ -452,16 +450,44 @@ public sealed class SeedController : ControllerBase
 
                         if (existing == null)
                         {
+                            // Detect language and translate to Turkish
+                            var sourceLanguage = _translationService.DetectLanguage(post.Title);
+                            string translatedTitle = post.Title;
+                            string translatedSummary = post.Content?.Length > 200 ? post.Content[..200] : post.Content ?? post.Title;
+                            string translatedContent = post.Content ?? post.Title;
+
+                            // Translate if content is in English
+                            if (sourceLanguage == "en")
+                            {
+                                try
+                                {
+                                    translatedTitle = await _translationService.TranslateToTurkishAsync(post.Title, sourceLanguage);
+                                    _logger.LogDebug("Translated title: {Original} -> {Translated}", post.Title, translatedTitle);
+
+                                    var summaryText = post.Content?.Length > 200 ? post.Content[..200] : post.Content ?? post.Title;
+                                    translatedSummary = await _translationService.TranslateToTurkishAsync(summaryText, sourceLanguage);
+
+                                    if (!string.IsNullOrEmpty(post.Content) && post.Content.Length > 50)
+                                    {
+                                        translatedContent = await _translationService.TranslateToTurkishAsync(post.Content, sourceLanguage);
+                                    }
+                                }
+                                catch (Exception transEx)
+                                {
+                                    _logger.LogWarning(transEx, "Translation failed for post, using original text");
+                                }
+                            }
+
                             var article = new NewsArticle
                             {
                                 Category = category,
                                 Type = "reddit",
-                                Caption = $"{subreddit}: {post.Title}",
+                                Caption = translatedTitle,
                                 Slug = slug,
-                                Summary = post.Content?.Length > 200 ? post.Content[..200] + "..." : post.Content ?? post.Title,
-                                Content = post.Content ?? post.Title,
+                                Summary = translatedSummary + "...",
+                                Content = translatedContent,
                                 ImgPath = post.ImageUrls?.FirstOrDefault() ?? string.Empty,
-                                ImgAlt = post.Title,
+                                ImgAlt = translatedTitle,
                                 ExpressDate = post.PostedAt,
                                 CreateDate = DateTime.UtcNow,
                                 UpdateDate = DateTime.UtcNow,
@@ -472,6 +498,7 @@ public sealed class SeedController : ControllerBase
 
                             await newsRepository.CreateAsync(article);
                             totalSaved++;
+                            _logger.LogInformation("Saved Turkish article: {Title}", translatedTitle);
                         }
                     }
 
@@ -488,7 +515,7 @@ public sealed class SeedController : ControllerBase
 
             return Ok(new
             {
-                message = "Reddit news aggregation completed successfully!",
+                message = "Reddit news aggregation completed successfully with Turkish translation!",
                 fetched = totalFetched,
                 saved = totalSaved,
                 subreddits = subreddits.Keys.ToArray(),

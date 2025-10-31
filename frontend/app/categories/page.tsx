@@ -135,7 +135,7 @@ export default function CategoriesPage() {
               <h1 className="text-4xl font-bold md:text-5xl">Kategoriler</h1>
             </div>
             <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-              Yapay zeka, robotik ve yazılım geliştirme dünyasından Reddit haberleri
+              Reddit'ten yapay zeka, robotik ve yazılım geliştirme haberleri
             </p>
           </div>
 

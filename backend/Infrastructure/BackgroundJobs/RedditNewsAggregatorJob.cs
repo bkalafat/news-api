@@ -51,7 +51,8 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Reddit News Aggregator Job started");
+        _logger.LogInformation("Reddit News Aggregator Job started (Turkish translation enabled)");
+        _logger.LogInformation("Scheduled to run daily at 05:00 Turkey Time (02:00 UTC)");
 
         // Run immediately on startup, then every 24 hours
         while (!stoppingToken.IsCancellationRequested)
@@ -60,10 +61,11 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
             {
                 var now = DateTime.UtcNow;
 
-                // Check if we should execute (6 AM UTC or first run)
+                // Check if we should execute (2 AM UTC = 5 AM Turkey Time, or first run)
                 if (!_lastExecutionTime.HasValue ||
-                    (now.Hour >= 6 && now - _lastExecutionTime.Value >= _executionInterval))
+                    (now.Hour >= 2 && now.Hour < 3 && now - _lastExecutionTime.Value >= _executionInterval))
                 {
+                    _logger.LogInformation("Starting scheduled Reddit news fetch with Turkish translation...");
                     await FetchAndSeedRedditNewsAsync(stoppingToken).ConfigureAwait(false);
                     _lastExecutionTime = now;
                 }
@@ -86,13 +88,14 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
 
     private async Task FetchAndSeedRedditNewsAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Starting Reddit news aggregation...");
+        _logger.LogInformation("Starting Reddit news aggregation with Turkish translation...");
 
         using var scope = _scopeFactory.CreateScope();
         var repository = scope.ServiceProvider.GetRequiredService<INewsArticleRepository>();
         var httpClientFactory = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>();
         var redditLogger = scope.ServiceProvider.GetRequiredService<ILogger<RedditService>>();
         var redditSettings = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<Infrastructure.Configuration.RedditSettings>>();
+        var translationService = scope.ServiceProvider.GetRequiredService<TranslationService>();
 
         var httpClient = httpClientFactory.CreateClient("Reddit");
         var redditService = new RedditService(httpClient, redditLogger, redditSettings);
@@ -114,17 +117,18 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
 
                 totalFetched += posts.Count;
 
-                // Convert Reddit posts to news articles
-                var newsArticles = posts.Select(post => ConvertRedditPostToNews(post, category, subreddit)).ToList();
-
-                // Save to database (skip if already exists by checking post URL)
-                foreach (var article in newsArticles)
+                // Convert Reddit posts to news articles with Turkish translation
+                foreach (var post in posts)
                 {
+                    var article = await ConvertRedditPostToNewsAsync(post, category, subreddit, translationService).ConfigureAwait(false);
+                    
+                    // Save to database (skip if already exists)
                     var existing = await repository.GetBySlugAsync(article.Slug).ConfigureAwait(false);
                     if (existing == null)
                     {
                         await repository.CreateAsync(article).ConfigureAwait(false);
                         totalSaved++;
+                        _logger.LogDebug("Saved Turkish article: {Title}", article.Caption);
                     }
                 }
 
@@ -137,22 +141,47 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
         }
 
         _logger.LogInformation(
-            "Reddit aggregation completed. Fetched: {Fetched}, Saved: {Saved}",
+            "Reddit aggregation completed with translation. Fetched: {Fetched}, Saved: {Saved}",
             totalFetched,
             totalSaved
         );
     }
 
-    private static NewsArticle ConvertRedditPostToNews(
+    private static async Task<NewsArticle> ConvertRedditPostToNewsAsync(
         Application.DTOs.CreateSocialMediaPostDto post,
         string category,
-        string subreddit)
+        string subreddit,
+        TranslationService translationService)
     {
         var now = DateTime.UtcNow;
 
-        // Generate Turkish title and content
-        var turkishTitle = GenerateTurkishTitle(post.Title, subreddit);
-        var turkishContent = GenerateTurkishContent(post);
+        // Detect language and translate to Turkish
+        var sourceLanguage = translationService.DetectLanguage(post.Title);
+        string turkishTitle = post.Title;
+        string turkishSummary = post.Content?.Length > 200 ? post.Content[..200] : post.Content ?? post.Title;
+        string turkishContent = post.Content ?? post.Title;
+
+        // Translate if content is in English
+        if (sourceLanguage == "en")
+        {
+            try
+            {
+                turkishTitle = await translationService.TranslateToTurkishAsync(post.Title, sourceLanguage);
+                
+                var summaryText = post.Content?.Length > 200 ? post.Content[..200] : post.Content ?? post.Title;
+                turkishSummary = await translationService.TranslateToTurkishAsync(summaryText, sourceLanguage);
+                
+                if (!string.IsNullOrEmpty(post.Content) && post.Content.Length > 50)
+                {
+                    turkishContent = await translationService.TranslateToTurkishAsync(post.Content, sourceLanguage);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log warning but continue with original text
+                System.Diagnostics.Debug.WriteLine($"Translation failed: {ex.Message}");
+            }
+        }
 
         // Extract image URL (prefer first image, fallback to thumbnail)
         var imageUrl = post.ImageUrls?.FirstOrDefault() ?? string.Empty;
@@ -162,10 +191,10 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
             Category = category,
             Type = "reddit",
             Caption = turkishTitle,
-            Slug = SlugHelper.GenerateSlug(turkishTitle),
+            Slug = SlugHelper.GenerateSlug($"{subreddit}: {post.Title}"),
             Keywords = string.Join(", ", post.Tags ?? Array.Empty<string>()),
             SocialTags = $"#Reddit #{subreddit} {string.Join(" ", (post.Tags ?? Array.Empty<string>()).Select(t => $"#{t}"))}",
-            Summary = GenerateTurkishSummary(post.Title, post.Content),
+            Summary = turkishSummary + "...",
             ImgPath = imageUrl,
             ImgAlt = turkishTitle,
             Content = turkishContent,
@@ -183,7 +212,7 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
 
     private static string GenerateTurkishTitle(string originalTitle, string subreddit)
     {
-        // Simple title generation - can be enhanced with translation API
+        // Fallback title generation (used if translation fails)
         var prefix = subreddit switch
         {
             "popular" => "Popüler: ",

@@ -78,46 +78,7 @@ export function Header() {
                 >
                   {t("navigation.about")}
                 </Link>
-                <div className="border-t pt-4">
-                  <h3 className="mb-3 font-semibold">{t("navigation.categories")}</h3>
-                  <div className="flex flex-col space-y-2">
-                    <Link
-                      href="/category/popular"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="hover:text-primary text-sm transition-colors"
-                    >
-                      {t("categories.popular")}
-                    </Link>
-                    <Link
-                      href="/category/artificialintelligence"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="hover:text-primary text-sm transition-colors"
-                    >
-                      {t("categories.artificialintelligence")}
-                    </Link>
-                    <Link
-                      href="/category/githubcopilot"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="hover:text-primary text-sm transition-colors"
-                    >
-                      {t("categories.githubcopilot")}
-                    </Link>
-                    <Link
-                      href="/category/openai"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="hover:text-primary text-sm transition-colors"
-                    >
-                      {t("categories.openai")}
-                    </Link>
-                    <Link
-                      href="/category/claudeai"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="hover:text-primary text-sm transition-colors"
-                    >
-                      {t("categories.claudeai")}
-                    </Link>
-                  </div>
-                </div>
+                {/* Removed hardcoded categories - use Categories page instead */}
               </nav>
             </SheetContent>
           </Sheet>
