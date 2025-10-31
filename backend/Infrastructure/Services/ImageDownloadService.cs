@@ -40,6 +40,10 @@ internal sealed class ImageDownloadService
     /// <param name="imageUrl">The source URL of the image</param>
     /// <param name="altText">Alt text for the image</param>
     /// <returns>Image metadata with MinIO URLs, or null if download/upload failed</returns>
+    /// <remarks>
+    /// All images are converted to JPEG format for consistency and optimal web delivery.
+    /// This ensures predictable file sizes and uniform quality across all news images.
+    /// </remarks>
     public async Task<ImageMetadata?> DownloadAndUploadImageAsync(
         string newsId,
         string imageUrl,
@@ -47,6 +51,13 @@ internal sealed class ImageDownloadService
     {
         if (string.IsNullOrWhiteSpace(imageUrl))
         {
+            return null;
+        }
+
+        // Validate URL for security (prevent SSRF attacks)
+        if (!IsValidImageUrl(imageUrl))
+        {
+            _logger.LogWarning("Invalid or potentially unsafe image URL: {Url}", imageUrl);
             return null;
         }
 
@@ -81,7 +92,8 @@ internal sealed class ImageDownloadService
             var width = image.Width;
             var height = image.Height;
 
-            // Determine file extension and content type
+            // Convert all images to JPEG for consistency and optimal web delivery
+            // This ensures predictable file sizes, uniform quality, and broad browser compatibility
             var extension = ".jpg";
             var contentType = "image/jpeg";
 
@@ -165,6 +177,38 @@ internal sealed class ImageDownloadService
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Validate image URL for security (prevent SSRF attacks)
+    /// </summary>
+    private static bool IsValidImageUrl(string imageUrl)
+    {
+        if (!Uri.TryCreate(imageUrl, UriKind.Absolute, out var uri))
+        {
+            return false;
+        }
+
+        // Only allow HTTP and HTTPS schemes
+        if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
+        {
+            return false;
+        }
+
+        // Block access to localhost and private IP ranges (prevent SSRF)
+        var host = uri.Host.ToLowerInvariant();
+        if (host == "localhost" ||
+            host == "127.0.0.1" ||
+            host.StartsWith("192.168.") ||
+            host.StartsWith("10.") ||
+            host.StartsWith("172.16.") ||
+            host.StartsWith("169.254.") ||
+            host == "0.0.0.0")
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>

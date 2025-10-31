@@ -242,7 +242,7 @@ internal sealed class CategoryDetectionService
     /// <summary>
     /// Get top trending categories from a list of aggregated news items
     /// </summary>
-    public Dictionary<string, int> GetTrendingCategories(List<AggregatedNewsItem> newsItems)
+    public Dictionary<string, int> GetTrendingCategories(IEnumerable<AggregatedNewsItem> newsItems)
     {
         var categoryEngagement = new Dictionary<string, int>();
 

@@ -199,9 +199,11 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
                         item.SourceUrl,
                         item.Source);
 
+                    // 6. Generate news ID (used for both article and image)
+                    var newsId = ObjectId.GenerateNewId().ToString();
+
                     if (!string.IsNullOrEmpty(imageSourceUrl))
                     {
-                        var newsId = ObjectId.GenerateNewId().ToString();
                         imageMetadata = await imageDownloadService.DownloadAndUploadImageAsync(
                             newsId,
                             imageSourceUrl,
@@ -216,10 +218,10 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
                         }
                     }
 
-                    // 6. Create news entity
+                    // 7. Create news entity
                     var news = new NewsArticle
                     {
-                        Id = ObjectId.GenerateNewId().ToString(),
+                        Id = newsId,
                         Category = detectedCategory,
                         Type = "article",
                         Caption = translatedTitle,
@@ -244,7 +246,7 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
                         Authors = new[] { item.Author },
                     };
 
-                    // 7. Save to database
+                    // 8. Save to database
                     await newsRepository.CreateAsync(news);
                     successCount++;
 
@@ -263,13 +265,13 @@ internal sealed class DailyNewsAggregatorJob : BackgroundService
                 }
             }
 
-            // 8. Log trending categories
+            // 9. Log trending categories
             var trendingCategories = categoryDetectionService.GetTrendingCategories(aggregatedNews);
             _logger.LogInformation(
                 "Trending categories: {Categories}",
                 string.Join(", ", trendingCategories.Select(x => $"{x.Key}({x.Value})")));
 
-            // 9. Clear all caches
+            // 10. Clear all caches
             _logger.LogInformation("Clearing caches...");
             ClearAllCaches();
 
