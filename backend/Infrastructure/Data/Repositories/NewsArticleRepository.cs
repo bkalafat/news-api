@@ -34,6 +34,7 @@ internal sealed class NewsArticleRepository(MongoDbContext context) : INewsArtic
                 .Find(article => article.Id == id && article.IsActive)
                 .FirstOrDefaultAsync()
                 .ConfigureAwait(false);
+            return result;
         }
         catch (Exception ex)
         {

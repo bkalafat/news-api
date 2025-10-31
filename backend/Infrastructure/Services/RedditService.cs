@@ -82,7 +82,7 @@ internal sealed class RedditService
             var url = $"{RedditApiBase}/r/{subreddit}/search.json?q={Uri.EscapeDataString(query)}&restrict_sr=1&sort={sort}&t={timeframe}&limit={limit}";
             _logger.LogInformation("Searching Reddit: {Url}", url);
 
-            var response = await _httpClient.GetFromJsonAsync<RedditResponse>(url, cancellationToken: app.Lifetime.ApplicationStarted);
+            var response = await _httpClient.GetFromJsonAsync<RedditResponse>(url, cancellationToken);
 
             if (response?.Data?.Children == null || response.Data.Children.Count == 0)
             {

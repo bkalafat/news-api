@@ -102,7 +102,7 @@ internal sealed class SeedController : ControllerBase
             int totalErrors = 0;
 
             // Fetch news from external API
-            var newsArticles = await _newsDataFetcher.FetchLatestNewsAsync(app.Lifetime.ApplicationStarted);
+            var newsArticles = await _newsDataFetcher.FetchLatestNewsAsync(CancellationToken.None);
             totalFetched = newsArticles.Count;
 
             _logger.LogInformation("Fetched {Count} news articles from external sources", totalFetched);

@@ -75,7 +75,7 @@ internal sealed class MinioImageStorageService : IImageStorageService
                         .WithStreamData(uploadStream)
                         .WithObjectSize(imageBytes.Length)
                         .WithContentType(image.ContentType)
-, app.Lifetime.ApplicationStarted).ConfigureAwait(false);
+                        , CancellationToken.None).ConfigureAwait(false);
 
             _logger.LogInformation("Uploaded image {ObjectKey} to MinIO", objectKey);
 
@@ -97,7 +97,7 @@ internal sealed class MinioImageStorageService : IImageStorageService
                             .WithStreamData(thumbnailStream)
                             .WithObjectSize(thumbnailBytes.Length)
                             .WithContentType(image.ContentType)
-, app.Lifetime.ApplicationStarted).ConfigureAwait(false);
+                            , CancellationToken.None).ConfigureAwait(false);
 
                 _logger.LogInformation("Uploaded thumbnail {ThumbnailKey} to MinIO", thumbnailKey);
             }
@@ -123,7 +123,7 @@ internal sealed class MinioImageStorageService : IImageStorageService
         try
         {
             await _minioClient
-                .RemoveObjectAsync(new RemoveObjectArgs().WithBucket(_settings.BucketName).WithObject(objectKey), app.Lifetime.ApplicationStarted).ConfigureAwait(false);
+                .RemoveObjectAsync(new RemoveObjectArgs().WithBucket(_settings.BucketName).WithObject(objectKey), CancellationToken.None).ConfigureAwait(false);
 
             _logger.LogInformation("Deleted image {ObjectKey} from MinIO", objectKey);
         }
@@ -165,7 +165,7 @@ internal sealed class MinioImageStorageService : IImageStorageService
         try
         {
             await _minioClient
-                .StatObjectAsync(new StatObjectArgs().WithBucket(_settings.BucketName).WithObject(objectKey), app.Lifetime.ApplicationStarted).ConfigureAwait(false);
+                .StatObjectAsync(new StatObjectArgs().WithBucket(_settings.BucketName).WithObject(objectKey), CancellationToken.None).ConfigureAwait(false);
             return true;
         }
         catch
@@ -236,12 +236,12 @@ internal sealed class MinioImageStorageService : IImageStorageService
     private async Task EnsureBucketExistsAsync()
     {
         var bucketExists = await _minioClient
-            .BucketExistsAsync(new BucketExistsArgs().WithBucket(_settings.BucketName), app.Lifetime.ApplicationStarted).ConfigureAwait(false);
+            .BucketExistsAsync(new BucketExistsArgs().WithBucket(_settings.BucketName), CancellationToken.None).ConfigureAwait(false);
 
         if (!bucketExists)
         {
             await _minioClient
-                .MakeBucketAsync(new MakeBucketArgs().WithBucket(_settings.BucketName), app.Lifetime.ApplicationStarted).ConfigureAwait(false);
+                .MakeBucketAsync(new MakeBucketArgs().WithBucket(_settings.BucketName), CancellationToken.None).ConfigureAwait(false);
 
             _logger.LogInformation("Created MinIO bucket: {BucketName}", _settings.BucketName);
         }

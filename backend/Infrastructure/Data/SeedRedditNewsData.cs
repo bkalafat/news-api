@@ -529,7 +529,7 @@ internal static class SeedRedditNewsData
             },
         };
 
-        await newsCollection.InsertManyAsync(redditNewsList, cancellationToken: app.Lifetime.ApplicationStarted).ConfigureAwait(false);
+        await newsCollection.InsertManyAsync(redditNewsList, cancellationToken: CancellationToken.None).ConfigureAwait(false);
         Console.WriteLine($"Successfully seeded {redditNewsList.Count} Reddit news articles!");
     }
 }
