@@ -13,16 +13,19 @@ import { Footer } from "@/components/layout/footer";
 export const metadata: Metadata = {
   title: "Kategoriler - Teknoloji Haberleri",
   description:
-    "Teknoloji, iş dünyası, eğlence ve daha fazlası. Tüm haber kategorilerine göz atın ve ilgi alanınıza göre haberleri keşfedin.",
+    "Yapay zeka, robotik, yazılım geliştirme ve daha fazlası. Reddit'ten teknoloji haberlerini kategorilere göre keşfedin.",
   keywords: [
-    "teknoloji kategorileri",
-    "haber kategorileri",
+    "yapay zeka",
+    "AI",
+    "OpenAI",
+    "Claude AI",
+    "GitHub Copilot",
+    "robotik",
+    ".NET",
+    "DeepSeek",
+    "MCP",
     "teknoloji haberleri",
-    "iş dünyası haberleri",
-    "eğlence haberleri",
-    "teknoloji",
-    "business",
-    "entertainment",
+    "reddit teknoloji",
   ],
   alternates: {
     canonical: "/categories",
@@ -30,14 +33,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kategoriler - Teknoloji Haberleri",
     description:
-      "Teknoloji, iş dünyası, eğlence ve daha fazlası. Tüm haber kategorilerine göz atın.",
+      "Yapay zeka, robotik ve yazılım geliştirme. Reddit'ten teknoloji haberlerini keşfedin.",
     type: "website",
     url: "/categories",
   },
   twitter: {
     card: "summary",
     title: "Kategoriler - Teknoloji Haberleri",
-    description: "Tüm haber kategorilerine göz atın ve ilgi alanınıza göre haberleri keşfedin.",
+    description: "Reddit'ten yapay zeka ve teknoloji haberlerini kategorilere göre keşfedin.",
   },
 };
 
@@ -132,7 +135,7 @@ export default function CategoriesPage() {
               <h1 className="text-4xl font-bold md:text-5xl">Kategoriler</h1>
             </div>
             <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-              Teknoloji, iş dünyası ve eğlence dünyasından güncel haberler
+              Yapay zeka, robotik ve yazılım geliştirme dünyasından Reddit haberleri
             </p>
           </div>
 
@@ -179,14 +182,14 @@ export default function CategoriesPage() {
               <CardHeader>
                 <CardTitle>Her Gün Yeni Haberler</CardTitle>
                 <CardDescription>
-                  Teknoloji, iş dünyası ve eğlence dünyasından sürekli güncellenen içerikler
+                  Reddit'ten yapay zeka, robotik ve yazılım geliştirme haberleri
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="mt-4 grid grid-cols-3 gap-4">
                   <div className="text-center">
                     <div className="text-primary text-3xl font-bold">9</div>
-                    <div className="text-muted-foreground text-sm">Reddit Kategorisi</div>
+                    <div className="text-muted-foreground text-sm">Teknoloji Kategorisi</div>
                   </div>
                   <div className="text-center">
                     <div className="text-primary text-3xl font-bold">Günlük</div>

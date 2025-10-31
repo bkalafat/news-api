@@ -33,15 +33,15 @@ interface NewsFormData {
 }
 
 const categories = [
-  "reddit",
-  "github",
-  "twitter",
-  "linkedin",
-  "facebook",
-  "instagram",
-  "tiktok",
-  "youtube",
-  "technology",
+  "popular",
+  "artificialintelligence",
+  "githubcopilot",
+  "mcp",
+  "openai",
+  "robotics",
+  "deepseek",
+  "dotnet",
+  "claudeai",
 ];
 
 export default function NewsEditorPage() {
@@ -52,7 +52,7 @@ export default function NewsEditorPage() {
     slug: "",
     caption: "",
     content: "",
-    category: "technology",
+    category: "popular",
     author: "",
     imageUrl: "",
     imgAlt: "",

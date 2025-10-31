@@ -83,10 +83,10 @@ class NewsApiClient {
    * Get news by category
    */
   async getNewsByCategory(category: string): Promise<News[]> {
-    // Capitalize first letter to match backend's case-sensitive categories
-    // (Technology, Business, Entertainment, Science, Health, Sports, World)
-    const capitalizedCategory = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
-    const response = await this.client.get<News[]>(`/?category=${capitalizedCategory}`);
+    // Lowercase to match backend's lowercase categories
+    // (popular, artificialintelligence, githubcopilot, mcp, openai, robotics, deepseek, dotnet, claudeai)
+    const lowercaseCategory = category.toLowerCase();
+    const response = await this.client.get<News[]>(`/?category=${lowercaseCategory}`);
     // Backend returns array directly
     const data = Array.isArray(response.data) ? response.data : [];
     return data.map(this.parseNewsDate);

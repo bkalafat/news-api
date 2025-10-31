@@ -23,7 +23,7 @@ internal sealed class NewsApiSettings
     /// <summary>
     /// Gets or sets categories to fetch (business, entertainment, general, health, science, sports, technology)
     /// </summary>
-    public string[] Categories { get; set; } = ["technology", "business", "sports", "science", "health", "entertainment"];
+    public string[] Categories { get; set; } = [];
 
     /// <summary>
     /// Gets or sets maximum articles to fetch per category per run

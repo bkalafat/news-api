@@ -10,7 +10,7 @@ internal sealed class CreateNewsArticleDtoValidator : AbstractValidator<CreateNe
 {
     public CreateNewsArticleDtoValidator()
     {
-        var allowedCategories = new[] { "reddit", "github", "twitter", "linkedin", "facebook", "instagram", "tiktok", "youtube", "technology" };
+        var allowedCategories = new[] { "popular", "artificialintelligence", "githubcopilot", "mcp", "openai", "robotics", "deepseek", "dotnet", "claudeai" };
 
         RuleFor(dto => dto.Category)
             .NotEmpty()
@@ -62,7 +62,7 @@ internal sealed class UpdateNewsArticleDtoValidator : AbstractValidator<UpdateNe
 {
     public UpdateNewsArticleDtoValidator()
     {
-        var allowedCategories = new[] { "reddit", "github", "twitter", "linkedin", "facebook", "instagram", "tiktok", "youtube", "technology" };
+        var allowedCategories = new[] { "popular", "artificialintelligence", "githubcopilot", "mcp", "openai", "robotics", "deepseek", "dotnet", "claudeai" };
 
         RuleFor(dto => dto.Category)
             .MaximumLength(100)
