@@ -59,6 +59,7 @@ builder.Services.AddCustomHealthChecks();
 
 // Add background services
 builder.Services.AddHostedService<NewsApi.Infrastructure.BackgroundJobs.DailyNewsAggregatorJob>();
+builder.Services.AddHostedService<NewsApi.Infrastructure.BackgroundJobs.RedditNewsAggregatorJob>();
 
 var app = builder.Build();
 
