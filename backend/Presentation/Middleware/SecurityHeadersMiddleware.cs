@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace NewsApi.Presentation.Middleware;
 
-public class SecurityHeadersMiddleware
+internal sealed class SecurityHeadersMiddleware
 {
     private readonly RequestDelegate _next;
 

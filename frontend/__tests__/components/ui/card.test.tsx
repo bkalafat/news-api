@@ -1,20 +1,27 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@/__tests__/utils/test-utils';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@/__tests__/utils/test-utils";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 
-describe('Card Component', () => {
-  it('renders card with content', () => {
+describe("Card Component", () => {
+  it("renders card with content", () => {
     render(
       <Card>
         <CardContent>Card content</CardContent>
       </Card>
     );
 
-    const content = screen.getByText('Card content');
+    const content = screen.getByText("Card content");
     expect(content).toBeInTheDocument();
   });
 
-  it('renders card header with title', () => {
+  it("renders card header with title", () => {
     render(
       <Card>
         <CardHeader>
@@ -23,11 +30,11 @@ describe('Card Component', () => {
       </Card>
     );
 
-    const title = screen.getByText('Card Title');
+    const title = screen.getByText("Card Title");
     expect(title).toBeInTheDocument();
   });
 
-  it('renders card header with description', () => {
+  it("renders card header with description", () => {
     render(
       <Card>
         <CardHeader>
@@ -37,11 +44,11 @@ describe('Card Component', () => {
       </Card>
     );
 
-    const description = screen.getByText('This is a description');
+    const description = screen.getByText("This is a description");
     expect(description).toBeInTheDocument();
   });
 
-  it('renders card footer', () => {
+  it("renders card footer", () => {
     render(
       <Card>
         <CardContent>Content</CardContent>
@@ -49,11 +56,11 @@ describe('Card Component', () => {
       </Card>
     );
 
-    const footer = screen.getByText('Footer content');
+    const footer = screen.getByText("Footer content");
     expect(footer).toBeInTheDocument();
   });
 
-  it('renders complete card structure', () => {
+  it("renders complete card structure", () => {
     render(
       <Card>
         <CardHeader>
@@ -65,13 +72,13 @@ describe('Card Component', () => {
       </Card>
     );
 
-    expect(screen.getByText('Complete Card')).toBeInTheDocument();
-    expect(screen.getByText('Card description')).toBeInTheDocument();
-    expect(screen.getByText('Main content')).toBeInTheDocument();
-    expect(screen.getByText('Footer')).toBeInTheDocument();
+    expect(screen.getByText("Complete Card")).toBeInTheDocument();
+    expect(screen.getByText("Card description")).toBeInTheDocument();
+    expect(screen.getByText("Main content")).toBeInTheDocument();
+    expect(screen.getByText("Footer")).toBeInTheDocument();
   });
 
-  it('applies custom className to Card', () => {
+  it("applies custom className to Card", () => {
     const { container } = render(
       <Card className="custom-card">
         <CardContent>Content</CardContent>
@@ -79,10 +86,10 @@ describe('Card Component', () => {
     );
 
     const card = container.firstChild as HTMLElement;
-    expect(card.className).toContain('custom-card');
+    expect(card.className).toContain("custom-card");
   });
 
-  it('applies custom className to CardHeader', () => {
+  it("applies custom className to CardHeader", () => {
     const { container } = render(
       <Card>
         <CardHeader className="custom-header">
@@ -91,33 +98,33 @@ describe('Card Component', () => {
       </Card>
     );
 
-    const header = container.querySelector('.custom-header');
+    const header = container.querySelector(".custom-header");
     expect(header).toBeInTheDocument();
   });
 
-  it('applies custom className to CardContent', () => {
+  it("applies custom className to CardContent", () => {
     const { container } = render(
       <Card>
         <CardContent className="custom-content">Content</CardContent>
       </Card>
     );
 
-    const content = container.querySelector('.custom-content');
+    const content = container.querySelector(".custom-content");
     expect(content).toBeInTheDocument();
   });
 
-  it('applies custom className to CardFooter', () => {
+  it("applies custom className to CardFooter", () => {
     const { container } = render(
       <Card>
         <CardFooter className="custom-footer">Footer</CardFooter>
       </Card>
     );
 
-    const footer = container.querySelector('.custom-footer');
+    const footer = container.querySelector(".custom-footer");
     expect(footer).toBeInTheDocument();
   });
 
-  it('has proper card styling', () => {
+  it("has proper card styling", () => {
     const { container } = render(
       <Card>
         <CardContent>Content</CardContent>
@@ -127,13 +134,13 @@ describe('Card Component', () => {
     const card = container.firstChild as HTMLElement;
     // Card should have border, rounded corners, background
     const hasCardStyling =
-      card.className.includes('border') ||
-      card.className.includes('rounded') ||
-      card.className.includes('bg-');
+      card.className.includes("border") ||
+      card.className.includes("rounded") ||
+      card.className.includes("bg-");
     expect(hasCardStyling).toBe(true);
   });
 
-  it('renders nested cards', () => {
+  it("renders nested cards", () => {
     render(
       <Card>
         <CardContent>
@@ -144,11 +151,11 @@ describe('Card Component', () => {
       </Card>
     );
 
-    const nestedContent = screen.getByText('Nested card');
+    const nestedContent = screen.getByText("Nested card");
     expect(nestedContent).toBeInTheDocument();
   });
 
-  it('renders CardTitle with proper heading level', () => {
+  it("renders CardTitle with proper heading level", () => {
     const { container } = render(
       <Card>
         <CardHeader>
@@ -160,17 +167,17 @@ describe('Card Component', () => {
     // CardTitle may render as div or heading, check that title text exists
     const titleElement = container.querySelector('[data-slot="card-title"]');
     expect(titleElement).toBeInTheDocument();
-    expect(titleElement?.textContent).toBe('Title');
+    expect(titleElement?.textContent).toBe("Title");
   });
 
-  it('passes through additional props', () => {
+  it("passes through additional props", () => {
     render(
       <Card data-testid="test-card">
         <CardContent>Content</CardContent>
       </Card>
     );
 
-    const card = screen.getByTestId('test-card');
+    const card = screen.getByTestId("test-card");
     expect(card).toBeInTheDocument();
   });
 });

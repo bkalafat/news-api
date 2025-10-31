@@ -7,7 +7,7 @@ namespace NewsApi.Domain.Entities;
 /// <summary>
 /// Represents a news article entity with full content and metadata.
 /// </summary>
-public class NewsArticle
+internal sealed class NewsArticle
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

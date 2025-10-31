@@ -21,20 +21,20 @@ export const revalidate = 21600; // 6 hours
 // Generate static params for top 200 news articles at build time (maximize free Azure static hosting)
 export async function generateStaticParams() {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
     const response = await fetch(`${apiUrl}/api/NewsArticle?pageSize=200`, {
-      next: { revalidate: 86400 } // Cache for 24 hours
+      next: { revalidate: 86400 }, // Cache for 24 hours
     });
-    
+
     if (!response.ok) return [];
-    
+
     const news: News[] = await response.json();
     // Generate static pages for all 200 articles at build time
     return news.map((item) => ({
       slug: item.slug,
     }));
   } catch (error) {
-    console.error('Error generating static params:', error);
+    console.error("Error generating static params:", error);
     return [];
   }
 }
@@ -73,10 +73,13 @@ interface News {
 async function getNewsBySlug(slug: string): Promise<News | null> {
   try {
     // Use the by-slug endpoint for better performance
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-    const response = await fetch(`${apiUrl}/api/NewsArticle/by-slug?slug=${encodeURIComponent(slug)}`, {
-      next: { revalidate: 60 },
-    });
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const response = await fetch(
+      `${apiUrl}/api/NewsArticle/by-slug?slug=${encodeURIComponent(slug)}`,
+      {
+        next: { revalidate: 60 },
+      }
+    );
 
     if (!response.ok) {
       console.error(`Failed to fetch news by slug: ${response.status}`);
@@ -137,11 +140,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function NewsDetailPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const news = await getNewsBySlug(slug);
 
@@ -160,47 +159,47 @@ export default async function NewsDetailPage({
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1 bg-background">
+      <main className="bg-background flex-1">
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 py-4">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Ana Sayfa</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`/category/${news.category}`}>
-                {categoryNames[news.category] || news.category}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{news.caption}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-
-      {/* Hero Section */}
-      <NewsDetailHero news={news} />
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Article Content - 2/3 width on large screens */}
-          <div className="lg:col-span-2">
-            <NewsDetailContent news={news} />
-          </div>
-
-          {/* Sidebar - 1/3 width on large screens */}
-          <aside className="lg:col-span-1">
-            <RelatedNews category={news.category} currentNewsId={news.id} />
-          </aside>
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Ana Sayfa</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href={`/category/${news.category}`}>
+                  {categoryNames[news.category] || news.category}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{news.caption}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
         </div>
-      </div>
+
+        {/* Hero Section */}
+        <NewsDetailHero news={news} />
+
+        {/* Main Content */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-3">
+            {/* Article Content - 2/3 width on large screens */}
+            <div className="lg:col-span-2">
+              <NewsDetailContent news={news} />
+            </div>
+
+            {/* Sidebar - 1/3 width on large screens */}
+            <aside className="lg:col-span-1">
+              <RelatedNews category={news.category} currentNewsId={news.id} />
+            </aside>
+          </div>
+        </div>
       </main>
       <Footer />
     </div>

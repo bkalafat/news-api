@@ -1,34 +1,34 @@
 import type { NextConfig } from "next";
-import createNextIntlPlugin from 'next-intl/plugin';
+import createNextIntlPlugin from "next-intl/plugin";
 
-const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
   /* Image optimization for external sources */
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '**',
+        protocol: "https",
+        hostname: "**",
       },
       {
-        protocol: 'http',
-        hostname: '**',
+        protocol: "http",
+        hostname: "**",
       },
     ],
     unoptimized: false,
     dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
+    contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    loader: 'default',
+    loader: "default",
   },
-  
+
   /* Enable React strict mode for better development experience */
   reactStrictMode: true,
 
   /* Optimize production builds */
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: process.env.NODE_ENV === "production",
   },
 
   /* Enable React Compiler for automatic performance optimizations */
@@ -36,7 +36,7 @@ const nextConfig: NextConfig = {
 
   /* Performance optimizations */
   experimental: {
-    optimizePackageImports: ['lucide-react', 'date-fns'],
+    optimizePackageImports: ["lucide-react", "date-fns"],
     // Enable Turbopack filesystem caching for faster dev restarts
     turbopackFileSystemCacheForDev: true,
   },
@@ -45,34 +45,34 @@ const nextConfig: NextConfig = {
   // Cache static pages for 1 week
   // Revalidate every 12 hours to get new content
   staticPageGenerationTimeout: 120,
-  
+
   /* Headers for CDN and browser caching */
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: "/:path*",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600, stale-while-revalidate=86400',
+            key: "Cache-Control",
+            value: "public, max-age=3600, stale-while-revalidate=86400",
           },
         ],
       },
       {
-        source: '/api/:path*',
+        source: "/api/:path*",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=300, stale-while-revalidate=600',
+            key: "Cache-Control",
+            value: "public, max-age=300, stale-while-revalidate=600",
           },
         ],
       },
       {
-        source: '/_next/image',
+        source: "/_next/image",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },

@@ -1,15 +1,13 @@
-using System;
 using NewsApi.Application.DTOs;
 using NewsApi.Common.Mappers;
 using NewsApi.Domain.Entities;
-using Xunit;
 
 namespace NewsApi.Tests.Unit.Common;
 
 /// <summary>
 /// Tests for NewsArticleMapper
 /// </summary>
-public class NewsArticleMapperTests
+internal class NewsArticleMapperTests
 {
     [Fact]
     public void ToEntity_ValidDto_MapsAllProperties()

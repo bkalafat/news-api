@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace NewsApi.Presentation.Middleware;
 
-public class ValidationMiddleware
+internal sealed class ValidationMiddleware
 {
     private readonly RequestDelegate _next;
 
@@ -36,8 +36,8 @@ public class ValidationMiddleware
         response.StatusCode = (int)HttpStatusCode.BadRequest;
 
         var errors = exception
-            .Errors.GroupBy(error => error.PropertyName)
-            .ToDictionary(errorGroup => errorGroup.Key, errorGroup => errorGroup.Select(error => error.ErrorMessage).ToArray());
+            .Errors.GroupBy(error => error.PropertyName, System.StringComparer.Ordinal)
+            .ToDictionary(errorGroup => errorGroup.Key, errorGroup => errorGroup.Select(error => error.ErrorMessage).ToArray(), System.StringComparer.Ordinal);
 
         var validationResponse = new ValidationErrorResponse { Message = "Validation failed", Errors = errors };
 
@@ -46,13 +46,13 @@ public class ValidationMiddleware
             new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
         );
 
-        await response.WriteAsync(jsonResponse).ConfigureAwait(false);
+        await response.WriteAsync(jsonResponse, cancellationToken: context.RequestAborted).ConfigureAwait(false);
     }
 }
 
-public class ValidationErrorResponse
+internal sealed class ValidationErrorResponse
 {
     public string Message { get; set; } = string.Empty;
 
-    public Dictionary<string, string[]> Errors { get; set; } = new();
+    public Dictionary<string, string[]> Errors { get; set; } = new(System.StringComparer.Ordinal);
 }

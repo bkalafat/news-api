@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace NewsApi.Infrastructure.Caching;
 
-public interface ICacheService
+internal interface ICacheService
 {
     T? Get<T>(string key);
 
@@ -14,7 +14,7 @@ public interface ICacheService
     bool TryGetValue<T>(string key, out T? value);
 }
 
-public class CacheService : ICacheService
+internal sealed class CacheService : ICacheService
 {
     private readonly IMemoryCache _memoryCache;
 

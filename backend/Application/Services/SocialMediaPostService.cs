@@ -13,7 +13,7 @@ namespace NewsApi.Application.Services;
 /// <summary>
 /// Service for managing social media posts with caching support
 /// </summary>
-public sealed class SocialMediaPostService : ISocialMediaPostService
+internal sealed class SocialMediaPostService : ISocialMediaPostService
 {
     private readonly ISocialMediaPostRepository _repository;
     private readonly IMemoryCache _cache;
@@ -141,7 +141,7 @@ public sealed class SocialMediaPostService : ISocialMediaPostService
             FetchedAt = DateTime.UtcNow,
             IsActive = true,
             Priority = dto.Priority,
-            Language = dto.Language
+            Language = dto.Language,
         };
 
         var created = await _repository.CreateAsync(post).ConfigureAwait(false);
@@ -159,17 +159,60 @@ public sealed class SocialMediaPostService : ISocialMediaPostService
         }
 
         // Update only provided fields
-        if (dto.Title is not null) existing.Title = dto.Title;
-        if (dto.Content is not null) existing.Content = dto.Content;
-        if (dto.ImageUrls is not null) existing.ImageUrls = dto.ImageUrls;
-        if (dto.VideoUrl is not null) existing.VideoUrl = dto.VideoUrl;
-        if (dto.Upvotes.HasValue) existing.Upvotes = dto.Upvotes.Value;
-        if (dto.Downvotes.HasValue) existing.Downvotes = dto.Downvotes.Value;
-        if (dto.CommentCount.HasValue) existing.CommentCount = dto.CommentCount.Value;
-        if (dto.ShareCount.HasValue) existing.ShareCount = dto.ShareCount.Value;
-        if (dto.Tags is not null) existing.Tags = dto.Tags;
-        if (dto.Priority.HasValue) existing.Priority = dto.Priority.Value;
-        if (dto.IsActive.HasValue) existing.IsActive = dto.IsActive.Value;
+        if (dto.Title is not null)
+        {
+            existing.Title = dto.Title;
+        }
+
+        if (dto.Content is not null)
+        {
+            existing.Content = dto.Content;
+        }
+
+        if (dto.ImageUrls is not null)
+        {
+            existing.ImageUrls = dto.ImageUrls;
+        }
+
+        if (dto.VideoUrl is not null)
+        {
+            existing.VideoUrl = dto.VideoUrl;
+        }
+
+        if (dto.Upvotes.HasValue)
+        {
+            existing.Upvotes = dto.Upvotes.Value;
+        }
+
+        if (dto.Downvotes.HasValue)
+        {
+            existing.Downvotes = dto.Downvotes.Value;
+        }
+
+        if (dto.CommentCount.HasValue)
+        {
+            existing.CommentCount = dto.CommentCount.Value;
+        }
+
+        if (dto.ShareCount.HasValue)
+        {
+            existing.ShareCount = dto.ShareCount.Value;
+        }
+
+        if (dto.Tags is not null)
+        {
+            existing.Tags = dto.Tags;
+        }
+
+        if (dto.Priority.HasValue)
+        {
+            existing.Priority = dto.Priority.Value;
+        }
+
+        if (dto.IsActive.HasValue)
+        {
+            existing.IsActive = dto.IsActive.Value;
+        }
 
         existing.LastUpdated = DateTime.UtcNow;
 
@@ -222,6 +265,6 @@ public sealed class SocialMediaPostService : ISocialMediaPostService
         LastUpdated = post.LastUpdated,
         IsActive = post.IsActive,
         Priority = post.Priority,
-        Language = post.Language
+        Language = post.Language,
     };
 }

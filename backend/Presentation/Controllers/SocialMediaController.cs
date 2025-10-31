@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +17,7 @@ namespace NewsApi.Presentation.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
-public class SocialMediaController : ControllerBase
+internal sealed class SocialMediaController : ControllerBase
 {
     private readonly ISocialMediaPostService _service;
     private readonly ILogger<SocialMediaController> _logger;
@@ -26,6 +25,7 @@ public class SocialMediaController : ControllerBase
     private readonly RedditService _redditService;
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="SocialMediaController"/> class.
     /// Initializes a new instance of SocialMediaController
     /// </summary>
     public SocialMediaController(
@@ -269,7 +269,8 @@ public class SocialMediaController : ControllerBase
         [FromQuery] string timeframe = "month",
         [FromQuery] int limit = 25)
     {
-        _logger.LogInformation("Importing GitHub Copilot posts from Reddit, timeframe: {Timeframe}, limit: {Limit}",
+        _logger.LogInformation(
+            "Importing GitHub Copilot posts from Reddit, timeframe: {Timeframe}, limit: {Limit}",
             timeframe, limit);
 
         try
@@ -311,10 +312,11 @@ public class SocialMediaController : ControllerBase
                 TotalFetched = redditPosts.Count,
                 Imported = imported,
                 Skipped = skipped,
-                Errors = errors.ToArray()
+                Errors = errors.ToArray(),
             };
 
-            _logger.LogInformation("Import completed: {Imported} imported, {Skipped} skipped, {Errors} errors",
+            _logger.LogInformation(
+                "Import completed: {Imported} imported, {Skipped} skipped, {Errors} errors",
                 imported, skipped, errors.Count);
 
             return Ok(result);
@@ -330,10 +332,13 @@ public class SocialMediaController : ControllerBase
 /// <summary>
 /// Result of a social media import operation
 /// </summary>
-public record ImportResultDto
+internal record ImportResultDto
 {
     public int TotalFetched { get; init; }
+
     public int Imported { get; init; }
+
     public int Skipped { get; init; }
+
     public string[] Errors { get; init; } = [];
 }

@@ -1,0 +1,55 @@
+<Project>
+  <!-- This file is imported by all projects in the solution -->
+  
+  <PropertyGroup>
+    <!-- Build Configuration -->
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>5</WarningLevel>
+    <NoWarn>$(NoWarn);1591</NoWarn> <!-- Disable XML documentation warnings -->
+    
+    <!-- Code Analysis -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest-all</AnalysisLevel>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+    
+    <!-- Generate XML documentation for all projects -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    
+    <!-- Deterministic build -->
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Global Analyzer Packages -->
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.4.0.108396">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Include .editorconfig for all projects -->
+    <EditorConfigFiles Include="$(MSBuildThisFileDirectory).editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)\stylecop.json')">
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\stylecop.json" />
+  </ItemGroup>
+
+  <!-- Enforce code cleanup on build (optional, can be disabled if too slow) -->
+  <Target Name="FormatCode" BeforeTargets="CoreCompile" Condition="'$(Configuration)' == 'Debug'">
+    <Message Text="Running code analysis..." Importance="High" />
+  </Target>
+
+</Project>

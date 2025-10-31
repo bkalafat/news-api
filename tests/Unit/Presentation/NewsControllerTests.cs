@@ -9,7 +9,7 @@ using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Unit.Presentation;
 
-public class NewsArticleControllerTests
+internal class NewsArticleControllerTests
 {
     private readonly Mock<INewsArticleService> _mockNewsArticleService;
     private readonly Mock<IImageStorageService> _mockImageStorageService;

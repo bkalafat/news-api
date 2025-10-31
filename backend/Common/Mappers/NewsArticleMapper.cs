@@ -6,7 +6,7 @@ namespace NewsApi.Common.Mappers;
 /// <summary>
 /// Mapper for converting between NewsArticle entities and DTOs.
 /// </summary>
-public static class NewsArticleMapper
+internal static class NewsArticleMapper
 {
     /// <summary>
     /// Maps a CreateNewsArticleDto to a NewsArticle entity.
@@ -46,10 +46,14 @@ public static class NewsArticleMapper
     public static void UpdateFromDto(NewsArticle entity, UpdateNewsArticleDto dto)
     {
         if (dto.Category != null)
+        {
             entity.Category = dto.Category;
+        }
 
         if (dto.Type != null)
+        {
             entity.Type = dto.Type;
+        }
 
         if (dto.Caption != null)
         {
@@ -58,45 +62,73 @@ public static class NewsArticleMapper
         }
 
         if (dto.Keywords != null)
+        {
             entity.Keywords = dto.Keywords;
+        }
 
         if (dto.SocialTags != null)
+        {
             entity.SocialTags = dto.SocialTags;
+        }
 
         if (dto.Summary != null)
+        {
             entity.Summary = dto.Summary;
+        }
 
         if (dto.ImgPath != null)
+        {
             entity.ImgPath = dto.ImgPath;
+        }
 
         if (dto.ImgAlt != null)
+        {
             entity.ImgAlt = dto.ImgAlt;
+        }
 
         if (dto.Content != null)
+        {
             entity.Content = dto.Content;
+        }
 
         if (dto.Subjects != null)
+        {
             entity.Subjects = dto.Subjects;
+        }
 
         if (dto.Authors != null)
+        {
             entity.Authors = dto.Authors;
+        }
 
         if (dto.ExpressDate.HasValue)
+        {
             entity.ExpressDate = dto.ExpressDate.Value;
+        }
 
         if (dto.Priority.HasValue)
+        {
             entity.Priority = dto.Priority.Value;
+        }
 
         if (dto.IsActive.HasValue)
+        {
             entity.IsActive = dto.IsActive.Value;
+        }
 
         if (dto.IsSecondPageNews.HasValue)
+        {
             entity.IsSecondPageNews = dto.IsSecondPageNews.Value;
+        }
 
         if (dto.ImageUrl != null)
+        {
             entity.ImageUrl = dto.ImageUrl;
+        }
 
         if (dto.ThumbnailUrl != null)
+        {
             entity.ThumbnailUrl = dto.ThumbnailUrl;
+        }
     }
 }

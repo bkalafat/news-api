@@ -32,7 +32,7 @@ export interface News {
   url: string;
   viewCount: number;
   isSecondPageNews: boolean;
-  
+
   // Legacy compatibility
   title?: string;
   description?: string;
@@ -80,15 +80,15 @@ export interface ApiError {
 }
 
 export enum NewsCategory {
-  Reddit = 'reddit',
-  GitHub = 'github',
-  Twitter = 'twitter',
-  LinkedIn = 'linkedin',
-  Facebook = 'facebook',
-  Instagram = 'instagram',
-  TikTok = 'tiktok',
-  YouTube = 'youtube',
-  Technology = 'technology',
+  Reddit = "reddit",
+  GitHub = "github",
+  Twitter = "twitter",
+  LinkedIn = "linkedin",
+  Facebook = "facebook",
+  Instagram = "instagram",
+  TikTok = "tiktok",
+  YouTube = "youtube",
+  Technology = "technology",
 }
 
 export interface NewsFilters {

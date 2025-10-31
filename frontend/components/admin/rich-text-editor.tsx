@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
-import TextAlign from '@tiptap/extension-text-align';
-import TextStyle from '@tiptap/extension-text-style';
-import Color from '@tiptap/extension-color';
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
 import {
   Bold,
   Italic,
@@ -21,7 +21,7 @@ import {
   AlignCenter,
   AlignRight,
   AlignJustify,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface RichTextEditorProps {
   value: string;
@@ -29,7 +29,11 @@ interface RichTextEditorProps {
   placeholder?: string;
 }
 
-export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+export function RichTextEditor({
+  value,
+  onChange,
+  placeholder: _placeholder,
+}: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -37,7 +41,7 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
         openOnClick: false,
       }),
       TextAlign.configure({
-        types: ['heading', 'paragraph'],
+        types: ["heading", "paragraph"],
       }),
       TextStyle,
       Color,
@@ -48,7 +52,8 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[400px] p-4',
+        class:
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[400px] p-4",
       },
     },
   });
@@ -71,8 +76,8 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     <button
       type="button"
       onClick={onClick}
-      className={`p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 ${
-        active ? 'bg-slate-200 dark:bg-slate-700' : ''
+      className={`rounded p-2 hover:bg-slate-100 dark:hover:bg-slate-800 ${
+        active ? "bg-slate-200 dark:bg-slate-700" : ""
       }`}
       title={title}
     >
@@ -81,112 +86,112 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
   );
 
   return (
-    <div className="rich-text-editor border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden">
-      <div className="toolbar flex flex-wrap gap-1 p-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
+    <div className="rich-text-editor overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800">
+      <div className="toolbar flex flex-wrap gap-1 border-b border-slate-200 bg-slate-50 p-2 dark:border-slate-800 dark:bg-slate-900">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          active={editor.isActive('heading', { level: 1 })}
+          active={editor.isActive("heading", { level: 1 })}
           title="Heading 1"
         >
           <Heading1 size={18} />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          active={editor.isActive('heading', { level: 2 })}
+          active={editor.isActive("heading", { level: 2 })}
           title="Heading 2"
         >
           <Heading2 size={18} />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          active={editor.isActive('heading', { level: 3 })}
+          active={editor.isActive("heading", { level: 3 })}
           title="Heading 3"
         >
           <Heading3 size={18} />
         </ToolbarButton>
-        <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1" />
+        <div className="mx-1 h-6 w-px bg-slate-200 dark:bg-slate-700" />
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
-          active={editor.isActive('bold')}
+          active={editor.isActive("bold")}
           title="Bold"
         >
           <Bold size={18} />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          active={editor.isActive('italic')}
+          active={editor.isActive("italic")}
           title="Italic"
         >
           <Italic size={18} />
         </ToolbarButton>
-        <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1" />
+        <div className="mx-1 h-6 w-px bg-slate-200 dark:bg-slate-700" />
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          active={editor.isActive('bulletList')}
+          active={editor.isActive("bulletList")}
           title="Bullet List"
         >
           <List size={18} />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          active={editor.isActive('orderedList')}
+          active={editor.isActive("orderedList")}
           title="Ordered List"
         >
           <ListOrdered size={18} />
         </ToolbarButton>
-        <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1" />
+        <div className="mx-1 h-6 w-px bg-slate-200 dark:bg-slate-700" />
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          active={editor.isActive('blockquote')}
+          active={editor.isActive("blockquote")}
           title="Blockquote"
         >
           <Quote size={18} />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          active={editor.isActive('codeBlock')}
+          active={editor.isActive("codeBlock")}
           title="Code Block"
         >
           <Code size={18} />
         </ToolbarButton>
-        <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1" />
+        <div className="mx-1 h-6 w-px bg-slate-200 dark:bg-slate-700" />
         <ToolbarButton
           onClick={() => {
-            const url = window.prompt('Enter URL');
+            const url = window.prompt("Enter URL");
             if (url) {
               editor.chain().focus().setLink({ href: url }).run();
             }
           }}
-          active={editor.isActive('link')}
+          active={editor.isActive("link")}
           title="Add Link"
         >
           <LinkIcon size={18} />
         </ToolbarButton>
-        <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1" />
+        <div className="mx-1 h-6 w-px bg-slate-200 dark:bg-slate-700" />
         <ToolbarButton
-          onClick={() => editor.chain().focus().setTextAlign('left').run()}
-          active={editor.isActive({ textAlign: 'left' })}
+          onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          active={editor.isActive({ textAlign: "left" })}
           title="Align Left"
         >
           <AlignLeft size={18} />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          active={editor.isActive({ textAlign: 'center' })}
+          onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          active={editor.isActive({ textAlign: "center" })}
           title="Align Center"
         >
           <AlignCenter size={18} />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().setTextAlign('right').run()}
-          active={editor.isActive({ textAlign: 'right' })}
+          onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          active={editor.isActive({ textAlign: "right" })}
           title="Align Right"
         >
           <AlignRight size={18} />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-          active={editor.isActive({ textAlign: 'justify' })}
+          onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+          active={editor.isActive({ textAlign: "justify" })}
           title="Justify"
         >
           <AlignJustify size={18} />

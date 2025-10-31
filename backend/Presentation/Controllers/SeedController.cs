@@ -12,18 +12,18 @@ namespace NewsApi.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SeedController : ControllerBase
+internal sealed class SeedController : ControllerBase
 {
     private readonly MongoDbContext _context;
     private readonly ILogger<SeedController> _logger;
     private readonly INewsDataFetcherService _newsDataFetcher;
-    private readonly INewsService _newsService;
+    private readonly INewsArticleService _newsService;
 
     public SeedController(
         MongoDbContext context,
         ILogger<SeedController> logger,
         INewsDataFetcherService newsDataFetcher,
-        INewsService newsService)
+        INewsArticleService newsService)
     {
         _context = context;
         _logger = logger;
@@ -114,7 +114,7 @@ public class SeedController : ControllerBase
                     fetched = 0,
                     created = 0,
                     skipped = 0,
-                    errors = 0
+                    errors = 0,
                 });
             }
 
@@ -142,7 +142,8 @@ public class SeedController : ControllerBase
                     await _newsService.CreateNewsAsync(article);
                     totalCreated++;
 
-                    _logger.LogDebug("Created article: {Caption} in {Category}",
+                    _logger.LogDebug(
+                        "Created article: {Caption} in {Category}",
                         article.Caption, article.Category);
                 }
                 catch (Exception ex)
@@ -166,7 +167,7 @@ public class SeedController : ControllerBase
                 fetched = totalFetched,
                 created = totalCreated,
                 skipped = totalSkipped,
-                errors = totalErrors
+                errors = totalErrors,
             });
         }
         catch (Exception ex)

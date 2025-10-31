@@ -11,7 +11,7 @@ namespace NewsApi.Presentation.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+internal sealed class AuthController : ControllerBase
 {
     private readonly JwtTokenService _jwtTokenService;
     private readonly ILogger<AuthController> _logger;
@@ -36,7 +36,7 @@ public class AuthController : ControllerBase
         {
             // Simple authentication - replace with real user validation
             // For demo purposes, hardcoded admin credentials
-            if (request.Username == "admin" && request.Password == "admin123")
+            if (string.Equals(request.Username, "admin", StringComparison.Ordinal) && string.Equals(request.Password, "admin123", StringComparison.Ordinal))
             {
                 var token = _jwtTokenService.GenerateToken(
                     userId: "1",
@@ -78,7 +78,7 @@ public class AuthController : ControllerBase
         try
         {
             var authHeader = Request.Headers["Authorization"].ToString();
-            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ", StringComparison.Ordinal))
             {
                 return Unauthorized(new { message = "Token bulunamadı" });
             }
@@ -114,15 +114,15 @@ public class AuthController : ControllerBase
 /// <summary>
 /// Login request model
 /// </summary>
-public class LoginRequest
+internal sealed class LoginRequest
 {
     /// <summary>
-    /// Username
+    /// Gets or sets username
     /// </summary>
     public required string Username { get; set; }
 
     /// <summary>
-    /// Password
+    /// Gets or sets password
     /// </summary>
     public required string Password { get; set; }
 }
@@ -130,25 +130,25 @@ public class LoginRequest
 /// <summary>
 /// Login response model
 /// </summary>
-public class LoginResponse
+internal sealed class LoginResponse
 {
     /// <summary>
-    /// JWT token
+    /// Gets or sets jWT token
     /// </summary>
     public required string Token { get; set; }
 
     /// <summary>
-    /// User ID
+    /// Gets or sets user ID
     /// </summary>
     public required string UserId { get; set; }
 
     /// <summary>
-    /// Username
+    /// Gets or sets username
     /// </summary>
     public required string Username { get; set; }
 
     /// <summary>
-    /// Token expiration time in seconds
+    /// Gets or sets token expiration time in seconds
     /// </summary>
     public int ExpiresIn { get; set; }
 }
@@ -156,20 +156,20 @@ public class LoginResponse
 /// <summary>
 /// Token validation response model
 /// </summary>
-public class ValidateResponse
+internal sealed class ValidateResponse
 {
     /// <summary>
-    /// User ID
+    /// Gets or sets user ID
     /// </summary>
     public required string UserId { get; set; }
 
     /// <summary>
-    /// Username
+    /// Gets or sets username
     /// </summary>
     public required string Username { get; set; }
 
     /// <summary>
-    /// Whether token is valid
+    /// Gets or sets a value indicating whether whether token is valid
     /// </summary>
     public bool IsValid { get; set; }
 }

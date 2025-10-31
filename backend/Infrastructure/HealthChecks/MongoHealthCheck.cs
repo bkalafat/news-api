@@ -6,7 +6,7 @@ using NewsApi.Infrastructure.Data;
 
 namespace NewsApi.Infrastructure.HealthChecks;
 
-public class MongoHealthCheck : IHealthCheck
+internal sealed class MongoHealthCheck : IHealthCheck
 {
     private readonly MongoDbContext _context;
 

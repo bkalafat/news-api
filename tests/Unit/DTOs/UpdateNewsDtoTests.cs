@@ -3,7 +3,7 @@ using NewsApi.Application.DTOs;
 
 namespace NewsApi.Tests.Unit.DTOs;
 
-public class UpdateNewsArticleDtoTests
+internal class UpdateNewsArticleDtoTests
 {
     [Fact]
     public void UpdateNewsArticleDto_WithAllProperties_ShouldAllowPartialUpdates()

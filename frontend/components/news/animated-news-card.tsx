@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { News } from "@/lib/api/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,7 +19,7 @@ interface AnimatedNewsCardProps {
 export function AnimatedNewsCard({ news, index = 0 }: AnimatedNewsCardProps) {
   const imageUrl = news.imageUrl || news.thumbnailUrl || news.imgPath || "/placeholder-news.jpg";
   const newsUrl = `/news/${news.slug || news.id}`;
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -27,19 +27,19 @@ export function AnimatedNewsCard({ news, index = 0 }: AnimatedNewsCardProps) {
       transition={{
         duration: 0.4,
         delay: index * 0.1,
-        ease: "easeOut"
+        ease: "easeOut",
       }}
       whileHover={{ y: -4 }}
     >
-      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group h-full">
+      <Card className="group h-full overflow-hidden transition-shadow duration-300 hover:shadow-lg">
         {/* Image */}
         {imageUrl && (
-          <div className="relative h-48 w-full overflow-hidden bg-muted">
+          <div className="bg-muted relative h-48 w-full overflow-hidden">
             <Image
               src={imageUrl}
               alt={news.imgAlt || news.caption}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
@@ -47,7 +47,7 @@ export function AnimatedNewsCard({ news, index = 0 }: AnimatedNewsCardProps) {
 
         <CardHeader className="space-y-2">
           {/* Category Badge & Share Button */}
-          <motion.div 
+          <motion.div
             className="flex items-center justify-between"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -58,35 +58,31 @@ export function AnimatedNewsCard({ news, index = 0 }: AnimatedNewsCardProps) {
                 {news.category}
               </Badge>
             )}
-            <ShareButtons 
-              title={news.caption || news.title || 'Haber'} 
-              url={newsUrl}
-            />
+            <ShareButtons title={news.caption || news.title || "Haber"} url={newsUrl} />
           </motion.div>
 
           {/* Title */}
           <CardTitle className="line-clamp-2 leading-tight">
-            <Link
-              href={newsUrl}
-              className="hover:text-primary transition-colors"
-            >
+            <Link href={newsUrl} className="hover:text-primary transition-colors">
               {news.caption || news.title}
             </Link>
           </CardTitle>
 
           {/* Date & Source */}
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-4 text-xs">
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
               {(news.expressDate || news.publishedAt) && (
                 <time dateTime={news.expressDate || news.publishedAt?.toISOString()}>
-                  {news.expressDate ? format(new Date(news.expressDate), 'dd MMMM yyyy', { locale: tr }) : 
-                   news.publishedAt ? format(news.publishedAt, 'dd MMMM yyyy', { locale: tr }) : 
-                   'Tarih belirtilmemiş'}
+                  {news.expressDate
+                    ? format(new Date(news.expressDate), "dd MMMM yyyy", { locale: tr })
+                    : news.publishedAt
+                      ? format(news.publishedAt, "dd MMMM yyyy", { locale: tr })
+                      : "Tarih belirtilmemiş"}
                 </time>
               )}
             </div>
-            {(news.authors && news.authors.length > 0) && (
+            {news.authors && news.authors.length > 0 && (
               <Badge variant="outline" className="text-xs">
                 {news.authors[0]}
               </Badge>
@@ -103,10 +99,10 @@ export function AnimatedNewsCard({ news, index = 0 }: AnimatedNewsCardProps) {
           {/* Read More Link */}
           <Link
             href={newsUrl}
-            className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-primary hover:underline group/link"
+            className="text-primary group/link mt-4 inline-flex items-center gap-1 text-sm font-medium hover:underline"
           >
             Haberi Oku
-            <ExternalLink className="h-3 w-3 group-hover/link:translate-x-0.5 transition-transform" />
+            <ExternalLink className="h-3 w-3 transition-transform group-hover/link:translate-x-0.5" />
           </Link>
         </CardContent>
       </Card>

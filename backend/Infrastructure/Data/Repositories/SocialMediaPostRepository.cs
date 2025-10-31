@@ -11,7 +11,7 @@ namespace NewsApi.Infrastructure.Data.Repositories;
 /// <summary>
 /// MongoDB repository for social media posts
 /// </summary>
-public sealed class SocialMediaPostRepository : ISocialMediaPostRepository
+internal sealed class SocialMediaPostRepository : ISocialMediaPostRepository
 {
     private readonly IMongoCollection<SocialMediaPost> _collection;
 
@@ -20,28 +20,25 @@ public sealed class SocialMediaPostRepository : ISocialMediaPostRepository
         _collection = context.SocialMediaPosts;
     }
 
-    public async Task<List<SocialMediaPost>> GetAllAsync() =>
-        await _collection
+    public Task<List<SocialMediaPost>> GetAllAsync() =>
+        _collection
             .Find(post => post.IsActive)
             .SortByDescending(post => post.PostedAt)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
 
-    public async Task<List<SocialMediaPost>> GetByPlatformAsync(string platform) =>
-        await _collection
+    public Task<List<SocialMediaPost>> GetByPlatformAsync(string platform) =>
+        _collection
             .Find(post => post.Platform == platform && post.IsActive)
             .SortByDescending(post => post.PostedAt)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
 
-    public async Task<List<SocialMediaPost>> GetByCategoryAsync(string category) =>
-        await _collection
+    public Task<List<SocialMediaPost>> GetByCategoryAsync(string category) =>
+        _collection
             .Find(post => post.Category == category && post.IsActive)
             .SortByDescending(post => post.PostedAt)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
 
-    public async Task<List<SocialMediaPost>> GetTopPostsAsync(int limit, string? platform = null)
+    public Task<List<SocialMediaPost>> GetTopPostsAsync(int limit, string? platform = null)
     {
         var filter = platform == null
             ? Builders<SocialMediaPost>.Filter.Eq(post => post.IsActive, true)
@@ -50,12 +47,11 @@ public sealed class SocialMediaPostRepository : ISocialMediaPostRepository
                 Builders<SocialMediaPost>.Filter.Eq(post => post.Platform, platform)
             );
 
-        return await _collection
+        return _collection
             .Find(filter)
             .SortByDescending(post => post.Upvotes)
             .Limit(limit)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
     }
 
     public async Task<SocialMediaPost?> GetByIdAsync(string id)
@@ -79,11 +75,10 @@ public sealed class SocialMediaPostRepository : ISocialMediaPostRepository
         }
     }
 
-    public async Task<SocialMediaPost?> GetByExternalIdAsync(string externalId, string platform) =>
-        await _collection
+    public Task<SocialMediaPost?> GetByExternalIdAsync(string externalId, string platform) =>
+        _collection
             .Find(post => post.ExternalId == externalId && post.Platform == platform)
-            .FirstOrDefaultAsync()
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync();
 
     public async Task<SocialMediaPost> CreateAsync(SocialMediaPost post)
     {

@@ -5,7 +5,7 @@ using NewsApi.Application.DTOs;
 
 namespace NewsApi.Application.Validators;
 
-public class CreateNewsArticleDtoValidator : AbstractValidator<CreateNewsArticleDto>
+internal sealed class CreateNewsArticleDtoValidator : AbstractValidator<CreateNewsArticleDto>
 {
     public CreateNewsArticleDtoValidator()
     {
@@ -16,7 +16,7 @@ public class CreateNewsArticleDtoValidator : AbstractValidator<CreateNewsArticle
             .WithMessage("Category is required")
             .MaximumLength(100)
             .WithMessage("Category must not exceed 100 characters")
-            .Must(c => !string.IsNullOrEmpty(c) && allowedCategories.Contains(c.ToLower()))
+            .Must(c => !string.IsNullOrEmpty(c) && allowedCategories.Contains(c.ToLower(), StringComparer.Ordinal))
             .WithMessage($"Category must be one of: {string.Join(", ", allowedCategories)}");
 
         RuleFor(dto => dto.Type)
@@ -57,7 +57,7 @@ public class CreateNewsArticleDtoValidator : AbstractValidator<CreateNewsArticle
     }
 }
 
-public class UpdateNewsArticleDtoValidator : AbstractValidator<UpdateNewsArticleDto>
+internal sealed class UpdateNewsArticleDtoValidator : AbstractValidator<UpdateNewsArticleDto>
 {
     public UpdateNewsArticleDtoValidator()
     {
@@ -66,7 +66,7 @@ public class UpdateNewsArticleDtoValidator : AbstractValidator<UpdateNewsArticle
         RuleFor(dto => dto.Category)
             .MaximumLength(100)
             .WithMessage("Category must not exceed 100 characters")
-            .Must(c => !string.IsNullOrEmpty(c) && allowedCategories.Contains(c.ToLower()))
+            .Must(c => !string.IsNullOrEmpty(c) && allowedCategories.Contains(c.ToLower(), StringComparer.Ordinal))
             .WithMessage($"Category must be one of: {string.Join(", ", allowedCategories)}")
             .When(dto => !string.IsNullOrEmpty(dto.Category));
 

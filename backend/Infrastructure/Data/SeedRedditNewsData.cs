@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using NewsApi.Common;
 using NewsApi.Domain.Entities;
-using NewsApi.Infrastructure.Data;
 
 namespace NewsApi.Infrastructure.Data;
 
@@ -12,7 +11,7 @@ namespace NewsApi.Infrastructure.Data;
 /// Seeds news database with Reddit posts converted to Turkish news articles
 /// Follows Reddit API best practices: top posts from last month, proper filtering
 /// </summary>
-public static class SeedRedditNewsData
+internal static class SeedRedditNewsData
 {
     public static async Task SeedAsync(MongoDbContext context)
     {

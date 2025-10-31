@@ -13,7 +13,7 @@ namespace NewsApi.Infrastructure.BackgroundJobs;
 /// <summary>
 /// Background service that automatically fetches and seeds news articles daily at 5:00 AM
 /// </summary>
-public class DailyNewsSeedService : BackgroundService
+internal sealed class DailyNewsSeedService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<DailyNewsSeedService> _logger;
@@ -48,7 +48,9 @@ public class DailyNewsSeedService : BackgroundService
                 await Task.Delay(delay, stoppingToken);
 
                 if (stoppingToken.IsCancellationRequested)
+                {
                     break;
+                }
 
                 // Execute the news seeding
                 await FetchAndSeedNewsAsync(stoppingToken);
@@ -92,7 +94,7 @@ public class DailyNewsSeedService : BackgroundService
         using var scope = _serviceProvider.CreateScope();
 
         var newsDataFetcher = scope.ServiceProvider.GetRequiredService<INewsDataFetcherService>();
-        var newsService = scope.ServiceProvider.GetRequiredService<INewsService>();
+        var newsService = scope.ServiceProvider.GetRequiredService<INewsArticleService>();
 
         int totalFetched = 0;
         int totalCreated = 0;
@@ -118,7 +120,9 @@ public class DailyNewsSeedService : BackgroundService
             foreach (var article in newsArticles)
             {
                 if (cancellationToken.IsCancellationRequested)
+                {
                     break;
+                }
 
                 try
                 {
@@ -142,7 +146,8 @@ public class DailyNewsSeedService : BackgroundService
                     await newsService.CreateNewsAsync(article);
                     totalCreated++;
 
-                    _logger.LogDebug("Created article: {Caption} in {Category}",
+                    _logger.LogDebug(
+                        "Created article: {Caption} in {Category}",
                         article.Caption, article.Category);
                 }
                 catch (Exception ex)
@@ -174,7 +179,7 @@ public class DailyNewsSeedService : BackgroundService
         }
     }
 
-    private bool IsSimilarCaption(string caption1, string caption2)
+    private static bool IsSimilarCaption(string caption1, string caption2)
     {
         // Simple similarity check: compare first 50 characters
         var sample1 = caption1.Length > 50 ? caption1.Substring(0, 50) : caption1;

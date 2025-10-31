@@ -7,7 +7,7 @@ namespace NewsApi.Tests.Helpers;
 /// A no-op implementation of IMemoryCache that doesn't actually cache anything.
 /// Used for integration tests to prevent cross-test data contamination.
 /// </summary>
-public class NullMemoryCache : IMemoryCache
+internal class NullMemoryCache : IMemoryCache
 {
     public ICacheEntry CreateEntry(object key)
     {

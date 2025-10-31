@@ -9,7 +9,7 @@ using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Unit.Performance;
 
-public class NewsArticleServicePerformanceTests
+internal class NewsArticleServicePerformanceTests
 {
     private readonly Mock<INewsArticleRepository> _mockRepository;
     private readonly TestMemoryCache _cache;

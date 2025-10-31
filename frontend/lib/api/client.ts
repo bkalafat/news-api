@@ -1,5 +1,5 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
-import { News, CreateNewsDto, UpdateNewsDto, ApiError } from './types';
+import axios, { AxiosInstance, AxiosError } from "axios";
+import { News, CreateNewsDto, UpdateNewsDto, ApiError } from "./types";
 
 /**
  * News API Client
@@ -9,14 +9,14 @@ class NewsApiClient {
   private client: AxiosInstance;
 
   constructor() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-    const basePath = process.env.NEXT_PUBLIC_API_BASE_PATH || '/api/NewsArticle';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    const basePath = process.env.NEXT_PUBLIC_API_BASE_PATH || "/api/NewsArticle";
     const baseURL = `${apiUrl}${basePath}`;
-    
+
     this.client = axios.create({
       baseURL,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       timeout: 10000, // 10 seconds
     });
@@ -26,7 +26,7 @@ class NewsApiClient {
       (response) => response,
       (error: AxiosError<ApiError>) => {
         const apiError: ApiError = {
-          message: error.response?.data?.message || error.message || 'An error occurred',
+          message: error.response?.data?.message || error.message || "An error occurred",
           statusCode: error.response?.status || 500,
           errors: error.response?.data?.errors,
         };
@@ -39,7 +39,7 @@ class NewsApiClient {
    * Get all news articles
    */
   async getAllNews(): Promise<News[]> {
-    const response = await this.client.get<News[]>('/');
+    const response = await this.client.get<News[]>("/");
     // Backend returns array directly
     const data = Array.isArray(response.data) ? response.data : [];
     return data.map(this.parseNewsDate);
@@ -58,7 +58,7 @@ class NewsApiClient {
    * Note: This might require authentication in the backend
    */
   async createNews(data: CreateNewsDto): Promise<News> {
-    const response = await this.client.post<News>('/', data);
+    const response = await this.client.post<News>("/", data);
     return this.parseNewsDate(response.data);
   }
 
@@ -95,7 +95,7 @@ class NewsApiClient {
    */
   private parseNewsDate(news: News): News {
     let publishedAt: Date;
-    
+
     try {
       // Backend returns expressDate, fallback to publishedAt for backward compatibility
       const dateValue = news.expressDate || news.publishedAt;

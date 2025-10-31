@@ -4,7 +4,7 @@ using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Unit.Domain;
 
-public class NewsEntityAdvancedTests
+internal class NewsEntityAdvancedTests
 {
     [Fact]
     public void News_WithLongContent_ShouldAcceptLargeContent()

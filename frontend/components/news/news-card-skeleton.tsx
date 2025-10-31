@@ -24,12 +24,12 @@ export function NewsCardSkeleton() {
 
       <CardContent>
         {/* Description Skeleton */}
-        <Skeleton className="h-4 w-full mb-2" />
-        <Skeleton className="h-4 w-full mb-2" />
+        <Skeleton className="mb-2 h-4 w-full" />
+        <Skeleton className="mb-2 h-4 w-full" />
         <Skeleton className="h-4 w-3/4" />
 
         {/* Link Skeleton */}
-        <Skeleton className="h-4 w-24 mt-4" />
+        <Skeleton className="mt-4 h-4 w-24" />
       </CardContent>
     </Card>
   );

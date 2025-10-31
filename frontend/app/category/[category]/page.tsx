@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { use, useState, useMemo } from 'react';
+import { use, useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { useNewsByCategory } from "@/lib/api/hooks";
 import { Header } from "@/components/layout/header";
@@ -70,14 +70,14 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
         <div className="container mx-auto px-4 py-12">
           <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex items-center justify-between">
               <div>
-                <h1 className="text-4xl font-bold mb-2">{categoryName}</h1>
+                <h1 className="mb-2 text-4xl font-bold">{categoryName}</h1>
                 <p className="text-muted-foreground">
                   {categoryName} kategorisindeki son haberler
                   {filteredNews.length > 0 && ` (${filteredNews.length} haber)`}
@@ -88,7 +88,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           </div>
 
           {isLoading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, i) => (
                 <NewsCardSkeleton key={i} />
               ))}
@@ -98,16 +98,11 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>{t('common.error')}</AlertTitle>
+              <AlertTitle>{t("common.error")}</AlertTitle>
               <AlertDescription>
                 {error.message}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => refetch()}
-                  className="ml-4"
-                >
-                  {t('common.tryAgain')}
+                <Button variant="outline" size="sm" onClick={() => refetch()} className="ml-4">
+                  {t("common.tryAgain")}
                 </Button>
               </AlertDescription>
             </Alert>
@@ -116,22 +111,20 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           {!isLoading && !error && news && news.length === 0 && (
             <Alert>
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>{t('common.noResults')}</AlertTitle>
-              <AlertDescription>
-                Bu kategoride henüz haber bulunmuyor.
-              </AlertDescription>
+              <AlertTitle>{t("common.noResults")}</AlertTitle>
+              <AlertDescription>Bu kategoride henüz haber bulunmuyor.</AlertDescription>
             </Alert>
           )}
 
           {!isLoading && !error && paginatedNews.length > 0 && (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {paginatedNews.map((item, index) => (
                   <AnimatedNewsCard key={item.id} news={item} index={index} />
                 ))}
               </div>
               {totalPages > 1 && (
-                <div className="flex justify-center mt-8">
+                <div className="mt-8 flex justify-center">
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}

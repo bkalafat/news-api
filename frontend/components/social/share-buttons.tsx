@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Share2, Twitter, Facebook, Link as LinkIcon, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Share2, Twitter, Facebook, Link as LinkIcon, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useState } from 'react';
+} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 
 interface ShareButtonsProps {
   title: string;
@@ -32,12 +32,12 @@ export function ShareButtons({ title, url, className }: ShareButtonsProps) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      console.error('Failed to copy link:', error);
+      console.error("Failed to copy link:", error);
     }
   };
 
   const handleShare = (platform: keyof typeof shareUrls) => {
-    window.open(shareUrls[platform], '_blank', 'noopener,noreferrer,width=600,height=400');
+    window.open(shareUrls[platform], "_blank", "noopener,noreferrer,width=600,height=400");
   };
 
   return (
@@ -49,15 +49,15 @@ export function ShareButtons({ title, url, className }: ShareButtonsProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem onClick={() => handleShare('twitter')}>
+        <DropdownMenuItem onClick={() => handleShare("twitter")}>
           <Twitter className="mr-2 h-4 w-4" />
           Twitter&apos;da Paylaş
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleShare('facebook')}>
+        <DropdownMenuItem onClick={() => handleShare("facebook")}>
           <Facebook className="mr-2 h-4 w-4" />
           Facebook&apos;ta Paylaş
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleShare('whatsapp')}>
+        <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
           <svg
             className="mr-2 h-4 w-4"
             fill="currentColor"
@@ -68,7 +68,7 @@ export function ShareButtons({ title, url, className }: ShareButtonsProps) {
           </svg>
           WhatsApp&apos;ta Paylaş
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleShare('linkedin')}>
+        <DropdownMenuItem onClick={() => handleShare("linkedin")}>
           <svg
             className="mr-2 h-4 w-4"
             fill="currentColor"
@@ -85,7 +85,7 @@ export function ShareButtons({ title, url, className }: ShareButtonsProps) {
           ) : (
             <LinkIcon className="mr-2 h-4 w-4" />
           )}
-          {copied ? 'Kopyalandı!' : 'Linki Kopyala'}
+          {copied ? "Kopyalandı!" : "Linki Kopyala"}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

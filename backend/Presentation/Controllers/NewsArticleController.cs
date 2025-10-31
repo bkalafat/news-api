@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsApi.Application.DTOs;
 using NewsApi.Application.Services;
-using NewsApi.Common;
 using NewsApi.Common.Mappers;
 using NewsApi.Domain.Entities;
 using NewsApi.Domain.Interfaces;
@@ -20,7 +19,7 @@ namespace NewsApi.Presentation.Controllers;
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
-public sealed class NewsArticleController(INewsArticleService newsService, IImageStorageService imageStorageService)
+internal sealed class NewsArticleController(INewsArticleService newsService, IImageStorageService imageStorageService)
     : ControllerBase
 {
     /// <summary>
@@ -354,7 +353,7 @@ public sealed class NewsArticleController(INewsArticleService newsService, IImag
             // Validate file type
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            if (!allowedExtensions.Contains(extension))
+            if (!allowedExtensions.Contains(extension, StringComparer.Ordinal))
             {
                 return BadRequest(new { message = "Invalid file type. Only images are allowed." });
             }

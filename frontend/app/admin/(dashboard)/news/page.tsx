@@ -1,28 +1,18 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import {
-  Plus,
-  Search,
-  Filter,
-  Eye,
-  Edit,
-  Trash2,
-  Calendar,
-  Clock,
-  MoreVertical,
-} from 'lucide-react';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Plus, Search, Filter, Eye, Edit, Trash2, Calendar, MoreVertical } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
 interface NewsItem {
   id: string;
@@ -33,15 +23,15 @@ interface NewsItem {
   author: string;
   publishedAt: string;
   views: number;
-  status: 'published' | 'draft';
+  status: "published" | "draft";
   imageUrl?: string;
 }
 
 export default function AdminNewsPage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   useEffect(() => {
     fetchNews();
@@ -49,29 +39,29 @@ export default function AdminNewsPage() {
 
   const fetchNews = async () => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
       const response = await fetch(`${API_URL}/api/NewsArticle`);
-      
+
       if (!response.ok) {
         throw new Error(`API returned ${response.status}`);
       }
-      
+
       const data = await response.json();
-      
+
       // Map backend data to frontend format
       const mappedData = data.map((article: any) => ({
         id: article.id,
-        title: article.caption || 'Başlıksız',
+        title: article.caption || "Başlıksız",
         category: article.category,
-        author: article.author || 'Bilinmeyen',
+        author: article.author || "Bilinmeyen",
         publishedAt: article.expressDate || article.createdDate,
-        status: article.isActive ? 'published' : 'draft',
+        status: article.isActive ? "published" : "draft",
         views: article.views || 0,
       }));
-      
+
       setNews(mappedData);
     } catch (error) {
-      console.error('Failed to fetch news:', error);
+      console.error("Failed to fetch news:", error);
       setNews([]);
     } finally {
       setLoading(false);
@@ -79,20 +69,20 @@ export default function AdminNewsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Bu haberi silmek istediğinizden emin misiniz?')) return;
+    if (!confirm("Bu haberi silmek istediğinizden emin misiniz?")) return;
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
       const response = await fetch(`${API_URL}/api/News/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
         setNews(news.filter((item) => item.id !== id));
       }
     } catch (error) {
-      console.error('Failed to delete news:', error);
-      alert('Haber silinirken bir hata oluştu');
+      console.error("Failed to delete news:", error);
+      alert("Haber silinirken bir hata oluştu");
     }
   };
 
@@ -100,12 +90,11 @@ export default function AdminNewsPage() {
     const matchesSearch =
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.caption.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory =
-      selectedCategory === 'all' || item.category === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const categories = ['all', ...Array.from(new Set(news.map((item) => item.category)))];
+  const categories = ["all", ...Array.from(new Set(news.map((item) => item.category)))];
 
   if (loading) {
     return (
@@ -117,7 +106,7 @@ export default function AdminNewsPage() {
           {[1, 2, 3].map((i) => (
             <Card key={i}>
               <CardContent className="p-6">
-                <div className="h-20 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
+                <div className="h-20 animate-pulse rounded bg-slate-100 dark:bg-slate-800" />
               </CardContent>
             </Card>
           ))}
@@ -132,13 +121,13 @@ export default function AdminNewsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Haberler</h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-1">
+          <p className="mt-1 text-slate-600 dark:text-slate-400">
             Toplam {filteredNews.length} haber
           </p>
         </div>
         <Link href="/admin/news/new">
           <Button>
-            <Plus className="w-4 h-4 mr-2" />
+            <Plus className="mr-2 h-4 w-4" />
             Yeni Haber
           </Button>
         </Link>
@@ -147,9 +136,9 @@ export default function AdminNewsPage() {
       {/* Filters */}
       <Card>
         <CardContent className="p-4">
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <Input
                 placeholder="Haber ara..."
                 value={searchQuery}
@@ -158,23 +147,19 @@ export default function AdminNewsPage() {
               />
             </div>
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="sm:hidden"
-              >
-                <Filter className="w-4 h-4" />
+              <Button variant="outline" size="icon" className="sm:hidden">
+                <Filter className="h-4 w-4" />
               </Button>
-              <div className="hidden sm:flex gap-2 overflow-x-auto">
+              <div className="hidden gap-2 overflow-x-auto sm:flex">
                 {categories.map((cat) => (
                   <Button
                     key={cat}
-                    variant={selectedCategory === cat ? 'default' : 'outline'}
+                    variant={selectedCategory === cat ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedCategory(cat)}
-                    className="capitalize whitespace-nowrap"
+                    className="whitespace-nowrap capitalize"
                   >
-                    {cat === 'all' ? 'Tümü' : cat}
+                    {cat === "all" ? "Tümü" : cat}
                   </Button>
                 ))}
               </div>
@@ -186,16 +171,16 @@ export default function AdminNewsPage() {
       {/* News List */}
       <div className="grid gap-4">
         {filteredNews.map((item) => (
-          <Card key={item.id} className="overflow-hidden hover:shadow-md transition-shadow">
+          <Card key={item.id} className="overflow-hidden transition-shadow hover:shadow-md">
             <CardContent className="p-0">
               <div className="flex flex-col sm:flex-row">
                 {/* Image */}
                 {item.imageUrl && (
-                  <div className="w-full sm:w-48 h-48 sm:h-auto bg-slate-200 dark:bg-slate-800 flex-shrink-0">
+                  <div className="h-48 w-full flex-shrink-0 bg-slate-200 sm:h-auto sm:w-48 dark:bg-slate-800">
                     <img
                       src={item.imageUrl}
                       alt={item.title}
-                      className="w-full h-full object-cover"
+                      className="h-full w-full object-cover"
                     />
                   </div>
                 )}
@@ -203,37 +188,33 @@ export default function AdminNewsPage() {
                 {/* Content */}
                 <div className="flex-1 p-6">
                   <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-2 flex items-center gap-2">
                         <Badge variant="secondary" className="capitalize">
                           {item.category}
                         </Badge>
-                        <Badge
-                          variant={item.status === 'published' ? 'default' : 'outline'}
-                        >
-                          {item.status === 'published' ? 'Yayında' : 'Taslak'}
+                        <Badge variant={item.status === "published" ? "default" : "outline"}>
+                          {item.status === "published" ? "Yayında" : "Taslak"}
                         </Badge>
                       </div>
 
-                      <h3 className="text-xl font-semibold mb-2 line-clamp-2">
-                        {item.title}
-                      </h3>
+                      <h3 className="mb-2 line-clamp-2 text-xl font-semibold">{item.title}</h3>
 
-                      <p className="text-slate-600 dark:text-slate-400 line-clamp-2 mb-4">
+                      <p className="mb-4 line-clamp-2 text-slate-600 dark:text-slate-400">
                         {item.caption}
                       </p>
 
                       <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
                         <span className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          {new Date(item.publishedAt).toLocaleDateString('tr-TR')}
+                          <Calendar className="h-3 w-3" />
+                          {new Date(item.publishedAt).toLocaleDateString("tr-TR")}
                         </span>
                         <span>•</span>
                         <span>{item.author}</span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
-                          <Eye className="w-3 h-3" />
-                          {item.views?.toLocaleString('tr-TR') || 0} görüntülenme
+                          <Eye className="h-3 w-3" />
+                          {item.views?.toLocaleString("tr-TR") || 0} görüntülenme
                         </span>
                       </div>
                     </div>
@@ -242,7 +223,7 @@ export default function AdminNewsPage() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="flex-shrink-0">
-                          <MoreVertical className="w-4 h-4" />
+                          <MoreVertical className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
@@ -250,18 +231,18 @@ export default function AdminNewsPage() {
                           <Link
                             href={`/news/${item.slug}`}
                             target="_blank"
-                            className="flex items-center cursor-pointer"
+                            className="flex cursor-pointer items-center"
                           >
-                            <Eye className="w-4 h-4 mr-2" />
+                            <Eye className="mr-2 h-4 w-4" />
                             Görüntüle
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <Link
                             href={`/admin/news/edit/${item.id}`}
-                            className="flex items-center cursor-pointer"
+                            className="flex cursor-pointer items-center"
                           >
-                            <Edit className="w-4 h-4 mr-2" />
+                            <Edit className="mr-2 h-4 w-4" />
                             Düzenle
                           </Link>
                         </DropdownMenuItem>
@@ -269,7 +250,7 @@ export default function AdminNewsPage() {
                           onClick={() => handleDelete(item.id)}
                           className="text-red-600 focus:text-red-600"
                         >
-                          <Trash2 className="w-4 h-4 mr-2" />
+                          <Trash2 className="mr-2 h-4 w-4" />
                           Sil
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -284,12 +265,12 @@ export default function AdminNewsPage() {
         {filteredNews.length === 0 && (
           <Card>
             <CardContent className="p-12 text-center">
-              <Newspaper className="w-12 h-12 mx-auto text-slate-400 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Haber bulunamadı</h3>
+              <Newspaper className="mx-auto mb-4 h-12 w-12 text-slate-400" />
+              <h3 className="mb-2 text-lg font-semibold">Haber bulunamadı</h3>
               <p className="text-slate-600 dark:text-slate-400">
                 {searchQuery
-                  ? 'Arama kriterlerinize uygun haber bulunamadı.'
-                  : 'Henüz hiç haber eklenmemiş.'}
+                  ? "Arama kriterlerinize uygun haber bulunamadı."
+                  : "Henüz hiç haber eklenmemiş."}
               </p>
             </CardContent>
           </Card>
@@ -301,12 +282,7 @@ export default function AdminNewsPage() {
 
 function Newspaper({ className }: { className?: string }) {
   return (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

@@ -1,18 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { authFetch } from '@/lib/auth';
-import {
-  Newspaper,
-  TrendingUp,
-  Eye,
-  Users,
-  Calendar,
-  ArrowUp,
-  ArrowDown,
-  Clock,
-} from 'lucide-react';
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Newspaper, TrendingUp, Eye, Calendar, ArrowUp, ArrowDown, Clock } from "lucide-react";
 
 interface DashboardStats {
   totalNews: number;
@@ -29,7 +19,7 @@ interface RecentNews {
   category: string;
   publishedAt: string;
   views: number;
-  status: 'published' | 'draft';
+  status: "published" | "draft";
 }
 
 export default function AdminDashboardPage() {
@@ -43,15 +33,15 @@ export default function AdminDashboardPage() {
 
   const fetchDashboardData = async () => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
       // Fetch news for stats - Correct endpoint is /api/NewsArticle
       const newsResponse = await fetch(`${API_URL}/api/NewsArticle`);
-      
+
       if (!newsResponse.ok) {
         throw new Error(`API returned ${newsResponse.status}`);
       }
-      
+
       const newsData = await newsResponse.json();
 
       // Calculate stats - Backend uses IsActive instead of status
@@ -73,21 +63,25 @@ export default function AdminDashboardPage() {
 
       // Get recent news - Backend uses Caption as title and ExpressDate
       const recent = newsData
-        .sort((a: any, b: any) => new Date(b.expressDate || b.createdDate).getTime() - new Date(a.expressDate || a.createdDate).getTime())
+        .sort(
+          (a: any, b: any) =>
+            new Date(b.expressDate || b.createdDate).getTime() -
+            new Date(a.expressDate || a.createdDate).getTime()
+        )
         .slice(0, 5)
         .map((n: any) => ({
           id: n.id,
-          title: n.caption || 'Başlıksız',
+          title: n.caption || "Başlıksız",
           category: n.category,
           publishedAt: n.expressDate || n.createdDate,
           views: n.views || 0,
-          status: n.isActive ? 'published' : 'draft',
+          status: n.isActive ? "published" : "draft",
         }));
 
       setRecentNews(recent);
     } catch (error) {
-      console.error('Failed to fetch dashboard data:', error);
-      
+      console.error("Failed to fetch dashboard data:", error);
+
       // Set default empty stats on error
       setStats({
         totalNews: 0,
@@ -105,32 +99,32 @@ export default function AdminDashboardPage() {
 
   const statCards = [
     {
-      title: 'Toplam Haber',
+      title: "Toplam Haber",
       value: stats?.totalNews || 0,
       icon: Newspaper,
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-500/10',
+      color: "text-blue-500",
+      bgColor: "bg-blue-500/10",
     },
     {
-      title: 'Yayınlanan',
+      title: "Yayınlanan",
       value: stats?.publishedNews || 0,
       icon: TrendingUp,
-      color: 'text-green-500',
-      bgColor: 'bg-green-500/10',
+      color: "text-green-500",
+      bgColor: "bg-green-500/10",
     },
     {
-      title: 'Taslak',
+      title: "Taslak",
       value: stats?.draftNews || 0,
       icon: Clock,
-      color: 'text-orange-500',
-      bgColor: 'bg-orange-500/10',
+      color: "text-orange-500",
+      bgColor: "bg-orange-500/10",
     },
     {
-      title: 'Toplam Görüntülenme',
+      title: "Toplam Görüntülenme",
       value: stats?.totalViews || 0,
       icon: Eye,
-      color: 'text-purple-500',
-      bgColor: 'bg-purple-500/10',
+      color: "text-purple-500",
+      bgColor: "bg-purple-500/10",
       change: stats?.weeklyChange,
     },
   ];
@@ -143,7 +137,7 @@ export default function AdminDashboardPage() {
           {[1, 2, 3, 4].map((i) => (
             <Card key={i}>
               <CardContent className="p-6">
-                <div className="h-20 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
+                <div className="h-20 animate-pulse rounded bg-slate-100 dark:bg-slate-800" />
               </CardContent>
             </Card>
           ))}
@@ -157,7 +151,7 @@ export default function AdminDashboardPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-1">
+        <p className="mt-1 text-slate-600 dark:text-slate-400">
           Hoş geldiniz! İşte sistemin genel görünümü.
         </p>
       </div>
@@ -174,19 +168,17 @@ export default function AdminDashboardPage() {
                     <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
                       {stat.title}
                     </p>
-                    <p className="text-3xl font-bold">
-                      {stat.value.toLocaleString('tr-TR')}
-                    </p>
+                    <p className="text-3xl font-bold">{stat.value.toLocaleString("tr-TR")}</p>
                     {stat.change && (
                       <div className="flex items-center gap-1 text-sm">
                         {stat.change > 0 ? (
                           <>
-                            <ArrowUp className="w-4 h-4 text-green-500" />
+                            <ArrowUp className="h-4 w-4 text-green-500" />
                             <span className="text-green-500">+{stat.change}%</span>
                           </>
                         ) : (
                           <>
-                            <ArrowDown className="w-4 h-4 text-red-500" />
+                            <ArrowDown className="h-4 w-4 text-red-500" />
                             <span className="text-red-500">{stat.change}%</span>
                           </>
                         )}
@@ -194,8 +186,8 @@ export default function AdminDashboardPage() {
                       </div>
                     )}
                   </div>
-                  <div className={`${stat.bgColor} ${stat.color} p-3 rounded-full`}>
-                    <Icon className="w-6 h-6" />
+                  <div className={`${stat.bgColor} ${stat.color} rounded-full p-3`}>
+                    <Icon className="h-6 w-6" />
                   </div>
                 </div>
               </CardContent>
@@ -214,32 +206,32 @@ export default function AdminDashboardPage() {
             {recentNews.map((news) => (
               <div
                 key={news.id}
-                className="flex items-center justify-between p-4 border border-slate-200 dark:border-slate-800 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors"
+                className="flex items-center justify-between rounded-lg border border-slate-200 p-4 transition-colors hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-900"
               >
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium truncate">{news.title}</h3>
-                  <div className="flex items-center gap-3 mt-1 text-sm text-slate-600 dark:text-slate-400">
+                <div className="min-w-0 flex-1">
+                  <h3 className="truncate font-medium">{news.title}</h3>
+                  <div className="mt-1 flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
                     <span className="capitalize">{news.category}</span>
                     <span>•</span>
                     <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      {new Date(news.publishedAt).toLocaleDateString('tr-TR')}
+                      <Calendar className="h-3 w-3" />
+                      {new Date(news.publishedAt).toLocaleDateString("tr-TR")}
                     </span>
                     <span>•</span>
                     <span className="flex items-center gap-1">
-                      <Eye className="w-3 h-3" />
-                      {news.views.toLocaleString('tr-TR')}
+                      <Eye className="h-3 w-3" />
+                      {news.views.toLocaleString("tr-TR")}
                     </span>
                   </div>
                 </div>
                 <div
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    news.status === 'published'
-                      ? 'bg-green-500/10 text-green-500'
-                      : 'bg-orange-500/10 text-orange-500'
+                  className={`rounded-full px-3 py-1 text-xs font-medium ${
+                    news.status === "published"
+                      ? "bg-green-500/10 text-green-500"
+                      : "bg-orange-500/10 text-orange-500"
                   }`}
                 >
-                  {news.status === 'published' ? 'Yayında' : 'Taslak'}
+                  {news.status === "published" ? "Yayında" : "Taslak"}
                 </div>
               </div>
             ))}

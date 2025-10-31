@@ -3,7 +3,7 @@ using NewsApi.Domain.Entities;
 
 namespace NewsApi.Tests.Unit.Domain;
 
-public class NewsEntityTests
+internal class NewsEntityTests
 {
     [Fact]
     public void News_WhenCreated_ShouldHaveDefaultValues()

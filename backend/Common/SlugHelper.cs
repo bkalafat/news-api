@@ -1,9 +1,8 @@
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace NewsApi.Common;
 
-public static class SlugHelper
+internal static class SlugHelper
 {
     /// <summary>
     /// Generates a URL-friendly slug from Turkish text
@@ -12,7 +11,9 @@ public static class SlugHelper
     public static string GenerateSlug(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
+        {
             return string.Empty;
+        }
 
         // Convert to lowercase
         text = text.ToLowerInvariant();
@@ -35,11 +36,13 @@ public static class SlugHelper
         text = Regex.Replace(text, @"[^a-z0-9\s-]", "", RegexOptions.NonBacktracking);
         text = Regex.Replace(text, @"\s+", " ", RegexOptions.NonBacktracking).Trim();
         text = Regex.Replace(text, @"\s", "-", RegexOptions.NonBacktracking);
-        text = Regex.Replace(text, @"-+", "-", RegexOptions.NonBacktracking);
+        text = Regex.Replace(text, "-+", "-", RegexOptions.NonBacktracking);
 
         // Limit length to 100 characters
         if (text.Length > 100)
+        {
             text = text.Substring(0, 100).TrimEnd('-');
+        }
 
         return text;
     }

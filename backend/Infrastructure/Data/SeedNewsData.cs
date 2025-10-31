@@ -4,11 +4,10 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using NewsApi.Common;
 using NewsApi.Domain.Entities;
-using NewsApi.Infrastructure.Data;
 
 namespace NewsApi.Infrastructure.Data;
 
-public static class SeedNewsData
+internal static class SeedNewsData
 {
     public static async Task SeedAsync(MongoDbContext context)
     {
@@ -142,7 +141,7 @@ public static class SeedNewsData
                 ViewCount = 750,
                 IsSecondPageNews = false,
             },
-            
+
             // Reddit News - Web Development
             new NewsArticle
             {

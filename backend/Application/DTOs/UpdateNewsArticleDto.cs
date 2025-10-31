@@ -7,7 +7,7 @@ namespace NewsApi.Application.DTOs;
 /// Data transfer object for updating an existing news article.
 /// All properties are optional to support partial updates.
 /// </summary>
-public sealed record UpdateNewsArticleDto
+internal sealed record UpdateNewsArticleDto
 {
     [StringLength(100)]
     public string? Category { get; set; }

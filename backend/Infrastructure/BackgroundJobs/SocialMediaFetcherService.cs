@@ -12,7 +12,7 @@ namespace NewsApi.Infrastructure.BackgroundJobs;
 /// <summary>
 /// Background service that fetches social media posts daily
 /// </summary>
-public class SocialMediaFetcherService : BackgroundService
+internal sealed class SocialMediaFetcherService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<SocialMediaFetcherService> _logger;
@@ -73,13 +73,15 @@ public class SocialMediaFetcherService : BackgroundService
             ("github", "copilot", "GitHub Copilot discussions"),
             ("programming", "copilot OR \"github copilot\"", "Programming community"),
             ("webdev", "copilot", "Web development"),
-            ("MachineLearning", "copilot", "AI/ML community")
+            ("MachineLearning", "copilot", "AI/ML community"),
         };
 
         foreach (var (subreddit, query, description) in subreddits)
         {
             if (cancellationToken.IsCancellationRequested)
+            {
                 break;
+            }
 
             try
             {
@@ -97,7 +99,9 @@ public class SocialMediaFetcherService : BackgroundService
                 foreach (var post in posts)
                 {
                     if (cancellationToken.IsCancellationRequested)
+                    {
                         break;
+                    }
 
                     try
                     {

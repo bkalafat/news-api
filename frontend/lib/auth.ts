@@ -3,7 +3,7 @@
  * Handles JWT token management and API authentication
  */
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export interface LoginCredentials {
   username: string;
@@ -22,18 +22,18 @@ export interface AuthUser {
  */
 export async function login(credentials: LoginCredentials): Promise<AuthUser> {
   const response = await fetch(`${API_URL}/api/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credentials),
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Giriş başarısız' }));
-    throw new Error(error.message || 'Giriş başarısız');
+    const error = await response.json().catch(() => ({ message: "Giriş başarısız" }));
+    throw new Error(error.message || "Giriş başarısız");
   }
 
   const data = await response.json();
-  
+
   const user: AuthUser = {
     userId: data.userId,
     username: data.username,
@@ -42,8 +42,8 @@ export async function login(credentials: LoginCredentials): Promise<AuthUser> {
   };
 
   // Store in localStorage
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('auth_user', JSON.stringify(user));
+  if (typeof window !== "undefined") {
+    localStorage.setItem("auth_user", JSON.stringify(user));
   }
 
   return user;
@@ -53,9 +53,9 @@ export async function login(credentials: LoginCredentials): Promise<AuthUser> {
  * Logout from admin panel
  */
 export function logout(): void {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('auth_user');
-    window.location.href = '/admin/login';
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("auth_user");
+    window.location.href = "/admin/login";
   }
 }
 
@@ -63,14 +63,14 @@ export function logout(): void {
  * Get current authenticated user
  */
 export function getUser(): AuthUser | null {
-  if (typeof window === 'undefined') return null;
+  if (typeof window === "undefined") return null;
 
-  const stored = localStorage.getItem('auth_user');
+  const stored = localStorage.getItem("auth_user");
   if (!stored) return null;
 
   try {
     const user: AuthUser = JSON.parse(stored);
-    
+
     // Check if token expired
     if (Date.now() > user.expiresAt) {
       logout();
@@ -96,9 +96,9 @@ export function isAuthenticated(): boolean {
 export function getAuthHeader(): Record<string, string> {
   const user = getUser();
   if (!user) return {};
-  
+
   return {
-    'Authorization': `Bearer ${user.token}`,
+    Authorization: `Bearer ${user.token}`,
   };
 }
 
@@ -116,7 +116,7 @@ export async function authFetch(url: string, options: RequestInit = {}) {
   // Handle 401 Unauthorized
   if (response.status === 401) {
     logout();
-    throw new Error('Session expired');
+    throw new Error("Session expired");
   }
 
   return response;

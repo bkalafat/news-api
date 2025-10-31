@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { MarkdownEditor } from '@/components/admin/markdown-editor';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { MarkdownEditor } from "@/components/admin/markdown-editor";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { ArrowLeft, Save, Eye } from 'lucide-react';
-import Link from 'next/link';
-import { authFetch } from '@/lib/auth';
+} from "@/components/ui/select";
+import { ArrowLeft, Save, Eye } from "lucide-react";
+import Link from "next/link";
+import { authFetch } from "@/lib/auth";
 
 interface NewsFormData {
   title: string;
@@ -29,36 +29,36 @@ interface NewsFormData {
   imgAlt: string;
   tags: string[];
   topics: string[];
-  status: 'published' | 'draft';
+  status: "published" | "draft";
 }
 
 const categories = [
-  'reddit',
-  'github',
-  'twitter',
-  'linkedin',
-  'facebook',
-  'instagram',
-  'tiktok',
-  'youtube',
-  'technology',
+  "reddit",
+  "github",
+  "twitter",
+  "linkedin",
+  "facebook",
+  "instagram",
+  "tiktok",
+  "youtube",
+  "technology",
 ];
 
 export default function NewsEditorPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<NewsFormData>({
-    title: '',
-    slug: '',
-    caption: '',
-    content: '',
-    category: 'technology',
-    author: '',
-    imageUrl: '',
-    imgAlt: '',
+    title: "",
+    slug: "",
+    caption: "",
+    content: "",
+    category: "technology",
+    author: "",
+    imageUrl: "",
+    imgAlt: "",
     tags: [],
     topics: [],
-    status: 'draft',
+    status: "draft",
   });
 
   // Auto-generate slug from title
@@ -66,100 +66,100 @@ export default function NewsEditorPage() {
     if (formData.title) {
       const slug = formData.title
         .toLowerCase()
-        .replace(/ğ/g, 'g')
-        .replace(/ü/g, 'u')
-        .replace(/ş/g, 's')
-        .replace(/ı/g, 'i')
-        .replace(/ö/g, 'o')
-        .replace(/ç/g, 'c')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
+        .replace(/ğ/g, "g")
+        .replace(/ü/g, "u")
+        .replace(/ş/g, "s")
+        .replace(/ı/g, "i")
+        .replace(/ö/g, "o")
+        .replace(/ç/g, "c")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
       setFormData((prev) => ({ ...prev, slug }));
     }
   }, [formData.title]);
 
-  const handleSubmit = async (e: React.FormEvent, status: 'published' | 'draft' = 'draft') => {
+  const handleSubmit = async (e: React.FormEvent, status: "published" | "draft" = "draft") => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
       // Backend NewsArticle DTO'suna uygun format
       const newsData = {
         category: formData.category,
-        type: 'standard', // Backend için gerekli
+        type: "standard", // Backend için gerekli
         caption: formData.title, // Backend caption field'ı title için kullanılıyor
-        keywords: formData.tags.filter(t => t).join(', '), // Array'i string'e çevir
-        socialTags: formData.topics.filter(t => t).join(', '), // Array'i string'e çevir
+        keywords: formData.tags.filter((t) => t).join(", "), // Array'i string'e çevir
+        socialTags: formData.topics.filter((t) => t).join(", "), // Array'i string'e çevir
         summary: formData.caption, // Frontend caption backend summary'ye map ediliyor
         imgPath: formData.imageUrl,
         imgAlt: formData.imgAlt,
         imageUrl: formData.imageUrl,
         thumbnailUrl: formData.imageUrl,
         content: formData.content,
-        subjects: formData.topics.filter(t => t), // Boş elemanları temizle
+        subjects: formData.topics.filter((t) => t), // Boş elemanları temizle
         authors: [formData.author],
         expressDate: new Date().toISOString(),
-        priority: status === 'published' ? 1 : 0,
-        isActive: status === 'published',
+        priority: status === "published" ? 1 : 0,
+        isActive: status === "published",
         isSecondPageNews: false,
       };
 
-      console.log('Sending news data:', newsData); // Debug için
+      console.log("Sending news data:", newsData); // Debug için
 
       const response = await authFetch(`${API_URL}/api/NewsArticle`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newsData),
       });
 
       if (response.ok) {
-        alert('Haber başarıyla kaydedildi!');
-        router.push('/admin/news');
+        alert("Haber başarıyla kaydedildi!");
+        router.push("/admin/news");
       } else {
-        const errorData = await response.json().catch(() => ({ message: 'Bilinmeyen hata' }));
-        console.error('Error response:', errorData);
+        const errorData = await response.json().catch(() => ({ message: "Bilinmeyen hata" }));
+        console.error("Error response:", errorData);
         alert(`Haber kaydedilemedi: ${errorData.message || JSON.stringify(errorData)}`);
       }
     } catch (error) {
-      console.error('Failed to save news:', error);
-      alert('Bir hata oluştu: ' + (error instanceof Error ? error.message : 'Bilinmeyen hata'));
+      console.error("Failed to save news:", error);
+      alert(`Bir hata oluştu: ${error instanceof Error ? error.message : "Bilinmeyen hata"}`);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/admin/news">
             <Button variant="ghost" size="icon">
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
           <div>
             <h1 className="text-3xl font-bold">Yeni Haber Oluştur</h1>
-            <p className="text-slate-600 dark:text-slate-400 mt-1">
+            <p className="mt-1 text-slate-600 dark:text-slate-400">
               Tüm alanları doldurun ve yayınlayın
             </p>
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={(e) => handleSubmit(e, 'draft')} disabled={loading}>
-            <Save className="w-4 h-4 mr-2" />
+          <Button variant="outline" onClick={(e) => handleSubmit(e, "draft")} disabled={loading}>
+            <Save className="mr-2 h-4 w-4" />
             Taslak Kaydet
           </Button>
-          <Button onClick={(e) => handleSubmit(e, 'published')} disabled={loading}>
-            <Eye className="w-4 h-4 mr-2" />
+          <Button onClick={(e) => handleSubmit(e, "published")} disabled={loading}>
+            <Eye className="mr-2 h-4 w-4" />
             Yayınla
           </Button>
         </div>
       </div>
 
-      <form onSubmit={(e) => handleSubmit(e, 'published')} className="space-y-6">
+      <form onSubmit={(e) => handleSubmit(e, "published")} className="space-y-6">
         {/* Basic Info */}
         <Card>
           <CardHeader>
@@ -195,7 +195,7 @@ export default function NewsEditorPage() {
                 value={formData.caption}
                 onChange={(e) => setFormData({ ...formData, caption: e.target.value })}
                 placeholder="Haber özeti (maksimum 500 karakter)"
-                className="w-full min-h-[100px] px-3 py-2 rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 resize-y"
+                className="min-h-[100px] w-full resize-y rounded-md border border-slate-200 bg-white px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
                 maxLength={500}
                 required
               />
@@ -279,14 +279,14 @@ export default function NewsEditorPage() {
             </div>
 
             {formData.imageUrl && (
-              <div className="border rounded-lg p-4">
-                <p className="text-sm font-medium mb-2">Görsel Önizleme:</p>
+              <div className="rounded-lg border p-4">
+                <p className="mb-2 text-sm font-medium">Görsel Önizleme:</p>
                 <img
                   src={formData.imageUrl}
-                  alt={formData.imgAlt || 'Preview'}
+                  alt={formData.imgAlt || "Preview"}
                   className="w-full max-w-md rounded-lg"
                   onError={(e) => {
-                    e.currentTarget.src = '/placeholder.png';
+                    e.currentTarget.src = "/placeholder.png";
                   }}
                 />
               </div>
@@ -304,9 +304,9 @@ export default function NewsEditorPage() {
               <Label htmlFor="tags">Etiketler (virgülle ayırın)</Label>
               <Input
                 id="tags"
-                value={formData.tags.join(', ')}
+                value={formData.tags.join(", ")}
                 onChange={(e) =>
-                  setFormData({ ...formData, tags: e.target.value.split(',').map((t) => t.trim()) })
+                  setFormData({ ...formData, tags: e.target.value.split(",").map((t) => t.trim()) })
                 }
                 placeholder="yapay zeka, teknoloji, GPT-5"
               />
@@ -316,11 +316,11 @@ export default function NewsEditorPage() {
               <Label htmlFor="topics">Konular (virgülle ayırın)</Label>
               <Input
                 id="topics"
-                value={formData.topics.join(', ')}
+                value={formData.topics.join(", ")}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    topics: e.target.value.split(',').map((t) => t.trim()),
+                    topics: e.target.value.split(",").map((t) => t.trim()),
                   })
                 }
                 placeholder="Yapay Zeka, Teknoloji, İnovasyon"

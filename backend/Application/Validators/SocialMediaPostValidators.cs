@@ -8,18 +8,18 @@ namespace NewsApi.Application.Validators;
 /// <summary>
 /// Validator for CreateSocialMediaPostDto
 /// </summary>
-public class CreateSocialMediaPostDtoValidator : AbstractValidator<CreateSocialMediaPostDto>
+internal sealed class CreateSocialMediaPostDtoValidator : AbstractValidator<CreateSocialMediaPostDto>
 {
     private static readonly string[] ValidPlatforms =
     {
-        "Reddit", "Twitter", "LinkedIn", "Facebook", "Instagram", "YouTube"
+        "Reddit", "Twitter", "LinkedIn", "Facebook", "Instagram", "YouTube",
     };
 
     public CreateSocialMediaPostDtoValidator()
     {
         RuleFor(x => x.Platform)
             .NotEmpty().WithMessage("Platform is required")
-            .Must(p => ValidPlatforms.Contains(p)).WithMessage($"Platform must be one of: {string.Join(", ", ValidPlatforms)}");
+            .Must(p => ValidPlatforms.Contains(p, StringComparer.Ordinal)).WithMessage($"Platform must be one of: {string.Join(", ", ValidPlatforms)}");
 
         RuleFor(x => x.ExternalId)
             .NotEmpty().WithMessage("External ID is required")
@@ -74,7 +74,7 @@ public class CreateSocialMediaPostDtoValidator : AbstractValidator<CreateSocialM
 /// <summary>
 /// Validator for UpdateSocialMediaPostDto
 /// </summary>
-public class UpdateSocialMediaPostDtoValidator : AbstractValidator<UpdateSocialMediaPostDto>
+internal sealed class UpdateSocialMediaPostDtoValidator : AbstractValidator<UpdateSocialMediaPostDto>
 {
     public UpdateSocialMediaPostDtoValidator()
     {

@@ -1,9 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Image, Bold, Italic, Link as LinkIcon, List, ListOrdered, Code } from 'lucide-react';
-import { Label } from '@/components/ui/label';
+import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Image, Bold, Italic, Link as LinkIcon, List, ListOrdered, Code } from "lucide-react";
 
 interface MarkdownEditorProps {
   value: string;
@@ -16,13 +15,14 @@ export function MarkdownEditor({ value, onChange, placeholder }: MarkdownEditorP
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const insertText = (before: string, after: string = '') => {
+  const insertText = (before: string, after: string = "") => {
     if (!textareaRef.current) return;
 
     const start = textareaRef.current.selectionStart;
     const end = textareaRef.current.selectionEnd;
     const selectedText = value.substring(start, end);
-    const newText = value.substring(0, start) + before + selectedText + after + value.substring(end);
+    const newText =
+      value.substring(0, start) + before + selectedText + after + value.substring(end);
 
     onChange(newText);
 
@@ -30,7 +30,10 @@ export function MarkdownEditor({ value, onChange, placeholder }: MarkdownEditorP
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
-        textareaRef.current.setSelectionRange(start + before.length, start + before.length + selectedText.length);
+        textareaRef.current.setSelectionRange(
+          start + before.length,
+          start + before.length + selectedText.length
+        );
       }
     }, 0);
   };
@@ -43,19 +46,19 @@ export function MarkdownEditor({ value, onChange, placeholder }: MarkdownEditorP
 
     try {
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('altText', file.name);
+      formData.append("file", file);
+      formData.append("altText", file.name);
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
       // Get token from localStorage
-      const authUser = localStorage.getItem('auth_user');
+      const authUser = localStorage.getItem("auth_user");
       const token = authUser ? JSON.parse(authUser).token : null;
 
       const response = await fetch(`${API_URL}/api/NewsArticle/upload-content-image`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
@@ -63,84 +66,84 @@ export function MarkdownEditor({ value, onChange, placeholder }: MarkdownEditorP
       if (response.ok) {
         const data = await response.json();
         const imageMarkdown = `\n![${data.altText}](${data.url})\n`;
-        
+
         if (textareaRef.current) {
           const start = textareaRef.current.selectionStart;
           const newText = value.substring(0, start) + imageMarkdown + value.substring(start);
           onChange(newText);
         }
 
-        alert('Resim başarıyla yüklendi!');
+        alert("Resim başarıyla yüklendi!");
       } else {
-        alert('Resim yüklenemedi');
+        alert("Resim yüklenemedi");
       }
     } catch (error) {
-      console.error('Upload error:', error);
-      alert('Bir hata oluştu');
+      console.error("Upload error:", error);
+      alert("Bir hata oluştu");
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     }
   };
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-1 p-2 bg-slate-100 dark:bg-slate-900 rounded-t-md border border-b-0 border-slate-200 dark:border-slate-800">
+      <div className="flex items-center gap-1 rounded-t-md border border-b-0 border-slate-200 bg-slate-100 p-2 dark:border-slate-800 dark:bg-slate-900">
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => insertText('**', '**')}
+          onClick={() => insertText("**", "**")}
           title="Bold"
         >
-          <Bold className="w-4 h-4" />
+          <Bold className="h-4 w-4" />
         </Button>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => insertText('*', '*')}
+          onClick={() => insertText("*", "*")}
           title="Italic"
         >
-          <Italic className="w-4 h-4" />
+          <Italic className="h-4 w-4" />
         </Button>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => insertText('[Link metni](', ')')}
+          onClick={() => insertText("[Link metni](", ")")}
           title="Link"
         >
-          <LinkIcon className="w-4 h-4" />
+          <LinkIcon className="h-4 w-4" />
         </Button>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => insertText('\n- ', '')}
+          onClick={() => insertText("\n- ", "")}
           title="Unordered List"
         >
-          <List className="w-4 h-4" />
+          <List className="h-4 w-4" />
         </Button>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => insertText('\n1. ', '')}
+          onClick={() => insertText("\n1. ", "")}
           title="Ordered List"
         >
-          <ListOrdered className="w-4 h-4" />
+          <ListOrdered className="h-4 w-4" />
         </Button>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => insertText('`', '`')}
+          onClick={() => insertText("`", "`")}
           title="Inline Code"
         >
-          <Code className="w-4 h-4" />
+          <Code className="h-4 w-4" />
         </Button>
         <div className="ml-auto">
           <input
@@ -159,24 +162,26 @@ export function MarkdownEditor({ value, onChange, placeholder }: MarkdownEditorP
             disabled={uploading}
             title="Resim Ekle"
           >
-            <Image className="w-4 h-4 mr-1" />
-            {uploading ? 'Yükleniyor...' : 'Resim Ekle'}
+            <Image className="mr-1 h-4 w-4" />
+            {uploading ? "Yükleniyor..." : "Resim Ekle"}
           </Button>
         </div>
       </div>
-      
+
       <textarea
         ref={textareaRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full min-h-[400px] px-3 py-2 rounded-b-md border border-t-0 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 resize-y font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="min-h-[400px] w-full resize-y rounded-b-md border border-t-0 border-slate-200 bg-white px-3 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950"
         required
       />
-      
-      <div className="text-xs text-slate-500 space-y-1">
-        <p><strong>Markdown Kullanımı:</strong></p>
-        <ul className="list-disc list-inside space-y-0.5">
+
+      <div className="space-y-1 text-xs text-slate-500">
+        <p>
+          <strong>Markdown Kullanımı:</strong>
+        </p>
+        <ul className="list-inside list-disc space-y-0.5">
           <li>**kalın metin** veya *italik metin*</li>
           <li>[Link metni](https://example.com)</li>
           <li>![Resim açıklaması](resim-url)</li>

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +14,7 @@ namespace NewsApi.Infrastructure.Services;
 /// <summary>
 /// Service for fetching news data from external NewsAPI.org
 /// </summary>
-public interface INewsDataFetcherService
+internal interface INewsDataFetcherService
 {
     /// <summary>
     /// Fetches latest news articles from NewsAPI.org
@@ -25,7 +24,7 @@ public interface INewsDataFetcherService
     Task<List<CreateNewsArticleDto>> FetchLatestNewsAsync(CancellationToken cancellationToken = default);
 }
 
-public class NewsDataFetcherService : INewsDataFetcherService
+internal sealed class NewsDataFetcherService : INewsDataFetcherService
 {
     private readonly HttpClient _httpClient;
     private readonly NewsApiSettings _settings;
@@ -54,7 +53,9 @@ public class NewsDataFetcherService : INewsDataFetcherService
         foreach (var category in _settings.Categories)
         {
             if (cancellationToken.IsCancellationRequested)
+            {
                 break;
+            }
 
             try
             {
@@ -93,7 +94,8 @@ public class NewsDataFetcherService : INewsDataFetcherService
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogWarning("NewsAPI returned status {StatusCode} for category {Category}",
+                _logger.LogWarning(
+                    "NewsAPI returned status {StatusCode} for category {Category}",
                     response.StatusCode, category);
                 return articles;
             }
@@ -101,7 +103,7 @@ public class NewsDataFetcherService : INewsDataFetcherService
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
             var result = JsonSerializer.Deserialize<NewsApiResponse>(content, new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
             });
 
             if (result?.Articles == null || result.Articles.Length == 0)
@@ -114,7 +116,9 @@ public class NewsDataFetcherService : INewsDataFetcherService
             foreach (var article in result.Articles)
             {
                 if (cancellationToken.IsCancellationRequested)
+                {
                     break;
+                }
 
                 try
                 {
@@ -147,7 +151,7 @@ public class NewsDataFetcherService : INewsDataFetcherService
         // Skip articles without title or content
         if (string.IsNullOrWhiteSpace(article.Title) ||
             string.IsNullOrWhiteSpace(article.Description) ||
-            article.Title == "[Removed]")
+string.Equals(article.Title, "[Removed]", StringComparison.Ordinal))
         {
             return null;
         }
@@ -177,11 +181,11 @@ public class NewsDataFetcherService : INewsDataFetcherService
                 : DateTime.UtcNow,
             Priority = 5,
             IsActive = true,
-            IsSecondPageNews = false
+            IsSecondPageNews = false,
         };
     }
 
-    private string BuildContent(NewsApiArticle article)
+    private static string BuildContent(NewsApiArticle article)
     {
         var content = article.Content ?? article.Description ?? string.Empty;
 
@@ -191,7 +195,7 @@ public class NewsDataFetcherService : INewsDataFetcherService
         return content + sourceLink;
     }
 
-    private string MapCategory(string newsApiCategory)
+    private static string MapCategory(string newsApiCategory)
     {
         return newsApiCategory.ToLowerInvariant() switch
         {
@@ -202,65 +206,77 @@ public class NewsDataFetcherService : INewsDataFetcherService
             "health" => "Sağlık",
             "entertainment" => "Magazin",
             "general" => "Genel",
-            _ => "Genel"
+            _ => "Genel",
         };
     }
 
-    private string[] ExtractKeywords(string text)
+    private static string[] ExtractKeywords(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
+        {
             return [];
+        }
 
         // Simple keyword extraction: split by common separators
-        var words = text.Split([' ', ',', '-', ':', '|'], StringSplitOptions.RemoveEmptyEntries)
+        return text.Split([' ', ',', '-', ':', '|'], StringSplitOptions.RemoveEmptyEntries)
             .Where(w => w.Length > 3)
             .Take(5)
             .ToArray();
-
-        return words;
     }
 
-    private string TruncateString(string text, int maxLength)
+    private static string TruncateString(string text, int maxLength)
     {
         if (string.IsNullOrEmpty(text))
+        {
             return string.Empty;
+        }
 
         return text.Length <= maxLength
             ? text
-            : text.Substring(0, maxLength - 3) + "...";
+            : string.Concat(text.AsSpan(0, maxLength - 3), "...");
     }
 }
 
 /// <summary>
 /// Response model from NewsAPI.org
 /// </summary>
-internal class NewsApiResponse
+internal sealed class NewsApiResponse
 {
     public string Status { get; set; } = string.Empty;
+
     public int TotalResults { get; set; }
+
     public NewsApiArticle[] Articles { get; set; } = [];
 }
 
 /// <summary>
 /// Article model from NewsAPI.org
 /// </summary>
-internal class NewsApiArticle
+internal sealed class NewsApiArticle
 {
     public NewsApiSource? Source { get; set; }
+
     public string Author { get; set; } = string.Empty;
+
     public string Title { get; set; } = string.Empty;
+
     public string Description { get; set; } = string.Empty;
+
     public string Url { get; set; } = string.Empty;
+
     public string UrlToImage { get; set; } = string.Empty;
+
     public DateTime PublishedAt { get; set; }
+
     public string Content { get; set; } = string.Empty;
 }
 
 /// <summary>
 /// Source model from NewsAPI.org
 /// </summary>
-internal class NewsApiSource
+internal sealed class NewsApiSource
 {
     public string Id { get; set; } = string.Empty;
+
     public string Name { get; set; } = string.Empty;
 }

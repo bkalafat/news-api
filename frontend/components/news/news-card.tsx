@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { News } from "@/lib/api/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,19 +16,19 @@ interface NewsCardProps {
 
 export function NewsCard({ news }: NewsCardProps) {
   // Extract slug from URL
-  const slug = news.url?.split('/').pop() || '';
+  const slug = news.url?.split("/").pop() || "";
   const localNewsUrl = `/news/${slug}`;
-  
+
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
+    <Card className="group overflow-hidden transition-shadow duration-300 hover:shadow-lg">
       {/* Image */}
       {news.imageUrl && (
-        <div className="relative h-48 w-full overflow-hidden bg-muted">
+        <div className="bg-muted relative h-48 w-full overflow-hidden">
           <Image
             src={news.imageUrl}
-            alt={news.title || 'News image'}
+            alt={news.title || "News image"}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
@@ -42,29 +42,26 @@ export function NewsCard({ news }: NewsCardProps) {
               {news.category}
             </Badge>
           )}
-          <ShareButtons 
-            title={news.title || 'News article'} 
-            url={`${typeof window !== 'undefined' ? window.location.origin : ''}${localNewsUrl}`}
+          <ShareButtons
+            title={news.title || "News article"}
+            url={`${typeof window !== "undefined" ? window.location.origin : ""}${localNewsUrl}`}
           />
         </div>
 
         {/* Title */}
         <CardTitle className="line-clamp-2 leading-tight">
-          <Link
-            href={localNewsUrl}
-            className="hover:text-primary transition-colors"
-          >
+          <Link href={localNewsUrl} className="hover:text-primary transition-colors">
             {news.title}
           </Link>
         </CardTitle>
 
         {/* Date & Source */}
-        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+        <div className="text-muted-foreground flex items-center gap-4 text-xs">
           <div className="flex items-center gap-1">
             <Calendar className="h-3 w-3" />
             {news.publishedAt && !isNaN(news.publishedAt.getTime()) ? (
               <time dateTime={news.publishedAt.toISOString()}>
-                {format(news.publishedAt, 'dd MMMM yyyy', { locale: tr })}
+                {format(news.publishedAt, "dd MMMM yyyy", { locale: tr })}
               </time>
             ) : (
               <span>Tarih belirtilmemiş</span>
@@ -80,14 +77,12 @@ export function NewsCard({ news }: NewsCardProps) {
 
       <CardContent>
         {/* Description */}
-        <CardDescription className="line-clamp-3">
-          {news.description}
-        </CardDescription>
+        <CardDescription className="line-clamp-3">{news.description}</CardDescription>
 
         {/* Read More Link */}
         <Link
           href={localNewsUrl}
-          className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-primary hover:underline"
+          className="text-primary mt-4 inline-flex items-center gap-1 text-sm font-medium hover:underline"
         >
           Haberi Oku
           <ExternalLink className="h-3 w-3" />

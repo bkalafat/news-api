@@ -4,7 +4,7 @@ using NewsApi.Domain.Entities;
 
 namespace NewsApi.Tests.Unit.DTOs;
 
-public class CreateNewsArticleDtoTests
+internal class CreateNewsArticleDtoTests
 {
     [Fact]
     public void CreateNewsArticleDto_WithAllProperties_ShouldMapToNewsEntity()

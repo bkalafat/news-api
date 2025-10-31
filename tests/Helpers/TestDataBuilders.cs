@@ -6,7 +6,7 @@ namespace NewsApi.Tests.Helpers;
 /// <summary>
 /// Builder class for creating test NewsArticle entities with fluent API
 /// </summary>
-public class NewsBuilder
+internal class NewsBuilder
 {
     private readonly NewsArticle _news;
 
@@ -214,7 +214,7 @@ public class NewsBuilder
 /// <summary>
 /// Builder class for creating test CreateNewsArticleDto objects
 /// </summary>
-public class CreateNewsArticleDtoBuilder
+internal class CreateNewsArticleDtoBuilder
 {
     private readonly CreateNewsArticleDto _dto;
 
@@ -359,7 +359,7 @@ public class CreateNewsArticleDtoBuilder
 /// <summary>
 /// Builder class for creating test UpdateNewsArticleDto objects
 /// </summary>
-public class UpdateNewsArticleDtoBuilder
+internal class UpdateNewsArticleDtoBuilder
 {
     private readonly UpdateNewsArticleDto _dto;
 

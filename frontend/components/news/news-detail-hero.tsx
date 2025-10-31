@@ -52,13 +52,17 @@ export function NewsDetailHero({ news }: NewsDetailHeroProps) {
     technology: "Teknoloji",
   };
 
-  const colors = categoryColors[news.category] || { bg: "bg-gray-500", from: "from-gray-500", to: "to-gray-600" };
+  const colors = categoryColors[news.category] || {
+    bg: "bg-gray-500",
+    from: "from-gray-500",
+    to: "to-gray-600",
+  };
   const publishDate = new Date(news.expressDate);
   const now = new Date();
   const diffTime = Math.abs(now.getTime() - publishDate.getTime());
   const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  
+
   let timeAgo = "";
   if (diffHours < 1) {
     timeAgo = "Az önce";
@@ -77,41 +81,41 @@ export function NewsDetailHero({ news }: NewsDetailHeroProps) {
   return (
     <div className="relative w-full overflow-hidden">
       {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-purple-500/5 to-background" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
-      
-      <div className="container relative mx-auto px-4 py-12 md:py-16">
-        <div className="max-w-5xl mx-auto">
+      <div className="from-primary/5 to-background absolute inset-0 bg-gradient-to-br via-purple-500/5" />
+      <div className="from-primary/10 absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] via-transparent to-transparent" />
+
+      <div className="relative container mx-auto px-4 py-12 md:py-16">
+        <div className="mx-auto max-w-5xl">
           {/* Category Badge - Modern with gradient */}
           <div className="mb-6 flex items-center gap-3">
-            <Badge 
-              className={`bg-gradient-to-r ${colors.from} ${colors.to} text-white px-5 py-2 text-sm font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 rounded-full border-0`}
+            <Badge
+              className={`bg-gradient-to-r ${colors.from} ${colors.to} rounded-full border-0 px-5 py-2 text-sm font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl`}
             >
               {categoryNames[news.category] || news.category}
             </Badge>
-            <div className="h-1 w-16 bg-gradient-to-r from-primary/50 to-transparent rounded-full" />
+            <div className="from-primary/50 h-1 w-16 rounded-full bg-gradient-to-r to-transparent" />
           </div>
 
           {/* Title - Premium Typography */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-[1.1] tracking-tighter">
-            <span className="bg-gradient-to-br from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent">
+          <h1 className="mb-8 text-4xl leading-[1.1] font-black tracking-tighter md:text-6xl lg:text-7xl">
+            <span className="from-foreground via-foreground/90 to-foreground/70 bg-gradient-to-br bg-clip-text text-transparent">
               {news.caption}
             </span>
           </h1>
 
           {/* Summary - Enhanced */}
-          <p className="text-xl md:text-2xl text-muted-foreground/90 mb-8 leading-relaxed font-light max-w-4xl">
+          <p className="text-muted-foreground/90 mb-8 max-w-4xl text-xl leading-relaxed font-light md:text-2xl">
             {news.summary}
           </p>
 
           {/* Meta Information - Modern Card Design */}
-          <div className="flex flex-wrap items-center gap-6 mb-10">
-            <div className="flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-full border border-border/50 shadow-sm">
-              <Clock className="w-4 h-4 text-primary" />
+          <div className="mb-10 flex flex-wrap items-center gap-6">
+            <div className="bg-background/80 border-border/50 flex items-center gap-2 rounded-full border px-4 py-2 shadow-sm backdrop-blur-sm">
+              <Clock className="text-primary h-4 w-4" />
               <span className="text-sm font-medium">{timeAgo}</span>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-full border border-border/50 shadow-sm">
-              <Calendar className="w-4 h-4 text-primary" />
+            <div className="bg-background/80 border-border/50 flex items-center gap-2 rounded-full border px-4 py-2 shadow-sm backdrop-blur-sm">
+              <Calendar className="text-primary h-4 w-4" />
               <time dateTime={news.expressDate} className="text-sm font-medium">
                 {publishDate.toLocaleDateString("tr-TR", {
                   year: "numeric",
@@ -120,19 +124,21 @@ export function NewsDetailHero({ news }: NewsDetailHeroProps) {
                 })}
               </time>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-full border border-border/50 shadow-sm">
-              <Eye className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium">{news.viewCount.toLocaleString("tr-TR")} görüntülenme</span>
+            <div className="bg-background/80 border-border/50 flex items-center gap-2 rounded-full border px-4 py-2 shadow-sm backdrop-blur-sm">
+              <Eye className="text-primary h-4 w-4" />
+              <span className="text-sm font-medium">
+                {news.viewCount.toLocaleString("tr-TR")} görüntülenme
+              </span>
             </div>
           </div>
 
           {/* Main Image - Premium with overlay effects */}
-          <div className="relative group">
+          <div className="group relative">
             {/* Glow effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-purple-500/20 to-primary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            
+            <div className="from-primary/20 to-primary/20 absolute -inset-1 rounded-3xl bg-gradient-to-r via-purple-500/20 opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100" />
+
             {/* Image container */}
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border border-border/50 bg-muted">
+            <div className="border-border/50 bg-muted relative aspect-video w-full overflow-hidden rounded-2xl border shadow-2xl">
               <Image
                 src={imageUrl}
                 alt={altText}
@@ -142,7 +148,7 @@ export function NewsDetailHero({ news }: NewsDetailHeroProps) {
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
               />
               {/* Subtle overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
             </div>
           </div>
         </div>

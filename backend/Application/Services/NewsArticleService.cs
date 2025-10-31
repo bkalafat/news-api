@@ -12,7 +12,7 @@ namespace NewsApi.Application.Services;
 /// <summary>
 /// Service for managing news articles with caching support.
 /// </summary>
-public sealed class NewsArticleService(INewsArticleRepository newsArticleRepository, IMemoryCache memoryCache)
+internal sealed class NewsArticleService(INewsArticleRepository newsArticleRepository, IMemoryCache memoryCache)
     : INewsArticleService
 {
     public async Task<List<NewsArticle>> GetAllNewsAsync()
@@ -44,8 +44,8 @@ public sealed class NewsArticleService(INewsArticleRepository newsArticleReposit
         return news;
     }
 
-    public async Task<NewsArticle?> GetNewsBySlugAsync(string slug) =>
-        await newsArticleRepository.GetBySlugAsync(slug).ConfigureAwait(false);
+    public Task<NewsArticle?> GetNewsBySlugAsync(string slug) =>
+        newsArticleRepository.GetBySlugAsync(slug);
 
     public async Task<NewsArticle> CreateNewsAsync(NewsArticle newsArticle)
     {
@@ -82,7 +82,7 @@ public sealed class NewsArticleService(INewsArticleRepository newsArticleReposit
     /// Invalidates all news-related cache entries.
     /// </summary>
     /// <param name="newsId">The ID of the specific news article to invalidate (optional).</param>
-    private void InvalidateNewsCache(string? newsId = null)
+    private static void InvalidateNewsCache(string? newsId = null)
     {
         memoryCache.Remove(CacheKeys.NewsList);
         if (!string.IsNullOrEmpty(newsId))

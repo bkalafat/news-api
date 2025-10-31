@@ -11,16 +11,15 @@ namespace NewsApi.Infrastructure.Data.Repositories;
 /// <summary>
 /// MongoDB repository for news articles with optimized queries.
 /// </summary>
-public sealed class NewsArticleRepository(MongoDbContext context) : INewsArticleRepository
+internal sealed class NewsArticleRepository(MongoDbContext context) : INewsArticleRepository
 {
     private readonly IMongoCollection<NewsArticle> _newsCollection = context.News;
 
-    public async Task<List<NewsArticle>> GetAllAsync() =>
-        await _newsCollection
+    public Task<List<NewsArticle>> GetAllAsync() =>
+        _newsCollection
             .Find(article => article.IsActive)
             .SortByDescending(article => article.ExpressDate)
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
 
     public async Task<NewsArticle?> GetByIdAsync(string id)
     {
@@ -44,11 +43,10 @@ public sealed class NewsArticleRepository(MongoDbContext context) : INewsArticle
         }
     }
 
-    public async Task<NewsArticle?> GetBySlugAsync(string slug) =>
-        await _newsCollection
+    public Task<NewsArticle?> GetBySlugAsync(string slug) =>
+        _newsCollection
             .Find(article => article.Slug == slug && article.IsActive)
-            .FirstOrDefaultAsync()
-            .ConfigureAwait(false);
+            .FirstOrDefaultAsync();
 
     public async Task<NewsArticle> CreateAsync(NewsArticle newsArticle)
     {

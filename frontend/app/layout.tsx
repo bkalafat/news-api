@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/lib/providers/query-provider";
 import { ThemeProvider } from "@/lib/providers/theme-provider";
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,9 +15,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: {
     default: "Teknoloji Haberleri - Türkiye'nin Teknoloji Gazetesi",
-    template: "%s | Teknoloji Haberleri"
+    template: "%s | Teknoloji Haberleri",
   },
-  description: "BBC ve güvenilir kaynaklardan son dakika teknoloji haberleri, güncel gelişmeler ve analizler.",
+  description:
+    "BBC ve güvenilir kaynaklardan son dakika teknoloji haberleri, güncel gelişmeler ve analizler.",
   keywords: ["teknoloji", "haberler", "Türkiye", "BBC", "teknoloji haberleri", "güncel haberler"],
   authors: [{ name: "Teknoloji Haberleri" }],
   creator: "Teknoloji Haberleri",
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   openGraph: {
     type: "website",
     locale: "tr_TR",
@@ -56,9 +57,9 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
 };
@@ -72,7 +73,7 @@ export default async function RootLayout({
 
   return (
     <html lang="tr" className={inter.variable} suppressHydrationWarning>
-      <body className="antialiased min-h-screen bg-background">
+      <body className="bg-background min-h-screen antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -80,9 +81,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            <NextIntlClientProvider messages={messages}>
-              {children}
-            </NextIntlClientProvider>
+            <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
           </QueryProvider>
         </ThemeProvider>
       </body>

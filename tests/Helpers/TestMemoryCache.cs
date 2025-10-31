@@ -3,7 +3,7 @@ using Microsoft.Extensions.Primitives;
 
 namespace NewsApi.Tests.Helpers;
 
-public class TestMemoryCache : IMemoryCache
+internal class TestMemoryCache : IMemoryCache
 {
     private readonly Dictionary<object, object?> _cache = new();
 
@@ -33,7 +33,7 @@ public class TestMemoryCache : IMemoryCache
     }
 }
 
-public class TestCacheEntry : ICacheEntry
+internal class TestCacheEntry : ICacheEntry
 {
     private readonly TestMemoryCache _cache;
 

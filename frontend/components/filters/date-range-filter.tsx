@@ -1,16 +1,12 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Calendar } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { useState } from "react";
+import { Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 interface DateRangeFilterProps {
   onFilter: (startDate: Date | null, endDate: Date | null) => void;
@@ -18,14 +14,14 @@ interface DateRangeFilterProps {
 }
 
 export function DateRangeFilter({ onFilter, className }: DateRangeFilterProps) {
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [isActive, setIsActive] = useState(false);
 
   const handleApply = () => {
     const start = startDate ? new Date(startDate) : null;
     const end = endDate ? new Date(endDate) : null;
-    
+
     if (start || end) {
       onFilter(start, end);
       setIsActive(true);
@@ -33,8 +29,8 @@ export function DateRangeFilter({ onFilter, className }: DateRangeFilterProps) {
   };
 
   const handleClear = () => {
-    setStartDate('');
-    setEndDate('');
+    setStartDate("");
+    setEndDate("");
     onFilter(null, null);
     setIsActive(false);
   };
@@ -46,13 +42,17 @@ export function DateRangeFilter({ onFilter, className }: DateRangeFilterProps) {
           <Button variant="outline" size="sm" className="gap-2">
             <Calendar className="h-4 w-4" />
             Tarih Filtrele
-            {isActive && <Badge variant="secondary" className="ml-1 h-5 px-1">✓</Badge>}
+            {isActive && (
+              <Badge variant="secondary" className="ml-1 h-5 px-1">
+                ✓
+              </Badge>
+            )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-80" align="end">
           <div className="space-y-4">
-            <h4 className="font-medium leading-none">Tarih Aralığı</h4>
-            
+            <h4 className="leading-none font-medium">Tarih Aralığı</h4>
+
             <div className="space-y-2">
               <Label htmlFor="start-date">Başlangıç Tarihi</Label>
               <Input
@@ -83,12 +83,7 @@ export function DateRangeFilter({ onFilter, className }: DateRangeFilterProps) {
               >
                 Uygula
               </Button>
-              <Button
-                onClick={handleClear}
-                size="sm"
-                variant="outline"
-                className="flex-1"
-              >
+              <Button onClick={handleClear} size="sm" variant="outline" className="flex-1">
                 Temizle
               </Button>
             </div>

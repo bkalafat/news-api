@@ -6,7 +6,7 @@ namespace NewsApi.Application.DTOs;
 /// <summary>
 /// Data transfer object for creating a new news article.
 /// </summary>
-public sealed record CreateNewsArticleDto
+internal sealed record CreateNewsArticleDto
 {
     [Required]
     [StringLength(100)]
@@ -63,5 +63,5 @@ public sealed record CreateNewsArticleDto
 
     public bool IsActive { get; set; } = true;
 
-    public bool IsSecondPageNews { get; set; } = false;
+    public bool IsSecondPageNews { get; set; }
 }

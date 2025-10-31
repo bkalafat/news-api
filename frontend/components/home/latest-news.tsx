@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
@@ -19,12 +19,12 @@ export function LatestNews() {
   // Calculate pagination
   const { paginatedNews, totalPages } = useMemo(() => {
     if (!news) return { paginatedNews: [], totalPages: 0 };
-    
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedNews = news.slice(startIndex, endIndex);
     const totalPages = Math.ceil(news.length / itemsPerPage);
-    
+
     return { paginatedNews, totalPages };
   }, [news, currentPage]);
 
@@ -32,9 +32,9 @@ export function LatestNews() {
     return (
       <section id="latest" className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-bold">{t('home.latest')}</h2>
+          <h2 className="text-3xl font-bold">{t("home.latest")}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <NewsCardSkeleton key={i} />
           ))}
@@ -46,19 +46,14 @@ export function LatestNews() {
   if (error) {
     return (
       <section id="latest" className="space-y-6">
-        <h2 className="text-3xl font-bold">{t('home.latest')}</h2>
+        <h2 className="text-3xl font-bold">{t("home.latest")}</h2>
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{t('common.error')}</AlertTitle>
+          <AlertTitle>{t("common.error")}</AlertTitle>
           <AlertDescription>
             {error.message}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => refetch()}
-              className="ml-4"
-            >
-              {t('common.tryAgain')}
+            <Button variant="outline" size="sm" onClick={() => refetch()} className="ml-4">
+              {t("common.tryAgain")}
             </Button>
           </AlertDescription>
         </Alert>
@@ -69,13 +64,11 @@ export function LatestNews() {
   if (!news || news.length === 0) {
     return (
       <section id="latest" className="space-y-6">
-        <h2 className="text-3xl font-bold">{t('home.latest')}</h2>
+        <h2 className="text-3xl font-bold">{t("home.latest")}</h2>
         <Alert>
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>{t('common.noResults')}</AlertTitle>
-          <AlertDescription>
-            Şu anda gösterilecek haber bulunmuyor.
-          </AlertDescription>
+          <AlertTitle>{t("common.noResults")}</AlertTitle>
+          <AlertDescription>Şu anda gösterilecek haber bulunmuyor.</AlertDescription>
         </Alert>
       </section>
     );
@@ -84,12 +77,10 @@ export function LatestNews() {
   return (
     <section id="latest" className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold">{t('home.latest')}</h2>
-        <p className="text-muted-foreground">
-          Toplam {news.length} haber
-        </p>
+        <h2 className="text-3xl font-bold">{t("home.latest")}</h2>
+        <p className="text-muted-foreground">Toplam {news.length} haber</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {paginatedNews.map((item, index) => (
           <AnimatedNewsCard key={item.id} news={item} index={index} />
         ))}

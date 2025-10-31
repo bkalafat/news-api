@@ -4,7 +4,7 @@ using NewsApi.Infrastructure.Data.Configurations;
 
 namespace NewsApi.Infrastructure.Data;
 
-public class MongoDbContext
+internal sealed class MongoDbContext
 {
     private readonly IMongoDatabase _database;
 

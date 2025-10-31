@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { Search, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useCallback } from "react";
+import { Search, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface SearchBarProps {
   className?: string;
 }
 
 export function SearchBar({ className }: SearchBarProps) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
@@ -27,22 +27,25 @@ export function SearchBar({ className }: SearchBarProps) {
     return () => clearTimeout(timer);
   }, [query, router]);
 
-  const handleSearch = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
-      setIsOpen(false);
-    }
-  }, [query, router]);
+  const handleSearch = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      if (query.trim()) {
+        router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+        setIsOpen(false);
+      }
+    },
+    [query, router]
+  );
 
   const handleClear = useCallback(() => {
-    setQuery('');
+    setQuery("");
   }, []);
 
   return (
     <div className={className}>
       {/* Desktop Search */}
-      <form onSubmit={handleSearch} className="hidden md:flex relative">
+      <form onSubmit={handleSearch} className="relative hidden md:flex">
         <Input
           type="search"
           placeholder="Haber ara..."
@@ -55,7 +58,7 @@ export function SearchBar({ className }: SearchBarProps) {
             type="button"
             variant="ghost"
             size="icon"
-            className="absolute right-0 top-0 h-full"
+            className="absolute top-0 right-0 h-full"
             onClick={handleClear}
           >
             <X className="h-4 w-4" />
@@ -64,18 +67,13 @@ export function SearchBar({ className }: SearchBarProps) {
       </form>
 
       {/* Mobile Search Button */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="md:hidden"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+      <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
         <Search className="h-5 w-5" />
       </Button>
 
       {/* Mobile Search Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-background md:hidden">
+        <div className="bg-background fixed inset-0 z-50 md:hidden">
           <div className="container mx-auto px-4 py-4">
             <form onSubmit={handleSearch} className="flex gap-2">
               <Input

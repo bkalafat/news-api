@@ -1,6 +1,6 @@
-﻿namespace NewsApi.Common;
+namespace NewsApi.Common;
 
-public static class CacheKeys
+internal static class CacheKeys
 {
     public static string NewsList => "_NewsList";
 }

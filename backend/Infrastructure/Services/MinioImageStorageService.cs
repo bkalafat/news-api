@@ -16,7 +16,7 @@ namespace NewsApi.Infrastructure.Services;
 /// <summary>
 /// Service for managing image storage in MinIO/S3
 /// </summary>
-public class MinioImageStorageService : IImageStorageService
+internal sealed class MinioImageStorageService : IImageStorageService
 {
     private readonly IMinioClient _minioClient;
     private readonly MinioSettings _settings;
@@ -55,6 +55,7 @@ public class MinioImageStorageService : IImageStorageService
         var thumbnailKey = $"{newsId}-thumb{extension}";
         var imageStream = image.OpenReadStream();
         await
+
         // Upload original image
         using (imageStream.ConfigureAwait(false))
         {
@@ -153,14 +154,14 @@ public class MinioImageStorageService : IImageStorageService
     }
 
     /// <inheritdoc />
-    public async Task<string> GetPresignedUrlAsync(string objectKey, int expirySeconds = 3600)
+    public Task<string> GetPresignedUrlAsync(string objectKey, int expirySeconds = 3600)
     {
         var args = new PresignedGetObjectArgs()
             .WithBucket(_settings.BucketName)
             .WithObject(objectKey)
             .WithExpiry(expirySeconds);
 
-        return await _minioClient.PresignedGetObjectAsync(args).ConfigureAwait(false);
+        return _minioClient.PresignedGetObjectAsync(args);
     }
 
     /// <inheritdoc />
@@ -219,7 +220,7 @@ public class MinioImageStorageService : IImageStorageService
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
         var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
 
-        if (!Array.Exists(allowedExtensions, ext => ext == extension))
+        if (!Array.Exists(allowedExtensions, ext => string.Equals(ext, extension, StringComparison.Ordinal)))
         {
             throw new ArgumentException(
                 $"Image format not supported. Allowed formats: {string.Join(", ", allowedExtensions)}"
@@ -227,7 +228,7 @@ public class MinioImageStorageService : IImageStorageService
         }
 
         var allowedContentTypes = new[] { "image/jpeg", "image/png", "image/webp", "image/gif" };
-        if (!Array.Exists(allowedContentTypes, ct => ct == image.ContentType))
+        if (!Array.Exists(allowedContentTypes, ct => string.Equals(ct, image.ContentType, StringComparison.Ordinal)))
         {
             throw new ArgumentException(
                 $"Invalid content type. Allowed types: {string.Join(", ", allowedContentTypes)}"
@@ -257,7 +258,7 @@ public class MinioImageStorageService : IImageStorageService
     /// <summary>
     /// Generate a thumbnail from the original image
     /// </summary>
-    private async Task<byte[]> GenerateThumbnailAsync(byte[] imageBytes, int width, int height)
+    private static async Task<byte[]> GenerateThumbnailAsync(byte[] imageBytes, int width, int height)
     {
         using var image = Image.Load(imageBytes);
 
@@ -274,7 +275,7 @@ public class MinioImageStorageService : IImageStorageService
     /// <summary>
     /// Read stream to byte array
     /// </summary>
-    private async Task<byte[]> ReadStreamToBytes(Stream stream)
+    private static async Task<byte[]> ReadStreamToBytes(Stream stream)
     {
         using var memoryStream = new MemoryStream();
         await stream.CopyToAsync(memoryStream).ConfigureAwait(false);

@@ -1,26 +1,28 @@
-'use client';
+"use client";
 
-import { useQuery, useMutation, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
-import { newsApi } from './client';
-import { News, CreateNewsDto, UpdateNewsDto, ApiError } from './types';
+import { useQuery, useMutation, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
+import { newsApi } from "./client";
+import { News, CreateNewsDto, UpdateNewsDto, ApiError } from "./types";
 
 /**
  * Query keys for React Query caching
  */
 export const newsQueryKeys = {
-  all: ['news'] as const,
-  lists: () => [...newsQueryKeys.all, 'list'] as const,
+  all: ["news"] as const,
+  lists: () => [...newsQueryKeys.all, "list"] as const,
   list: (filters?: any) => [...newsQueryKeys.lists(), filters] as const,
-  details: () => [...newsQueryKeys.all, 'detail'] as const,
+  details: () => [...newsQueryKeys.all, "detail"] as const,
   detail: (id: string) => [...newsQueryKeys.details(), id] as const,
-  categories: () => [...newsQueryKeys.all, 'category'] as const,
+  categories: () => [...newsQueryKeys.all, "category"] as const,
   category: (category: string) => [...newsQueryKeys.categories(), category] as const,
 };
 
 /**
  * Hook to fetch all news
  */
-export function useAllNews(options?: Omit<UseQueryOptions<News[], ApiError>, 'queryKey' | 'queryFn'>) {
+export function useAllNews(
+  options?: Omit<UseQueryOptions<News[], ApiError>, "queryKey" | "queryFn">
+) {
   return useQuery<News[], ApiError>({
     queryKey: newsQueryKeys.lists(),
     queryFn: () => newsApi.getAllNews(),
@@ -35,7 +37,7 @@ export function useAllNews(options?: Omit<UseQueryOptions<News[], ApiError>, 'qu
  */
 export function useNewsById(
   id: string,
-  options?: Omit<UseQueryOptions<News, ApiError>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<News, ApiError>, "queryKey" | "queryFn">
 ) {
   return useQuery<News, ApiError>({
     queryKey: newsQueryKeys.detail(id),
@@ -51,7 +53,7 @@ export function useNewsById(
  */
 export function useNewsByCategory(
   category: string,
-  options?: Omit<UseQueryOptions<News[], ApiError>, 'queryKey' | 'queryFn'>
+  options?: Omit<UseQueryOptions<News[], ApiError>, "queryKey" | "queryFn">
 ) {
   return useQuery<News[], ApiError>({
     queryKey: newsQueryKeys.category(category),
@@ -116,7 +118,7 @@ export function useDeleteNews() {
  */
 export function useApiHealth() {
   return useQuery<{ status: string }, ApiError>({
-    queryKey: ['health'],
+    queryKey: ["health"],
     queryFn: () => newsApi.getHealth(),
     staleTime: 30 * 1000, // 30 seconds
     retry: 3,

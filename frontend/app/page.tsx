@@ -10,11 +10,11 @@ export const revalidate = 43200; // 12 hours
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
         <HeroSection />
-        <div className="container mx-auto px-4 py-12 space-y-16">
+        <div className="container mx-auto space-y-16 px-4 py-12">
           <LatestNews />
           <CategoriesSection />
         </div>

@@ -19,7 +19,7 @@ using NewsApi.Infrastructure.Services;
 
 namespace NewsApi.Presentation.Extensions;
 
-public static class ServiceCollectionExtensions
+internal static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplicationServices(
         this IServiceCollection services,

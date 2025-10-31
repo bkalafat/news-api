@@ -102,13 +102,13 @@ web/
 The frontend communicates with the News API backend using React Query hooks:
 
 ```typescript
-import { useAllNews, useNewsByCategory } from '@/lib/api/hooks';
+import { useAllNews, useNewsByCategory } from "@/lib/api/hooks";
 
 // Get all news
 const { data, isLoading, error } = useAllNews();
 
 // Get news by category
-const { data: techNews } = useNewsByCategory('technology');
+const { data: techNews } = useNewsByCategory("technology");
 ```
 
 ## 🔧 Development with Context7 MCP

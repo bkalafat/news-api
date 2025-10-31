@@ -5,7 +5,7 @@ using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Unit.Validators;
 
-public class UpdateNewsArticleDtoValidatorTests
+internal class UpdateNewsArticleDtoValidatorTests
 {
     private readonly UpdateNewsArticleDtoValidator _validator;
 

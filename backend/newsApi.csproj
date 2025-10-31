@@ -12,6 +12,11 @@
   <ItemGroup>
     <None Include=".circleci\config.yaml" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Meziantou.Analyzer" Version="2.0.177">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

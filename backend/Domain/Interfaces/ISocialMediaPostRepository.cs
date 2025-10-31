@@ -7,7 +7,7 @@ namespace NewsApi.Domain.Interfaces;
 /// <summary>
 /// Repository interface for social media posts
 /// </summary>
-public interface ISocialMediaPostRepository
+internal interface ISocialMediaPostRepository
 {
     /// <summary>
     /// Gets all social media posts

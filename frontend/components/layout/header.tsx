@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -14,41 +14,36 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <Newspaper className="h-6 w-6" />
-            <span className="font-bold text-xl hidden sm:inline-block">
-              {t('app.title')}
-            </span>
+            <span className="hidden text-xl font-bold sm:inline-block">{t("app.title")}</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link
-              href="/"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
-              {t('navigation.home')}
+          <nav className="hidden items-center space-x-6 md:flex">
+            <Link href="/" className="hover:text-primary text-sm font-medium transition-colors">
+              {t("navigation.home")}
             </Link>
             <Link
               href="/categories"
-              className="text-sm font-medium transition-colors hover:text-primary"
+              className="hover:text-primary text-sm font-medium transition-colors"
             >
-              {t('navigation.categories')}
+              {t("navigation.categories")}
             </Link>
             <Link
               href="/about"
-              className="text-sm font-medium transition-colors hover:text-primary"
+              className="hover:text-primary text-sm font-medium transition-colors"
             >
-              {t('navigation.about')}
+              {t("navigation.about")}
             </Link>
           </nav>
 
           {/* Search Bar */}
-          <SearchBar className="flex-1 max-w-md hidden md:flex" />
+          <SearchBar className="hidden max-w-md flex-1 md:flex" />
 
           {/* Theme Toggle */}
           <ThemeToggle />
@@ -61,93 +56,93 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-              <nav className="flex flex-col space-y-4 mt-8">
+              <nav className="mt-8 flex flex-col space-y-4">
                 <Link
                   href="/"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-lg font-medium transition-colors hover:text-primary"
+                  className="hover:text-primary text-lg font-medium transition-colors"
                 >
-                  {t('navigation.home')}
+                  {t("navigation.home")}
                 </Link>
                 <Link
                   href="/categories"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-lg font-medium transition-colors hover:text-primary"
+                  className="hover:text-primary text-lg font-medium transition-colors"
                 >
-                  {t('navigation.categories')}
+                  {t("navigation.categories")}
                 </Link>
                 <Link
                   href="/about"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-lg font-medium transition-colors hover:text-primary"
+                  className="hover:text-primary text-lg font-medium transition-colors"
                 >
-                  {t('navigation.about')}
+                  {t("navigation.about")}
                 </Link>
                 <div className="border-t pt-4">
-                  <h3 className="font-semibold mb-3">{t('navigation.categories')}</h3>
+                  <h3 className="mb-3 font-semibold">{t("navigation.categories")}</h3>
                   <div className="flex flex-col space-y-2">
                     <Link
                       href="/category/reddit"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
+                      className="hover:text-primary text-sm transition-colors"
                     >
-                      {t('categories.reddit')}
+                      {t("categories.reddit")}
                     </Link>
                     <Link
                       href="/category/github"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
+                      className="hover:text-primary text-sm transition-colors"
                     >
-                      {t('categories.github')}
+                      {t("categories.github")}
                     </Link>
                     <Link
                       href="/category/twitter"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
+                      className="hover:text-primary text-sm transition-colors"
                     >
-                      {t('categories.twitter')}
+                      {t("categories.twitter")}
                     </Link>
                     <Link
                       href="/category/linkedin"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
+                      className="hover:text-primary text-sm transition-colors"
                     >
-                      {t('categories.linkedin')}
+                      {t("categories.linkedin")}
                     </Link>
                     <Link
                       href="/category/facebook"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
+                      className="hover:text-primary text-sm transition-colors"
                     >
-                      {t('categories.facebook')}
+                      {t("categories.facebook")}
                     </Link>
                     <Link
                       href="/category/instagram"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
+                      className="hover:text-primary text-sm transition-colors"
                     >
-                      {t('categories.instagram')}
+                      {t("categories.instagram")}
                     </Link>
                     <Link
                       href="/category/tiktok"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
+                      className="hover:text-primary text-sm transition-colors"
                     >
-                      {t('categories.tiktok')}
+                      {t("categories.tiktok")}
                     </Link>
                     <Link
                       href="/category/youtube"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
+                      className="hover:text-primary text-sm transition-colors"
                     >
-                      {t('categories.youtube')}
+                      {t("categories.youtube")}
                     </Link>
                     <Link
                       href="/category/technology"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm transition-colors hover:text-primary"
+                      className="hover:text-primary text-sm transition-colors"
                     >
-                      {t('categories.technology')}
+                      {t("categories.technology")}
                     </Link>
                   </div>
                 </div>

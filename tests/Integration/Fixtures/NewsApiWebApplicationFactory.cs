@@ -9,7 +9,7 @@ using NewsApi.Tests.Helpers;
 
 namespace NewsApi.Tests.Integration.Fixtures;
 
-public class NewsApiWebApplicationFactory : WebApplicationFactory<Program>
+internal class NewsApiWebApplicationFactory : WebApplicationFactory<Program>
 {
     public string TestDatabaseName { get; } = $"NewsApiTestDb_{Guid.NewGuid()}";
 
@@ -40,7 +40,7 @@ public class NewsApiWebApplicationFactory : WebApplicationFactory<Program>
                     {
                         { "MongoDbSettings:DatabaseName", TestDatabaseName },
                     };
-                    config.AddInMemoryCollection(overrides as IEnumerable<KeyValuePair<string, string?>>);
+                    config.AddInMemoryCollection(overrides);
 
                     // Attempt to drop any leftover test databases early so the app starts with a clean DB.
                     try
@@ -128,7 +128,7 @@ public class NewsApiWebApplicationFactory : WebApplicationFactory<Program>
     // Hide the base CreateClient so we can ensure the database is cleaned before each test uses the factory.
     // Tests call factory.CreateClient() in their constructors; this "new" method will be invoked and
     // perform a best-effort DropDatabase to guarantee per-test isolation.
-    public new System.Net.Http.HttpClient CreateClient()
+    public new HttpClient CreateClient()
     {
         try
         {

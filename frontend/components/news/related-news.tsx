@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 import { Calendar } from "lucide-react";
 
 interface RelatedNewsItem {
@@ -35,18 +34,16 @@ export function RelatedNews({ category, currentNewsId, limit = 5 }: RelatedNewsP
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
         const response = await fetch(`${apiUrl}/api/NewsArticle?category=${category}`);
-        
+
         if (!response.ok) {
           throw new Error("Failed to fetch related news");
         }
 
         const data: RelatedNewsItem[] = await response.json();
-        
+
         // Filter out current news and limit results
-        const filtered = data
-          .filter((item) => item.id !== currentNewsId)
-          .slice(0, limit);
-        
+        const filtered = data.filter((item) => item.id !== currentNewsId).slice(0, limit);
+
         setNews(filtered);
       } catch (error) {
         console.error("Error fetching related news:", error);
@@ -100,33 +97,34 @@ export function RelatedNews({ category, currentNewsId, limit = 5 }: RelatedNewsP
       </CardHeader>
       <CardContent className="space-y-4">
         {news.map((item) => {
-          const imageUrl = item.thumbnailUrl || item.imageUrl || item.imgPath || "/placeholder-news.jpg";
-          
+          const imageUrl =
+            item.thumbnailUrl || item.imageUrl || item.imgPath || "/placeholder-news.jpg";
+
           return (
             <Link
               key={item.id}
               href={`/news/${item.slug || item.id}`}
-              className="group block hover:bg-muted/50 p-2 rounded-lg transition-colors"
+              className="group hover:bg-muted/50 block rounded-lg p-2 transition-colors"
             >
               <div className="flex gap-3">
                 {/* Thumbnail */}
-                <div className="relative w-24 h-20 flex-shrink-0 rounded-md overflow-hidden bg-muted">
+                <div className="bg-muted relative h-20 w-24 flex-shrink-0 overflow-hidden rounded-md">
                   <Image
                     src={imageUrl}
                     alt={item.caption}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                     sizes="96px"
                   />
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-semibold line-clamp-2 group-hover:text-primary transition-colors mb-1">
+                <div className="min-w-0 flex-1">
+                  <h4 className="group-hover:text-primary mb-1 line-clamp-2 text-sm font-semibold transition-colors">
                     {item.caption}
                   </h4>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Calendar className="w-3 h-3" />
+                  <div className="text-muted-foreground flex items-center gap-2 text-xs">
+                    <Calendar className="h-3 w-3" />
                     <time dateTime={item.expressDate}>
                       {new Date(item.expressDate).toLocaleDateString("tr-TR", {
                         day: "numeric",
@@ -143,7 +141,7 @@ export function RelatedNews({ category, currentNewsId, limit = 5 }: RelatedNewsP
         {/* View All Link */}
         <Link
           href={`/category/${category}`}
-          className="block text-center text-sm font-medium text-primary hover:underline pt-2"
+          className="text-primary block pt-2 text-center text-sm font-medium hover:underline"
         >
           Tüm {categoryNames[category] || category} Haberlerini Gör →
         </Link>

@@ -12,7 +12,7 @@ namespace NewsApi.Infrastructure.Services;
 /// <summary>
 /// Service for fetching posts from Reddit API
 /// </summary>
-public class RedditService
+internal sealed class RedditService
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger<RedditService> _logger;
@@ -46,7 +46,7 @@ public class RedditService
 
             var response = await _httpClient.GetFromJsonAsync<RedditResponse>(url);
 
-            if (response?.Data?.Children == null || !response.Data.Children.Any())
+            if (response?.Data?.Children == null || response.Data.Children.Count == 0)
             {
                 _logger.LogWarning("No posts found for subreddit: {Subreddit}", subreddit);
                 return new List<CreateSocialMediaPostDto>();
@@ -84,7 +84,7 @@ public class RedditService
 
             var response = await _httpClient.GetFromJsonAsync<RedditResponse>(url);
 
-            if (response?.Data?.Children == null || !response.Data.Children.Any())
+            if (response?.Data?.Children == null || response.Data.Children.Count == 0)
             {
                 _logger.LogWarning("No search results for query: {Query} in r/{Subreddit}", query, subreddit);
                 return new List<CreateSocialMediaPostDto>();
@@ -120,6 +120,7 @@ public class RedditService
             {
                 imageUrls.Add(data.Url);
             }
+
             // Thumbnail
             else if (!string.IsNullOrEmpty(data.Thumbnail) &&
                      data.Thumbnail.StartsWith("http", StringComparison.OrdinalIgnoreCase))
@@ -129,7 +130,7 @@ public class RedditService
         }
 
         // Preview images
-        if (data.Preview?.Images != null && data.Preview.Images.Any())
+        if (data.Preview?.Images != null && data.Preview.Images.Count > 0)
         {
             foreach (var img in data.Preview.Images)
             {
@@ -137,7 +138,7 @@ public class RedditService
                 {
                     // Reddit returns HTML-encoded URLs, decode them
                     var decodedUrl = System.Net.WebUtility.HtmlDecode(img.Source.Url);
-                    if (!imageUrls.Contains(decodedUrl))
+                    if (!imageUrls.Contains(decodedUrl, StringComparer.Ordinal))
                     {
                         imageUrls.Add(decodedUrl);
                     }
@@ -165,7 +166,7 @@ public class RedditService
             Category = subreddit,
             PostedAt = DateTimeOffset.FromUnixTimeSeconds((long)(data.CreatedUtc ?? 0)).UtcDateTime,
             Priority = CalculatePriority(data.Ups ?? 0, data.NumComments ?? 0),
-            Language = "en"
+            Language = "en",
         };
     }
 
@@ -174,69 +175,110 @@ public class RedditService
         // Calculate priority based on engagement (0-100 scale)
         var score = upvotes + (comments * 2); // Comments are weighted more
 
-        if (score >= 1000) return 90;
-        if (score >= 500) return 80;
-        if (score >= 200) return 70;
-        if (score >= 100) return 60;
-        if (score >= 50) return 50;
-        if (score >= 20) return 40;
-        if (score >= 10) return 30;
+        if (score >= 1000)
+        {
+            return 90;
+        }
+
+        if (score >= 500)
+        {
+            return 80;
+        }
+
+        if (score >= 200)
+        {
+            return 70;
+        }
+
+        if (score >= 100)
+        {
+            return 60;
+        }
+
+        if (score >= 50)
+        {
+            return 50;
+        }
+
+        if (score >= 20)
+        {
+            return 40;
+        }
+
+        if (score >= 10)
+        {
+            return 30;
+        }
+
         return 20;
     }
 }
 
-#region Reddit API Response Models
-
-public class RedditResponse
+internal sealed class RedditResponse
 {
     public string? Kind { get; set; }
+
     public RedditData? Data { get; set; }
 }
 
-public class RedditData
+internal sealed class RedditData
 {
     public List<RedditChild>? Children { get; set; }
+
     public string? After { get; set; }
+
     public string? Before { get; set; }
 }
 
-public class RedditChild
+internal sealed class RedditChild
 {
     public string? Kind { get; set; }
+
     public RedditPostData? Data { get; set; }
 }
 
-public class RedditPostData
+internal sealed class RedditPostData
 {
     public string? Id { get; set; }
+
     public string? Title { get; set; }
+
     public string? Selftext { get; set; }
+
     public string? Author { get; set; }
+
     public string? Permalink { get; set; }
+
     public string? Url { get; set; }
+
     public string? Thumbnail { get; set; }
+
     public int? Ups { get; set; }
+
     public int? Downs { get; set; }
+
     public int? NumComments { get; set; }
+
     public double? CreatedUtc { get; set; }
+
     public RedditPreview? Preview { get; set; }
 }
 
-public class RedditPreview
+internal sealed class RedditPreview
 {
     public List<RedditImage>? Images { get; set; }
 }
 
-public class RedditImage
+internal sealed class RedditImage
 {
     public RedditImageSource? Source { get; set; }
 }
 
-public class RedditImageSource
+internal sealed class RedditImageSource
 {
     public string? Url { get; set; }
+
     public int? Width { get; set; }
+
     public int? Height { get; set; }
 }
-
-#endregion
