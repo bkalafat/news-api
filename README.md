@@ -1,43 +1,101 @@
-# News Portal
+<p align="center">
+  <h1 align="center">📰 News Portal</h1>
+</p>
 
-[![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-7.0-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
-[![Tests](https://img.shields.io/badge/Tests-178%20Passing-success)](tests/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+<p align="center">
+  <strong>Modern full-stack news platform built with Clean Architecture</strong>
+</p>
 
-> A professional full-stack news platform with Clean Architecture, JWT authentication, and modern web technologies.
+<p align="center">
+  <a href="https://dotnet.microsoft.com/"><img alt=".NET 9" src="https://img.shields.io/badge/.NET-9.0-512BD4?style=flat-square&logo=dotnet" /></a>
+  <a href="https://nextjs.org/"><img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" /></a>
+  <a href="https://www.mongodb.com/"><img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-7.0-47A248?style=flat-square&logo=mongodb&logoColor=white" /></a>
+  <a href="https://www.docker.com/"><img alt="Docker" src="https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker&logoColor=white" /></a>
+  <a href="tests/"><img alt="Tests" src="https://img.shields.io/badge/Tests-178%20Passing-success?style=flat-square" /></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" /></a>
+</p>
+
+<p align="center">
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-key-features">Features</a> •
+  <a href="#-documentation">Documentation</a> •
+  <a href="#-api-endpoints">API</a> •
+  <a href="#-deployment">Deployment</a>
+</p>
+
+---
 
 ## 🚀 Quick Start
 
+> **Prerequisites**: Docker Desktop installed and running
+
 ```bash
-# 1. Clone and setup
+# Clone the repository
 git clone https://github.com/bkalafat/newsportal.git
 cd newsportal
+
+# Create environment file (optional)
 cp .env.example .env
 
-# 2. Start with Docker (recommended)
+# Start all services with Docker Compose
 docker compose up -d
 
-# 3. Access services
-# API: http://localhost:5000
-# Swagger: http://localhost:5000/swagger
-# MongoDB UI: http://localhost:8081 (admin/admin123)
-# MinIO Console: http://localhost:9001 (minioadmin/minioadmin123)
+# Verify services are running
+docker compose ps
+```
+
+### 🌐 Access Your Services
+
+| Service | URL | Credentials |
+|---------|-----|-------------|
+| **🔥 Backend API** | http://localhost:5000 | - |
+| **📚 Swagger UI** | http://localhost:5000/swagger | - |
+| **🗄️ MongoDB Admin** | http://localhost:8081 | `admin` / `admin123` |
+| **📦 MinIO Console** | http://localhost:9001 | `minioadmin` / `minioadmin123` |
+| **🎨 Frontend** | http://localhost:3000 | - |
+
+**Test the API:**
+```bash
+curl http://localhost:5000/health
+# Response: {"status":"Healthy","mongodb":"Connected"}
 ```
 
 ## ✨ Key Features
 
-- **Clean Architecture** - Domain-driven design with SOLID principles
-- **RESTful API** - ASP.NET Core 9 with comprehensive validation
-- **JWT Authentication** - Secure token-based authorization
-- **MongoDB** - Flexible NoSQL storage with optimized indexes
-- **MinIO Storage** - S3-compatible object storage for images
-- **Memory Caching** - High-performance in-memory caching
-- **Modern Frontend** - Next.js 16, TypeScript, TailwindCSS
-- **Auto-Scaling** - Production deployment on Azure Container Apps
-- **178+ Tests** - Comprehensive unit and integration test coverage
+<table>
+<tr>
+<td width="50%">
+
+### 🏗️ Architecture
+- **Clean Architecture** with SOLID principles
+- **Domain-Driven Design** with clear layer separation
+- **Dependency Injection** throughout
+- **Repository Pattern** for data access
+
+### 🔒 Security & Performance
+- **JWT Authentication** with Bearer tokens
+- **FluentValidation** for all inputs
+- **Memory Caching** (30-60 min TTL)
+- **Auto-Scaling** (0-10 replicas)
+
+</td>
+<td width="50%">
+
+### 🚀 Technology
+- **ASP.NET Core 9** with C# 13+
+- **MongoDB 7.0** with optimized indexes
+- **MinIO** S3-compatible storage
+- **Next.js 16** with TypeScript
+
+### 🧪 Quality Assurance
+- **178+ Tests** (unit + integration)
+- **CI/CD** with GitHub Actions
+- **Health Checks** for all services
+- **Swagger/OpenAPI** documentation
+
+</td>
+</tr>
+</table>
 
 ## 📁 Project Structure
 
@@ -131,45 +189,69 @@ npm run dev
 
 ## 🚢 Deployment
 
+### Production Architecture
+
+```mermaid
+graph LR
+    A[GitHub Push] -->|Triggers| B[GitHub Actions]
+    B -->|Builds & Deploys| C[Azure Container Apps]
+    B -->|Deploys| D[Vercel CDN]
+    C -->|Connects to| E[MongoDB Atlas]
+    C -->|Stores Images| F[MinIO/Cloudflare R2]
+    D -->|API Calls| C
+```
+
 ### Production Stack
 
-- **Backend**: Azure Container Apps (auto-scaling, 0-10 replicas)
-- **Frontend**: Vercel / Azure Static Web Apps
-- **Database**: MongoDB Atlas (M0 free tier)
-- **Storage**: MinIO / Cloudflare R2
-- **CI/CD**: GitHub Actions (auto-deploy on push to master)
+| Component | Platform | Auto-Deploy | Scaling |
+|-----------|----------|-------------|---------|
+| **Backend API** | Azure Container Apps | ✅ GitHub Actions | 0-10 replicas |
+| **Frontend** | Vercel | ✅ Git Push | Global CDN |
+| **Database** | MongoDB Atlas | Manual | M0 Free Tier |
+| **Storage** | MinIO / Cloudflare R2 | Manual | 10GB Free |
 
-### Production URLs
+### Deploy Commands
 
-- **Backend API**: `https://newsportal-backend.*.azurecontainerapps.io`
-- **Swagger**: `https://newsportal-backend.*.azurecontainerapps.io/swagger`
-- **Frontend**: Deployed via Vercel
+```bash
+# Deploy backend to Azure
+.\deploy-to-azure.ps1
 
-See **[DEPLOY.md](docs/DEPLOY.md)** for complete deployment guide.
+# Frontend deploys automatically on push to master
+git push origin master
+```
+
+📘 **Complete Guide**: See [DEPLOY.md](docs/DEPLOY.md) for detailed deployment instructions
 
 ## 🛠️ Tech Stack
 
+<div align="center">
+
 ### Backend
-- **.NET 9** - Latest C# 13 with minimal APIs
-- **MongoDB 7.0** - Flexible NoSQL document database
-- **MinIO** - S3-compatible object storage
-- **JWT Bearer** - Token-based authentication
-- **FluentValidation** - Request validation
-- **xUnit + Moq** - Comprehensive testing
+![.NET](https://img.shields.io/badge/.NET_9-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![C#](https://img.shields.io/badge/C%23_13-239120?style=for-the-badge&logo=csharp&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB_7.0-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![MinIO](https://img.shields.io/badge/MinIO-C72E49?style=for-the-badge&logo=minio&logoColor=white)
 
 ### Frontend
-- **Next.js 16** - React framework with App Router
-- **TypeScript 5** - Type-safe development
-- **TailwindCSS 4** - Modern utility-first CSS
-- **Shadcn/ui** - Beautiful accessible components
-- **React Query** - Powerful data fetching
-- **next-intl** - Turkish localization
+![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript_5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![React Query](https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
 
-### Infrastructure
-- **Docker Compose** - Local development environment
-- **Azure Container Apps** - Production backend hosting
-- **Vercel** - Frontend CDN deployment
-- **GitHub Actions** - CI/CD automation
+### Infrastructure & DevOps
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+
+### Testing
+![xUnit](https://img.shields.io/badge/xUnit-512BD4?style=for-the-badge&logo=.net&logoColor=white)
+![Moq](https://img.shields.io/badge/Moq-512BD4?style=for-the-badge&logo=.net&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
+
+</div>
 
 ## 📋 Prerequisites
 
@@ -178,27 +260,65 @@ See **[DEPLOY.md](docs/DEPLOY.md)** for complete deployment guide.
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Contributions are welcome! Please follow these guidelines:
 
-Please ensure:
-- All tests pass (`dotnet test`)
-- Code follows existing patterns
-- Documentation is updated
+<details>
+<summary><b>Contribution Workflow</b></summary>
+
+1. **Fork** the repository
+2. **Create** your feature branch
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. **Commit** your changes
+   ```bash
+   git commit -m 'Add amazing feature'
+   ```
+4. **Push** to the branch
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+5. **Open** a Pull Request
+
+### ✅ Before Submitting
+
+- [ ] All tests pass (`dotnet test`)
+- [ ] Code follows Clean Architecture principles
+- [ ] Documentation is updated
+- [ ] No breaking changes (or clearly documented)
+
+</details>
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Support
+## 📞 Support & Community
 
-- **Issues**: [GitHub Issues](https://github.com/bkalafat/newsportal/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/bkalafat/newsportal/discussions)
-- **Repository**: [github.com/bkalafat/newsportal](https://github.com/bkalafat/newsportal)
+<p align="center">
+  <a href="https://github.com/bkalafat/newsportal/issues">
+    <img src="https://img.shields.io/github/issues/bkalafat/newsportal?style=for-the-badge" alt="Issues" />
+  </a>
+  <a href="https://github.com/bkalafat/newsportal/stargazers">
+    <img src="https://img.shields.io/github/stars/bkalafat/newsportal?style=for-the-badge" alt="Stars" />
+  </a>
+  <a href="https://github.com/bkalafat/newsportal/network/members">
+    <img src="https://img.shields.io/github/forks/bkalafat/newsportal?style=for-the-badge" alt="Forks" />
+  </a>
+</p>
+
+<p align="center">
+  <strong>Need help?</strong> Open an <a href="https://github.com/bkalafat/newsportal/issues">issue</a> or start a <a href="https://github.com/bkalafat/newsportal/discussions">discussion</a>
+</p>
 
 ---
 
-**Built with ❤️ using Clean Architecture principles**
+<p align="center">
+  <strong>Built with ❤️ using Clean Architecture principles</strong>
+</p>
+
+<p align="center">
+  <sub>⭐ Star this repository if you find it helpful!</sub>
+</p>
