@@ -11,7 +11,7 @@
    Name: News Portal Aggregator
    App type: ☑️ script (for personal use)
    Description: Automated news aggregation from technology subreddits
-   About URL: https://clever-speculoos-aacb3a.netlify.app
+   About URL: https://teknohaber.netlify.app
    Redirect URI: https://newsportal-backend.happyglacier-db0dd319.westeurope.azurecontainerapps.io/auth/reddit/callback
    ```
 

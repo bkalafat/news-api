@@ -146,8 +146,6 @@ internal static class ServiceCollectionExtensions
                         .WithOrigins(
                             "http://localhost:3000",
                             "http://localhost:3001",
-                            "https://haberibul.azurewebsites.net",
-                            "https://clever-speculoos-aacb3a.netlify.app",
                             "https://teknohaber.netlify.app"
                         )
                         .AllowAnyMethod()

@@ -12,7 +12,7 @@ Write-Host "══════════════════════�
 
 Write-Host "📋 STEP 1: Create Build Hook in Netlify" -ForegroundColor Yellow
 Write-Host ""
-Write-Host "1. Go to: https://app.netlify.com/sites/clever-speculoos-aacb3a/settings/deploys#build-hooks" -ForegroundColor White
+Write-Host "1. Go to: https://app.netlify.com/sites/teknohaber/settings/deploys#build-hooks" -ForegroundColor White
 Write-Host "2. Click 'Add build hook'" -ForegroundColor White
 Write-Host "3. Name: 'ISR Revalidation (Auto)'" -ForegroundColor White
 Write-Host "4. Branch: 'master'" -ForegroundColor White

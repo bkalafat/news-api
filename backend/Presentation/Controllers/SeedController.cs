@@ -605,6 +605,181 @@ public sealed class SeedController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Cleans up low-quality articles from the database
+    /// Removes articles with:
+    /// - Short content (less than 500 characters)
+    /// - Non-Turkish content (detected by language)
+    /// - Low engagement Reddit posts
+    /// </summary>
+    /// <returns>Result of cleanup operation with count of deleted articles</returns>
+    [HttpPost("cleanup-low-quality")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> CleanupLowQualityNews()
+    {
+        try
+        {
+            _logger.LogInformation("Starting low-quality news cleanup...");
+
+            // Clear cache first to ensure we're working with fresh data from database
+            ClearAllCaches();
+
+            var allNews = await _newsService.GetAllNewsAsync();
+            int totalChecked = allNews.Count;
+            int totalDeleted = 0;
+            var deletionReasons = new Dictionary<string, int>
+            {
+                ["ShortContent"] = 0,
+                ["NonTurkish"] = 0,
+                ["LowQuality"] = 0,
+                ["NoImage"] = 0
+            };
+
+            foreach (var news in allNews)
+            {
+                bool shouldDelete = false;
+                string reason = string.Empty;
+
+                // 1. Check if article has an image (REQUIRED - highest priority)
+                if (string.IsNullOrWhiteSpace(news.ImageUrl) && string.IsNullOrWhiteSpace(news.ImgPath))
+                {
+                    shouldDelete = true;
+                    reason = "NoImage";
+                    deletionReasons["NoImage"]++;
+                }
+
+                // 2. Check content length (minimum 500 chars)
+                if (!shouldDelete)
+                {
+                    var contentLength = (news.Content ?? string.Empty).Length;
+                    if (contentLength < 500)
+                    {
+                        shouldDelete = true;
+                        reason = "ShortContent";
+                        deletionReasons["ShortContent"]++;
+                    }
+                }
+
+                // 3. Check if content appears to be English (no Turkish characters)
+                if (!shouldDelete && !ContainsTurkishCharacters(news.Caption) && !ContainsTurkishCharacters(news.Content))
+                {
+                    // Additional check: look for common English-only patterns
+                    if (IsLikelyEnglish(news.Content ?? string.Empty))
+                    {
+                        shouldDelete = true;
+                        reason = "NonTurkish";
+                        deletionReasons["NonTurkish"]++;
+                    }
+                }
+
+                // 4. Check for low-quality indicators
+                if (!shouldDelete && IsLowQualityContent(news))
+                {
+                    shouldDelete = true;
+                    reason = "LowQuality";
+                    deletionReasons["LowQuality"]++;
+                }
+
+                if (shouldDelete)
+                {
+                    await _newsService.DeleteNewsAsync(news.Id);
+                    totalDeleted++;
+                    _logger.LogInformation(
+                        "Deleted article: [{Reason}] {Caption} (Content length: {Length})",
+                        reason,
+                        news.Caption.Length > 50 ? news.Caption[..50] + "..." : news.Caption,
+                        news.Content?.Length ?? 0);
+                }
+            }
+
+            // Clear all caches after cleanup
+            ClearAllCaches();
+
+            _logger.LogInformation(
+                "Cleanup completed: {Deleted}/{Total} articles removed",
+                totalDeleted,
+                totalChecked);
+
+            return Ok(new
+            {
+                message = $"Cleanup completed successfully! Removed {totalDeleted} low-quality articles.",
+                totalChecked,
+                totalDeleted,
+                deletionReasons,
+                summary = new
+                {
+                    shortContent = deletionReasons["ShortContent"],
+                    noImage = deletionReasons["NoImage"],
+                    nonTurkish = deletionReasons["NonTurkish"],
+                    lowQuality = deletionReasons["LowQuality"]
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during cleanup");
+            return StatusCode(500, new { message = "Error during cleanup", error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Check if text contains Turkish-specific characters
+    /// </summary>
+    private static bool ContainsTurkishCharacters(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        var turkishChars = new[] { 'ı', 'ğ', 'ü', 'ş', 'ö', 'ç', 'İ', 'Ğ', 'Ü', 'Ş', 'Ö', 'Ç' };
+        return turkishChars.Any(text.Contains);
+    }
+
+    /// <summary>
+    /// Check if text is likely English based on common patterns
+    /// </summary>
+    private static bool IsLikelyEnglish(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        var lowerText = text.ToLowerInvariant();
+
+        // Common English words that are less common in Turkish
+        var englishIndicators = new[]
+        {
+            " the ", " and ", " with ", " this ", " that ",
+            " have ", " from ", " they ", " what ", " your ",
+            " which ", " their ", " would ", " there ", " could "
+        };
+
+        int englishWordCount = englishIndicators.Count(indicator => lowerText.Contains(indicator));
+
+        // If text contains 3+ common English words, it's likely English
+        return englishWordCount >= 3;
+    }
+
+    /// <summary>
+    /// Check if article has low-quality indicators
+    /// </summary>
+    private static bool IsLowQualityContent(NewsArticle news)
+    {
+        // Check for common low-quality patterns
+        var caption = news.Caption?.ToLowerInvariant() ?? string.Empty;
+
+        var lowQualityPatterns = new[]
+        {
+            "ama ", "ask me anything", "i made ", "check out",
+            "eli5", "looking for", "need help", "please help"
+        };
+
+        return lowQualityPatterns.Any(caption.Contains);
+    }
+
     private static int CalculatePriority(int score, string source)
     {
         // Base priority from score

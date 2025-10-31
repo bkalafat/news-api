@@ -121,6 +121,13 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
                 // Convert Reddit posts to news articles with Turkish translation
                 foreach (var post in posts)
                 {
+                    // Quality filters: Skip low-quality or too-short content
+                    if (!IsQualityContent(post))
+                    {
+                        _logger.LogDebug("Skipping low-quality post: {Title}", post.Title);
+                        continue;
+                    }
+
                     var article = await ConvertRedditPostToNewsAsync(post, category, subreddit, translationService).ConfigureAwait(false);
 
                     // Save to database (skip if already exists)
@@ -345,6 +352,69 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
         html = html.Replace("\n", "<br />");
 
         return $"<p>{html}</p>";
+    }
+
+    /// <summary>
+    /// Check if Reddit post meets quality standards for Turkish tech news
+    /// </summary>
+    private static bool IsQualityContent(Application.DTOs.CreateSocialMediaPostDto post)
+    {
+        // 1. Minimum title length (avoid clickbait)
+        if (string.IsNullOrWhiteSpace(post.Title) || post.Title.Length < 20)
+        {
+            return false;
+        }
+
+        // 2. Minimum content length for substantial articles (500 chars = ~100 words)
+        var contentLength = (post.Content ?? string.Empty).Length;
+        if (contentLength < 500)
+        {
+            return false;
+        }
+
+        // 3. Require at least one image (no image = no publish)
+        if (post.ImageUrls == null || post.ImageUrls.Length == 0 || string.IsNullOrWhiteSpace(post.ImageUrls.FirstOrDefault()))
+        {
+            return false;
+        }
+
+        // 4. Require engagement (upvotes OR comments)
+        if (post.Upvotes < 50 && post.CommentCount < 5)
+        {
+            return false;
+        }
+
+        // 5. Filter out low-effort content patterns
+        var lowerTitle = post.Title.ToLowerInvariant();
+        var badPatterns = new[]
+        {
+            "ama ", "ask me anything", "i made ", "check out my",
+            "eli5", "what's the best", "which is better",
+            "looking for", "need help", "please help"
+        };
+
+        foreach (var pattern in badPatterns)
+        {
+            if (lowerTitle.Contains(pattern))
+            {
+                return false;
+            }
+        }
+
+        // 6. Prefer longer, detailed posts (1000+ chars)
+        // Give bonus points to comprehensive content
+        if (contentLength >= 1000)
+        {
+            return true; // Always accept detailed content with image
+        }
+
+        // 7. Accept medium-length posts only if highly engaged
+        if (contentLength >= 500 && (post.Upvotes >= 100 || post.CommentCount >= 10))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private static int CalculatePriority(int upvotes, int comments)

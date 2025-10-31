@@ -36,6 +36,6 @@ Write-Host "   1. Commit your changes: git add . && git commit -m 'Update fronte
 Write-Host "   2. Push to master: git push origin master" -ForegroundColor White
 Write-Host "   3. Netlify will auto-deploy (usually takes 2-3 minutes)" -ForegroundColor White
 Write-Host ""
-Write-Host "🌐 Live Site: https://clever-speculoos-aacb3a.netlify.app" -ForegroundColor Green
-Write-Host "📊 Netlify Dashboard: https://app.netlify.com" -ForegroundColor Cyan
+Write-Host "🌐 Live Site: https://teknohaber.netlify.app" -ForegroundColor Green
+Write-Host "📊 Netlify Dashboard: https://app.netlify.com/sites/teknohaber/deploys" -ForegroundColor Cyan
 Write-Host ""

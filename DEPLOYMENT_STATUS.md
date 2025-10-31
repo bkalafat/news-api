@@ -25,7 +25,7 @@
 
 ### 2. Frontend (Netlify)
 **Status**: ✅ Deployed & Live  
-**URL**: https://clever-speculoos-aacb3a.netlify.app  
+**URL**: https://teknohaber.netlify.app  
 **Repository**: `master` branch  
 **CI/CD**: Netlify (auto-deploy on push)
 
@@ -132,7 +132,7 @@ Invoke-RestMethod -Uri $fetchUrl -Method Post -Headers $headers
 
 ### 2. Verify Frontend Data
 After Reddit fetch completes:
-1. Go to: https://clever-speculoos-aacb3a.netlify.app/categories
+1. Go to: https://teknohaber.netlify.app/categories
 2. Verify all 9 Reddit categories are visible
 3. Click each category to see news articles
 
@@ -247,7 +247,7 @@ az containerapp logs show \
 https://github.com/bkalafat/newsportal/actions
 
 ### Netlify Deployment
-https://app.netlify.com/sites/clever-speculoos-aacb3a/deploys
+https://app.netlify.com/sites/teknohaber/deploys
 
 ### Azure Portal
 https://portal.azure.com → newsportal-rg → newsportal-backend
