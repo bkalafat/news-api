@@ -58,8 +58,7 @@ builder.Services.AddCorsPolicy();
 builder.Services.AddCustomHealthChecks();
 
 // Add background services
-builder.Services.AddHostedService<NewsApi.Infrastructure.BackgroundJobs.SocialMediaFetcherService>();
-builder.Services.AddHostedService<NewsApi.Infrastructure.BackgroundJobs.DailyNewsSeedService>();
+builder.Services.AddHostedService<NewsApi.Infrastructure.BackgroundJobs.DailyNewsAggregatorJob>();
 
 var app = builder.Build();
 

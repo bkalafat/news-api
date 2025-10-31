@@ -4,8 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using NewsApi.Application.Services;
+using NewsApi.Common;
 using NewsApi.Domain.Entities;
 using NewsApi.Infrastructure.Data;
 using NewsApi.Infrastructure.Services;
@@ -20,17 +23,26 @@ internal sealed class SeedController : ControllerBase
     private readonly ILogger<SeedController> _logger;
     private readonly INewsDataFetcherService _newsDataFetcher;
     private readonly INewsArticleService _newsService;
+    private readonly NewsAggregatorService _newsAggregator;
+    private readonly TranslationService _translationService;
+    private readonly IMemoryCache _cache;
 
     public SeedController(
         MongoDbContext context,
         ILogger<SeedController> logger,
         INewsDataFetcherService newsDataFetcher,
-        INewsArticleService newsService)
+        INewsArticleService newsService,
+        NewsAggregatorService newsAggregator,
+        TranslationService translationService,
+        IMemoryCache cache)
     {
         _context = context;
         _logger = logger;
         _newsDataFetcher = newsDataFetcher;
         _newsService = newsService;
+        _newsAggregator = newsAggregator;
+        _translationService = translationService;
+        _cache = cache;
     }
 
     /// <summary>
@@ -196,5 +208,242 @@ internal sealed class SeedController : ControllerBase
             _logger.LogError(ex, "Error occurred while fetching external news");
             return StatusCode(500, new { message = "Error fetching external news", error = ex.Message });
         }
+    }
+
+    /// <summary>
+    /// Manually triggers the daily news aggregation from free sources (Reddit, GitHub, RSS feeds)
+    /// Fetches AI/tech news, translates to Turkish, and publishes them
+    /// This endpoint allows testing the automated daily job without waiting until 5 AM
+    /// </summary>
+    /// <returns>Result of news aggregation, translation, and publishing operation</returns>
+    [HttpPost("aggregate-and-publish")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> AggregateAndPublishNews()
+    {
+        try
+        {
+            _logger.LogInformation("Manually triggering news aggregation and publishing...");
+
+            var startTime = DateTime.UtcNow;
+            int totalFetched = 0;
+            int totalCreated = 0;
+            int totalSkipped = 0;
+            int totalErrors = 0;
+
+            // 1. Fetch all news from various sources
+            _logger.LogInformation("Fetching news from all sources...");
+            var aggregatedNews = await _newsAggregator.FetchAllNewsAsync();
+            totalFetched = aggregatedNews.Count;
+
+            _logger.LogInformation("Fetched {Count} news items from all sources", totalFetched);
+
+            if (totalFetched == 0)
+            {
+                return Ok(new
+                {
+                    message = "No news articles were fetched from any source.",
+                    fetched = 0,
+                    created = 0,
+                    skipped = 0,
+                    errors = 0,
+                });
+            }
+
+            // 2. Filter and prioritize (top 50 most relevant)
+            var topNews = aggregatedNews
+                .OrderByDescending(n => n.Score)
+                .ThenByDescending(n => n.PublishedDate)
+                .Take(50)
+                .ToList();
+
+            _logger.LogInformation("Processing top {Count} news items", topNews.Count);
+
+            // 3. Translate and save each news item
+            foreach (var item in topNews)
+            {
+                try
+                {
+                    // Check if already exists (by title slug)
+                    var slug = SlugHelper.GenerateSlug(item.Title);
+                    var existing = await _newsService.GetNewsBySlugAsync(slug);
+                    
+                    if (existing != null)
+                    {
+                        totalSkipped++;
+                        _logger.LogDebug("Skipping duplicate: {Title}", item.Title);
+                        continue;
+                    }
+
+                    // Detect language
+                    var sourceLanguage = _translationService.DetectLanguage(item.Title);
+
+                    // Translate to Turkish if not already Turkish
+                    string translatedTitle = item.Title;
+                    string translatedContent = item.Content;
+                    string translatedSummary = item.Content;
+
+                    if (sourceLanguage != "tr")
+                    {
+                        _logger.LogInformation("Translating: {Title}", item.Title);
+
+                        translatedTitle = await _translationService.TranslateToTurkishAsync(item.Title, sourceLanguage);
+                        
+                        // Create summary from content (first 200 chars)
+                        var summary = item.Content.Length > 200 
+                            ? item.Content[..200] + "..." 
+                            : item.Content;
+                        
+                        translatedSummary = await _translationService.TranslateToTurkishAsync(summary, sourceLanguage);
+                        
+                        // Only translate full content if it's not too long
+                        if (item.Content.Length > 0 && item.Content.Length < 2000)
+                        {
+                            translatedContent = await _translationService.TranslateToTurkishAsync(item.Content, sourceLanguage);
+                        }
+                        else if (item.Content.Length >= 2000)
+                        {
+                            translatedContent = $"[Orijinal kaynak: {item.Source}]\n\n{item.Content}";
+                        }
+
+                        // Rate limiting - wait between translations
+                        await Task.Delay(500);
+                    }
+
+                    // 4. Create news entity
+                    var news = new NewsArticle
+                    {
+                        Id = ObjectId.GenerateNewId().ToString(),
+                        Category = item.Category,
+                        Type = "article",
+                        Caption = translatedTitle,
+                        Slug = slug,
+                        Keywords = string.Join(", ", item.Tags.Take(10)),
+                        SocialTags = string.Join(" ", item.Tags.Select(t => $"#{t}").Take(5)),
+                        Summary = translatedSummary,
+                        ImgPath = string.Empty,
+                        ImgAlt = $"Image from {item.Source}",
+                        ImageUrl = string.Empty,
+                        ThumbnailUrl = string.Empty,
+                        Content = translatedContent,
+                        ExpressDate = item.PublishedDate,
+                        CreateDate = DateTime.UtcNow,
+                        UpdateDate = DateTime.UtcNow,
+                        Priority = CalculatePriority(item.Score, item.Source),
+                        IsActive = true,
+                        ViewCount = 0,
+                        IsSecondPageNews = false,
+                        ImageMetadata = null,
+                        Subjects = Array.Empty<string>(),
+                        Authors = new[] { item.Author },
+                    };
+
+                    // 5. Save to database
+                    await _newsService.CreateNewsAsync(news);
+                    totalCreated++;
+
+                    _logger.LogInformation(
+                        "Published: [{Category}] {Title} (Source: {Source}, Score: {Score})",
+                        news.Category,
+                        news.Caption,
+                        item.Source,
+                        item.Score);
+                }
+                catch (Exception ex)
+                {
+                    totalErrors++;
+                    _logger.LogError(ex, "Failed to process news item: {Title}", item.Title);
+                }
+            }
+
+            // 6. Clear all caches
+            _logger.LogInformation("Clearing caches...");
+            ClearAllCaches();
+
+            var endTime = DateTime.UtcNow;
+            var duration = (endTime - startTime).TotalSeconds;
+
+            _logger.LogInformation(
+                "News aggregation complete: {Created} published, {Skipped} skipped, {Errors} failed",
+                totalCreated,
+                totalSkipped,
+                totalErrors);
+
+            return Ok(new
+            {
+                message = "News aggregation and publishing completed successfully!",
+                durationSeconds = Math.Round(duration, 2),
+                fetched = totalFetched,
+                created = totalCreated,
+                skipped = totalSkipped,
+                errors = totalErrors,
+                sources = new[] 
+                { 
+                    "Reddit (AI/Tech subreddits)", 
+                    "GitHub Trending", 
+                    "Hacker News", 
+                    "Dev.to", 
+                    "Medium", 
+                    "Ars Technica", 
+                    "TechCrunch" 
+                },
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while aggregating news");
+            return StatusCode(500, new { message = "Error aggregating news", error = ex.Message });
+        }
+    }
+
+    private void ClearAllCaches()
+    {
+        try
+        {
+            // Clear all news-related caches
+            _cache.Remove(CacheKeys.NewsList);
+            _cache.Remove(CacheKeys.AllNews);
+
+            // Clear category caches
+            var categories = new[] { "Technology", "Science", "Business", "Sports", "Entertainment", "Health", "World" };
+            foreach (var category in categories)
+            {
+                _cache.Remove(CacheKeys.GetNewsByCategory(category));
+            }
+
+            // Clear type caches
+            var types = new[] { "article", "breaking", "analysis" };
+            foreach (var type in types)
+            {
+                _cache.Remove(CacheKeys.GetNewsByType(type));
+            }
+
+            _logger.LogInformation("All news caches cleared");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error clearing caches");
+        }
+    }
+
+    private static int CalculatePriority(int score, string source)
+    {
+        // Base priority from score
+        var priority = Math.Min(score / 10, 50);
+
+        // Boost for high-quality sources
+        priority += source switch
+        {
+            "Hacker News" => 20,
+            "Ars Technica" => 25,
+            "TechCrunch" => 25,
+            "GitHub Trending" => 15,
+            "Dev.to" => 10,
+            "Medium" => 10,
+            _ when source.StartsWith("Reddit") => 5,
+            _ => 0,
+        };
+
+        return Math.Clamp(priority, 10, 100);
     }
 }

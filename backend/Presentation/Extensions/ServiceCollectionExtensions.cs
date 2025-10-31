@@ -62,6 +62,18 @@ internal static class ServiceCollectionExtensions
         services.AddSingleton(newsApiSettings);
         services.AddHttpClient<INewsDataFetcherService, NewsDataFetcherService>();
 
+        // News Aggregation and Translation Services
+        services.AddHttpClient<NewsAggregatorService>(client =>
+        {
+            client.DefaultRequestHeaders.Add("User-Agent", "NewsPortal/1.0");
+            client.Timeout = TimeSpan.FromSeconds(30);
+        });
+        services.AddHttpClient<TranslationService>(client =>
+        {
+            client.DefaultRequestHeaders.Add("User-Agent", "NewsPortal/1.0");
+            client.Timeout = TimeSpan.FromSeconds(15);
+        });
+
         return services;
     }
 
