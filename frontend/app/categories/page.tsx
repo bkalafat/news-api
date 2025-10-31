@@ -44,8 +44,8 @@ export const metadata: Metadata = {
   },
 };
 
-// ISR: Revalidate every 24 hours (static content, no frequent changes)
-export const revalidate = 86400; // 24 hours
+// Force revalidation on every request to show updated Reddit categories
+export const revalidate = 0; // Disable ISR cache
 
 const categories = [
   {

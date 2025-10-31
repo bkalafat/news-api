@@ -5,9 +5,8 @@ import { LatestNews } from "@/components/home/latest-news";
 import { CategoriesSection } from "@/components/home/categories-section";
 import { Metadata } from "next";
 
-// ISR: Revalidate every 12 hours (43200 seconds)
-// Reduces backend API calls significantly
-export const revalidate = 43200; // 12 hours
+// ISR: Revalidate every 30 minutes for fresh Reddit news
+export const revalidate = 1800; // 30 minutes
 
 export const metadata: Metadata = {
   alternates: {

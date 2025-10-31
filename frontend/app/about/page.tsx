@@ -27,8 +27,8 @@ export const metadata: Metadata = {
   },
 };
 
-// ISR: Revalidate every 7 days (static content, rarely changes)
-export const revalidate = 604800; // 7 days
+// ISR: Revalidate every hour for profile updates
+export const revalidate = 3600; // 1 hour
 
 export default function AboutPage() {
   const techStack = [
@@ -78,21 +78,76 @@ export default function AboutPage() {
             </p>
           </div>
 
+          {/* Developer Profile */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>Geliştirici</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-start gap-4">
+                <div className="flex-1">
+                  <h3 className="mb-2 text-xl font-semibold">Burak Kalafat</h3>
+                  <p className="text-muted-foreground mb-2 text-sm font-medium">
+                    Senior Software Engineer (Backend, .NET)
+                  </p>
+                  <p className="text-muted-foreground mb-4">
+                    12+ yıl deneyimli kıdemli yazılım mühendisi. Yapay zeka destekli geliştirme, 
+                    Clean Architecture ve yüksek performanslı backend sistemleri konusunda uzman. 
+                    GitHub Copilot Enterprise şampiyonu olarak, büyük ölçekli legacy modernizasyon 
+                    projelerinde 6-8× hızlanma sağlayan AI-assisted development tekniklerinde öncü.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="secondary">C# & .NET Core</Badge>
+                    <Badge variant="secondary">GitHub Copilot Enterprise</Badge>
+                    <Badge variant="secondary">Clean Architecture</Badge>
+                    <Badge variant="secondary">Azure DevOps</Badge>
+                    <Badge variant="secondary">REST APIs</Badge>
+                    <Badge variant="secondary">MongoDB</Badge>
+                  </div>
+                  <div className="mt-4 flex gap-4 text-sm">
+                    <a 
+                      href="https://github.com/bkalafat" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      GitHub
+                    </a>
+                    <a 
+                      href="https://linkedin.com/in/bkalafat" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      LinkedIn
+                    </a>
+                    <a 
+                      href="mailto:burakkalafat89@gmail.com"
+                      className="text-primary hover:underline"
+                    >
+                      Email
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Mission */}
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Misyonumuz</CardTitle>
+              <CardTitle>Proje Hakkında</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">
-                Teknoloji Haberleri, Türkiye&apos;deki teknoloji meraklılarına en güncel teknoloji
-                haberlerini, analizleri ve gelişmeleri sunmak için oluşturulmuş modern bir
-                platformdur.
+                Bu proje, Reddit&apos;ten yapay zeka, robotik ve yazılım geliştirme haberlerini 
+                toplayan modern bir haber platformudur. OAuth 2.0 entegrasyonu ile günlük otomatik 
+                haber güncellemesi sağlar.
               </p>
               <p className="text-muted-foreground">
-                Amacımız, en son web teknolojilerini kullanarak hızlı, güvenli ve kullanıcı dostu
-                bir haber okuma deneyimi sunmaktır. Platform, modern yazılım geliştirme prensipleri
-                ve en iyi pratiklerle geliştirilmiştir.
+                Platform, en son web teknolojileri ve best practices kullanılarak geliştirilmiştir. 
+                Clean Architecture prensiplerine uygun, ölçeklenebilir ve sürdürülebilir bir mimari 
+                ile .NET 10 backend ve Next.js 16 frontend teknolojilerini birleştirir.
               </p>
             </CardContent>
           </Card>
