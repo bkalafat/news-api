@@ -121,7 +121,7 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
                 foreach (var post in posts)
                 {
                     var article = await ConvertRedditPostToNewsAsync(post, category, subreddit, translationService).ConfigureAwait(false);
-                    
+
                     // Save to database (skip if already exists)
                     var existing = await repository.GetBySlugAsync(article.Slug).ConfigureAwait(false);
                     if (existing == null)
@@ -167,10 +167,10 @@ public sealed class RedditNewsAggregatorJob : BackgroundService
             try
             {
                 turkishTitle = await translationService.TranslateToTurkishAsync(post.Title, sourceLanguage);
-                
+
                 var summaryText = post.Content?.Length > 200 ? post.Content[..200] : post.Content ?? post.Title;
                 turkishSummary = await translationService.TranslateToTurkishAsync(summaryText, sourceLanguage);
-                
+
                 if (!string.IsNullOrEmpty(post.Content) && post.Content.Length > 50)
                 {
                     turkishContent = await translationService.TranslateToTurkishAsync(post.Content, sourceLanguage);
