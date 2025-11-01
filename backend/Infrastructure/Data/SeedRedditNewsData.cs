@@ -19,13 +19,9 @@ internal static class SeedRedditNewsData
         var newsCollection = context.News;
         var now = DateTime.UtcNow;
 
-        // Clear existing Reddit-sourced news
-        var filter = Builders<NewsArticle>.Filter.In(
-            x => x.Category,
-            new[] { "github", "reddit", "technology" }
-        );
-        await newsCollection.DeleteManyAsync(filter).ConfigureAwait(false);
-        Console.WriteLine("Cleared existing Reddit/GitHub news articles.");
+        // Clear ALL existing news articles before seeding
+        await newsCollection.DeleteManyAsync(Builders<NewsArticle>.Filter.Empty).ConfigureAwait(false);
+        Console.WriteLine("Cleared ALL existing news articles.");
 
         var redditNewsList = new List<NewsArticle>
         {
