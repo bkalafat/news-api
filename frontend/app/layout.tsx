@@ -19,6 +19,7 @@ export const metadata: Metadata = {
   },
   description:
     "Son dakika teknoloji haberleri, güncel gelişmeler, yazılım, donanım, yapay zeka, siber güvenlik ve teknoloji dünyasından tüm haberler. Türkiye'nin öncü teknoloji haber platformu.",
+  generator: "Next.js",
   keywords: [
     "teknoloji haberleri",
     "güncel haberler",
